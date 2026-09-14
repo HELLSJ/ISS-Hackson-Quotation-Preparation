@@ -1,0 +1,13 @@
+sku,currency,unit_price_cents,price_version,effective_date,price_source_type
+MON-001,SGD,14900,demo-v1,2026-09-14,synthetic
+MON-002,SGD,18900,demo-v1,2026-09-14,synthetic
+MON-003,SGD,17900,demo-v1,2026-09-14,synthetic
+MON-004,SGD,20900,demo-v1,2026-09-14,synthetic
+MON-005,SGD,22900,demo-v1,2026-09-14,synthetic
+MON-006,SGD,24900,demo-v1,2026-09-14,synthetic
+MON-007,SGD,28900,demo-v1,2026-09-14,synthetic
+MON-008,SGD,31900,demo-v1,2026-09-14,synthetic
+MON-009,SGD,34900,demo-v1,2026-09-14,synthetic
+MON-010,SGD,45900,demo-v1,2026-09-14,synthetic
+MON-011,SGD,62900,demo-v1,2026-09-14,synthetic
+MON-012,SGD,49900,demo-v1,2026-09-14,synthetic

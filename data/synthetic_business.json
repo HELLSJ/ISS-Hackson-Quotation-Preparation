@@ -1,0 +1,23 @@
+{
+  "dataset_version": "2026-09-14.v1",
+  "source_type": "synthetic",
+  "description": "Fictional SGD selling prices and policies for the hackathon, not Dell retail/wholesale prices or tax advice.",
+  "prices_cents": {"MON-001":14900,"MON-002":18900,"MON-003":17900,"MON-004":20900,"MON-005":22900,"MON-006":24900,"MON-007":28900,"MON-008":31900,"MON-009":34900,"MON-010":45900,"MON-011":62900,"MON-012":49900},
+  "rules": {
+    "rule_version":"demo-v1",
+    "price_version":"demo-v1",
+    "currency":"SGD",
+    "effective_date":"2026-09-14",
+    "discount_limit_bps":500,
+    "default_discount_bps":0,
+    "rounding":"half_up_per_line_discount",
+    "shipping_fee_cents":0,
+    "validity_days":7,
+    "tax_mode":"not_modelled",
+    "tax_note":"Demo quotation: tax is not modelled; this is not a tax invoice.",
+    "confirmation_required":true,
+    "inventory_mode":"not_available",
+    "delivery_commitment":"not_available",
+    "source_type":"synthetic"
+  }
+}

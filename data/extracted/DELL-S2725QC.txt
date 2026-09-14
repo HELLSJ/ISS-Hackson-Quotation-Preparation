@@ -1,0 +1,4723 @@
+=== PDF page 1 ===
+Dell S 27 4K USB-C Monitor
+S2725QC
+User’s Guide
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Model: S2725QC
+Regulatory Model: S2725QCb
+May 2026
+Rev. A01
+
+=== PDF page 2 ===
+Notes, cautions, and warnings
+     NOTE: A NOTE indicates important information that helps you make better use of your product.
+     CAUTION: A CAUTION indicates either potential damage to hardware or loss of data and tells you how to avoid the problem.
+     WARNING: A WARNING indicates a potential for property damage, personal injury, or death.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Copyright © 2025-2026 Dell Inc. All Rights Reserved. Dell Technologies, Dell, and other trademarks are trademarks of Dell Inc. or its
+subsidiaries. Other trademarks may be trademarks of their respective owners.
+
+=== PDF page 3 ===
+Contents
+
+
+
+
+
+Safety instructions .....................................................................                                                                                                  5
+About your monitor                   ....................................................................                                                                                  6
+        Package contents ....................................................................................                                                                               6
+        Product features .....................................................................................                                                                              7
+        Operating system compatibility ........................................................................                                                                           10
+        Identifying parts and controls                .........................................................................                                                           10
+              Front view ................................................................................................                                                                 10
+              Side view .................................................................................................                                                                 11
+              Back view ................................................................................................                                                                  12
+              Bottom view ..............................................................................................                                                                  13
+        Monitor specifications ...............................................................................                                                                            14
+              Dell Display and Peripheral Manager (DDPM) for Windows .....................................................                                                                15
+              Resolution specifications ...................................................................................                                                               15
+              Supported video modes ....................................................................................                                                                  15
+              Preset display modes ......................................................................................                                                                 16
+              Electrical specifications ....................................................................................                                                              17
+              Physical characteristics ....................................................................................                                                               18
+              Environmental characteristics                ..............................................................................                                                 19
+        Pin assignments ....................................................................................                                                                              20
+              HDMI port ................................................................................................                                                                  20
+              Universal Serial Bus (USB) interface .........................................................................                                                              21
+        Plug-and-play capability ..............................................................................                                                                           22
+        LCD monitor quality and pixel policy ....................................................................                                                                         22
+        Ergonomics ........................................................................................                                                                               23
+        Handling and moving your display ......................................................................                                                                           24
+        Maintenance guidelines ..............................................................................                                                                             25
+              Cleaning your monitor .....................................................................................                                                                 25
+Setting up the monitor .................................................................                                                                                                 26
+        Attaching the stand ..................................................................................                                                                            26
+        Connecting your monitor                .............................................................................                                                              29
+              Connecting the USB-C and power cables .....................................................................                                                                 29
+              Connecting the HDMI and power cables (optional) ............................................................                                                                30
+        Routing the cables ..................................................................................                                                                             30
+        Attaching the side I/O-cover                ..........................................................................                                                            31
+        Organizing your cables ...............................................................................                                                                            31
+        Turn on the monitor            .................................................................................                                                                  33
+        Securing your monitor using Kensington lock (optional) ....................................................                                                                       33
+        Removing the monitor stand ..........................................................................                                                                             34
+        VESA wall mounting (optional)                   ........................................................................                                                          35
+        Organizing cables on a monitor arm (sold separately) ......................................................                                                                       35
+Operating the monitor                    .................................................................                                                                               37
+        Turn on the monitor            .................................................................................                                                                  37
+        Using the joystick control .............................................................................                                                                          37
+        Using the On-Screen Display (OSD) menu ................................................................                                                                           39
+              Accessing the Menu Launcher ..............................................................................                                                                  39
+              Using the navigation keys ..................................................................................                                                                40
+
+
+                                                                                                                                                                     Contents                   3
+
+=== PDF page 4 ===
+             Accessing the menu system ................................................................................                                                        40
+             OSD warning message .....................................................................................                                                         52
+       Locking the control buttons ...........................................................................                                                                 55
+       Setting the maximum resolution .......................................................................                                                                  56
+       Requirements to view or playback HDR content ...........................................................                                                                56
+       Using the tilt, swivel, pivot and height adjustment .........................................................                                                           57
+             Tilt and swivel adjustment ..................................................................................                                                     57
+             Height adjustment .........................................................................................                                                       57
+             Pivot adjustment ..........................................................................................                                                       58
+             Adjusting the rotation display settings of your computer .......................................................                                                  59
+Troubleshooting ......................................................................                                                                                        60
+       Self-test ...........................................................................................                                                                   60
+       Built-in diagnostics ..................................................................................                                                                 60
+       Common problems ..................................................................................                                                                      61
+       Product-specific problems ............................................................................                                                                  63
+       Universal Serial Bus (USB) specific problems .............................................................                                                              64
+       Speakers-specific problems                ..........................................................................                                                    64
+Regulatory information ................................................................                                                                                       65
+       FCC notices (U.S. only) and other regulatory information ...................................................                                                            65
+       EU product database for energy label and product information sheet                                .........................................                             65
+Contacting Dell .......................................................................                                                                                       66
+Revision history ......................................................................                                                                                       67
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4            Contents
+
+=== PDF page 5 ===
+Safety instructions
+Use the following safety guidelines to protect your monitor from potential damage and to ensure your personal safety. Unless
+otherwise noted, each procedure included in this document assumes that you have read the safety information that shipped with
+your monitor.
+     NOTE: Before using the monitor, read the safety information that is shipped with your monitor and printed on the product. Keep
+     the documentation at a secure location for future reference.
+     WARNING: Use of controls, adjustments, or procedures other than those specified in this documentation may result in
+     exposure to shock, electrical hazards and/or mechanical hazards.
+     CAUTION: The possible long-term effect of listening to audio at high volume through the headphones (on monitor that
+     support it) may cause damage to your hearing ability.
+•    Place the monitor on a solid surface and handle it carefully.
+     •    The screen is fragile and can be damaged if dropped or hit with a sharp object.
+     •    Ensure that your monitor is electrically rated to operate with the AC power available in your location.
+     •    Keep the monitor in room temperature. Excessive cold or hot conditions can have an adverse effect on the liquid crystal of
+          the display.
+     •    Connect the power cable from the monitor to a wall outlet that is near and accessible. See Connecting your monitor.
+•    Do not place and use the monitor on a wet surface or near water.
+•    Do not subject the monitor to severe vibration or high impact conditions. For example, do not place the monitor inside a car
+     trunk.
+•    Unplug the monitor when it is going to be left unused for an extended period.
+•    To avoid electric shock, do not attempt to remove any cover or touch the inside of the monitor.
+•    Read these instructions carefully. Keep this document for future reference. Follow all warnings and instructions that are marked
+     on the product.
+•    Certain monitors can be wall mounted using the VESA mount that is sold separately. Ensure to use the correct VESA
+     specifications as mentioned in the wall mounting section of the User’s Guide.
+For information about safety instructions, see the Safety, Environmental, and Regulatory Information (SERI) document that is shipped
+with your monitor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                               Safety instructions                5
+
+=== PDF page 6 ===
+About your monitor
+Package contents
+The following table provides the list of components that are shipped with your monitor. If any component is missing, contact Dell. For
+more information, see Contacting Dell.
+    NOTE: Some items may be optional and may not ship with your monitor. Some features may not be available in certain
+    countries.
+Table 1. Monitor and accessories inside the box.
+ Component image                                                        Component description
+                                                                        Display
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                        VESA cover
+
+
+
+
+
+
+                                                                        Stand riser
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                        Stand base
+
+
+                                                                        Side I/O-cover
+
+
+
+
+
+
+                                                                        Power cable (varies by country)
+
+
+
+
+
+
+                                                                        USB-C to C 5Gbps 100 W cable (1.8 m)*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6          About your monitor
+
+=== PDF page 7 ===
+ Component image                                                                Component description
+                                                                                •    QR Card
+                                                                                •    Safety, Environmental, and Regulatory Information
+
+
+
+
+
+*Disclaimer: The included 1.8 m cable applies to monitors manufactured on or after June 2026.
+Product features
+The Dell S2725QC monitor has an active matrix, Thin-Film Transistor (TFT), Liquid Crystal Display (LCD), and LED backlight. The
+monitor features include:
+•    684.7 mm (27.0 in.) viewable area (measured diagonally).
+     3840 x 2160 (16:9) resolution, plus full-screen support for lower resolutions.
+•    Supports AMD FreeSync Premium Technology, with a refresh rate of 120 Hz and a rapid response time of 4 ms gray to gray in
+     Extreme mode*.
+*The 4 ms gray-to-gray mode is achievable in Extreme mode to reduce visible motion blur and increase image responsiveness.
+However, this may introduce some slight and noticeable visual artifacts into the image. As every system setup and every user’s needs
+are different, we recommend that users experiment with the different modes to find the setting that is right for them.
+•    A wide viewing angle to allow viewing from a sitting or standing position.
+•    Color gamut of 99% sRGB.
+•    Digital connectivity with one USB-C and two HDMI por ts.
+•    Use a USB-C cable to provide power (up to 65 W) to a compatible notebook while receiving video and data signal.
+•    Tilt, swivel, pivot, and height adjustment capabilities.
+•    The ultra-thin bezel reduces the gap between monitors in multi-screen setups, making installation simpler and providing a sleek,
+     seamless viewing experience.
+•    Removable stand and Video Electronics Standards Association (VESA) 100 mm mounting holes for flexible mounting solutions.
+•    Equipped with:
+     •    One USB-C 5Gbps upstream port (DisplayPort 1.4 Alternate Mode, Power Delivery up to 65 W)
+     •    One USB 5Gbps Type-A downstream port with Battery Charging 1.2
+     •    One USB-C 5Gbps downstream port (Power Delivery up to 15 W)
+     •    One USB 5Gbps Type-A downstream port
+•    Plug-and-play capability if suppor ted by your computer.
+•    On-Screen Display (OSD) adjustments for ease of set-up and screen optimization.
+•    Power button and OSD menu lock.
+•    Security-lock slot for Kensington locks (sold separately).
+•    Stand lock.
+•    ≤ 0.5 W in Standby Mode.
+•    Integrated speakers (2 x 5 W).
+•    Dell ComfortView Plus is an integrated low blue light screen feature that improves eye comfort by reducing potentially harmful
+     blue light emissions without compromising color. Through ComfortView Plus technology, Dell has reduced harmful blue light
+     exposure from ≤ 50% to ≤ 35%. This monitor is certified with TÜV Rheinland Eye Comfort 3.0 with a 4-star rating. It incorporates
+     key technologies that also deliver a flicker-free screen, up to 120 Hz refresh rate, a color gamut of minimum 99% sRGB. Dell
+     ComfortView Plus feature is enabled by default on your monitor.
+•    This monitor uses a low blue light panel. When the monitor is reset to factory settings or default setting, it is in compliance with
+     TÜV Rheinland’s hardware low blue light certification.
+     Blue light ratio:
+     The ratio of light in the range from 415 nm-455 nm compared to 400 nm-500 nm shall be less than 35%.
+Table 2. Blue light ratio.
+      Category                       Blue light ratio
+      1                              ≤ 20%
+      2                              20% < R ≤ 35%
+      3                              35% < R ≤ 50%
+
+
+
+                                                                                                                              About your monitor                 7
+
+=== PDF page 8 ===
+•    Decreases the level of hazard blue light that is emitted from the screen to make viewing more comfortable for your eyes without
+     distortion of color accuracy.
+•    The monitor adopts Flicker-Free technology, which clears the eye visible flicker, brings comfor t viewing experience and
+     preventing users suffer from eye strain and fatigue.
+•    This monitor is in compliance with TÜV Rheinland hardware low blue light certification under Category 2.
+About TÜV Rheinland Eye Comfort 3.0
+•    TÜV Rheinland Eye Comfort 3.0 certification program presents a consumer-friendly star rating scheme to the display industry
+     promoting eye wellness from safety to eye care. Compared to existing certifications, the 5-star-rating program adds rigorous
+     testing requirements on overall eye care attributes such as low blue-light, flicker-free, refresh rate, color gamut, color accuracy
+     and ambient light sensor performance. It lays out requirement metrics and rates the product performance on five levels, and the
+     sophisticated technical assessment process provides consumers and buyers with indicators that are easier to judge.
+•    The eye wellness factors being considered remain constant, however, the standards for the various star ratings are different.
+     The higher the star rating, the more stringent the standards. The table below lists the major eye comfort requirements which
+     apply in addition to the basic eye comfort requirements (such as pixel density, uniformity of luminance and color, and freedom of
+     movement).
+•    For more information around TÜV Eye Comfort certification please refer to: https://www.tuv.com/world/en/eye-comfort.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+8           About your monitor
+
+=== PDF page 9 ===
+Table 3. Eye Comfor t 3.0 requirements and star rating scheme for monitors.
+                                     Eye Comfort 3.0 Requirements and Star Rating Scheme for Monitors
+ Category                  Test item                                                           Star Rating Scheme
+                                                         3-star                             4-star                             5-star
+                                                         TÜV Hardware LBL                   TÜV Hardware LBL                   TÜV Hardware LBL
+                           Low Blue Light                Category III (≤50%) or             Category II (≤35%) or              Category II (≤35%) or
+ Eye Care                                                Software LBL solution1             Category I (≤20%)                  Category I (≤20%)
+
+                           Flicker Free                  TÜV Flicker Reduced or             TÜV Flicker Reduced or             Flicker Free
+                                                         TÜV Flicker Free                   TÜV Flicker Free
+                           Ambient Light Sensor          No sensor                          No sensor                          Ambient light sensor
+                           performance
+ Ambient Light             Intelligent CCT control       No                                 No                                 Ye s
+ Management
+                           Intelligent Luminance         No                                 No                                 Ye s
+                           control
+                           Refresh Rate                  ≥60 Hz                             ≥75 Hz                             ≥120 Hz
+                           Luminance uniformity          Luminance uniformity ≥ 75%
+                           Color Uniformity              Color uniformity Δu’v’ ≤ 0.02
+                           Freedom of movement           Luminance changes shall decrease less than 50%;
+                                                         The color shift shall be less than 0.01.
+ Image quality             Gamma difference              Gamma difference ≤ ±0.2            Gamma difference ≤ ±0.2            Gamma difference ≤ ±0.2
+                                                                                                                               DCI-P35 Min.95%
+
+                                                                3                                                              (CIE 1976) & sRGB4
+                                                         NTSC     Min.72% (CIE 1931)                                           Min.95% (CIE 1931) or
+                           Wide color gamut2             or sRGB4 Min.95%                   sRGB4 Min.95% (CIE 1931)
+                                                         (CIE 1931)                                                            Adobe RGB6 Min.95%
+                                                                                                                               (CIE 1931) & sRGB4
+                                                                                                                               Min.95% (CIE 1931)
+ Eye Comfort User          User guide                    Ye s                               Ye s                               Ye s
+ Guide
+
+                           1 Software controls the blue light emission by reducing excessive blue light, resulting in a more yellow tone.
+
+                           2 Color gamut describes the availability of colors in the display. Various standards were developed for specific
+                            purposes. 100% corresponds to the full color space as defined in the standard.
+
+                           3 NTSC stands for National Television Standards Committee, which developed a color space for the television
+                            system that is used in the United States.
+ Remark                    4 sRGB is a standard red, green, and blue color space that is in use on monitors, printers, and the World Wide
+                            Web.
+
+                           5 DCI-P3, short for Digital Cinema Initiatives - Protocol 3, is a color space used in digital cinema that
+                            encompasses a wider range of colors than the standard RGB color space.
+
+                           6 Adobe RGB is a color space created by Adobe Systems that encompasses a broader range of colors than
+                            the standard RGB color model, particularly in the cyans and greens.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                           About your monitor                 9
+
+=== PDF page 10 ===
+Operating system compatibility
+•    Windows 10 and later*.
+•    macOS 12* and macOS 13*.
+*The operating system compatibility on Dell and Alienware branded monitors may vary based on factors such as:
+•    Specific release dates when operating system versions, patches, or updates are available.
+•    Specific release dates when Dell and Alienware branded monitor firmware, software application, or driver updates are available
+     on the Dell support website.
+Identifying par ts and controls
+Front view
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                      1
+
+                                                 Figure 1. Front view with the monitor stand
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                       2                                                                       3
+
+                                                       Figure 2. Front view of the monitor
+Table 4. Components and descriptions.
+ Label                 Description                                     Use
+ 1                     Power LED indicator                             Solid white light indicates that the monitor is turned on and functioning
+                                                                       normally. Blinking white light indicates that the monitor is in Standby
+                                                                       Mode.
+ 2                                                                     Connect your USB device* or charge your device.
+                       Quick access port: USB-C 5Gbps                       NOTE: To use this port, you must connect the USB-C cable that
+                       downstream port (Power Delivery up                   came with your monitor to the USB-C upstream port on the monitor
+                       to 15 W)                                             and to your computer.
+
+
+
+
+
+
+10          About your monitor
+
+=== PDF page 11 ===
+ Label                Description                                    Use
+ 3                                                                   Connect your USB device* or charge your device.
+                      Quick access port: USB 5Gbps                        NOTE: To use this port, you must connect the USB-C cable that
+                      Type-A downstream port with Battery                 came with your monitor to the USB-C upstream port on the monitor
+                      Charging 1.2                                        and to your computer.
+
+*To avoid signal interference, when a wireless USB device has been connected to a USB downstream port, it is NOT recommended to
+connect any other USB devices to the adjacent port(s).
+Side view
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                Figure 3. Side view
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                         About your monitor              11
+
+=== PDF page 12 ===
+Back view
+
+
+
+
+                                                                                5
+                 1                                                             6
+                                                                                7
+
+                2
+                3
+                4                                                                                            8
+
+
+
+                                                                Figure 4. Back view
+Table 5. Components and descriptions.
+ Label                Description                                     Use
+ 1                    Side I/O-cover                                  Use to cover side I/O.
+ 2                    Joystick                                        Use to control the OSD menu. (For more information, see Operating the
+                                                                      monitor.)
+ 3                    Power button                                    To turn the monitor on or off.
+ 4                    Cable management guide                          Use to organize the cables by routing them through the guide.
+ 5                    VESA mounting holes (100 mm x                   Wall-mount the monitor using VESA-compatible wall mount kit (100 mm
+                      100 mm - behind the VESA cover)                 x 100 mm).
+                                                                           NOTE: Wall-mount kit is not shipped with your monitor and is sold
+                                                                           separately.
+ 6                    Regulatory label                                Lists the regulatory approvals.
+ 7                    MyDell QR code, serial number, and              Refer to this label if you must contact Dell for technical suppor t. The
+                      Service Tag label                               Service Tag is a unique alphanumeric identifier that enables Dell service
+                                                                      technicians to identify the hardware components in your monitor and
+                                                                      access warranty information.
+ 8                    Stand-release button                            Releases the stand from the monitor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+12          About your monitor
+
+=== PDF page 13 ===
+Bottom view
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                        1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         12                                                                                                                                 3                                                                                                                                                                                                                              4                                                                              5                                                                              6                                                                                                                                                               7                                                                                                                             8
+
+                                                                                                           Figure 5. Bottom view without monitor stand
+Table 6. Components and descriptions.
+   Label                                           Description                                                                                               Use
+   1                                               Speakers                                                                                                  Provides audio output.
+   2                                                                                                                                                         Connect your USB device.
+                                                   USB 5Gbps Type-A downstream port                                                                                      NOTE: To use this port, you must connect the USB-C cable that
+                                                                                                                                                                         came with your monitor to the USB-C upstream port on the monitor
+                                                                                                                                                                         and to your computer.
+   3                                                                                                                                                         Connect your computer with the HDMI cable (sold separately).
+                                                   HDMI port (HDMI 2)
+   4                                                                                                                                                         Connect your computer with the HDMI cable (sold separately).
+                                                   HDMI port (HDMI 1)
+   5                                                                                                                                                         Connect the USB-C to C 5Gbps 100W cable that came with your monitor
+                                                   USB-C 5Gbps upstream port                                                                                 to the computer. This port supports USB Power Delivery, Data, and
+                                                   (DisplayPort 1.4 Alternate Mode,                                                                          DisplayPort video signal. This port supports DisplayPort 1.4 Alternate
+                                                   Power Delivery up to 65 W)                                                                                Mode with a maximum resolution of 3840 x 2160 at 120 Hz, PD
+                                                                                                                                                             20 V/3.25 A, 15 V/3 A, 9 V/3 A, 5 V/3 A. Once this cable is connected, you
+                                                                                                                                                             can use the USB connectors on the monitor.
+                                                                                                                                                                         NOTE: USB-C is not suppor ted on versions of Windows prior to
+                                                                                                                                                                         Windows 10.
+   6                                               Stand-lock feature                                                                                        To lock the stand to the monitor using a M3 x 6 mm screw (screw not
+                                                                                                                                                             included).
+   7                                               Security-lock slot (based on                                                                              Secures the monitor with a security lock (purchased separately) to
+                                                   Kensington Security Slot)                                                                                 prevent unauthorized movement of your monitor.
+   8                                                                                                                                                         Connect the power cable (shipped with your monitor).
+                                                   Power port
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                                                                                                                  About your monitor                                                        13
+
+=== PDF page 14 ===
+Monitor specifications
+Table 7. Monitor specifications.
+ Description                                                 Value
+ Screen type                                                 Active matrix - TFT LCD
+ Panel technology                                            In-Plane Switching (IPS) Technology
+ Aspect ratio                                                16:9
+ Viewable image dimensions
+      Diagonal                                               684.7 mm (27.0 in.)
+ Active area
+      Horizontal                                             596.74 mm (23.49 in.)
+      Vertical                                               335.66 mm (13.22 in.)
+      Area                                                   200302.79 mm2 (310.47 in.2)
+
+ Pixel pitch
+      Horizontal                                             0.1554 mm
+      Vertical                                               0.1554 mm
+ Pixel per inch (PPI)                                        163
+ Viewing angle
+      Horizontal                                             178° (typical)
+      Vertical                                               178° (typical)
+ Brightness                                                  350 cd/m² (typical)
+ Contrast ratio                                              1500:1 (typical)
+ Display screen coating                                      Anti-glare with hard-coating 3H
+ Backlight                                                   LED Edgelight System
+ Response time
+      Normal mode                                            8 ms gray to gray
+      Fast mode                                              5 ms gray to gray
+      Extreme mode                                           4 ms gray to gray*
+                                                             *The 4 ms gray-to-gray mode is achievable in Extreme mode to reduce
+                                                             visible motion blur and increase image responsiveness. However this may
+                                                             introduce some slight and noticeable visual artifacts into the image. As every
+                                                             system setup and every user’s needs are different, we recommend that users
+                                                             experiment with the different modes to find the setting that is right for them.
+ Color depth                                                 1.07 billion colors
+ Color gamut                                                 sRGB 99% (CIE 1931) (typical)
+ Connectivity                                                Bottom
+                                                             •    1 USB-C 5Gbps upstream port (DisplayPort 1.4 Alternate Mode, Power
+                                                                  Delivery up to 65 W)**
+                                                             •    2 HDMI 2.1 ports (HDCP 1.4 & 2.3) (Supports up to UHD 3840 x 2160,
+                                                                  120 Hz, FRL, HDR, VRR as per specified in HDMI 2.1)
+                                                             •    1 USB 5Gbps Type-A downstream port
+                                                             Quick Access Port
+                                                             •    1 USB 5Gbps Type-A downstream port with Battery Charging 1.2
+                                                             •    1 USB-C 5Gbps downstream port (Power Delivery up to 15 W)
+ Border width (edge of monitor to active area)
+      To p                                                   7.30 mm (0.29 in.)
+      Left/Right                                             7.40 mm (0.29 in.)
+      Bottom                                                 13.02 mm (0.51 in.)
+
+
+
+
+
+14          About your monitor
+
+=== PDF page 15 ===
+ Description                                                 Value
+ Adjustability
+      Height adjustment up to                                130 mm
+      Tilt                                                   -5° to 21°
+      Swivel                                                 -30° to 30°
+      Pivot                                                  -90° to 90°
+ Integrated speakers                                         2 integrated 5 W speakers
+ Cable management                                            Ye s
+ Dell Display and Peripheral Manager                         Easy Arrange and other key features
+ compatibility
+ Security                                                    Security-lock slot (for Kensington locks, sold separately)
+
+**USB-C (Alternate mode with DisplayPort 1.4): HBR3/DisplayPort 1.4/ DP audio is suppor ted.
+Dell Display and Peripheral Manager (DDPM) for Windows
+DDPM is a software application that helps you set up and configure the Dell monitors and peripherals. Some of its features include:
+1.   Adjusting the monitor On-Screen Display (OSD) settings such as brightness, contrast, and resolution without needing to use the
+     joystick on the monitor.
+2.   Arrange multiple applications on your screen by placing them into a template of your choice using Easy Arrange.
+3.   Assign applications or files to the partitions of Easy Arrange, save the layout as a profile, and restore the profile automatically
+     with Easy Arrange Memory when needed.
+4.   Connect the Dell Monitor to multiple input sources and manage these video inputs using the Input Source feature.
+5.   Customize each application with its own distinct color mode using the Color Preset feature.
+6.   Replicate software application settings from one monitor to another identical monitor using the Import/Export application
+     settings feature.
+7.   Receive notifications and update the firmware and software.
+8.   A macOS version of DDPM software is also available for your monitor. For the list of displays that support DDPM macOS version,
+     see the knowledge base article 000201067 at https://www.dell.com/support.
+     NOTE: Some features of the DDPM mentioned above are available only on select monitor models. For more information about
+     DDPM, and the recommended computer configuration to install it, go to https://www.dell.com/support/ddpm.
+Resolution specifications
+Table 8. Resolution specifications.
+ Description                                                 Value
+ Horizontal scan range                                       27 kHz to 270 kHz (automatic)
+ Vertical scan range                                         48 Hz to 120 Hz (automatic)
+ Maximum preset resolution                                   3840 x 2160 up to 120 Hz
+
+Suppor ted video modes
+Table 9. Supported video modes.
+ Description                                                                    Value
+ Video display capabilities (HDMI)                                              480p, 576p, 720p, 1080p, 1080i, 2160p
+ Video display capabilities (USB-C alternate mode)                              480p, 576p, 720p, 1080p, 2160p
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                           About your monitor               15
+
+=== PDF page 16 ===
+Preset display modes
+HDMI display modes
+Table 10. HDMI display modes.
+ Display mode                        Horizontal frequency        Vertical frequency          Pixel clock                Sync polarity
+                                     (kHz)                       (Hz)                        (MHz)                      (Horizontal/Vertical)
+ 640 x 480                           31.47                       59.94                       25.18                      -/-
+ 640 x 480                           37.50                       75                          31.50                      -/-
+ 720 x 400                           31.47                       70.08                       28.32                      -/+
+ 800 x 600                           37.88                       60.32                       40                         +/+
+ 800 x 600                           46.88                       75                          49.50                      +/+
+ 1024 x 768                          48.36                       60                          65                         -/-
+ 1024 x 768                          60.02                       75.03                       78.75                      +/+
+ 1152 x 864                          67.50                       75                          108                        +/+
+ 1280 x 1024                         63.98                       60.02                       108                        +/+
+ 1280 x 1024                         79.98                       75.03                       135                        +/+
+ 1600 x 900                          60                          60                          108                        +/+
+ 1600 x 1200                         75                          60                          162                        +/+
+ 1920 x 1080                         67.50                       60                          148.50                     +/+
+ 1920 x 1080                         137.26                      119.98                      285.50                     +/-
+ 2048 x 1280                         78.92                       59.92                       174.25                     +/-
+ 2560 x 1440                         88.79                       59.95                       241.50                     +/-
+ 2560 x 1440                         183                         120                         497.75                     +/-
+ 3840 x 2160                         135                         60                          594                        +/+
+ 3840 x 2160                         270                         120                         1188                       +/+
+
+
+DisplayPort display modes
+Table 11. DisplayPort display modes.
+
+ Display mode                        Horizontal frequency        Vertical frequency          Pixel clock                Sync polarity
+                                     (kHz)                       (Hz)                        (MHz)                      (Horizontal/Vertical)
+ 640 x 480                           31.47                       59.94                       25.18                      -/-
+ 640 x 480                           37.50                       75                          31.50                      -/-
+ 720 x 400                           31.47                       70.08                       28.32                      -/+
+ 800 x 600                           37.88                       60.32                       40                         +/+
+ 800 x 600                           46.88                       75                          49.50                      +/+
+ 1024 x 768                          48.36                       60                          65                         -/-
+ 1024 x 768                          60.02                       75.03                       78.75                      +/+
+ 1152 x 864                          67.50                       75                          108                        +/+
+ 1280 x 1024                         63.98                       60.02                       108                        +/+
+ 1280 x 1024                         79.98                       75.03                       135                        +/+
+ 1600 x 900                          60                          60                          108                        +/+
+ 1600 x 1200                         75                          60                          162                        +/+
+ 1920 x 1080                         67.50                       60                          148.50                     +/+
+ 1920 x 1080                         137.26                      119.98                      285.50                     +/-
+ 2048 x 1280                         78.92                       59.92                       174.25                     +/-
+ 2560 x 1440                         88.79                       59.95                       241.50                     +/-
+ 2560 x 1440                         183                         120                         497.75                     +/-
+
+
+
+
+16         About your monitor
+
+=== PDF page 17 ===
+ Display mode                           Horizontal frequency           Vertical frequency            Pixel clock                    Sync polarity
+                                        (kHz)                          (Hz)                          (MHz)                          (Horizontal/Vertical)
+ 3840 x 2160                            133.31                         60                            533.25                         +/-
+ 3840 x 2160                            270                            120                           1188                           +/+
+
+     NOTE: This monitor supports AMD FreeSync Premium Technology.
+Electrical specifications
+Table 12. Electrical specifications.
+ Description                                                  Value
+ Video input signals                                          •     HDMI 2.0, 600 mV for each differential line, 100 Ω input impedance per
+                                                                    differential pair
+                                                              •     USB-C (Alternate mode with DisplayPort 1.4), 90 Ω input impedance per
+                                                                    differential pair
+ AC input voltage/frequency/current                           100 VAC to 240 VAC/50 Hz or 60 Hz ± 3 Hz/2.3 A (typical)
+ Inrush current                                               •     120 V: 40 A (maximum) at 0°C (cold star t)
+                                                              •     240 V: 80 A (maximum) at 0°C (cold star t)
+ Power consumption                                            •     0.3 W (Off mode)1
+                                                              •     0.4 W (Standby mode)1
+                                                              •     25.2 W (On mode)1
+                                                              •     180 W (Max.)2
+                                                              •     21.0 W (P    )3
+                                                                               on
+                                                              •     65.5 kWh (TEC)3
+
+
+
+1 As defined in EU 2019/2021 and EU 2019/2013.
+
+2 Maximum brightness and contrast setting with maximum power loading on all USB por ts.
+
+3          P: Power consumption of On mode as defined in Energy Star 8.0 version.
+   on
+ TEC: Total energy consumption in kWh as defined in Energy Star 8.0 version.
+ This document is informational only and reflects laboratory performance. Your product may perform differently, depending on the
+ software, components, and peripherals you ordered and you shall have no obligation to update such information.
+ Accordingly, the customer should not rely upon this information in making decisions about electrical tolerances or otherwise. No
+ warranty as to accuracy or completeness is expressed or implied.
+
+      NOTE: This monitor is ENERGY STAR certified. This product qualifies for ENERGY STAR in the factory
+      default settings which can be restored by “Factory Reset” function in the OSD menu. Changing the
+      factory default settings or enabling other features may increase power consumption that could exceed
+      the ENERGY STAR specified limit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                             About your monitor               17
+
+=== PDF page 18 ===
+Physical characteristics
+Table 13. Physical characteristics.
+ Description                                                  Value
+ Signal cable type                                            •    Digital: HDMI, 19 pins (cable not included)
+                                                              •    Digital: USB-C to C, 24 pins
+
+      NOTE: Dell monitors are designed to work optimally with the video cables that are shipped with your monitor. As Dell does
+      not have control over the different cable suppliers in the market, the type of material, connector, and process that is to
+      manufacture these cables, Dell does not guarantee video performance on cables that are not shipped with your Dell monitor.
+ Dimensions (with stand)
+      Height (extended)                                       518.63 mm (20.42 in.)
+      Height (compressed)                                     388.63 mm (15.30 in.)
+      Width                                                   611.54 mm (24.08 in.)
+      Depth                                                   200.40 mm (7.89 in.)
+ Dimensions (without stand)
+      Height                                                  355.98 mm (14.02 in.)
+      Width                                                   611.54 mm (24.08 in.)
+      Depth                                                   60 mm (2.36 in.)
+ Stand dimensions
+      Height (extended)                                       411.80 mm (16.21 in.)
+      Height (compressed)                                     371.24 mm (14.62 in.)
+      Width                                                   248 mm (9.76 in.)
+      Depth                                                   200.40 mm (7.89 in.)
+      Base                                                    248 mm (9.76 in.) x 181.93 mm (7.16 in.)
+ Weight
+      Weight with packaging                                   8.90 kg (19.62 lb)
+      Weight with stand assembly and cables                   6.71 kg (14.79 lb)
+      Weight without stand assembly (For wall                 4.85 kg (10.69 lb)
+      mount or VESA mount considerations - no
+      cables)
+      Weight of stand assembly                                1.65 kg (3.64 lb)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+18          About your monitor
+
+=== PDF page 19 ===
+Environmental characteristics
+Table 14. Environmental characteristics.
+ Description                                               Value
+ Compliant standards
+ •    ENERGY STAR certified monitor
+ •    RoHS-compliant
+ •    BFR/PVC reduced monitor (Its circuit boards are made from BFR/PVC-free laminates.)
+ •    Arsenic-free glass and Mercury-free for the panel only
+ Temperature
+      Operating                                            0°C to 40°C (32°F to 104°F)
+      Non-operating                                        •    Storage: -20°C to 60°C (-4°F to 140°F)
+                                                           •    Shipping: -20°C to 60°C (-4°F to 140°F)
+ Humidity
+      Operating                                            10% to 80% (non-condensing)
+      Non-operating                                        •    Storage: 5% to 90% (non-condensing)
+                                                           •    Shipping: 5% to 90% (non-condensing)
+ Altitude
+      Operating                                            5,000 m (16,404 ft) (maximum)
+      Non-operating                                        12,192 m (40,000 ft) (maximum)
+ Thermal dissipation                                       •    614.6 BTU/Hour (maximum)
+                                                           •    86.0 BTU/Hour (On mode)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                      About your monitor              19
+
+=== PDF page 20 ===
+Pin assignments
+HDMI por t
+
+
+
+
+
+                                                      Figure 6. HDMI port
+Table 15. HDMI pins and assignments.
+ Pin number           19-pin side of the connected signal cable
+ 1                    TMDS DATA 2+
+ 2                    TMDS DATA 2 SHIELD
+ 3                    TMDS DATA 2-
+ 4                    TMDS DATA 1+
+ 5                    TMDS DATA 1 SHIELD
+ 6                    TMDS DATA 1-
+ 7                    TMDS DATA 0+
+ 8                    TMDS DATA 0 SHIELD
+ 9                    TMDS DATA 0-
+ 10                   TMDS CLOCK+
+ 11                   TMDS CLOCK SHIELD
+ 12                   TMDS CLOCK-
+ 13                   CEC
+ 14                   Reserved (N.C. on device)
+ 15                   DDC CLOCK (SCL)
+ 16                   DDC DATA (SDA)
+ 17                   DDC/CEC Ground
+ 18                   +5 V POWER
+ 19                   HOT PLUG DETECT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+20        About your monitor
+
+=== PDF page 21 ===
+Universal Serial Bus (USB) interface
+This section gives you information about the USB por ts that are available on the monitor.
+USB  5Gbps Type-A
+Table 16. USB Type-A  specifications.
+ Transfer speed                         Data rate                               Maximum power supported*
+ SuperSpeed                             5 Gbps                                  4.50 W
+ High speed                             480 Mbps                                4.50 W
+ Full speed                             12 Mbps                                 4.50 W
+
+    NOTE: This monitor is USB 5Gbps compatible.
+USB-C 5Gbps upstream port
+Table 17. USB-C specifications.
+ USB-C                                  Description
+ Video                                  DisplayPort 1.4**
+ Data                                   USB 5Gbps
+ Power Delivery (PD)                    Up to 65 W
+
+*Up to 2 A on USB downstream port (Quick Access Port) with BC1.2 compliance devices or normal USB devices.
+**HBR3/DisplayPort 1.4/DP audio is supported.
+USB Type-A downstream connector
+
+
+
+
+
+                                                   Figure 7. USB Type-A  connector
+Table 18. USB Type-A pins and assignments.
+ Pin number                 Signal name                                  Pin number                  Signal name
+ 1                          VBUS                                         6                           StdA_SSRX+
+ 2                          D-                                           7                           GND_DRAIN
+ 3                          D+                                           8                           StdA_SSTX-
+ 4                          GND                                          9                           StdA_SSTX+
+ 5                          StdA_SSRX-                                   Shell                       Shield
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                About your monitor            21
+
+=== PDF page 22 ===
+USB-C port
+
+
+
+
+
+
+
+                                                             Figure 8. USB-C port
+Table 19. USB-C pins and assignments.
+ Pin number                   Signal name                                    Pin number                   Signal name
+ A1                           GND                                            B1                           GND
+ A2                           TX1+                                           B2                           TX2+
+ A3                           TX1-                                           B3                           TX2-
+ A4                           VBUS                                           B4                           VBUS
+ A5                           CC1                                            B5                           CC2
+ A6                           D+                                             B6                           D+
+ A7                           D-                                             B7                           D-
+ A8                           SBU1                                           B8                           SBU2
+ A9                           VBUS                                           B9                           VBUS
+ A10                          RX2-                                           B10                          RX1-
+ A11                          RX2+                                           B11                          RX1+
+ A12                          GND                                            B12                          GND
+
+
+USB ports
+•   1 USB-C 5Gbps upstream port - bottom (1)
+•   1 USB-C 5Gbps downstream port - Quick Access Port (1)
+•   2 USB 5Gbps Type-A downstream port - bottom (1) and Quick Access Port (1)
+    NOTE: USB 5Gbps functionality requires a USB 5Gbps-capable computer.
+    NOTE: The USB ports on the monitor work only when the monitor is turned On or in Standby mode. If you turn Off the monitor
+    and then turn it On, the attached peripherals may take a few seconds to resume normal functionality.
+Plug-and-play capability
+You can connect the monitor to any Plug and Play-compatible system. The monitor automatically provides the computer with its
+Extended Display Identification Data (EDID) using Display Data Channel (DDC) protocols so that the computer can configure itself
+and optimize the monitor settings. Most monitor installations are automatic; you can select different settings as required. For more
+information about changing the monitor settings, see Operating the monitor.
+LCD monitor quality and pixel policy
+During the LCD Monitor manufacturing process, it is not uncommon for one or more pixels to become fixed in an unchanging state
+which are hard to see and do not affect the display quality or usability. For more information about Dell Monitor Quality and Pixel
+Policy, see www.dell.com/pixelguidelines.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+22         About your monitor
+
+=== PDF page 23 ===
+Ergonomics
+     CAUTION: Improper or prolonged usage of a keyboard may result in injury.
+     CAUTION: Viewing the monitor screen for extended periods of time may result in eye strain.
+For comfort and efficiency, observe the following guidelines when setting up and using your computer workstation:
+•    Position your computer so that the monitor and keyboard are directly in front of you as you work. Special shelves are
+     commercially available to help you correctly position your keyboard.
+•    To reduce the risk of eye strain and neck, arm, back, or shoulder pain from using the monitor for a long period, we recommend
+     you to:
+     1.   Set the distance of the screen between 20 to 28 in. (50 - 70 cm) from your eyes.
+     2.   Blink frequently to moisten your eyes or wet your eyes with water after prolonged usage of the monitor.
+     3.   Take regular and frequent breaks for 20 minutes every two hours.
+     4.   Look away from your monitor and gaze at a distant object that is 20 feet away for at least 20 seconds during the breaks.
+     5.   Perform stretches to relieve tension in the neck, arm, back, and shoulders during the breaks.
+•    Ensure that the monitor screen is at eye level or slightly lower when you are sitting in front of the monitor.
+•    Adjust the tilt of the monitor, its contrast, and brightness settings.
+•    Adjust the ambient lighting around you (such as overhead lights, desk lamps, and the curtains or blinds on nearby windows) to
+     minimize reflections and glare on the monitor screen.
+•    Use a chair that provides good lower-back support.
+•    Keep your forearms horizontal with your wrists in a neutral, comfortable position while using the keyboard or mouse.
+•    Always leave space to rest your hands while using the keyboard or mouse.
+•    Let your upper arms rest naturally on both sides.
+•    Ensure that your feet are resting flat on the floor.
+•    When sitting, make sure that the weight of your legs is on your feet and not on the front portion of your seat. Adjust your chair’s
+     height or use a footrest if necessary, to maintain a proper posture.
+•    Vary your work activities. Try to organize your work so that you do not have to sit and work for extended periods of time. Try to
+     stand or get up and walk around at regular intervals.
+•    Keep the area under your desk clear of obstructions and cables or power cords that may interfere with comfortable seating or
+     present a potential trip hazard.
+                                                                                                     Monitor screen at or below eye level
+
+
+
+
+
+                                                                                                          Monitor and keyboard positioned
+                                                                                                          directly in front of the user
+
+
+
+
+
+     Wrists relaxed and flat
+
+
+                                                                                                          Feet flat on the floor
+
+
+
+
+
+
+                                          Figure 9. Proper sitting posture while using the monitor
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                About your monitor                23
+
+=== PDF page 24 ===
+Handling and moving your display
+To ensure that the monitor is handled safely when lifting or moving it, follow these guidelines:
+•    Before moving or lifting the monitor, turn off your computer and the monitor.
+•    Disconnect all cables from the monitor.
+•    Place the monitor in the original box with the original packing materials.
+•    Hold the bottom edge and the side of the monitor firmly without applying excessive pressure when lifting or moving the monitor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     Figure 10. Proper ways of handling and moving the monitor
+
+•    When lifting or moving the monitor, ensure the screen is facing away from you and do not press on the display area to avoid any
+     scratches or damage.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                Figure 11. Proper way of lifting the monitor
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+24         About your monitor
+
+=== PDF page 25 ===
+•    When transporting the monitor, avoid any sudden shock or vibration to it.
+•    When lifting or moving the monitor, do not turn the monitor upside down while holding the stand base or stand riser. This may
+     result in accidental damage to the monitor or cause personal injury.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        Figure 12. Incorrect way of lifting or moving the monitor
+Maintenance guidelines
+Cleaning your monitor
+     CAUTION: Read and follow the Safety instructions before cleaning the monitor.
+     WARNING: Before cleaning the monitor, unplug the monitor power cable from the electrical outlet.
+For best practices, follow the instructions in the list below when unpacking, cleaning, or handling your monitor:
+•    Use a clean cloth that is slightly dampened with water to clean the stand assembly, the screen, and the chassis of your Dell
+     monitor. If available, use a screen-cleaning tissue or solution suitable for cleaning Dell monitors.
+•    After cleaning the surface of the table, ensure that it is thoroughly dry and free from any moisture or cleaning agent before
+     placing your Dell monitor on it.
+     CAUTION: Do not use detergents or other chemicals such as benzene, thinner, ammonia, abrasive cleaners, alcohol, or
+     compressed air.
+     CAUTION: Using chemicals for cleaning may cause changes in the appearance of the monitor, such as color fading, milky
+     film on the monitor, deformation, uneven dark shade, and peeling of screen area.
+     WARNING: Do not spray the cleaning solution or even water directly on the surface of the monitor. Doing so will allow liquids
+     to accumulate at the bottom of the display panel and corrode the electronics resulting in permanent damage. Instead, apply
+     the cleaning solution or water to a soft cloth and then clean the monitor.
+     NOTE: Monitor damage due to improper cleaning methods and the use of benzene, thinner, ammonia, abrasive cleaners, alcohol,
+     compressed air, detergent of any kind will lead to a Customer Induced Damage (CID). CID is not covered under the standard Dell
+     warranty.
+•    If you notice white residual powder when you unpack your monitor, wipe it off with a cloth.
+•    Handle your monitor with care as a darker-colored monitor may get scratched and show white scuff marks more than a lighter-
+     colored monitor.
+•    To help maintain the best image quality on your monitor, use a dynamically changing screen saver and turn off your monitor
+     when not in use.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                             About your monitor               25
+
+=== PDF page 26 ===
+Setting up the monitor
+Attaching the stand
+     NOTE: The stand assembly is not pre-installed when the monitor is shipped from the factory.
+     NOTE: The following instructions are applicable only for the stand that was shipped with your monitor. If you are attaching a
+     stand that you purchased from any other source, follow the setup instructions that were included with the stand.
+To attach the monitor stand:
+1.   Remove the VESA cover, the side I/O-cover, the stand riser, and the stand base from the cushion.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           Figure 13. Removing the stand parts from the box
+     NOTE: The image is for the purpose of illustration only. The appearance of the package cushion may vary.
+2.   Align and place the stand base onto the stand riser.
+3.   Open the screw handle at the bottom of the stand base and turn it clockwise to secure the stand assembly.
+4.   Close the screw handle.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      Figure 14. Connecting the stand base with the stand riser
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+26         Setting up the monitor
+
+=== PDF page 27 ===
+5.   Align and place the VESA cover to the stand riser.
+6.   Check that the VESA plate is tilted up to flush with the thumbscrew for ease of tightening.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                          Figure 15. Aligning the VESA cover to the stand riser
+
+7.   Open the screw handle at the front of the VESA cover and turn it clockwise to secure the hinge assembly.
+8.   Close the screw handle.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    Figure 16. Tightening the screw to secure the hinge assembly
+
+9.   Open the protective cover on the monitor to access the VESA slot on the display back cover.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                   Figure 17. Opening the protective cover
+     NOTE: Before attaching the stand assembly to the display, ensure that the front plate flap is opened to allow space for assembly.
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                        Setting up the monitor              27
+
+=== PDF page 28 ===
+10.  Carefully insert the tabs on the stand riser into the slots on the display back cover and press down the stand assembly to snap it
+     into place.
+
+
+                                                                                   2
+
+
+
+
+                                                                                1
+
+
+
+
+
+
+
+
+
+                                        Figure 18. Attaching the stand assembly to the monitor
+
+11.  Hold the stand riser with both hands firmly and lift the monitor. Then place the monitor in an upright position on a flat surface.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                       Figure 19. Removing the monitor from the packaging box
+     NOTE: Hold the stand riser firmly when lifting the monitor to avoid any accidental damage.
+12.  Lift the protective cover from the monitor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                  Figure 20. Removing the protective cover
+
+
+
+
+
+
+
+
+
+
+28          Setting up the monitor
+
+=== PDF page 29 ===
+Connecting your monitor
+     WARNING: Before you begin any of the procedures in this section, follow the Safety instructions.
+     NOTE: Dell monitors are designed to work optimally with the Dell-supplied cables inside the box. Dell does not guarantee the
+     video quality and performance if non-Dell cables are used.
+     NOTE: Route the cables through the cable management guide before connecting them.
+     NOTE: Do not connect all the cables to the computer simultaneously.
+     NOTE: The images are for the purpose of illustration only. The appearance of the computer may vary.
+To connect your monitor to the computer:
+1.   Turn off your computer and disconnect the power cable.
+2.   Connect the USB-C cable (shipped with your monitor) or HDMI cable (purchased separately) from your monitor to the computer.
+     CAUTION: To prevent bending the USB-C cable connector, gently grasp both sides of the connector and insert or remove it
+     straight from the monitor’s USB-C port.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     Figure 21. Connecting and disconnecting the USB-C cable
+
+3.   Plug the power cables for your computer and monitor into a nearby outlet.
+4.   Turn on the monitor and the computer.
+If your monitor displays an image, installation is complete. If it does not display an image, see Common problems.
+Connecting the USB-C and power cables
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                         Figure 22. USB-C connection
+     NOTE: Use the USB-C to C cable shipped with your monitor only.
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                    Setting up the monitor              29
+
+=== PDF page 30 ===
+Connecting the HDMI and power cables (optional)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     Figure 23. HDMI connection
+Routing the cables
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                    Figure 24. Routing the cables
+To route the cables:
+1.  Connect the HDMI cable (purchased separately) to the HDMI 2 port or/and the USB cable (purchased separately) to the USB
+    Type-A port.
+2.  Insert and organize the HDMI/USB cable under the restraint lever as shown above.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+30        Setting up the monitor
+
+=== PDF page 31 ===
+Attaching the side I/O-cover
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                  Figure 25. Attaching the side I/O-cover
+To attach the side I/O-cover:
+1.   Align and place the tabs on the side I/O-cover with the slots on the display back cover.
+2.   Press the side I/O-cover to snap it into place.
+Organizing your cables
+Install the cable management guide.
+Route the cables through the cable management guide on the stand riser.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                      Figure 26. Organizing the cables
+After connecting all the necessary cables (see Connecting your monitor for cable attachment), organize all the cables as shown in the
+image.
+     NOTE: If the cable is too short, connect it directly to the computer without routing it through the cable management slot. This
+     provides room for all adjustments and prevents stress on the connections.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                    Setting up the monitor             31
+
+=== PDF page 32 ===
+     CAUTION: To prevent damage to the monitor when adjusting its orientation, ensure there is enough cable clearance between
+     the connectors and the cable management slot.
+Follow these steps:
+1.   Raise the monitor to its highest position and pivot it fully.
+2.   Connect all necessary cables and route them through the cable management slot.
+3.   Move, tilt, and pivot the monitor to check if any cables are tight, twisted, or out of place.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           Figure 27. Cable Connection at full height and pivot
+
+4.   Leave enough cable clearance between the connectors and the cable management slot.
+     NOTE: If the cable is too short, connect it directly to the computer without routing it through the cable management slot. This
+     provides room for all adjustments and prevents stress on the connections.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                Figure 28. Maintain adequate cable length for monitor adjustments
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+32          Setting up the monitor
+
+=== PDF page 33 ===
+Turn on the monitor
+Press the power button to turn on the monitor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     Figure 29. Turn on the monitor
+Securing your monitor using Kensington lock (optional)
+The security-lock slot is located at the bottom of the monitor (see Security-lock slot). Secure your monitor to a table using the
+Kensington security lock.
+For more information on using the Kensington lock (sold separately), see the documentation that is shipped with the lock.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                 Figure 30. Using the Kensington lock
+    NOTE: The image is for the purpose of illustration only. The appearance of the lock may vary.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                              Setting up the monitor            33
+
+=== PDF page 34 ===
+Removing the monitor stand
+     NOTE: To prevent scratches on the LCD screen when removing the stand, ensure that the monitor is placed on a soft surface
+     and handle it carefully.
+     NOTE: The following steps are specifically for removing the stand that is shipped with your monitor. If you are removing a stand
+     that you purchased from any other source, follow the setup instructions that are included with the stand.
+To remove the stand:
+1.   Place the monitor on a soft cloth or cushion.
+2.   Press and hold the stand release button at the back of the display.
+3.   Lift the stand assembly up and away from the monitor.
+
+
+
+
+
+
+                                                                                                3
+
+                                                           2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                   Figure 31. Removing the monitor stand
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+34         Setting up the monitor
+
+=== PDF page 35 ===
+VESA wall mounting (optional)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                       Figure 32. VESA wall mounting
+     NOTE: Use M4 x 10 mm screws to connect the monitor to the wall-mounting kit.
+Refer to the instructions that come with the VESA-compatible wall-mounting kit.
+1.   Place the monitor panel on a soft cloth or cushion on a stable flat table.
+2.   Remove the monitor stand. (See Removing the monitor stand.)
+3.   Use a Phillips crosshead screwdriver to remove the four screws securing the plastic cover.
+4.   Attach the mounting bracket from the wall-mounting kit to the monitor.
+5.   Mount the monitor on the wall. For more information, see the documentation that shipped with the wall-mounting kit.
+     NOTE: For use only with UL or CSA or GS-listed wall mount bracket with minimum weight or load bearing capacity of 19.40 kg.
+Organizing cables on a monitor arm (sold separately)
+     CAUTION: To prevent damage to the monitor when adjusting its orientation, ensure there is enough cable clearance between
+     the connectors and the cable management channel on the monitor arm.
+     NOTE: The images are for illustration purposes only. The appearance of your stand arm (sold separately) may vary.
+Follow these steps:
+1.   Raise the monitor to its highest position and pivot it fully.
+2.   Connect all necessary cables and route them through the cable management channel on the monitor arm.
+3.   Move, tilt, and pivot the monitor to check if any cables are tight, twisted, or out of place.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                          Figure 33. Cable Connection at full height and pivot
+
+
+
+                                                                                                                    Setting up the monitor             35
+
+=== PDF page 36 ===
+4.   Leave enough cable clearance between the connectors and the cable management channel on the monitor arm.
+     NOTE: If the cable is too short, connect it directly to the computer without routing it through the cable management channel on
+     the monitor arm. This provides room for all adjustments and prevents stress on the connections.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                Figure 34. Maintain adequate cable length for monitor adjustments
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+36         Setting up the monitor
+
+=== PDF page 37 ===
+Operating the monitor
+Turn on the monitor
+Press the power button to turn on the monitor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     Figure 35. Turn on the monitor
+Using the joystick control
+Use the joystick control on the rear of the monitor to make On-Screen Display (OSD) adjustments.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                  Figure 36. Using the joystick control
+
+1.  Press the joystick to launch the Menu Launcher.
+2.  Move the joystick up or down or left or right to toggle through options.
+3.  Press the joystick again to confirm the selection.
+
+Table 20. Movement of the joystick.
+ Joystick                        Description
+                                 •    When there is no OSD on the screen, press the joystick to launch the Menu Launcher. See
+                                      Accessing the Menu Launcher.
+                                 •    When the OSD is displayed, press the joystick to confirm the selection or save the settings.
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                               Operating the monitor             37
+
+=== PDF page 38 ===
+ Joystick                           Description
+                                    •    For 2-way (right and left) directional navigation.
+                                    •    Move right to enter the submenu.
+                                    •    Move left to the upper-level menu or exit from the current menu.
+
+
+
+
+                                    •    For 2-way (up and down) directional navigation.
+                                    •    Toggles through the menu items.
+                                    •    Increases (up) or decreases (down) the parameters of selected menu item.
+
+
+
+
+
+You can assign the four directional movements as Direct Key 1/2/3/4 to access a specific OSD function. For more information, see
+Direct Key Guide.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              Figure 37. Joystick and Direct Keys (view from the back of the display)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+38          Operating the monitor
+
+=== PDF page 39 ===
+Using the On-Screen Display (OSD) menu
+Accessing the Menu Launcher
+When you press the joystick, the Menu Launcher appears to let you access the OSD main menu and shortcut functions.
+To select a function, move the joystick.
+
+
+                                                                                                               2
+
+
+
+                                        1
+
+
+                                                                                                               3
+
+
+
+                                                           Figure 38. Menu Launcher
+The following table describes the Menu Launcher functions:
+Table 21. Menu Launcher description.
+ Label                Icon                          Description
+ When you move the joystick left or right to switch through the shortcut functions, the selected item is shifted to the center position.
+ Press the joystick to enter its submenu and make adjustments by moving the joystick.
+      NOTE: You can set your preferred shortcut keys. For more information, see Personalize.
+ 1                                                  Input Source: To choose an input source from the list of video signals that may be
+                                                    connected to your monitor.
+
+                           Shortcut Key 1
+                                                    Preset Modes: To choose a preferred color mode from the list of preset modes.
+
+
+                           Shortcut Key 2
+                                                    Brightness/Contrast: To access the adjustment sliders of brightness and contrast.
+
+
+                           Shortcut Key 3
+                                                    Volume: To access the adjustment slider of volume.
+
+
+                           Shortcut Key 4
+                                                    Audio Profiles: To choose a preferred audio mode from the list of audio profiles.
+
+
+                           Shortcut Key 5
+
+      NOTE: After you change the settings, follow the navigation keys to confirm the changes before proceeding to another function
+      or exiting.
+ 2                                                  To launch the On-Screen Display (OSD) main menu. See Accessing the menu system.
+
+
+                                Menu
+ 3                                                  To exit the Menu Launcher.
+
+
+                                 Exit
+
+
+
+
+
+
+                                                                                                                     Operating the monitor              39
+
+=== PDF page 40 ===
+Using the navigation keys
+When the OSD menu is active, adjust the settings by moving the joystick, following the navigation keys at the bottom center of the
+OSD menu.
+
+
+
+
+
+
+
+
+
+                                                           Figure 39. Navigation keys
+     NOTE: To exit the current menu item and return to the previous menu, move the joystick to the left until you exit.
+Accessing the menu system
+     NOTE: After you change the settings, follow the navigation keys to confirm the changes before proceeding to another function or
+     exiting.
+Table 22. OSD menu description.
+ Icon             Menu and submenu              Description
+                  Brightness/Contrast           Adjusts the brightness and the contrast of the display.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                            Figure 40. Brightness/Contrast menu
+                                                     NOTE: Manual adjustment of Brightness or Contrast is unavailable when Smart HDR
+                                                     is activated and HDR content is displayed.
+                  Brightness                    The Brightness function adjusts the luminance of the backlight.
+                                                Move the joystick up or down to increase or decrease the brightness level (min. 0/max.
+                                                100).
+                  Contrast                      Adjust Brightness first, and then adjust Contrast only if further adjustment is necessary.
+                                                The Contrast function adjusts the degree of difference between darkness and lightness on
+                                                the monitor screen.
+                                                Move the joystick up or down to increase or decrease the contrast level (min. 0/max. 100).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+40          Operating the monitor
+
+=== PDF page 41 ===
+Icon             Menu and submenu               Description
+                 Input Source                   Select from the available video signals connected to your monitor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                  Figure 41. Input Source menu
+                 USB-C       65W                Select USB-C         65W when you are using the USB-C port. Press the joystick to confirm the
+                                                selection.
+                 HDMI 1                         Select HDMI 1 when you are using the HDMI 1 port. Press the joystick to confirm the
+                                                selection.
+                 HDMI 2                         Select HDMI 2 when you are using the HDMI 2 port. Press the joystick to confirm the
+                                                selection.
+                 Rename Inputs                  Allows you to specify a preset input name for the selected input source. The preset options
+                                                are PC, PC 1, PC 2, Laptop, Laptop 1, and Laptop 2. The default setting is Off.
+                                                      NOTE: When you perform a rename for the USB-C Charging                       65W input, the wattage
+                                                     value remains after the specified option, e.g., PC 1              (65W).
+                                                      NOTE: It is not applicable for the input names that are shown in the warning messages
+                                                     and Display Info.
+                 Auto Select                    Automatically scans for available input sources. The default is On. Press the joystick to
+                                                confirm the selection.
+                 Options for USB-C              Allows you to set this function to:
+                                                •    Prompt for Multiple Inputs: Always displays the message for setting up the primary
+                                                     use of the monitor’s USB-C connection.
+                                                •    Always Switch: Always switches to USB-C video input (without asking) when the
+                                                     USB-C cable is connected.
+                                                •    Off: Never automatically switches to USB-C video input when the USB-C cable is
+                                                     connected.
+                                                Press the joystick to confirm the selection.
+                                                      NOTE: The function is available only when Auto Select is on.
+                 Options for HDMI               Allows you to set this function to:
+                                                •    Prompt for Multiple Inputs: Always displays the “Switch to HDMI Video Input”
+                                                     message for you to choose whether to switch or not.
+                                                •    Always Switch: Always switches to HDMI video input (without asking) when the HDMI
+                                                     cable is connected.
+                                                •    Off: Never automatically switches to HDMI video input when the HDMI cable is
+                                                     connected.
+                                                Press the joystick to confirm the selection.
+                                                      NOTE: The function is available only when Auto Select is on.
+                 Reset Input Source             Resets all settings under the Input Source menu to the factory defaults.
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                         Operating the monitor                41
+
+=== PDF page 42 ===
+ Icon              Menu and submenu              Description
+                   Color                         Adjusts the color setting mode.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                        Figure 42. Color menu
+                   Preset Modes                  Allows you to choose a preset color mode or create your own color modes.
+                                                 Press the joystick to confirm the selection.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                  Figure 43. Preset Modes menu
+
+                                                 •     Standard: Loads the monitor’s default color settings. This is the default setting.
+                                                 •     Movie: Loads color settings ideal for movies.
+                                                 •     FPS: Loads color settings ideal for First-Person Shooter (FPS) games.
+                                                 •     RTS: Loads color settings ideal for Real-Time Strategy (RTS) games.
+                                                 •     RPG: Loads color settings ideal for Role-Playing Games (RPG).
+                                                 •     Warm: Presents colors at lower color temperatures. The screen appears warmer with a
+                                                       red/yellow tint.
+                                                 •     Cool: Presents colors at higher color temperatures. The screen appears cooler with a
+                                                       blue tint.
+                                                 •     sRGB: Presents accurate colors without oversaturation when the displayed content is
+                                                       sRGB coded.
+                                                 •     Custom Color: Allows you to manually adjust the color settings. Move the joystick to
+                                                       adjust the Gain, Offset, Hue, and Saturation settings and create your own preset color
+                                                       mode.
+                                                       NOTE: The function is unavailable when Smart HDR is activated and HDR content is
+                                                       displayed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+42          Operating the monitor
+
+=== PDF page 43 ===
+Icon             Menu and submenu                Description
+                 Input Color Format              Allows you to set the video input mode to:
+                                                 •    RGB: Select this option if your monitor is connected to a computer or a media player
+                                                      that supports RGB output.
+                                                 •    YCbCr: Select this option if your media player supports only YCbCr output.
+                                                 Press the joystick to confirm the selection.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                               Figure 44. Input Color Format menu
+                 Hue                             This function can shift the color of the video image to green or purple. This is used to
+                                                 adjust the desired flesh tone color. Move the joystick to adjust the hue level from ‘0’ to ‘100’.
+                                                 Higher levels increase the green shade of the video image, while lower levels increase the
+                                                 purple shade of the video image.
+                                                      NOTE: The function is available only when you select Movie, FPS, RTS, or RPG preset
+                                                      mode.
+                 Saturation                      This function can adjust the color saturation of the video image. Move the joystick to adjust
+                                                 the saturation level from ‘0’ to ‘100’.
+                                                 Higher levels increase the colorful appearance of the video image; while lower levels
+                                                 increase the monochrome appearance of the video image.
+                                                      NOTE: The function is available only when you select Movie, FPS, RTS, or RPG preset
+                                                      mode.
+                 Reset Color                     Resets all settings under the Color menu to the factory defaults.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                          Operating the monitor                43
+
+=== PDF page 44 ===
+ Icon             Menu and submenu               Description
+                  Display                        Use Display to adjust the images.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                       Figure 45. Display menu
+                  Aspect Ratio                   Adjusts the image ratio to 16:9, Auto Resize, or 4:3.
+                  Sharpness                      This function can make the image look sharper or softer. Move the joystick to adjust the
+                                                 sharpness level from ‘0’ to ‘100’.
+                  Response Time                  Allows you to set the response time to Normal, Fast, or Extreme.
+                  Dark Stabilizer                The function improves the visibility in the dark gaming scenarios. The higher the value
+                                                 (between 0 to 3), the better visibility in the dark area of the display image.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                   Figure 46. Dark Stabilizer menu
+                                                      NOTE: The function is unavailable when Smart HDR is activated and HDR content is
+                                                      displayed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+44          Operating the monitor
+
+=== PDF page 45 ===
+Icon             Menu and submenu               Description
+                 Smart HDR                      The Smart HDR (High Dynamic Range) function enhances the display output by optimally
+                                                adjusting contrast and the ranges of color and luminosity to resemble true-to-life visuals.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                  Figure 47. Smart HDR menu
+
+                                                •    Desktop: For using the monitor with a desktop computer.
+                                                •    Movie HDR: For the playback of HDR video content.
+                                                •    Game HDR: For playing HDR-compatible games. It displays more realistic scenes and
+                                                     makes the gaming experience immersive and entertaining.
+                                                You can disable Smart HDR by selecting Off. Press the joystick to confirm the selection.
+                                                     NOTE: When activating and deactivating Smart HDR, a blank screen is expected
+                                                     (about 5 seconds). This is normal behavior as the monitor changes the display mode.
+                                                     Do not power cycle the monitor.
+                                                     NOTE: When the monitor is processing HDR content, Preset Modes, Dark Stabilizer,
+                                                     Brightness, and Contrast are unavailable.
+                                                     NOTE: S2725QC does not suppor t HLG.
+                 USB-C Prioritization           Allows you to specify the priority to transfer the data with high resolution (High Resolution)
+                                                or high speed (High Data Speed) when using the USB-C port. If the current platform is
+                                                DP 1.4 (HBR3), use High Data Speed to access full video performance with high data
+                                                speed. If the current platform is DP 1.2 (HBR2) or below, select High Resolution for
+                                                accessing full video performance with data and network speed drop.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                              Figure 48. USB-C Prioritization menu
+                 Reset Display                  Resets all settings under the Display menu to the factory defaults.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                       Operating the monitor                45
+
+=== PDF page 46 ===
+ Icon             Menu and submenu               Description
+                  Audio
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                       Figure 49. Audio menu
+                  Volume                         Allows you to set the volume level of the speakers. Move the joystick to adjust the volume
+                                                 level from ‘0’ to ‘100’.
+                  Speaker                        Allows you to turn on or off the speaker function.
+                  Audio Profiles                 Allows you to set your preferred audio profile.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                 Figure 50. Audio Profiles menu
+
+                                                 •    Standard: This is the default setting.
+                                                 •    Movie: For viewing motion picture.
+                                                 •    Game: For gaming sound effect.
+                                                 •    Music: For music listening.
+                                                 •    Voice: For speech.
+                                                 •    Custom Audio: Allows you to manually adjust the sound. Move the joystick to
+                                                      configure the settings.
+                  Reset Audio                    Resets all settings under the Audio menu to the factory defaults.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+46          Operating the monitor
+
+=== PDF page 47 ===
+Icon             Menu and submenu               Description
+                 Menu                           Adjusts the settings of the OSD, such as the languages of the OSD, the amount of time the
+                                                menu remains on screen, and so on.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                       Figure 51. Menu menu
+                 Language                       Sets the OSD display to one of the eight languages (English, Spanish, French, German,
+                                                Brazilian Portuguese, Russian, Simplified Chinese, or Japanese).
+                 Rotation                       Press the joystick to rotate the OSD by 0/90/270 degrees.
+                                                You can adjust the menu according to your display rotation.
+                 Transparency                   Select to change the menu transparency by moving the joystick (min. 0/max. 100).
+                 Timer                          Sets the length of time for the OSD to remain active after your last operation with the
+                                                joystick.
+                                                Move the joystick to adjust the slider in 1 second increments, from 5 to 60 seconds.
+                 Lock                           With the control buttons on the monitor locked, you can prevent people from accessing the
+                                                controls.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                        Figure 52. Lock menu
+
+                                                •     Menu Buttons: All joystick functions are locked and not accessible by the user.
+                                                •     Power Button: Only the Power button is locked and not accessible by the user.
+                                                •     Menu + Power Buttons: Both the joystick and Power button are locked and not
+                                                      accessible by the user.
+                                                The default setting is Disable.
+                                                Alternative Lock Method: You can move and hold the joystick up or down or left or right for
+                                                4 seconds to set the lock options using the pop-up menu, and then press the joystick to
+                                                confirm the configuration.
+                                                      NOTE: To unlock, move and hold the joystick up or down or left or right for 4 seconds,
+                                                      and then press the joystick to confirm the changes and close the pop-up menu.
+                 Reset Menu                     Resets all settings under the Menu menu to the factory defaults.
+
+
+
+
+
+
+
+
+                                                                                                                         Operating the monitor                47
+
+=== PDF page 48 ===
+ Icon             Menu and submenu               Description
+                  Personalize
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                   Figure 53. Personalize menu
+                  Shortcut Key Guide             Select and follow the on-screen instructions to customize the Shortcut Keys in the Menu
+                                                 Launcher.
+                  Shortcut Key 1                 Select a function from Preset Modes, Brightness/Contrast, Input Source, Aspect Ratio,
+                  Shortcut Key 2                 Rotation, Volume, Audio Profiles, Smart HDR, or Display Info and set it as a Shortcut Key
+                                                 in the Menu Launcher.
+                  Shortcut Key 3
+                  Shortcut Key 4
+                  Shortcut Key 5
+
+
+
+
+
+
+
+
+                                                                                     Figure 54. Menu Launcher
+                  Direct Key Guide               Select and follow the on-screen instructions to assign your preferred functions to the
+                                                 joystick’s 4 directional movements.
+                  Direct Key 1                   Select a function from Menu Launcher, Preset Modes, Brightness, Contrast, Input Source,
+                  Direct Key 2                   Aspect Ratio, Rotation, Volume, Audio Profiles, Smart HDR, or Display Info and set it as a
+                                                 Direct Key.
+                  Direct Key 3                   The factory default setting is Menu Launcher.
+                  Direct Key 4                   When you set a Direct Key to Off, it returns to the original movement (down, right, up, or
+                                                 left).
+                                                      NOTE: When there is no video signal, the Direct Key will not work.
+                  Power LED                      Allows you to set the state of the power light to save energy.
+                  USB-C Charging                 Allows you to enable or disable the USB-C Charging                 65W function during monitor off
+                  65W                            mode. If On in Off Mode is selected, you will be able to charge your notebook or mobile
+                                                 devices through the USB-C cable even when the monitor is powered off.
+                  Other USB Charging             Allows you to enable or disable USB Type-A and USB-C Downstream Ports charging
+                                                 function during monitor standby mode.
+                  Reset Personalization          Resets all settings under the Personalize menu to the factory defaults.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+48          Operating the monitor
+
+=== PDF page 49 ===
+Icon             Menu and submenu              Description
+                 Others                        Adjusts the OSD settings, such as DDC/CI, LCD Conditioning, Self-Diagnostic, and so on.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                    Figure 55. Others menu
+                 DDC/CI                        DDC/CI (Display Data Channel/Command Interface) allows you to adjust the monitor
+                                               settings using software on your computer. Enable this function for the best user experience
+                                               and optimum performance of your monitor. You can disable this function by selecting Off.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                   Figure 56. DDC/CI menu
+                 LCD Conditioning              Helps reduce minor cases of image retention. Depending on the degree of image retention,
+                                               the program may take some time to run. You can enable this function by selecting On.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                             Figure 57. LCD Conditioning menu
+                 Self-Diagnostic               Select this function to run the built-in diagnostics, see Built-in diagnostics.
+                 Reset Others                  Resets all settings under the Others menu to the factory defaults.
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                      Operating the monitor              49
+
+=== PDF page 50 ===
+ Icon             Menu and submenu             Description
+                  Factory Reset                Restore all preset values to the factory default settings. These are also the settings for
+                                               ENERGY STAR tests.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                              Figure 58.  Factory Reset menu
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+50         Operating the monitor
+
+=== PDF page 51 ===
+Icon            Menu and submenu              Description
+                More Information              Use the menu to view the monitor’s information or seek more monitor support.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                           Figure 59. More Information menu
+                Display Info                  Select to display the current settings, firmware version, and service tag of your monitor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                               Figure 60. Display Info menu
+                Dell Monitor Support          To access the general monitor support materials for your monitor, use your smartphone to
+                                              scan the QR code.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                   Operating the monitor              51
+
+=== PDF page 52 ===
+OSD warning message
+When the monitor does not suppor t a particular resolution mode, you see the following message:
+
+
+
+
+
+
+                                                 Figure 61. Input timing warning message
+This means that the monitor cannot synchronize with the signal that it is receiving from the computer. See Monitor specifications for
+the Horizontal and Vertical frequency ranges addressable by this monitor. The recommended mode is 3840 x 2160.
+You see the following message before the DDC/CI function is disabled:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                    Figure 62. DDC/CI warning message
+
+When you adjust the Brightness level above the default level for the first time, the following message appears:
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     Figure 63. Power warning message
+     NOTE: If you select Ye s, the message will not appear the next time that you change the Brightness setting.
+When you select Off for the Smart HDR function, the next time you select any predetermined option (without the                           symbol) that
+increases power consumption, the following message appears:
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     Figure 64. Power warning message
+     NOTE: Once you select Ye s, the message will not appear even if you choose any other predetermined option (without the
+     symbol). When you perform a factory reset, the message appears again.
+
+
+
+
+
+
+
+
+52         Operating the monitor
+
+=== PDF page 53 ===
+When you change the default setting of a power-saving feature (with the                   symbol) for the first time, such as USB-C Charging
+65W or Other USB Charging, the following message appears:
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     Figure 65. Power warning message
+     NOTE: Once you select Ye s, the message will not appear even if you choose any other predetermined option (without the
+     symbol). When you perform a factory reset, the message appears again.
+You see the following message before the Lock function is activated:
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                Figure 66. Lock function warning message
+     NOTE: The message may be slightly different according to the selected settings.
+When the monitor is under DP/HDMI input and the USB-C cable is connected to a notebook that supports DP Alternate Mode, if
+Options for USB-C is set to Prompt for Multiple Inputs, the following message appears:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                       Figure 67. Options for USB-C function warning message
+When the monitor goes into Standby mode, the following message appears:
+
+
+
+
+                                               Figure 68. Standby mode warning message
+Activate the computer and wake up the monitor to gain access to the OSD.
+
+
+
+
+
+
+
+
+
+                                                                                                                     Operating the monitor              53
+
+=== PDF page 54 ===
+The OSD functions only in the normal operation mode. If you press the joystick during the Standby mode, the following message
+appears depending on the selected input:
+
+
+
+
+
+
+
+                                              Figure 69. Signal detection warning message
+Activate the computer and the monitor to gain access to the OSD.
+     NOTE: The message may be slightly different according to the connected input signal.
+If USB-C or HDMI input is selected and the corresponding cable is not connected, the following message appears:
+
+
+
+
+
+
+                                       Figure 70. Signal cable disconnected warning message
+     NOTE: The message may be slightly different according to the selected input signal.
+When Factory Reset is selected, the following message appears:
+
+
+
+
+
+
+
+
+
+
+
+
+                                                Figure 71. Factory reset warning message
+See Troubleshooting for more information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+54         Operating the monitor
+
+=== PDF page 55 ===
+Locking the control buttons
+You can lock the monitor control buttons to prevent access to the OSD menu and/or power button.
+1.   Move and hold the joystick up or down or left or right for about 4 seconds until a pop-up menu appears.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                               Figure 72. Lock menu
+
+2.   Move the joystick to select one of the following options:
+
+
+      •             :  The OSD menu settings are locked and not accessible.
+
+
+
+      •             :  The power button is locked.
+
+
+
+      •             :  The OSD menu settings are not accessible, and the power button is locked.
+
+
+
+3.   Press the joystick to confirm the configuration.
+To unlock, move and hold the joystick up or down or left or right for about 4 seconds until a menu appears, and then select                                to
+unlock and close the pop-up menu.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                             Figure 73. Unlock menu
+     NOTE: The message may be slightly different according to the selected settings.
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                       Operating the monitor               55
+
+=== PDF page 56 ===
+Setting the maximum resolution
+     NOTE: The steps may vary slightly depending on the version of Windows you have.
+To set the maximum resolution for the monitor in Windows 10 and Windows 11:
+1.   Right-click the desktop and click Display settings.
+2.   If you have more than one monitor connected, ensure to select S2725QC.
+3.   Click the Display Resolution dropdown list and select 3840 x 2160.
+4.   Click Keep changes.
+If you do not see 3840 x 2160 as an option, you must update your graphics driver to the latest version. Depending on your computer,
+complete one of the following procedures:
+If you have a Dell desktop or laptop:
+•    Go to www.dell.com/support, enter your service tag, and download the latest driver for your graphics card.
+If you are using a non-Dell computer (laptop or desktop):
+•    Go to the support site for your non-Dell computer and download the latest graphics card drivers.
+•    Go to the graphics card’s website and download the latest graphics card drivers.
+Requirements to view or playback HDR content
+(1) Through Ultra BluRay DVD or Game consoles
+     Ensure the DVD player or Game console is HDR capable, such as Panasonic DMP-UB900 or PS5.
+(2) Through a PC
+     Ensure the graphics card used is HDR capable, that is, it has an HDMI 2.1 (TMDS)(with HDR option) compliant por t and an HDR
+     graphics driver is installed. HDR capable application program must be used, such as Cyberlink PowerDVD 17, Windows 10
+     Movies and TV app.
+     NOTE: The message may be slightly different according to the selected settings. To download and install the latest graphics
+     driver that supports HDR content playback on your Dell desktop or laptop, see https://www.dell.com/support/drivers.
+     NVIDIA
+     For a full range of HDR capable NVIDIA graphics cards, see www.nvidia.com.
+     Ensure to download the driver that supports Full Screen Playback mode (for example, PC games, UltraBluRay players), HDR on
+     Win 10 Redstone 2 OS: 381.65 or later.
+     AMD
+     For a full range of HDR capable AMD graphics cards, see www.amd.com. Read the HDR driver support information and
+     download the latest driver.
+     Intel (Integrated Graphics)
+     HDR capable processor: CannonLake or later
+     Suitable HDR player: Windows 10 Movies and TV app
+     Operating System (OS) with HDR support: Windows 10 Redstone 3
+     Driver with HDR support: see downloadcenter.intel.com for the latest HDR driver
+     NOTE: HDR playback through OS (e.g. playback of HDR in a window within the desktop) requires Windows 10 Redstone 2 or
+     later with an appropriate application program such as PowerDVD 17. Playing back protected content requires appropriate DRM
+     software and/or hardware, for example Microsoft Playready. For support information, see https://support.microsoft.com.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+56         Operating the monitor
+
+=== PDF page 57 ===
+Using the tilt, swivel, pivot and height adjustment
+      NOTE: The following instructions are applicable only for the stand that was shipped with your monitor. If you are attaching a
+      stand that you purchased from any other source, follow the setup instructions that were included with the stand.
+Tilt and swivel adjustment
+With the stand attached to the monitor, you can tilt and swivel the monitor for the most comfor table viewing angle.
+                                                                                    5°                                                                                                                                                                                                                                                                                                                                             21°
+
+
+
+
+
+                                                         30°                                                                                      30°
+
+
+
+
+
+
+
+
+
+
+
+                                                                      Figure 74. Tilt and swivel adjustment
+      NOTE: The stand assembly is not pre-installed when the monitor is shipped from the factory.
+Height adjustment
+      NOTE: The stand extends vertically up to 130 mm. The following image illustrates how to extend the stand vertically.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                              130 mm
+
+                                                                             Figure 75. Height adjustment
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                               Operating the monitor                           57
+
+=== PDF page 58 ===
+Pivot adjustment
+Before you rotate the display, ensure it is extended vertically and tilted up to avoid hitting the bottom edge of the monitor.
+
+
+                                                                               2
+
+
+
+
+
+                                                              1
+
+
+
+
+
+
+
+
+
+                                                         Figure 76. Pivot adjustment
+Rotate clockwise
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                       Figure 77. Rotating the display 90 degrees (clockwise)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+58         Operating the monitor
+
+=== PDF page 59 ===
+Rotate counterclockwise
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    Figure 78. Rotating the display 90 degrees (counterclockwise)
+     NOTE: To use the Display Rotation function (Landscape compared with Portrait view) with your Dell computer, you require an
+     updated graphics driver that is not included with this monitor. To download the graphics driver, go to www.dell.com/support and
+     see the Download section for Video Drivers for latest driver updates.
+     NOTE: In the Portrait mode, you may experience performance degradation when using graphic-intensive applications such as 3D
+     gaming.
+Adjusting the rotation display settings of your computer
+After you have rotated your monitor, you need to complete the procedure below to adjust the Rotation Display Settings of your
+computer.
+     NOTE If you are using the monitor with a non-Dell computer, you need to go to the graphics driver website or your computer
+     manufacturer’s website for information about rotating the ‘contents’ on your display.
+To adjust the Rotation Display Settings:
+1.   Right-click the desktop and click Properties.
+2.   Select the Settings tab and click Advanced.
+3.   If you have an AMD graphics card, select the Rotation tab and set the preferred rotation.
+4.   If you have an NVIDIA graphics card, click the NVIDIA tab, in the left-hand column select NVRotate, and then select the preferred
+     rotation.
+5.   If you have an Intel graphics card, select the Intel graphics tab, click Graphic Properties, select the Rotation tab, and then set the
+     preferred rotation.
+     NOTE: If you do not see the rotation option or it is not working correctly, go to www.dell.com/support and download the latest
+     driver for your graphics card.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                           Operating the monitor                59
+
+=== PDF page 60 ===
+Troubleshooting
+     WARNING: Before you begin any of the procedures in this section, follow the Safety instructions.
+Self-test
+Your monitor provides a self-test feature that allows you to check whether your monitor is functioning properly. If your monitor and
+computer are properly connected but the monitor screen remains dark, run the monitor self-test by performing the following steps:
+1.   Turn off both your computer and the monitor.
+2.   Unplug the video cable from the computer.
+3.   Turn on the monitor.
+If the monitor cannot sense a video signal and is working correctly, the following message appears:
+
+
+
+
+
+
+                                         Figure 79. Signal cable disconnected warning message
+     NOTE: The message may be slightly different according to the connected input signal.
+     NOTE: While in self-test mode, the power LED remains white.
+4.   This box also appears during normal system operation, if the video cable becomes disconnected or damaged.
+5.   Turn off your monitor and reconnect the video cable; then turn on both your computer and the monitor.
+If your monitor screen remains blank after you use the previous procedure, check your video controller and computer, because your
+monitor is functioning properly.
+Built-in diagnostics
+Your monitor has a built-in diagnostic tool that helps you determine if the screen abnormality you are experiencing is an inherent
+problem with your monitor, or with your computer and graphics card.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                         Figure 80. Self-Diagnostic menu
+To run the built-in diagnostics:
+1.   Ensure that the screen is clean (no dust particles on the surface of the screen).
+2.   Move or press the joystick to launch the Menu Launcher.
+3.   Move the joystick up to select            and open the Main Menu.
+4.   Using the joystick, navigate on the OSD menu and select Others > Self-Diagnostic.
+5.   Press the joystick button to start the diagnostics. A gray screen is displayed.
+6.   Observe if the screen has any defects or abnormalities.
+7.   Toggle the joystick once again until a red screen is displayed.
+8.   Observe if the screen has any defects or abnormalities.
+9.   Repeat steps 7 and 8 until the screen displays green, blue, black, and white colors. Note any abnormalities or defects.
+The test is completed when a text screen is displayed. To exit, toggle the joystick control again.
+If you do not detect any screen abnormalities upon using the built-in diagnostic tool, the monitor is functioning properly. Check the
+graphics card and computer.
+
+
+
+
+60          Troubleshooting
+
+=== PDF page 61 ===
+Common problems
+The following table contains general information about common monitor problems that you might encounter and the possible
+solutions:
+Table 23. Common problems and solutions.
+ Common symptoms                   What you experience               Possible solutions
+ No video/power LED off            No picture                        •    Ensure that the video cable connecting the monitor and the computer is
+                                                                          properly connected and secure.
+                                                                     •    Verify that the power outlet is functioning properly using any other
+                                                                          electrical equipment.
+                                                                     •    Ensure that you have pressed the power button properly.
+                                                                     •    Ensure that the correct input source is selected in the Input Source
+                                                                          menu.
+ No video/power LED on             No picture or no                  •    Increase brightness and contrast controls in the Brightness/Contrast
+                                   brightness                             menu.
+                                                                     •    Perform monitor self-test feature check.
+                                                                     •    Check for bent or broken pins in the video cable connector.
+                                                                     •    Run the built-in diagnostics. For more information, see Built-in
+                                                                          diagnostics.
+                                                                     •    Ensure that the correct input source is selected in the Input Source
+                                                                          menu.
+ Poor focus                        Picture is fuzzy, blurry, or      •    Eliminate video extension cables.
+                                   ghosting                          •    Reset the monitor to factory settings. For more information, see
+                                                                          Factory Reset.
+                                                                     •    Change the video resolution to the correct aspect ratio.
+ Shaky/jittery video               Wavy picture or fine              •    Reset the monitor to factory settings. For more information, see
+                                   movement                               Factory Reset.
+                                                                     •    Check environmental factors.
+                                                                     •    Relocate the monitor and test in another room.
+ Missing pixels                    LCD screen has spots              •    Cycle power On-Off.
+                                                                     •    A pixel that is permanently off is a natural defect that can occur in LCD
+                                                                          technology.
+                                                                     •    For more information about Dell Monitor Quality and Pixel Policy, see
+                                                                          www.dell.com/pixelguidelines.
+ Stuck-on pixels                   LCD screen has bright             •    Cycle power On-Off.
+                                   spots                             •    A pixel that is permanently off is a natural defect that can occur in LCD
+                                                                          technology.
+                                                                     •    For more information about Dell Monitor Quality and Pixel Policy, see
+                                                                          www.dell.com/pixelguidelines.
+ Brightness problems               Picture too dim or too            •    Reset the monitor to factory settings. For more information, see
+                                   bright                                 Factory Reset.
+                                                                     •    Adjust brightness and contrast controls using the OSD.
+ Geometric distortion              The screen is not                 Reset the monitor to factory settings. For more information, see Factory
+                                   centered correctly                Reset.
+ Horizontal/vertical lines         The screen has one or             •    Reset the monitor to factory settings. For more information, see
+                                   more lines                             Factory Reset.
+                                                                     •    Perform monitor self-test feature check and determine if these lines are
+                                                                          also in self-test mode.
+                                                                     •    Check for bent or broken pins in the video cable connector.
+                                                                     •    Run the built-in diagnostics. For more information, see Built-in
+                                                                          diagnostics.
+
+
+
+
+
+
+
+
+                                                                                                                                  Troubleshooting               61
+
+=== PDF page 62 ===
+ Common symptoms                   What you experience               Possible solutions
+ Synchronization                   The screen is scrambled           •    Reset the monitor to factory settings. For more information, see
+ problems                          or appears torn                        Factory Reset.
+                                                                     •    Perform monitor self-test feature check to determine if the scrambled
+                                                                          screen appears in self-test mode.
+                                                                     •    Check for bent or broken pins in the video cable connector.
+                                                                     •    Restart the computer in the safe mode.
+ Safety related issues             Visible signs of smoke or         •    Do not perform any troubleshooting steps.
+                                   sparks                            •    Contact Dell immediately.
+
+ Intermittent problems             Monitor malfunctions on           •    Ensure that the video cable connecting the monitor to the computer is
+                                   and off                                connected properly and is secure.
+                                                                     •    Reset the monitor to factory settings. For more information, see
+                                                                          Factory Reset.
+                                                                     •    Perform monitor self-test feature check to determine if the intermittent
+                                                                          problem occurs in self-test mode.
+ Missing color                     Picture missing color             •    Perform a monitor self-test feature check.
+                                                                     •    Ensure that the video cable connecting the monitor to the computer is
+                                                                          connected properly and is secure.
+                                                                     •    Check for bent or broken pins in the video cable connector.
+ Wrong color                       Picture color is not good         •    Reset all settings under the Color menu to the factory defaults using
+                                                                          Reset Color.
+                                                                     •    Change the Input Color Format to RGB or YCbCr/YPbPr in the Color
+                                                                          settings OSD.
+                                                                     •    Run the built-in diagnostics. For more information, see Built-in
+                                                                          diagnostics.
+ Image retention from a            A faint shadow from the           •    Set the screen to turn off after a few minutes of screen idle time. These
+ static image left on the          static image displayed                 can be adjusted in the Windows Power Options or Mac Energy Saver
+ monitor for a long period         appears on the screen                  setting.
+ of time                                                             •    Alternatively, use a dynamically changing screensaver.
+
+ Image ghosting                    Fast moving images                Change the Response Time in the Display menu OSD.
+                                   leave a trail of shadow
+                                   images
+ Picture quality (Refresh          Issues of incorrect               •    Set USB-C Prioritization to High Resolution.
+ rate of native resolution         refresh rate or missing           •    Check the resolution settings of your graphic card.
+ changes from 60 Hz to             colors
+ 30 Hz; or color depth
+ drops to 18 bits)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+62          Troubleshooting
+
+=== PDF page 63 ===
+Product-specific problems
+Table 24. Product-specific problems and solutions.
+ Specific symptoms                What you experience               Possible solutions
+ The screen image is too          The image is centered on          •    Check the Aspect Ratio settings in the Display menu OSD.
+ small                            the screen, but does not          •    Reset the monitor to factory settings. For more information, see
+                                  fill the entire viewing area           Factory Reset.
+
+ Cannot adjust the                OSD does not appear on            •    Turn off the monitor, unplug the power cable, plug it back, and then turn
+ monitor with the joystick        the screen                             on the monitor.
+                                                                    •    Check whether the OSD menu is locked. If yes, move and hold the
+                                                                         joystick up/down/left/right for 4 seconds to unlock (see Lock and
+                                                                         Locking the control buttons).
+ No input signal when             No picture, the LED light         •    Check the signal source. Ensure that the computer is not in the
+ user controls are                is white                               power saving mode by moving the mouse or pressing any key on the
+ pressed                                                                 keyboard.
+                                                                    •    Check whether the signal cable is plugged in properly. Replug the signal
+                                                                         cable if necessary.
+                                                                    •    Reset the computer or video player.
+ The picture does not fill        The picture cannot fill           •    Due to different video formats (aspect ratio), the monitor may display in
+ the entire screen                the height or width of the             full screen.
+                                  screen                            •    Run the built-in diagnostics. For more information, see Built-in
+                                                                         diagnostics.
+ No video at HDMI/USB-C           When connected to                 Unplug the HDMI/USB-C cable from dongle/docking device, then plug the
+ port                             some dongle/docking               docking HDMI/USB-C cable into the notebook.
+                                  device at the port,
+                                  there is no video when
+                                  unplugging/plugging the
+                                  cable from the notebook
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                Troubleshooting               63
+
+=== PDF page 64 ===
+Universal Serial Bus (USB) specific problems
+Table 25. USB specific problems and solutions.
+ Specific symptoms               What you experience             Possible solutions
+ USB interface is not            USB peripherals are not         •     Check that your monitor is turned on.
+ working                         working                         •     Reconnect the upstream cable to your computer.
+                                                                 •     Reconnect the USB peripherals (downstream connector).
+                                                                 •     Turn off and then turn on the monitor again.
+                                                                 •     Reboot your computer.
+                                                                 •     Some USB devices like external portable HDD require higher electric
+                                                                       current; connect the device directly to the computer system.
+ USB-C port does not             USB peripherals can not         •     Check that the connected device is compliant with the USB-C
+ supply power                    be charged                            specification. The USB-C port supports USB 5Gbps and an output of
+                                                                       65 W.
+                                                                 •     Check that you use the USB-C cable shipped with your monitor.
+ USB 5Gbps interface is          USB 5Gbps peripherals           •     Check that your computer is USB 5Gbps-compatible.
+ slow                            working slowly or not           •     Some computers have USB 3.2, USB 2.0, and USB 1.1 por ts. Ensure
+                                 working at all                        that the correct USB port is used.
+                                                                 •     Reconnect the upstream cable to your computer.
+                                                                 •     Reconnect the USB peripherals (downstream connector).
+                                                                 •     Set USB-C Prioritization to High Data Speed.
+                                                                 •     Reboot the computer.
+ Wireless USB peripherals        Wireless USB peripherals        •     Increase the distance between the USB 5Gbps peripherals and the
+ stop working when a             responding slowly or                  wireless USB receiver.
+ USB 5Gbps device is             only working as the             •     Position your wireless USB receiver as close as possible to the wireless
+ plugged in                      distance between                      USB peripherals.
+                                 themselves and their            •     Use a USB-extender cable to position the wireless USB receiver as far
+                                 receiver decreases                    away as possible from the USB 5Gbps port.
+
+ Wireless USB mouse              When plugged into one           Unplug the Wireless USB Mouse receiver and re-plug it into an appropriate
+ does not work properly          of the USB ports on the         USB Quick Access Port at the bottom of the monitor.
+                                 rear side of the monitor,
+                                 the Wireless USB mouse
+                                 lags or freezes during
+                                 use
+
+Speakers-specific problems
+Table 26. Speakers-specific problems and solutions.
+ Specific symptoms               What you experience             Possible solutions
+ No sound coming from            Cannot hear any sound           •     Turn off the monitor, unplug the monitor power cable, replug it, and then
+ the speakers                                                          turn on the monitor.
+                                                                 •     Reset the monitor to factory settings. For more information, see
+                                                                       Factory Reset.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+64         Troubleshooting
+
+=== PDF page 65 ===
+Regulatory information
+FCC notices (U.S. only) and other regulatory information
+For FCC notices and other regulatory information, see the regulatory compliance website located at
+www.dell.com/regulatory_compliance.
+EU product database for energy label and product information sheet
+S2725QC: https://eprel.ec.europa.eu/qr/2186109
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                       Regulatory information     65
+
+=== PDF page 66 ===
+Contacting Dell
+To contact Dell for sales, technical suppor t, or customer service issues, see www.dell.com/contactdell.
+     NOTE: Availability varies by country and product, and some services may not be available in your country.
+     NOTE: If you do not have an active internet connection, you can find contact information on your purchase invoice, packing slip,
+     bill, or Dell product catalog.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+66          Contacting Dell
+
+=== PDF page 67 ===
+Revision history
+The following table provides the revision history of this document:
+Table 27. Revision history
+ Revision                       Date                              Description
+ A00                            March 2025                        Original publish date
+ A01                            May 2026                          •    Updated the USB-C to USB-C cable specifications
+                                                                  •    Added additional content and tips for organizing cables
+                                                                  •    Updated the marketing name.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                       Revision history           67

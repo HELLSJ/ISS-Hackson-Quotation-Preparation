@@ -1,0 +1,4075 @@
+=== PDF page 1 ===
+Dell S2425H/S2725H Monitor
+User’s Guide
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Model: S2425H/S2725H
+Regulatory model: S2425Ht/S2725Ht
+
+=== PDF page 2 ===
+     NOTE: A NOTE indicates important information that helps you make
+     better use of your product.
+     CAUTION: A CAUTION indicates either potential damage to hardware or
+     loss of data and tells you how to avoid the problem.
+     WARNING: A WARNING indicates a potential for property damage,
+     personal injury, or death.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Copyright © 2024 Dell Inc. or its subsidiaries. All rights reserved. Dell, EMC, and other trademarks are
+trademarks of Dell Inc. or its subsidiaries. Other trademarks may be trademarks of their respective owners.
+
+
+2024 – 03
+
+
+Rev. A00
+
+=== PDF page 3 ===
+Contents
+
+
+Safety instructions..........................                                   5
+About your monitor .........................                                    6
+    Package contents . . . . . . . . . . . . . . . . . . . . . .                 6
+    Product features       .......................                               8
+    Operating system compatibility            ..............                    11
+    Identifying parts and controls         ...............                      12
+        Front view . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+        Back view . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+        Side view...............................                                14
+        Bottom view . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+    Monitor specifications        ...................                           16
+        Resolution specifications . . . . . . . . . . . . . . . . . . . . . . 19
+        Supported video modes     .......................                       19
+        Preset display modes . . . . . . . . . . . . . . . . . . . . . . . . 19
+        Electrical specifications.......................                        20
+        Physical characteristics.......................                         21
+        Environmental characteristics . . . . . . . . . . . . . . . . . . .     22
+        Pin assignments...........................                              23
+    Plug-and-play capability        ..................                         24
+    LCD monitor quality and pixel policy            . . . . . . . . . . .      24
+    Ergonomics.........................                                        24
+    Handling and moving your display.............                              26
+    Maintenance guidelines . . . . . . . . . . . . . . . . . .                 28
+        Cleaning your monitor........................                           28
+
+
+
+
+
+
+
+                                                                     Contents           |     |        33
+
+=== PDF page 4 ===
+Setting up the monitor......................                                  29
+    Attaching the stand . . . . . . . . . . . . . . . . . . . .                29
+    Using the tilt . . . . . . . . . . . . . . . . . . . . . . . .             32
+    Connecting your monitor           . . . . . . . . . . . . . . . . .        33
+    Attaching the side I/O-cover           . . . . . . . . . . . . . . .       34
+    Organizing your cables         . . . . . . . . . . . . . . . . . .         34
+    Securing your monitor using Kensington lock (optional)                     35
+    Removing the monitor stand             . . . . . . . . . . . . . . .       36
+    VESA wall mounting (optional) . . . . . . . . . . . . . . 37
+Operating the monitor ......................                                  38
+    Power on the monitor . . . . . . . . . . . . . . . . . . .                 38
+    Using the joystick control . . . . . . . . . . . . . . . . .               38
+    Using the rear-panel controls . . . . . . . . . . . . . . .                40
+        Front-panel button    . . . . . . . . . . . . . . . . . . . . . . . . . 42
+    Using the Main Menu          . . . . . . . . . . . . . . . . . . .         43
+    Using the OSD lock function            . . . . . . . . . . . . . . .      55
+        OSD warning messages      .......................                      58
+        Setting the maximum resolution . . . . . . . . . . . . . . . . . .     60
+Troubleshooting ............................                                   61
+    Self-test . . . . . . . . . . . . . . . . . . . . . . . . . . 61
+    Built-in diagnostics       . . . . . . . . . . . . . . . . . . . .         62
+    Common problems          .....................                             63
+Regulatory information .....................                                  66
+    FCC notices (U.S. only) and other regulatory information 66
+    EU product database for energy label and product information
+    sheet . . . . . . . . . . . . . . . . . . . . . . . . . . . .              66
+Contacting Dell.............................                                  67
+
+
+
+
+
+
+4                              |      Contents
+
+=== PDF page 5 ===
+Safety instructions
+Use the following safety guidelines to protect you monitor from potential damage and
+to ensure your personal safety. Unless otherwise noted, each procedure included in this
+document assumes that you have read the safety information that shipped with your
+monitor.
+    NOTE: Before using the monitor, read the safety information that
+    is shipped with your monitor and printed on the product. Keep the
+    documentation at a secure location for future reference.
+    WARNING: Use of controls, adjustments, or procedures other than those
+    specified in this documentation may result in exposure to shock, electrical
+    hazards, and/or mechanical hazards.
+    WARNING: The possible long-term effect of listening to audio at high
+    volume through the headphones (on monitor that support it) may cause
+    damage to your hearing ability.
+   •  Place the monitor on a solid surface and handle it carefully. The screen is fragile
+      and can be damaged if dropped or hit with a sharp object.
+   •  Ensure that your monitor is electrically rated to operate with the AC power
+      available in your location.
+   •  Keep the monitor in room temperature. Excessive cold or hot conditions can have
+      an adverse effect on the liquid crystals of the display.
+   •  Connect the power cable from the monitor to a wall outlet that is near and
+      accessible. See Connecting your monitor.
+   •  Do not place and use the monitor on a wet surface or near water.
+   •  Do not subject the monitor to severe vibration or high impact conditions. For
+      example, do not place the monitor inside a car trunk.
+   •  Unplug the monitor when it is going to be left unused for an extended period.
+   •  To avoid electric shock, do not attempt to remove any cover or touch the inside
+      of the monitor.
+   •  Read these instructions carefully. Keep this document for future reference. Follow
+      all warnings and instructions marked on the product.
+   •  Certain monitors can be wall mounted using the VESA mount that is sold
+      separately. Ensure to use the correct VESA specifications as mentioned in the
+      wall mounting section of the User’s Guide.
+For information about safety instructions, see the Safety, Environmental, and
+Regulatory Information (SERI) document that is shipped with your monitor.
+
+
+
+
+
+
+
+                                                                   Safety instructions       |    5
+
+=== PDF page 6 ===
+About your monitor
+
+Package contents
+The following table provides the list of components that are shipped with your monitor.
+If any component is missing, contact Dell. For more information, see Contacting Dell.
+    NOTE: Some items may be optional and may not ship with your monitor.
+    Some features may not be available in certain countries.
+
+               Component image                                Component description
+                                                            Display
+
+
+
+
+
+
+
+
+
+
+
+                                                            Stand riser
+
+
+
+
+
+
+
+                                                            Stand base
+
+
+
+
+
+                                                            Side I/O-cover
+
+
+
+
+
+
+
+
+
+
+
+
+
+6                                        |       About your monitor
+
+=== PDF page 7 ===
+                   VESA cover
+
+
+
+
+
+
+
+                   Power cable (varies by country)
+
+
+
+                   HDMI cable 1.80m
+
+
+
+
+                   • Quick Start Guide
+                   • Safety, Environmental, and
+                    Regulatory Information
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        About your monitor       |    7
+
+=== PDF page 8 ===
+Product features
+The Dell S2425H/S2725H monitor has an active matrix, Thin Film Transistor (TFT),
+Liquid Crystal Display (LCD), and LED backlight. The monitor has the following
+features:
+   •  Supports the refresh rate of 100 Hz.
+   •  Color gamut of 99% sRGB (typical).
+   •  Digital connectivity with 2 HDMI ports.
+   •  Plug and play capability if supported by your computer.
+   •  Integrated speakers (2 x 5W).
+   •  On-Screen Display (OSD) adjustments for ease of setup and screen optimization.
+   •  Removable stand and 100 mm Video Electronics Standards Association (VESA)
+      mounting holes for flexible mounting solutions.
+   •  Tilt only.
+   •  Security-lock slot for Kensington locks (sold separately).
+   •  Offers Premium Panel Exchange during warranty period.
+   •  Supports Dell ComfortView Plus feature.
+   •  Dell ComfortView Plus is an integrated low blue light screen feature that
+      improves eye comfort by reducing potentially harmful blue light emissions without
+      compromising color. Through ComfortView Plus technology, Dell has reduced
+      harmful blue light exposure from ≤50% to ≤35%. This monitor is certified
+      with TUV Rheinland Eye Comfort 3.0 with a 4-star rating. It incorporates key
+      technologies that also deliver a flicker-free screen, up to 100 Hz refresh rate, and
+      a color gamut of minimum 95% sRGB. Dell ComfortView Plus feature is enabled
+      by default on your monitor.
+   •  This monitor uses a low blue light panel. When the monitor is reset to factory
+      settings or default setting, it is in compliance with TÜV Rheinland’s hardware low
+      blue light certification.*
+      Blue light ratio:
+      The ratio of light in the range from 415nm-455nm compared to 400nm-500nm
+      shall be less than 50%.
+        Category           Blue light ratio
+        1                  ≤ 20%
+        2                  20% < R ≤ 35%
+        3                  35% < R ≤ 50%
+   •  Decreases the level of hazard blue light emitted from the screen to make viewing
+      more comfortable for your eyes without distortion of color accuracy.
+
+
+
+
+8                                        |       About your monitor
+
+=== PDF page 9 ===
+   •  The monitor adopts Flicker-Free technology, which clears the eye visible flicker,
+      brings comfort viewing experience and preventing users suffer from eye strain
+      and fatigue.
+   *  This monitor is in compliance with TÜV Rheinland hardware low blue light
+      certification under Category 2.
+
+About TÜV Rheinland Eye Comfort 3.0
+TÜV Rheinland Eye Comfort 3.0 certification
+program presents a consumer-friendly star rating
+scheme to the display industry promoting eye
+wellness from safety to eye care. Compared to
+existing certifications, the 5-star-rating program
+adds rigorous testing requirements on overall eye
+care attributes such as low blue-light, flicker-
+free, refresh rate, color gamut, color accuracy
+and ambient light sensor performance. It lays
+out requirement metrics and rates the product
+performance on five levels, and the sophisticated
+technical assessment process provides consumers
+and buyers with indicators that are easier to judge.
+The eye wellness factors being considered remain
+constant, however, the standards for the various star
+ratings are different. The higher the star rating, the
+more stringent the standards. The table below lists
+the major eye comfort requirements which apply in
+addition to the basic eye comfort requirements (such
+as pixel density, uniformity of luminance and color,
+and freedom of movement).
+For more information around TUV Eye Comfort
+certification please refer to: https://www.tuv.com/
+world/en/eye-comfort.html.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     About your monitor       |    9
+
+=== PDF page 10 ===
+             Eye Comfort 3.0 Requirements and Star Rating Scheme for Monitors
+ Category             Test item                                           Star Rating Scheme
+                                             3-star                      4-star                       5-star
+                                             TÜV Hardware LBL            TÜV Hardware LBL             TÜV Hardware LBL
+                      Low Blue Light         Category III (≤50%)         Category II (≤35%)           Category II (≤35%) or
+ Eye Care                                    or Software LBL             or Category I (≤20%)         Category I (≤20%)
+                                             solution¹
+                      Flicker Free           TÜV Flicker Reduced         TÜV Flicker Reduced          Flicker Free
+                                             or TÜV Flicker Free         or TÜV Flicker Free
+                      Ambient
+                      Light Sensor           No sensor                   No sensor                    Ambient light sensor
+                      performance
+ Ambient Light        Intelligent CCT        No                          No                           Ye  s
+ Management           control
+                      Intelligent
+                      Luminance              No                          No                           Ye  s
+                      control
+                      Refresh Rate           ≥60Hz                       ≥75Hz                        ≥120Hz
+                      Luminance              Luminance uniformity ≥ 75%
+                      uniformity
+                      Color Uniformity       Color uniformity Δu’v’ ≤ 0.02
+                      Freedom of             Luminance changes shall decrease less than 50%;
+                      movement               The colour shift shall be less than 0.01
+ Image quality        Gamma                  Gamma difference            Gamma difference             Gamma
+                      difference             ≤ ±0.2                      ≤ ±0.2                       difference ≤ ±0.2
+                                                                                                      DCI-P35  Min. 95%
+                                             NTSC3 Min.72%                                            (CIE 1976) &  sRGB4
+                      Wide color             (CIE 1931) or sRGB4         sRGB4 Min.95%                Min.95% (CIE 1931) or
+                      gamut2                 Min 95%                     (CIE 1931)                   Adobe RGB     6 Min.95%
+                                             (CIE 1931)                                               (CIE 1931) &  sRGB4
+                                                                                                      Min.95% (CIE 1931)
+ Eye Comfort          User guide             Ye  s                       Ye  s                        Ye  s
+ User Guide
+                      ¹ Software controls the blue light emission by reducing excessive blue light, resulting in a
+                      more yellow tone.
+                      2 Color gamut describes the availability of colors in the display. Various standards were
+                      developed for specific purposes. 100% corresponds to the full color space as defined in
+                      the standard.
+                      3 NTSC stands for National Television Standards Committee, which developed a color
+ Remark               space for the television system that is used in the United States.
+                      4 sRGB is a standard red, green, and blue color space that is in use on monitors, printers,
+                      and the World Wide Web.
+                      5 DCI-P3, short for Digital Cinema Initiatives - Protocol 3, is a color space used in digital
+                      cinema that encompasses a wider range of colors than the standard RGB color space.
+                      6 Adobe RGB is a color space created by Adobe Systems that encompasses a broader
+                      range of colors than the standard RGB color model, particularly in the cyans and greens.
+
+
+
+
+
+10                                        |       About your monitor
+
+=== PDF page 11 ===
+Operating system compatibility
+   •  Windows 10 and later*
+   * The operating system compatibility on Dell and Alienware branded monitors may
+   vary based on factors such as:
+   •  Specific release date(s) when operating system versions, patches, or updates are
+      available.
+   •  Specific release date(s) when Dell and Alienware branded monitor firmware,
+      software application, or driver updates are available on the Dell support website.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                  About your monitor       |    11
+
+=== PDF page 12 ===
+Identifying parts and controls
+
+Front view
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                   1
+
+
+ Label      Description                           Use
+ 1          Power LED indicator                   Solid white indicates that the monitor is turned
+                                                  on and functioning normally. Breathing white
+                                                  indicates that the monitor is in Standby Mode.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+12                                        |       About your monitor
+
+=== PDF page 13 ===
+Back view
+
+
+
+         1
+                                                                                 DELL                                                                                                                                                        S2425H
+
+                                                                                 Model N o. /  N ° de Modelo / N um éro  de m odèle / 모델명 / モデル名 / 型號:     S2425HtFlat Panel  Mon ito r / Monitor P     lano Panel  / Mon it eur à écran p     lat /  液晶顯示器
+
+                                                                                 Input Ratin  g  / Entra    da / Da   ya Tegang   an /  Tensi on  d’entr  ée / 정격입력: 100-2  40V~50   /60Hz 1.5A輸入電源: 交流電壓 100-2  40伏特,    1.5 安培, 50  /60赫茲
+
+                                                                                 Made in  Ch  ina / F abrica  do en  Ch  ina /   Fabriqué en Ch  in e /   Сделано в Китае /  제조국:중국 / 製造地:中國
+
+                                                                                 Con   sum  o de energía    en op era ci ón: XX.XX Wh     Удельная мощность рабочего режима -x,xx Вт                     /см2
+
+                                                                                 Потребляемая мощностьПотребляемая мощность изделием в режиме ожидания - x,xx Вт изделием в выключенном режиме - x,xx Вт
+
+                                                                                 Apparatet må  tilkoples jordet stikkontakt.Apparaten skall anslutas till jordat uttag.
+
+                                                                                 Apparatets stikprop skal tilsluttes en stikkontakt med jord, som giver forbindelse til stikproppens jord.
+         2                                                                       Laite on liitettävä suojakoskettimilla varustettuun pistorasiaan.IS 13252 (Part 1)/IEC 60950-1
+                                                              DELL                                                                         S2425HFlat Panel  Monitor /   液晶显示器신청인: DELL INC. (For Korea) Wistron InfoComm (Zhongshan) Corporation Linhai Branch
+
+                                                              Inpu t Rat ing /  输入电源:型号:S2425HE제조자: A/S 연락처:   080-854-0066Wistron InfoComm (Zhongshan) Corporation Linhai Branch
+
+                                                              Made in China /    制造地:中国100-240V ~ 50/60Hz  1.5At제조국: 중국CAN ICES-003(B)/NMB-003(B)警語:使用過度恐傷害視力230125-15
+
+                                                              Manufactured date /    制造日期 / 製造日期:Nov 2023For UK only: One Creechurch Place, London EC3A 5AF온모드 소비전력: XX.X W모델명: S2425HtR-41071650
+
+                                                                Service Tag:XXXXXXXXX-XXXXXX-S/N:This device complies with part 15 of the FCC Rules.  Operation is subject to the following two conditions: ID  0217009883YU101481-23001R-R-E2K-S2425Ht최저소비효율기준 만족제품www.bis.gov.in
+
+                                                                Express SVC Code:XXXXXXXXXXXXXXXX-XXX-XXXX-XXX(1) this device may not cause harmful interference, and(2) this device must accept any interference received, Address for EU Onl y:Raheen Busi ness ParkLimerick Ireland
+
+                                                                                 including interference that may cause undesired operation.www.dell.com/regulatory_compliance
+
+
+
+
+                                                                                             デル・テクノロジーズ67923
+         3
+
+         4
+         5                                                                                                                                                                                                                                                                                                     8
+                                                                                          6                                                                                                      7
+
+   Label                      Description                                                                                                                             Use
+   1                          VESA mounting holes (100 mm x                                                                                                           Wall mount monitor using VESA-
+                              100 mm-behind attached VESA                                                                                                             compatible wall mount kit.
+                              cover)                                                                                                                                             NOTE: Wall-mount kit is not
+                                                                                                                                                                                   shipped with your monitor and is
+                                                                                                                                                                                   sold separately.
+   2                          Regulatory information label                                                                                                            Lists the regulatory approvals.
+   3                          Regulatory label (including barcode,                                                                                                    See this label if you need to contact
+                              serial number and Service Tag                                                                                                           Dell for technical support. The Service
+                              label)                                                                                                                                  Tag is a unique alphanumeric identifier
+                                                                                                                                                                      that enables Dell service technicians
+                                                                                                                                                                      to identify the hardware components
+                                                                                                                                                                      in your display and access warranty
+                                                                                                                                                                      information.
+   4                          Joystick                                                                                                                                Use to control the OSD menu.
+                                                                                                                                                                      For more information, see Operating the
+                                                                                                                                                                      monitor.
+   5                          Power On/Off button                                                                                                                     Press the power button to turn the
+                                                                                                                                                                      monitor on and off.
+   6                          Stand release button                                                                                                                    Releases the stand from the monitor.
+   7                          Side I/O cover                                                                                                                          Use to cover side I/O.
+   8                          Cable management guide                                                                                                                  Use to organize cables by routing them
+                                                                                                                                                                      through the guide.
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                                     About your monitor       |    13
+
+=== PDF page 14 ===
+Side view
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bottom view
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                      E
+
+
+                                                                                       t
+                                     1
+
+
+
+
+
+
+
+
+
+
+                                                                   2                         3                                                                                                                                        5                                                                                                                                                                          24
+ Label          Description                                        Use
+ 1              HDMI 2 port                                        Connect to your computer or external device
+                                                                   using a HDMI cable (shipped with your monitor).
+ 2              Built-in speakers(2)                               Provides audio output.
+ 3              HDMI 1 port                                        Connect to your computer or external device
+                                                                   using a HDMI cable (shipped with your monitor).
+ 4              Security lock slot                                 Secure your monitor using a security lock
+                (based on Kensington                               (purchased separately) to prevent unauthorized
+                Security Slot)                                     movement of your monitor.
+ 5              Power connector                                    Connect the power cable (shipped with your
+                                                                   monitor).
+
+
+
+
+
+
+
+14                                        |       About your monitor
+
+=== PDF page 15 ===
+ NOTE: Hold the end of the cable connector when inserting and removing
+HDMI cable to avoid any accidental damage.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                         About your monitor       |    15
+
+=== PDF page 16 ===
+Monitor specifications
+
+Model                         S2425H                               S2725H
+Screen type                   Active matrix - TFT LCD
+Panel type                    In-Plane Switching(IPS) technology
+Aspect ratio                  16:9
+Viewable image dimensions:
+  Diagonal                    604.70 mm (23.8 in.)                 685.99 mm (27.0 in.)
+Active Area:
+  Horizontal                  527.04 mm (20.75 in.)                597.89 mm (23.54 in.)
+  Vertical                    296.46 mm  (11.67 in.)               336.31 mm  (13.24 in.)
+  Area                        156246.28 mm2 (242.18 in.2)          201076.91 mm2 (311.67 in.2)
+Pixel pitch                   0.2745 mm x 0.2745 mm                0.3114 mm x 0.3114 mm
+Pixel per inch (PPI)          93                                   82
+Viewing angle:
+  Horizontal                  178° (typical)
+  Vertical                    178° (typical)
+Brightness                    250 cd/m² (typical)                  300 cd/m² (typical)
+Contrast ratio                1500 to 1 (typical)
+Display screen coating        Anti-glare treatment of the front polarizer (3H) hard coating
+Backlight                     LED edgelight system
+Response time                 8 ms (Normal mode)
+                              5 ms (Fast mode)
+                              4 ms (Extreme mode*)
+                              * Reduced visible motion blur and increased image
+                              responsiveness.
+                                   NOTE: Using Extreme mode might introduce minor
+                                  and noticeable visual artifacts in the image. You
+                                  can choose Normal or Fast mode to mitigate these
+                                  visual artifacts.
+Color depth                   16.78 million colors
+Color gamut                   sRGB Ty    p    .    99%(CIE 1931)
+Connectivity                  2 x HDMI port version 1.4 (HDCP 1.4)
+Border width (edge of monitor to active area)
+To    p                       5.30 mm                              5.89 mm
+Left/Right                    5.30 mm                              5.90 mm
+Bottom                        12.00 mm                             12.00 mm
+
+
+
+
+
+16                                        |       About your monitor
+
+=== PDF page 17 ===
+Adjustability:
+ Height-adjust               NA
+ Tilt                        -5° to 21°
+ Swivel                      NA
+ Pivot                       NA
+Cable management             Ye   s
+Dell Display Manager         Easy Arrange and other key features
+(DDM) Compatibility*
+Security                     Security lock slot (cable lock sold separately)
+Built-in speakers            2 x 5W
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                  About your monitor       |    17
+
+=== PDF page 18 ===
+*Dell Display Manager
+Dell Display Manager is an application software that enhances the experience of your
+Dell monitor- ensuring more productivity and ease in customization.
+With this application you can:
+ 1.  Adjust the monitor On-Screen Display (OSD) settings such as brightness, contrast,
+     input source setting and so on with ease. No need to toggle using the joystick on
+     the monitor; simply use the DDM software.
+ 2.  Organize multiple applications on your screen, snapping them into a template of
+     your choice with the Easy Arrange.
+ 3.  Assign applications or even files to the partitions of Easy Arrange, save the layout
+     as a profile and then restore the profile automatically using Easy Arrange Memory.
+ 4.  Connect your Dell Monitor to multiple input sources and manage these multiple
+     video inputs using Input source.
+ 5.  Customize each application with different color mode using Color Preset.
+ 6.  Replicate the Dell Display Manager application settings from one monitor to
+     another monitor of the same model with Import/export application settings.
+Moreover, this model comes with advanced remote management features for IT
+admins.
+For more information about Dell Display Manager, see https://www.dell.com/support/
+ddm.
+You can download the software from this link and find detailed user guide of the
+software and knowledge base article under the documentation tab.
+Dell Display Manager User Interface
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+18                                        |       About your monitor
+
+=== PDF page 19 ===
+Resolution specifications
+
+ Description                                   Value
+ Horizontal frequency                          30 kHz to 110 kHz
+ Vertical refresh rate                         48 Hz to 100 Hz
+ Maximum preset resolution                     1920 x 1080 at 100 Hz
+Supported video modes
+
+ Description                                   Value
+ Video display capabilities                    480p, 576p, 720p, 1080i, 1080p
+ (HDMI playback)
+Preset display modes
+
+ Display mode               Horizontal          Vertical              Pixel clock         Sync polarity
+                            frequency           frequency             (MHz)               (Horizontal/
+                            (kHz)               (Hz)                                      Vertical)
+ VGA 720 x 400              31.50               7 0.0 0               28.3 0              -  /+
+ VGA 640 x 480              31.50               6 0.0 0               25.20               -   /-
+ VESA 640 x 480             3   7.  5   0       75.00                 31.50               -   /-
+ VESA 800 x 600             3   7.  9   0       6 0.0 0               4 0.0 0             +  /+
+ VESA 800 x 600             46.90               75.00                 49.50               +  /+
+ VESA 1024 x 768            48.40               6 0.0 0               65.00               -   /-
+ VESA 1024 x 768            6 0.0 0             75.00                 78.8 0              +  /+
+ MAC 1152 x 864             6   7.  5   0       75.00                 108.00              +  /+
+ VESA      1280       x      1024   64.00       6 0.0 0               108.00              +  /+
+ VESA      1280       x      1024   8 0.0 0     75.00                 135.00              +  /+
+ VESA 1600 x 900            6 0.0 0             6 0.0 0               108.00              +  /+
+ CVT 1920 x 1080            6   7.  5    0      6 0.0 0               148.50              +  /+
+ CVT 1920 x 1080            110.00              100.00                2 28.8 0            +   /-
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                      About your monitor       |    19
+
+=== PDF page 20 ===
+Electrical specifications
+
+Description                               Value
+Video input signals                       • Digital video signal for each differential line
+                                            per differential line at 100 ohm impedance
+                                          • HDMI signal input support
+Input voltage/frequency/current           100 VAC to 240 VAC/50 Hz or 60 Hz ± 3 Hz/1.5 A
+                                          (maximum)
+Inrush current                            120 V: 40 A (maximum)
+                                          240 V: 80 A (maximum)
+Power Consumption
+S2425H                                                S2725H
+0.3 W (Off Mode)1                                     0.3 W (Off Mode)1
+0.4 W (Standby Mode)1                                 0.4 W (Standby Mode)1
+14.5 W (On Mode)1                                     17.0 W (On Mode)1
+42 W (Max)2                                           45 W (Max)2
+1 3.0 W (P    )3                                      15.0 W (P     )3
+            on                                                    on
+41.1 kWh (TEC)3                                       47.0  kWh (TEC)3
+
+
+1 As defined in EU 2019/2021 and EU 2019/2013.
+
+2 Max brightness and contrast setting.
+
+3 P  : Power consumption of On Mode as defined in Energy Star 8.0 version.
+   on
+  TEC: Total energy consumption in kWh as defined in Energy Star 8.0 version.
+
+
+This document is informational only and reflects laboratory performance. Your product
+may perform differently, depending on the software, components and peripherals you
+ordered and shall have no obligation to update such information. So the customer
+should not rely upon this information in making decisions about electrical tolerances or
+otherwise. No warranty as to accuracy or completeness is expressed or implied.
+
+    NOTE: This monitor is ENERGY STAR certified.
+
+    This product qualifies for ENERGY STAR in the factory default settings which can
+    be restored by “Factory Reset” function in the OSD menu. Changing the factory
+    default settings or enabling other features may increase power consumption that
+    could exceed the ENERGY STAR specified limit.
+
+
+
+
+
+
+
+
+20                                        |       About your monitor
+
+=== PDF page 21 ===
+Physical characteristics
+
+Model                                 S2425H                          S2725H
+Dimensions (with stand):
+ Height                               411.73 mm (16.21 in.)           452.21 mm (1   7.  80 in.)
+ Width                                5   3   7.64 mm (21.17 in.)     609.69 mm (24.0 0 in.)
+ Depth                                163.00 mm (6.42 in.)            176.50 mm (6.95 in.)
+Dimensions (without stand):
+ Height                               313.73 mm (12.35 in.)           354.21 mm (13.95 in.)
+ Width                                5   3   7.64 mm (21.17 in.)     609.69 mm (24.0 0 in.)
+ Depth                                58.89 mm (2.32 in.)             59.04 mm (2.32 in.)
+Stand dimensions:
+ Height                               173.82 mm (6.84 in.)            193.75 mm (7.63 in.)
+ Width                                195.00 mm (7.68 in.)            211.20 mm (8.32 in.)
+ Depth                                163.00 mm (6.42 in.)            176.50 mm (6.95 in.)
+ Base                                 195.00 mm x 163.00 mm           211.20 mm x 176.50 mm
+                                      (7.68 in. x 6.42 in.)           (8.32 in. x 6.95 in.)
+Weight:
+ Weight with packaging                5.9 2 kg (13.05 l b)            7.31 kg (1 6.11 l b)
+ Weight with stand assembly           4.04 kg (8.91 lb)               5.19 kg (11.44 lb)
+ and cables
+ Weight without stand                 3.29 kg (7.25 lb)               4.30 kg (9.48 lb)
+ assembly (For wall mount or
+ VESA mount considerations
+ - no cables)
+ Weight of stand assembly             0.56 kg (1.23 lb)               0.64 kg (1.41 lb)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                   About your monitor       |    21
+
+=== PDF page 22 ===
+Environmental characteristics
+
+Description                              Value
+Compliant Standards:
+• ENERGY STAR certified Monitor.
+• RoHS Compliant.
+• BFR/PVC Reduce monitor (The circuit boards are made from BFR/PVC-free
+  laminates).
+• Arsenic-Free glass and Mercury-Free for the panel only.
+Temperature:
+ Operating                               0°C to 40°C (32°F to 104°F)
+ Non-operating                           –20°C to 60°C (–4°F to 140°F)
+Humidity:
+ Operating                               10% to 80% (non-condensing)
+ Non-operating                           5% to 90% (non-condensing)
+Altitude:
+ Operating (maximum)                     5,000 m (16,404 ft)
+ Non-operating (maximum)                 12,192 m (40,000 ft)
+Thermal dissipation:
+S2425H                                   143.3 BTU/hour (maximum)
+                                         49.5 BTU/hour (on mode)
+S2725H                                   153.5 BTU/hour (maximum)
+                                         58.0 BTU/hour (on mode)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+22                                        |       About your monitor
+
+=== PDF page 23 ===
+Pin assignments
+HDMI port
+
+
+
+
+
+
+
+
+ Pin number    19-pin side of the connected signal cable
+ 1             TMDS DATA 2+
+ 2             TMDS DATA 2 SHIELD
+ 3             TMDS DATA 2-
+ 4             TMDS DATA 1+
+ 5             TMDS DATA 1 SHIELD
+ 6             TMDS DATA 1-
+ 7             TMDS DATA 0+
+ 8             TMDS DATA 0 SHIELD
+ 9             TMDS DATA 0-
+ 10            TMDS CLOCK+
+ 11            TMDS CLOCK SHIELD
+ 12            TMDS CLOCK-
+ 13            CEC
+ 14            Reserved (N.C. on device)
+ 15            DDC CLOCK (SCL)
+ 16            DDC DATA (SDA)
+ 17            DDC/CEC Ground
+ 18            +5 V POWER
+ 19            HOT PLUG DETECT
+
+
+
+
+
+
+
+
+
+                                                       About your monitor       |    23
+
+=== PDF page 24 ===
+Plug-and-play capability
+You can connect the monitor to any Plug-and-Play compatible system. The monitor
+automatically provides the computer with its Extended Display Identification Data
+(EDID) using Display Data Channel (DDC) protocols so that the computer can
+configure itself and optimize the monitor settings. Most monitor installations are
+automatic; you can select different settings as required. For more information about
+changing the monitor settings, see Operating the Monitor.
+LCD monitor quality and pixel policy
+During the LCD Monitor manufacturing process, it is not uncommon for one or more
+pixels to become fixed in an unchanging state which are hard to see and do not affect
+the display quality or usability. For more information about Dell Monitor Quality and
+Pixel Policy, see https://www.dell.com/pixelguidelines.
+
+
+Ergonomics
+    CAUTION: Improper or prolonged usage of keyboard may result in injury.
+    CAUTION: Viewing the monitor screen for extended periods of time may
+    result in eye strain.
+For comfort and efficiency, observe the following guidelines when setting up and using
+your computer workstation:
+   •  Position your computer so that the monitor and keyboard are directly in front of
+      you as you work. Special shelves are commercially available to help you correctly
+      position your keyboard.
+   •  To reduce the risk of eye strain and neck/arm/back/shoulder pain from using the
+      monitor for long periods of time, we suggest you to:
+      1.   Set the distance of the screen between 20 to 28 in. (50 - 70 cm) from your
+           eyes.
+      2.   Blink frequently to moisten your eyes or wet your eyes with water after
+           prolonged usage of the monitor.
+      3.   Take regular and frequent breaks for 20 minutes every two hours.
+      4.   Look away from your monitor and gaze at a distant object at 20 feet away for
+           at least 20 seconds during the breaks.
+      5.   Perform stretches to relieve tension in the neck, arm, back, and shoulders
+           during the breaks.
+   •  Make sure that the monitor screen is at eye level or slightly lower when you are
+      sitting in front of the monitor.
+   •  Adjust the tilt of the monitor, its contrast, and brightness settings.
+
+
+
+
+24                                        |       About your monitor
+
+=== PDF page 25 ===
+•    Adjust the ambient lighting around you (such as overhead lights, desk lamps, and
+     the curtains or blinds on nearby windows) to minimize reflections and glare on the
+     monitor screen.
+•    Use a chair that provides good lower-back support.
+•    Keep your forearms horizontal with your wrists in a neutral, comfortable position
+     while using the keyboard or mouse.
+•    Always leave space to rest your hands while using the keyboard or mouse.
+•    Let your upper arms rest naturally on both sides.
+•    Ensure that your feet are resting flat on the floor.
+•    When sitting, make sure that the weight of your legs is on your feet and not
+     on the front portion of your seat. Adjust your chair’s height or use a footrest if
+     necessary to maintain a proper posture.
+•    Vary your work activities. Try to organize your work so that you do not have to sit
+     and work for extended periods of time. Try to stand or get up and walk around at
+     regular intervals.
+•    Keep the area under your desk clear of obstructions and cables or power cords
+     that may interfere with comfortable seating or present a potential trip hazard.
+
+                                                                                                                  monit                                                               or                           scr                            een                                               at          or
+                                                                                                                  be l ow e       ye l        eve l
+
+
+
+
+                                                                                                                          mon                                        it      or                 a       nd
+                                                                                                                          keyboar                                                              d
+                                                                                                                          posi                                              tioned
+                                                                                                                          dir                      ectl                                            y in                      fr          on                t
+                                                                                                                          of the use                                                                                         r
+
+
+      wrist             s r                    e l axed
+      and/f_l                        at
+
+
+
+                                                                                                                          fee               t          /f_la                 t          on                 the
+                                                                                                                          /f_loor
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                    About your monitor       |    25
+
+=== PDF page 26 ===
+Handling and moving your display
+To ensure the monitor is handled safely when lifting or moving it, follow the guidelines
+mentioned below:
+   •   Before moving or lifting the monitor, turn off your computer and the monitor.
+   •   Disconnect all cables from the monitor.
+   •   Place the monitor in the original box with the original packing materials.
+   •   Hold the bottom edge and the side of the monitor firmly without applying
+       excessive pressure when lifting or moving the monitor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   •   When lifting or moving the monitor, ensure the screen is facing away from you
+       and do not press on the display area to avoid any scratches or damage.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   •   When transporting the monitor, avoid any sudden shock or vibration to it.
+
+
+
+
+
+
+
+
+
+26                                        |       About your monitor
+
+=== PDF page 27 ===
+•  When lifting or moving the monitor, do not turn the monitor upside down while
+   holding the stand base or stand riser. This may result in accidental damage to the
+   monitor or cause personal injury.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                About your monitor       |    27
+
+=== PDF page 28 ===
+Maintenance guidelines
+
+Cleaning your monitor
+    CAUTION: Read and follow the Safety instructions before cleaning the
+    monitor.
+     WARNING: Before cleaning the monitor, unplug the monitor power cable
+    from the electrical outlet.
+ For best practices, follow the instructions in the list below when unpacking, cleaning,
+ or handling your monitor:
+   •  Use a clean cloth that is slightly dampened with water to clean the stand
+      assembly, the screen, and the chassis of your Dell monitor. If available, use a
+      screen-cleaning tissue or solution suitable for cleaning Dell monitors.
+   •  After cleaning the surface of the table, ensure that it is thoroughly dry and free
+      from any moisture or cleaning agent before placing your Dell monitor on it.
+    CAUTION: Do not use detergents or other chemicals such as benzene,
+    thinner, ammonia, abrasive cleaners, alcohol, or compressed air.
+    CAUTION: Using chemicals for cleaning may cause changes in the
+    appearance of the monitor, such as color fading, milky film on the monitor,
+    deformation, uneven dark shade, and peeling of screen area.
+     WARNING: Do not spray the cleaning solution or even water directly on
+    the surface of the monitor. Doing so will allow liquids to accumulate at
+    the bottom of the display panel and corrode the electronics resulting in
+    permanent damage. Instead, apply the cleaning solution or water to a soft
+    cloth and then clean the monitor.
+    NOTE: Monitor damages due to improper cleaning methods and the use
+    of benzene, thinner, ammonia, abrasive cleaners, alcohol, compressed air,
+    detergent of any kind will lead to a Customer Induced Damage (CID). CID is
+    not covered under the standard Dell warranty.
+   •  If you notice white residual powder when you unpack your monitor, wipe it off
+      with a cloth.
+   •  Handle your monitor with care as a darker-colored monitor may get scratched
+      and show white scuff marks more than a lighter-colored monitor.
+   •  To help maintain the best image quality on your monitor, use a dynamically
+      changing screen saver and turn off your monitor when not in use.
+
+
+
+
+
+
+
+
+
+
+28                                        |       About your monitor
+
+=== PDF page 29 ===
+Setting up the monitor
+
+Attaching the stand
+    NOTE: The stand is not installed at the factory when shipped.
+    NOTE: The following instructions are applicable only for the stand that
+    was shipped with your monitor. If you are connecting a stand that you
+    purchased from any other source, follow the setup instructions that were
+    included with the stand.
+
+    To attach the monitor stand:
+    1. Align the tabs on the stand base with the slots on the stand riser.
+    2. Insert the stand riser on the stand base firmly.
+    3. Open the screw handle at the bottom of the stand base, and rotate it clockwise
+       to tighten the screw firmly. Close the screw handle.
+
+                                                 1                     2
+
+
+
+
+
+
+
+
+
+
+
+                                                 3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                          Setting up the monitor       |    29
+
+=== PDF page 30 ===
+     4.  Open the protective cover on the monitor to access the VESA slot on the
+         monitor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     5.  Align the tabs on the stand-riser bracket with the grooves at the back of the
+         monitor.
+     6.  Insert the stand-riser bracket into monitor groove until it snaps into its place.
+
+                                           5
+
+
+
+
+
+
+                                           6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+30                                        |       Setting up the monitor
+
+=== PDF page 31 ===
+  CAUTION: Hold the stand riser firmly when lifting the monitor to avoid
+ any accidental damage.
+
+ 7. Hold the stand riser firmly with both hands and lift the monitor carefully, then
+    place it on a flat surface.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+8.  Remove the cover from the monitor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                           Setting up the monitor       |    31
+
+=== PDF page 32 ===
+Using the tilt
+     NOTE: The following instructions are applicable only for the stand that
+     is shipped with your monitor. If you are connecting a stand that you
+     purchased from any other source, follow the set up instructions that were
+     included with the stand.
+With the stand attached to the monitor, you can tilt the monitor for the most
+comfortable viewing angle.
+                                                     5°
+
+
+
+
+
+
+
+
+
+
+
+                                                                 21°
+
+
+
+     NOTE: The stand is detached when the monitor is shipped from the
+     factory.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+32                                        |       Setting up the monitor
+
+=== PDF page 33 ===
+Connecting your monitor
+    WARNING: Before you begin any of the procedures in this section, follow
+    the Safety instructions.
+     NOTE: Dell monitors are designed to work optimally with the Dell supplied
+    cables inside the box. Dell does not guarantee the video quality and
+    performance if non-Dell cables are used.
+     NOTE: Route the cables through the cable management guide before
+    connecting them.
+     NOTE: Do not connect all the cables to the computer at the same time.
+     NOTE: The images are for illustration only. The appearance of the
+    computer may vary.
+    To connect your monitor to the computer:
+    1.   Turn off your computer and disconnect the power cable.
+    2.   Connect the HDMI cable from your monitor to the computer.
+    3.   Connect the power cable to the monitor and the wall outlet.
+    4.   Turn on your monitor.
+    5.   Select the correct input source from the OSD menu on your monitor and then
+         turn on your computer.
+
+Connecting the HDMI cable
+
+
+
+
+                    HDMI
+                                                                     HDMI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                     HDMI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                          Setting up the monitor       |    33
+
+=== PDF page 34 ===
+Attaching the side I/O-cover
+
+
+
+
+
+
+
+
+
+
+
+
+To attach the side I/O-cover:
+   •   Aligh and place the tabs on the side I/O-cover with the slots on the display back-
+       cover.
+   •   Press the side I/O-cover to snap it into place.
+Organizing your cables
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                  HDMI
+
+
+
+
+
+After connecting all necessary cables to your monitor and computer, (see Connecting
+your monitor for cable attachment) organize all cables as shown in the image.
+If your cable is not able to reach your computer, you may connect directly to the com-
+puter without routing through the slot on the monitor stand.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+34                                        |       Setting up the monitor
+
+=== PDF page 35 ===
+Securing your monitor using Kensington lock (optional)
+The security lock slot is at the bottom of the monitor. (See Security lock slot)
+Secure your monitor to a table using the Kensington security lock.
+For more information about using the Kensington lock (purchased separately), see the
+documentation that is shipped with the lock.
+
+
+
+
+
+
+
+
+
+
+
+    NOTE: The image is for illustration only. Appearance of the lock may vary.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                            Setting up the monitor       |    35
+
+=== PDF page 36 ===
+Removing the monitor stand
+    NOTE: To prevent scratches on theLC                 D screen when removing the stand,
+    ensure that the monitor is placed on a soft surface and handle it carefully.
+    NOTE: The following instructions are applicable only for the stand that
+    was shipped with your monitor. If you are connecting a stand that you
+    purchased from any other source, follow the set up instructions that were
+    included with the stand.
+To remove the stand:
+ 1.   Place a flat cushion or a sitting mat near the edge of a table and place the
+      monitor on it with the display facing down.
+ 2.   Press the stand down to access to the release latch.
+ 3.   Press the release latch.
+ 4.   While pressing the release latch, slide out the stand assembly from the monitor.
+
+
+
+
+
+                                                           3
+                                                                    4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+36                                        |       Setting up the monitor
+
+=== PDF page 37 ===
+To remove the VESA cover and side I/O-cover:
+Lift the VESA cover and side I/O-cover up to release from the back of the display.
+
+
+
+
+
+
+
+
+
+
+
+
+VESA wall mounting (optional)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                      DELL                                                                                                                                                        S2425H
+
+
+                                                                                                                                                      Model No. / N° de Modelo / Numéro de modèle /                 모델명 /  モデル名 / 型號Flat Panel Monitor / Monitor Plano Panel / Moniteur à écran plat /                                 液晶顯示器 :      S2425Ht
+                                                                                                                                                      Input Rating / Entrada / Daya Tegangan / Tension d’entrée /                                 정격입력: 100-240V~50/60Hz 1.5A
+                                                                                                                                                      輸入電源: 交流     電壓 100-240     伏特, 1  .5 安培, 50/60   赫茲
+                                                                                                                                                      Consumo de energía en operación: XX.XX Wh   Made in China / Fabricado en China / Fabriqué en Chine / Сделано в Китае / 제조국:중국                                          / 製造地:中國
+                                                                                                                                                      Удельная мощность     рабочего режима -x,xx Вт          /см2
+                                                                                                                                                      Потребляемая мощностьПотребляемая мощность изделием                в режиме ожидания - x,xx    Вт изделием                в выключенном режиме - x,xx        Вт
+                                                                                                                                                      Apparatet må  tilkoples jordet stikkontakt.
+                                                                                                                                                      Apparaten skall anslutas till jordat uttag.Apparatets stikprop skal tilsluttes en stikkontakt med jord,
+                                                                                                                                                      som giver forbindelse til stikproppens jord.IS 13252 (Part 1)/
+                                                                                                                             DELL                                                                         S2425HLaite on liitettävä suojakoskettimilla varustettuun pistorasiaan.IEC 60950-1
+                                                                                                                             Flat Panel Monitor /      液晶显示器신청인: DELL INC. (For Korea) Wistron InfoComm (Zhongshan) Corporation Linhai Branch
+                                                                                                                             Input Rating /      输入电源:型号:S2425HE제조자: Wistron InfoComm (Zhongshan) Corporation Linhai Branch
+                                                                                                                             100-240V ~ 50/60Hz  1.5AtA/S 연락처:    080-854-0066제조국: 중국
+                                                                                                                             Made in China /     制造地:中国Manufactured date /      制造日期 / 製造日期:Nov 2023CAN ICES-003(B)/NMB-003(B)警語:使用過度恐傷害視力230125-15
+                                                                                                                               Service Tag:S/N:       For UK only: One Creechurch Place, London EC3A 5AF온모드 소비전력: XX.X W모델명: S2425HtR-41071650
+                                                                                                                               XXXXXXX  XX-XXXXXX-    This device complies with part 15 of the FCC Rules.  Operation is subject to the following two conditions: ID  0217009883YU101481-23001R-R-E2K-S2425Ht최저소비효율기준 만족제품www.bis.gov.in
+                                                                                                                               Express SVC Code:XXXXX-XXX-(1) this device may not cause harmful interference, andRaheen Business ParkAddress for EU Only:
+                                                                                                                               XXXXXXXXXXXXXXX-XXX    (2) this device must accept any interference received, including interference that may cause undesired operation.Limerick Irelandwww.de ll.com/regulatory_compliance
+
+
+
+
+
+
+                                                                                                                                                                     デル・テクノロジーズ67923
+
+
+
+
+
+            NOTE: Use M4 x 10 mm screws to connect the monitor to the wall-
+              mounting kit.
+See the documentation that is shipped with the VESA-compatible wall mounting kit.
+               1.             Place a flat cushion or a sitting mat near the edge of a table and place the
+                              monitor on it with the display facing down.
+             2.               Remove the stand.
+              3.              Using a Phillips crosshead screwdriver, remove the four screws that secure the
+                              back panel.
+             4.               Connect the mounting bracket from the wall mounting kit to the monitor.
+             5.               Follow the instructions that shipped with the wall-mounting kit and mount the
+                              monitor on the wall.
+            NOTE: For use only with UL or CSA or GS-listed wall mount bracket with
+              minimum weight/load bearing capacity of 13.08 kg (S2425H)/17.2 kg
+              (S2725H).
+
+
+
+
+
+                                                                                                                                                                                              Setting up the monitor       |    37
+
+=== PDF page 38 ===
+Operating the monitor
+
+Power on the monitor
+Press the power button to turn on your monitor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Using the joystick control
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+To modify the OSD adjustments using the joystick control on the rear end of the
+monitor, do the following:
+   1. Press the joystick button to launch the OSD menu.
+   2. Move the joystick up/down/left/right to toggle between options.
+
+
+
+
+38                                        |       Operating the monitor
+
+=== PDF page 39 ===
+Joystick Functions
+
+Joystick      Description
+
+
+              Press joystick to open the OSD menu launcher.
+
+
+
+              For right and left navigation.
+
+
+
+              For up and down navigation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                             Operating the monitor       |    39
+
+=== PDF page 40 ===
+Using the rear-panel controls
+Press the joystick to open the OSD Menu Launcher.
+
+
+
+
+
+
+
+
+                                             Brightness/Contrast
+
+
+                                          Menu Launcher
+
+- Move the joystick up to open the Main Menu.
+- Move the joystick to left or right to select the Shortcut Keys.
+- Move the joystick down to exit.
+
+Menu Launcher Details
+The following table describes the Menu Launcher icons:
+Options                                   Description
+                                          Use this Menu button to launch the On-Screen
+                                          Display (OSD) and select the OSD menu.
+             Shortcut key:
+                  Menu
+                                          Use this button to choose from a list of preset
+                                          color modes     .
+             Shortcut key:
+             Preset Modes
+                                          Use this button to directly access the Brightness/
+                                          Contrast adjustment sliders.
+             Shortcut key:
+        Brightness/Contrast
+                                          Use this button to choose from a list of Display
+                                          Info.
+             Shortcut key:
+              Display Info
+
+
+
+
+
+
+
+
+40                                        |       Operating the monitor
+
+=== PDF page 41 ===
+Options                                 Description
+                                        Use this button to adjust the volume of the built-in
+                                        speakers.
+           Shortcut key:
+                Volume
+                                        Use this button to choose from a list of Audio
+                                        Profile.
+           Shortcut key:
+            Audio Profile
+                                        Use this button to choose from a list of Input
+                                        Source.
+           Shortcut key:
+            Input Source
+                                        Use this button to choose from a list of Aspect
+                                        Ratio.
+           Shortcut key:
+            Aspect Ratio
+                                        Use this button to go back to the main menu or
+                                        Exit the OSD main menu.
+                  Exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                             Operating the monitor       |    41
+
+=== PDF page 42 ===
+Front-panel button
+Use the buttons on the front of the monitor to adjust the image settings.
+
+
+
+
+
+
+
+
+
+Joystick                              Description
+1
+                                      Use           to adjust (increase ranges) items in the OSD
+                  Up                  menu.
+2
+                                      Use           to adjust (decrease ranges) items in the OSD
+                Down                  menu.
+3
+                                      For all first level in the Menu list,                exits/closes the
+              Previous                OSD menu.
+4
+                                      For all other levels except first level in the Menu list,
+                 Next                 takes to the next level.
+5
+                                      Use            to confirm your selection.
+                  OK
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+42                                        |       Operating the monitor
+
+=== PDF page 43 ===
+Using the Main Menu
+
+ Icon               Menu and                                        Description
+                    Submenus
+                    Brightness/                                     Use this menu to activate Brightness/Contrast
+                    Contrast                                        adjustment.
+
+
+
+                                                                               24/27 Monitor
+
+
+
+                                                                               Brightness/Contrast
+
+                                                                               Input Source
+
+                                                                               Color
+
+                                                                               Display
+
+                                                                               Audio
+
+                                                                               Menu
+
+                                                                               Personalize
+
+                                                                               Others
+
+                                                                               More Information
+
+
+
+
+
+                                                                                                                                       7    5%                                                                                                                                                                                 7    5%Exit
+
+                    Brightness                                      Adjusts the luminance of the backlight (Range: 0 - 100).
+                                                                    Move the joystick                                      to increase brightness.
+                                                                    Move the joystick                                      to decrease brightness.
+
+                    Contrast                                        Adjust the brightness first, and then adjust contrast only if
+                                                                    further adjustment is necessary.
+                                                                    Move the joystick                                      to increase contrast and move the
+                                                                    joystick                    to decrease contrast (Range: 0 - 100).
+                                                                    The contrast function adjusts the degree of difference
+                                                                    between darkness and lightness on the monitor screen.
+                    Input Source                                    Use the Input Source menu to select between different
+                                                                    video inputs that are connected to your monitor.
+
+
+                                                                                 24/27 Monitor
+
+
+
+                                                                                 Brightness/Contrast                       HDMI 1
+
+                                                                                 Input Source                              HDMI 2
+
+                                                                                 Color                                     Rename Inputs                               HDMI 1
+
+                                                                                 Display                                   Auto Select                                                                                                                                                                                                                                                                                On
+
+                                                                                 Audio                                     Options for HDMI                                                                                                                                                                                                                                                                             Prompt for Multiple Inputs
+
+                                                                                 Menu                                      Reset Input Source
+
+                                                                                 Personalize
+
+                                                                                 Others
+
+                                                                                 More Information
+                                                                                                                                                                                                           Exit
+
+
+
+
+
+
+
+                                                                                                                                     Operating the monitor       |    43
+
+=== PDF page 44 ===
+Icon       Menu and                  Description
+           Submenus
+           HDMI 1                    Select the HDMI 1 input when using the HDMI 1 connector.
+                                     Press the joystick button to confirm the selection.
+           HDMI 2                    Select the HDMI 2 input when using the HDMI 2 connector.
+                                     Press the joystick button to confirm the selection.
+           Rename Inputs             Allows you to rename inputs.
+           Auto Select               Allows you to scan for available input sources.
+                                     Press         to select this function.
+           Options for               Press         to select this function.
+           HDMI                      •   Prompt for Multiple Inputs: Always displays the
+                                         Switch to HDMI Video Input message for you to choose
+                                         whether to switch or not.
+                                     •   Always Switch: Always switches to HDMI video by
+                                         default while HDMI is connected.
+                                     •   Off: The monitor does not auto-switch to HDMI video
+                                         from another available input.
+           Reset Input               Reset all settings under the Input Source menu to the
+           Source                    factory defaults. Press               to select this function.
+           Color                     Adjusts the color setting mode.
+
+
+
+
+
+                                            24/27 Monitor
+
+
+
+                                            Brightness/Contrast    Color Presets            Standard
+
+                                            Input Source           Input Color Format       RGB
+
+                                            Color                  Hue                      50
+
+                                            Display                Saturation               50
+
+                                            Audio                  Reset Color
+
+                                            Menu
+
+                                            Personalize
+
+                                            Others
+
+                                            More Information
+
+
+
+
+
+                                                                                                               Exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+44                                        |       Operating the monitor
+
+=== PDF page 45 ===
+Icon        Menu and                        Description
+            Submenus
+            Color Presets                   When you select Color Presets, you can choose
+                                            Standard, Movie, FPS, RTS, RPG, Warm, Cool, or
+                                            Custom Color from the list.
+
+
+
+
+                                                   24/27 Monitor
+
+
+
+                                                   Brightness/Contrast         Color Presets                 Standard
+
+                                                   Input Source                Input Color Format            Movie
+
+                                                   Color                       Reset Color                                                                                                                                                                                                                                                                 FPS
+
+                                                   Display                                                   RTS
+
+                                                   Audio                                                     RPG
+
+                                                   Menu                                                      Warm
+
+                                                   Personalize                                               Cool
+
+                                                   Others                                                    Custom Color
+
+                                                   More Information
+
+
+
+
+
+                                                                                                                                    Exit
+
+                                            • Standard: Default color setting. This monitor is certified
+                                              with TUV HW LBL at Standard color preset mode.
+                                            • Movie: Loads color setting ideal for movies.
+                                            • FPS: Loads color setting ideal for First-Person
+                                              Shooter(FPS) games.
+                                            • RTS: Loads color setting ideal for Real-Time
+                                              Strategy(RTS) games.
+                                            • RPG: Loads color setting ideal for Role-Playing
+                                              Games(RPG).
+                                            • Warm: Increases the color temperature. The screen
+                                              appears warmer with a red/yellow tint.
+                                            • Cool: Decreases the color temperature. The screen
+                                              appears cooler with a blue tint.
+                                            • Custom Color: Allows you to manually adjust the color
+                                              settings. Press the joystick                        and          buttons to adjust the
+                                              Red, Green, and Blue values and create your own preset
+                                              color mode.
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                       Operating the monitor       |    45
+
+=== PDF page 46 ===
+ Icon      Menu and                    Description
+           Submenus
+           Input Color                 Allows you to set the video input mode to:
+           Format                      • RGB: Select this option if your monitor is connected to a
+                                         computer or a media player that supports RGB output.
+                                       • YCbCr: Select this option if your media player supports
+                                         only YCbCr output.
+
+
+
+
+
+                                               24/27 Monitor
+
+
+
+                                               Brightness/Contrast     Color Presets
+
+                                               Input Source            Input Color Format        RGB
+
+                                               Color                   Hue                       YCbCr
+
+                                               Display                 Saturation
+
+                                               Audio                   Reset Color
+
+                                               Menu
+
+                                               Personalize
+
+                                               Others
+
+                                               More Information
+
+
+
+
+
+                                                                                                                     Exit
+
+           Hue                         Use joystick           and        to adjust the Hue from 0 to 100.
+                                            NOTE: Hue adjustment is available only for Movie,
+                                            FPS, RTS, and RPG mode.
+           Saturation                  Use joystick           and        to adjust the Saturation from 0 to
+                                       100.
+                                            NOTE: Saturation adjustment is available only for
+                                            Movie, FPS, RTS, and RPG mode.
+           Reset Color                 Reset your monitor color settings to the factory defaults.
+                                       Press        to select this function.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+46                                        |       Operating the monitor
+
+=== PDF page 47 ===
+Icon       Menu and                    Description
+           Submenus
+           Display                      Use the Display menu to adjust image.
+
+
+
+
+                                              24/27 Monitor
+
+
+
+                                              Brightness/Contrast      Aspect Ratio                16:9
+
+                                              Input Source             Sharpness                   50
+
+                                              Color                    Response Time               Normal
+
+                                              Display                  Reset Display
+
+                                              Audio
+
+                                              Menu
+
+                                              Personalize
+
+                                              Others
+
+                                              More Information
+
+
+
+
+
+                                                                                                                       Exit
+
+           Aspect Ratio                Adjust the image ratio to 16:9, 4:3, and 5:4.
+           Sharpness                   Makes the image look sharper or softer.
+                                       Move the joystick                and         to adjust the sharpness from 0
+                                       to 100.
+           Response                    Allows you to set the Response Time to Normal, Fast or
+           Time                        Extreme.
+           Reset Display               Reset all settings under the Display menu to the factory
+                                       defaults.
+                                       Press         to select this function.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                              Operating the monitor       |    47
+
+=== PDF page 48 ===
+ Icon         Menu and                        Description
+              Submenus
+              Audio                           Use the Audio Settings menu to adjust the audio settings.
+
+
+                                                      24/27 Monitor
+
+
+
+                                                      Brightness/Contrast          Volume                           50
+
+                                                      Input Source                 Speaker                          On
+
+                                                      Color                        Audio Pro/f_iles                 Standard
+
+                                                      Display                      Reset Audio
+
+                                                      Audio
+
+                                                      Menu
+
+                                                      Personalize
+
+                                                      Others
+
+                                                      More Information
+
+
+
+
+
+                                                                                                                                           Exit
+              Volume                          Allows you to set the volume level of audio source.
+                                              Move the joystick                      and          to adjust the volume from 0 to
+                                              100.
+              Speaker                         Allows you to turn on or off speaker function.
+              Audio Profiles                  Expand to show the various audio profiles.
+
+
+
+                                                      24/27 Monitor
+
+
+
+                                                      Brightness/Contrast          Volume
+
+                                                      Input Source                 Speaker
+
+                                                      Color                        Audio Pro/f_iles                 Standard
+
+                                                      Display                      Reset Audio                      Movie
+
+                                                      Audio                                                         Game
+
+                                                      Menu                                                          Music
+
+                                                      Personalize                                                   Voice
+
+                                                      Others                                                        Custom Audio
+
+                                                      More Information
+
+
+
+
+
+                                                                                                                                           Exit
+                                              •  Standard: Default audio setting.
+                                              •  Movie: For motion picture viewing.
+                                              •  Game: For game.
+                                              •  Music: For music listening.
+                                              •  Voice: For speech.
+                                              •  Custom Audio: Allows you to manually adjust the sound.
+                                                 Move the joystick                     and          to adjust the setting.
+              Reset Audio                     Reset all settings under the Audio menu to the factory
+                                              preset values.
+
+
+
+
+
+
+
+48                                        |       Operating the monitor
+
+=== PDF page 49 ===
+Icon      Menu and                   Description
+          Submenus
+          Menu                       Select this option to adjust the settings of the OSD, such
+                                     as the languages of the OSD, the amount of time the menu
+                                     remains on screen, and so on.
+
+
+
+
+                                            24/27 Monitor
+
+
+
+                                            Brightness/Contrast     Language                  English
+
+                                            Input Source            Rotation                  Select                  √
+
+                                            Color                   Transparency              20
+
+                                            Display                 Timer                     20s
+
+                                            Audio                   Lock                      Disable
+
+                                            Menu                    Reset Menu
+
+                                            Personalize
+
+                                            Others
+
+                                            More Information
+
+
+
+
+
+                                                                                                                 Exit
+
+          Language                   Set the OSD display to one of eight languages.
+                                     (English, Spanish, French, German, Brazilian Portuguese,
+                                     Russian, Simplified Chinese, or Japanese).
+          Rotation                   Rotates the OSD by 0/90/270 degrees.
+                                     You can press the joystick to rotate each time.
+          Transparency               Select this option to change the menu transparency by
+                                     moving the joystick               or       (Range: 0 - 100).
+          Timer                      OSD Hold Time: Sets the length of time the OSD remains
+                                     active after you press a button.
+                                     Move the joystick to adjust the slider in one second
+                                     increments, from 5 to 60 seconds.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                           Operating the monitor       |    49
+
+=== PDF page 50 ===
+ Icon        Menu and                     Description
+             Submenus
+             Lock                         With the control buttons on the monitor is locked, you can
+                                          prevent people from accessing the controls. It also prevents
+                                          accidental activation in multiple monitors side-by-side setup.
+
+
+
+                                                 24/27 Monitor
+
+
+
+                                                 Brightness/Contrast       Language
+
+                                                 Input Source              Rotation
+
+                                                 Color                     Transparency
+
+                                                 Display                   Timer
+
+                                                 Audio                     Lock                        Menu Buttons
+
+                                                 Menu                      Reset Menu                  Power Button
+
+                                                 Personalize                                           Menu + Power Buttons
+
+                                                 Others                                                Disable
+
+                                                 More Information
+
+
+
+
+
+                                                                                                                             Exit
+                                          • Menu Buttons: Through OSD to lock the Menu buttons.
+                                          • Power Button: Through OSD to lock the Power button.
+                                          • Menu + Power Buttons: Through OSD to lock all Menu
+                                            and Power buttons.
+                                          • Disable: Move the joystick left and hold for 4 seconds.
+             Reset Menu                   Reset all settings under the Reset Menu to the factory
+                                          defaults.
+                                          Press          to select this function.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+50                                        |       Operating the monitor
+
+=== PDF page 51 ===
+Icon             Menu and                                    Description
+                 Submenus
+                 Personalize
+                                                                       24/27 Monitor
+
+
+
+                                                                       Brightness/Contrast                    Shortcut Key 1                           Input Source
+
+                                                                       Input Source                           Shortcut Key 2                           Color Presets
+
+                                                                       Color                                  Shortcut Key 3                                                                                                                                                                                                                                            Brightness/Contrast
+
+                                                                       Display                                Shortcut Key 4                           Volume
+
+                                                                       Audio                                  Shortcut Key 5                                                                                                                                                                                                                                           Audio Pro/f_iles
+
+                                                                       Menu                                   Direct Key                               On
+
+                                                                       Personalize                            Power Button LED                          On in On Mode
+
+                                                                       Others                                 Reset Personalization
+
+                                                                       More Information
+
+
+
+
+
+                                                                                                                                                                                        Exit
+
+                 Shortcut key 1
+
+                 Shortcut key 2
+                 Shortcut key 3                              Select from Preset Modes, Brightness/Contrast, Input
+                                                             Source, Display Info, Aspect Ratio, Volume, Audio
+                 Shortcut key 4                              Profiles, and Rotation to set as shortcut key.
+
+                 Shortcut key 5
+
+                 Direct Key                                  Allows you to access most frequently used functions as
+                                                             direct access with key press on Joystick. You can disable
+                                                             this feature by selecting Off.
+                 Power Button                                Allows you to set the state of the power light to save
+                 LED                                         energy.
+                 Reset                                       Reset all settings under the Personalize to the factory
+                 Persona-                                    defaults.
+                 lization                                    Press                to select this function.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                          Operating the monitor       |    51
+
+=== PDF page 52 ===
+ Icon               Menu and                                     Description
+                    Submenus
+                    Others                                       Select this option to adjust the OSD settings such as the
+                                                                 DDC/CI, LCD Conditioning, and so on.
+
+
+
+                                                                             24/27 Monitor
+
+
+
+                                                                            Brightness/Contrast                      DDC/CI                                      On
+
+                                                                            Input Source                             LCD Conditioning                            Oﬀ
+
+                                                                            Color                                    Self-Diagnostic                             Select                  √
+
+                                                                            Display                                  Reset Others
+
+                                                                            Audio                                    Factory Reset                                                                                                                                                                                                                  ENERGY STAR           ®
+
+                                                                            Menu
+
+                                                                            Personalize
+
+                                                                            Others
+
+                                                                            More Information
+
+
+
+
+
+                                                                                                                                                                                                   Exit
+                    DDC/CI                                       DDC/CI (Display Data Channel/Command Interface) allows
+                                                                 your monitor parameters (brightness, color balance, and so
+                                                                 on) to be adjustable by the software on your computer. You
+                                                                 can disable this feature by selecting Off.
+                                                                 Enable this feature for best user experience and optimum
+                                                                 performance of your monitor.
+
+
+
+                                                                             24/27 Monitor
+
+
+
+                                                                            Brightness/Contrast                      DDC/CI                                      On
+
+                                                                            Input Source                             LCD Conditioning                            Oﬀ
+
+                                                                            Color                                    Self-Diagnostic
+
+                                                                            Display                                  Reset Others
+
+                                                                            Audio                                    Factory Reset
+
+                                                                            Menu
+
+                                                                            Personalize
+
+                                                                            Others
+
+                                                                            More Information
+
+
+
+
+
+                                                                                                                                                                                                   Exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+52                                        |       Operating the monitor
+
+=== PDF page 53 ===
+Icon        Menu and                      Description
+            Submenus
+            LCD                           Helps reduce minor cases of image retention. Depending on
+            Conditioning                  the degree of image retention, the program may take some
+                                          time to run. You can enable this feature by selecting On.
+
+
+
+
+
+                                                 24/27 Monitor
+
+
+
+                                                 Brightness/Contrast        DDC/CI
+
+                                                 Input Source               LCD Conditioning             On
+
+                                                 Color                      Self-Diagnostic              Oﬀ
+
+                                                 Display                    Reset Others
+
+                                                 Audio                      Factory Reset
+
+                                                 Menu
+
+                                                 Personalize
+
+                                                 Others
+
+                                                 More Information
+
+
+
+
+
+                                                                                                                                Exit
+            Self-                         Use this option to run the built-in diagnostics, see Built-in
+            Diagnostic                    Diagnostics.
+            Reset Others                  Reset all settings under the Others menu to the factory
+                                          defaults.
+                                          Press          to select this function.
+            Factory Reset                 Restore all preset values to the factory default settings.
+                                          These are also the settings for ENERGY STAR® tests.
+            More
+                                                 24/27 Monitor
+            Information
+
+                                                 Brightness/Contrast        Display Info                 Select √
+
+                                                 Input Source               Dell Monitor Support         Select √
+
+                                                 Color
+
+                                                 Display
+
+                                                 Audio
+
+                                                 Menu
+
+                                                 Personalize
+
+                                                 Others
+
+                                                 More Information
+
+
+
+
+
+                                                                                                                                Exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                    Operating the monitor       |    53
+
+=== PDF page 54 ===
+    Icon                                              Menu and                                                                                                                    Description
+                                                      Submenus
+                                                                Display Info                                                                                                      Displays the monitor’s current settings.
+                                                                                                                                                                                  Press                                                       to select this function.
+                                                                                                                                                                                                                                                             S2425H                                                                                                                                                                                                                S2725H
+
+
+                                                                                                                                                                                          Display Info                                                                                                                                                                                                          Display Info
+
+
+                                                                                                                                                                                                               Input Source:                                                                                                                                             HDMI1                                                       Input Source:                                                                                                                                             HDMI1
+
+                                                                                                                                                                                                               Resolution:                                                                                                                                                 1920x1080, 60Hz 24-bit                                    Resolution:                                                                                                                                                 1920x1080, 60Hz 24-bit
+
+                                                                                                                                                                                                               Monitor Capability:                                                                                                                             HDMI 1.4 TMDS                                                         Monitor Capability:                                                                                                                             HDMI 1.4 TMDS
+
+
+
+                                                                                                                                                                                                               Model:                                                                                                                                          S2425H                                                                Model:                                                                                                                                          S2725H
+
+                                                                                                                                                                                                               Firmware:                                                                                                                     M3T101                                                                                  Firmware:                                                                                                                     M3T101
+
+                                                                                                                                                                                                               Service Tag:                                                                                                                       XXXXXXX                                                                            Service Tag:                                                                                                                       XXXXXXX
+
+
+
+
+
+                                                                Dell Monitor                                                                                                      You can scan the QR code for Dell Monitor Support.
+                                                                Support                                                                                                                                                                                    S2425H                                                                                                                                                                                                                                                                                                                                                                        S2725H
+
+
+                                                                                                                                                                                           Dell Monitor Support                                                                                                                                                                                                          Dell Monitor Support
+
+
+                                                                                                                                                                                            Scan QR Code below for monitor support.                                                                                                                                                                                      Scan QR Code below for monitor support.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+54                                        |       Operating the monitor
+
+=== PDF page 55 ===
+Using the OSD lock function
+You can lock the front-panel control buttons to prevent access to the OSD menu and/
+or power button.
+To lock the buttons using the Lock menu:
+      1. Select the required option to lock.
+
+
+
+                                     24/27 Monitor
+
+
+
+                                     Brightness/Contrast          Language
+
+                                     Input Source                 Rotation
+
+                                     Color                        Transparency
+
+                                     Display                      Timer
+
+                                     Audio                        Lock                           Menu Buttons
+
+                                     Menu                         Reset Menu                     Power Button
+
+                                     Personalize                                                 Menu + Power Buttons
+
+                                     Others                                                      Disable
+
+                                     More Information
+
+
+
+
+
+                                                                                                                         Exit
+      2. The following message appears.
+
+
+                                                Are you sure you want to lock the Menu Buttons?
+                                                 To unlock the Button, refer to the User’s Guide.
+
+                                                                           Yes
+
+
+                                                                           No
+
+      3. Select Ye   s to lock the buttons. Once locked, pressing any control button displays
+         the lock icon                    .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                          Operating the monitor       |    55
+
+=== PDF page 56 ===
+Use the joystick to lock the button(s).
+Press the left directional navigation of joystick for four seconds, a menu appears on the
+screen.
+
+
+                                       Select Option:
+
+
+
+
+
+
+
+
+
+
+
+
+Select one of the following options:
+
+Options                                      Description
+1                                            Select this option to lock the OSD menu function.
+
+
+
+            Menu Button lock
+2                                            Use this option to lock the power button. It
+                                             prevents the user to turn off the monitor using the
+                                             power button.
+           Power Button lock
+3                                            Use this option to lock the OSD menu and power
+                                             button to turn off the monitor.
+
+     Menu and Power Button lock
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+56                                        |       Operating the monitor
+
+=== PDF page 57 ===
+To unlock the button(s).
+Press the left directional navigation of the joystick for four seconds until a menu
+appears on the screen. The following table describes the options to unlock the front-
+panel control buttons.
+
+
+
+                                     Select Option:
+
+
+
+
+
+
+
+Options                                   Description
+1                                         Use this option to unlock the OSD menu function.
+
+
+          Menu Button unlock
+2                                         Use this option to unlock the power button to turn
+                                          off the monitor.
+
+         Power Button unlock
+3                                         Use this option to unlock the OSD menu and power
+                                          button to turn off the monitor.
+
+       Menu and Power Button
+                  unlock
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                               Operating the monitor       |    57
+
+=== PDF page 58 ===
+OSD warning messages
+When the monitor does not support a particular resolution mode, you can see the
+following message:
+
+
+
+
+
+
+
+
+                                        The current input timing is not supported by the monitor display.
+
+                                       Please change your input timing to 1920x1080, 60Hz or any other
+                                             monitor listed timing as per the monitor speci/f_ications.
+
+This means that the monitor cannot synchronize with the signal that it is receiving
+from the computer. See Resolution Specifications for the horizontal and vertical
+frequency ranges addressable by this monitor. The recommended mode is 1920x1080.
+You can see the following message before the DDC/CI function is disabled:
+
+
+                                               The function of adjusting display setting using PC
+                                                         application will be           disabled.
+                                                   Do you wish to disable DDC/CI function?
+
+
+                                                                    Yes
+
+                                                                     No
+
+When the monitor enters the Standby mode, the following message appears:
+
+
+
+
+
+
+
+
+
+                                                         Going into Standby mode...
+
+Activate the computer and wake up the monitor to gain access to the OSD.
+If the Brightness level adjusted is above the default level 75%, the following message
+appears:
+
+
+                                 Adjusting to this value will increase power consumpiton above the default level.
+
+                                                          Do you want to continue?
+
+                                                                    Yes
+
+                                                                     No
+
+
+•     When you select Ye   s, the power message is displayed only once.
+•     When you select No, the power warning message is displayed again.
+
+
+
+
+58                                        |       Operating the monitor
+
+=== PDF page 59 ===
+•        The power warning message appears again only when you do a Factory Reset
+         from the OSD menu.
+If you press any button other than the power button, the following messages appear
+depending on the selected input:
+
+
+
+
+
+
+
+
+
+                                                                      No HDMI 1 Signal form your device.
+                                                                 Press any key on the keyboard to wake up.
+                                                               If there is no display, press the monitor joystick
+                                                                              to select input source.
+
+If either HDMI 1 or HDMI 2 input is selected and the corresponding cable is not
+connected, a floating dialog box as shown below appears.
+
+
+
+
+
+
+
+
+                                                                                 No HDMI 1 Cable
+                                                            The display will go into Standby mode in 4 minutes.
+                                                                             www.dell.com/S2425H
+                                                                             www.dell.com/S2725H
+                                                                                         or
+
+
+
+
+
+
+
+
+                                                                                No HDMI 2 Cable
+
+                                                            The display will go into Standby mode in 4 minutes.
+                                                                             www.dell.com/S2425H
+                                                                             www.dell.com/S2725H
+See Troubleshooting for more information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                           Operating the monitor       |    59
+
+=== PDF page 60 ===
+Setting the maximum resolution
+
+    NOTE: The steps may vary slightly depending on the version of Windows
+    you have.
+To set the maximum resolution for the monitor:
+In Windows 10 and Windows 11:
+   1. Right-click on the desktop and click Display Settings.
+   2. If you have more than one monitor connected, ensure that you select S2425H/
+      S2725H.
+   3. Click the Display Resolution dropdown list and select 1920 x 1080.
+   4. Click Keep changes.
+If you do not see 1920 x 1080 as an option, you must update your graphics driver
+to the latest version. Depending on your computer, complete one of the following
+procedures:
+If you have a Dell desktop or laptop:
+   •  Go to https://www.dell.com/support, enter your service tag, and download the
+      latest driver for your graphics card.
+If you are using a non-Dell computer (laptop or desktop):
+   •  Go to the support site for your computer and download the latest graphic drivers.
+   •  Go to your graphics card website and download the latest graphic drivers.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+60                                        |       Operating the monitor
+
+=== PDF page 61 ===
+Troubleshooting
+     WARNING:  Before you begin any of the procedures in this section, follow
+     the Safety instructions.
+Self-test
+Your monitor provides a self-test feature that allows you to check whether your
+monitor is functioning properly. If your monitor and computer are properly connected
+but the monitor screen remains dark, run the monitor self-test by performing the
+following steps:
+   1.  Turn off both your computer and the monitor.
+   2.  Unplug the video cable from the back of the computer. To ensure proper self-test
+       operation, remove all digital and the analog cables from the back of computer.
+   3.  Turn on the monitor.
+The floating dialog box should appear on-screen (against a black background), if the
+monitor cannot sense a video signal and is working correctly. While in self-test mode,
+the power LED remains white. Also, depending upon the selected input, one of the
+dialogs shown below will continuously scroll through the screen.
+
+
+
+
+
+
+
+
+                                                      No HDMI 1 Cable
+
+                                         The display will go into Standby mode in 4 minutes.
+                                                   www.dell.com/S2425H
+                                                    www.dell.com/S2725H
+                                                           or
+
+
+
+
+
+
+
+
+                                                      No HDMI 2 Cable
+                                         The display will go into Standby mode in 4 minutes.
+                                                   www.dell.com/S2425H
+                                                    www.dell.com/S2725H
+   4.  This message also appears during normal system operation if the video cable is
+       disconnected or damaged.
+   5.  Turn off your monitor and reconnect the video cable; then turn on both your
+       computer and the monitor.
+If your monitor screen remains blank after you use the previous procedure, check your
+video controller and computer, because your monitor is functioning properly.
+
+
+
+
+
+
+                                                                                 Troubleshooting       |    61
+
+=== PDF page 62 ===
+Built-in diagnostics
+Your monitor has a built-in diagnostic tool that helps you determine if the screen
+abnormality you are experiencing is an inherent problem with your monitor, or with your
+computer and video card.
+
+
+                            24/27 Monitor
+
+
+
+                           Brightness/Contrast                 DDC/CI                                On
+
+                           Input Source                        LCD Conditioning                      Oﬀ
+
+                           Color                               Self-Diagnostic                       Select                      √
+
+                           Display                             Reset Others
+
+                           Audio                               Factory Reset                                                                                                                                                                                                                                                ENERGY STAR              ®
+
+                           Menu
+
+                           Personalize
+
+                           Others
+
+                           More Information
+
+
+
+
+
+                                                                                                                                   Exit
+To run the built-in diagnostics:
+    1.   Ensure that the screen is clean (no dust particles on the surface of the screen).
+    2.   Select OSD items of Self-Diagnostics in Others feature.
+    3. Press the Joystick button to start the diagnostics. A gray screen is displayed.
+    4. Observe if the screen has any defects or abnormalities.
+    5. Toggle the joystick once again until a red screen is displayed.
+    6.   Observe if the screen has any defects or abnormalities.
+    7. Repeat steps 5 and 6 until the screen displays green, blue, black, and white
+         colors. Note any abnormalities or defects.
+The test is complete when a text screen is displayed. To exit, toggle the joystick control
+again.
+If you do not detect any screen abnormalities upon using the built-in diagnostic tool,
+the monitor is functioning properly. Check the video card and computer.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+62                                        |       Troubleshooting
+
+=== PDF page 63 ===
+Common problems
+The following table contains general information about common monitor problems you
+might encounter and the possible solutions:
+
+Common                What you             Possible solutions
+symptoms              experience
+No video/             No picture           • Ensure that the video cable connecting the
+Power LED off                                monitor and the computer is properly connected
+                                             and secure.
+                                           • Verify that the power outlet is functioning
+                                             properly using any other electrical equipment.
+                                           • Ensure that the power button is on.
+                                           • Ensure that the correct input source is selected
+                                             in the Input Source menu.
+No video/             No picture or no     • Increase brightness and contrast controls
+Power LED on          brightness             through OSD.
+                                           • Perform monitor self-test feature check.
+                                           • Check for bent or broken pins in the video cable
+                                             connector.
+                                           • Run the built-in diagnostics.
+                                           • Ensure that the correct input source is selected
+                                             in the Input Source menu.
+Missing pixels        LCD screen has       • Cycle power on-off.
+                      spots                • Pixel that is permanently off is a natural defect
+                                             that can occur in LCD technology.
+                                           • For more information about Dell Monitor Quality
+                                             and Pixel Policy, see Dell Support site at: https://
+                                             www.dell.com/support/monitors.
+Stuck-on pixels       LCD screen has       • Cycle power On-Off.
+                      bright spots         • Pixel that is permanently off is a natural defect
+                                             that can occur in LCD technology.
+                                           • For more information about Dell Monitor Quality
+                                             and Pixel Policy, see Dell Support site at: https://
+                                             www.dell.com/support/monitors.
+Brightness            Picture too dim      • Reset the monitor to factory settings.
+problems              or too bright        • Adjust brightness and contrast controls through
+                                             OSD.
+
+
+
+
+
+
+                                                                      Troubleshooting       |    63
+
+=== PDF page 64 ===
+Common                What you              Possible solutions
+symptoms              experience
+Safety-related        Visible signs of      • Do not perform any troubleshooting steps.
+issues                smoke or sparks       • Contact Dell immediately.
+Intermittent          The monitor           • Ensure that the video cable connecting the
+problems              turns on and off        monitor to the computer is connected properly
+                                              and is secure.
+                                            • Reset the monitor to factory settings.
+                                            • Perform monitor self-test feature check to
+                                              determine if the intermittent problem occurs in
+                                              self-test mode.
+Missing color         Picture missing       • Perform monitor self-test.
+                      color                 • Ensure that the video cable connecting the
+                                              monitor to the computer is connected properly
+                                              and is secure.
+                                            • Check for bent or broken pins in the video cable
+                                              connector.
+Wrong color           Picture color         • Change the settings of the Preset Modes
+                      not good                in the Color menu OSD depending on the
+                                              application.
+                                            • Adjust R/G/B value under Custom Color in
+                                              Color menu OSD.
+                                            • Change the Input Color Format to computer
+                                              RGB or YCbCr in the Color menu OSD.
+                                            • Run the built-in diagnostics.
+Image retention       Faint shadow          • Set the screen to turn off after a few minutes
+from a static         from the static         of screen idle time. These can be adjusted in
+image left on         image that              Windows Power Options or Mac Energy Saver
+the monitor for       is displayed            setting.
+a long period of      appears on the        • Alternatively, use a dynamically changing
+time                  screen                  screensaver.
+Screen image is       Image is              • Check the Aspect Ratio setting in the Display
+too small             centered on             menu OSD.
+                      screen, but           • Reset the monitor to factory settings.
+                      does not fill
+                      entire viewing
+                      area
+
+
+
+
+
+
+
+64                                        |       Troubleshooting
+
+=== PDF page 65 ===
+Common               What you              Possible solutions
+symptoms             experience
+Cannot adjust        OSD does not          • Turn off the monitor, unplug the monitor power
+the monitor          appear on the           cable, plug it back, and then turn on the monitor.
+with the             screen
+buttons on the
+front panel
+No Input Signal      No picture, the       • Check the signal source. Ensure that the
+when user            LED light is            computer is not in the power saving mode by
+controls are         white                   moving the mouse or pressing any key on the
+pressed                                      keyboard.
+                                           • Check whether the signal cable is plugged
+                                             in properly. Connect the signal cable again, if
+                                             necessary.
+                                           • Reset the computer or video player.
+The picture          The picture           • Due to different video formats (aspect ratio) of
+does not fill the    cannot fill the         DVDs, the monitor may display in full screen.
+entire screen        height or width       • Run the built-in diagnostics.
+                     of the screen
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                      Troubleshooting       |    65
+
+=== PDF page 66 ===
+Regulatory information
+
+FCC notices (U.S. only) and other regulatory information
+For FCC notices and other regulatory information, see the regulatory compliance
+website at https://www.dell.com/regulatory_compliance.
+EU product database for energy label and product information
+sheet
+S2425H: https://eprel.ec.europa.eu/qr/1856260
+S2725H: https://eprel.ec.europa.eu/qr/1856262
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+66                                        |       Regulatory information
+
+=== PDF page 67 ===
+Contacting Dell
+To contact Dell for sales, technical support, or customer service issues, see www.dell.
+com/contactdell.
+    NOTE: Availability varies by country and product, and some services may
+    not be available in your country.
+    NOTE: If you do not have an active internet connection, you can find
+    contact information on your purchase invoice, packing slip, bill, or Dell
+    product catalog.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                   Contacting Dell       |    67
