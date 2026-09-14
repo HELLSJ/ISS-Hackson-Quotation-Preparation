@@ -1,0 +1,1721 @@
+{
+  "dataset_version": "2026-09-14.v1",
+  "product_count": 12,
+  "field_definitions": {
+    "usb_c_video": "Video input through USB-C/Thunderbolt upstream connector using DP Alt Mode. A data-only USB-C or downstream charging port does not qualify.",
+    "usb_c_pd_watts": "Maximum host/laptop charging power on the video upstream port. Zero means that this host video+charging function is not provided; downstream charging is recorded separately.",
+    "max_refresh_hz": "Maximum preset refresh at the recorded native resolution, with a supported input and host. Not a guarantee for every cable/host.",
+    "screen_inches": "Viewable diagonal as stated in the manual; not rounded to the marketed size class."
+  },
+  "rules": {
+    "rule_version": "demo-v1",
+    "price_version": "demo-v1",
+    "currency": "SGD",
+    "effective_date": "2026-09-14",
+    "discount_limit_bps": 500,
+    "default_discount_bps": 0,
+    "rounding": "half_up_per_line_discount",
+    "shipping_fee_cents": 0,
+    "validity_days": 7,
+    "tax_mode": "not_modelled",
+    "tax_note": "Demo quotation: tax is not modelled; this is not a tax invoice.",
+    "confirmation_required": true,
+    "inventory_mode": "not_available",
+    "delivery_commitment": "not_available",
+    "source_type": "synthetic"
+  },
+  "products": [
+    {
+      "sku": "MON-001",
+      "model": "S2425H",
+      "screen_inches": 23.8,
+      "resolution": "1920x1080",
+      "max_refresh_hz": 100,
+      "usb_c_video": false,
+      "usb_c_pd_watts": 0,
+      "usb_c_downstream_charge_watts": 0,
+      "brand": "Dell",
+      "name": "Dell S2425H Monitor",
+      "category": "monitor",
+      "unit": "piece",
+      "aliases": [
+        "S2425H",
+        "Dell S2425H",
+        "MON-001"
+      ],
+      "video_inputs": [
+        "HDMI"
+      ],
+      "source_id": "DELL-S25H",
+      "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us",
+      "retrieved_at": "2026-09-14T06:01:05.725765+00:00",
+      "source_type": "public_manufacturer_specification",
+      "notes": "HDMI-only video; no USB-C connector in the connectivity list.",
+      "dataset_version": "2026-09-14.v1",
+      "price": {
+        "sku": "MON-001",
+        "currency": "SGD",
+        "unit_price_cents": 14900,
+        "price_version": "demo-v1",
+        "effective_date": "2026-09-14",
+        "price_source_type": "synthetic"
+      },
+      "evidence": [
+        {
+          "sku": "MON-001",
+          "field": "model",
+          "value": "S2425H",
+          "source_id": "DELL-S25H",
+          "pdf_page": 1,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=1",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-001",
+          "field": "screen_inches",
+          "value": 23.8,
+          "source_id": "DELL-S25H",
+          "pdf_page": 16,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=16",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-001",
+          "field": "resolution",
+          "value": "1920x1080",
+          "source_id": "DELL-S25H",
+          "pdf_page": 19,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=19",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-001",
+          "field": "max_refresh_hz",
+          "value": 100,
+          "source_id": "DELL-S25H",
+          "pdf_page": 19,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=19",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "HDMI-only video; no USB-C connector in the connectivity list."
+        },
+        {
+          "sku": "MON-001",
+          "field": "usb_c_video",
+          "value": false,
+          "source_id": "DELL-S25H",
+          "pdf_page": 16,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=16",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "HDMI-only video; no USB-C connector in the connectivity list."
+        },
+        {
+          "sku": "MON-001",
+          "field": "usb_c_pd_watts",
+          "value": 0,
+          "source_id": "DELL-S25H",
+          "pdf_page": 16,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=16",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "HDMI-only video; no USB-C connector in the connectivity list."
+        },
+        {
+          "sku": "MON-001",
+          "field": "usb_c_downstream_charge_watts",
+          "value": 0,
+          "source_id": "DELL-S25H",
+          "pdf_page": 16,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=16",
+          "method": "no_usb_connector_in_connectivity_list",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "HDMI-only video; no USB-C connector in the connectivity list."
+        },
+        {
+          "sku": "MON-001",
+          "field": "video_inputs",
+          "value": [
+            "HDMI"
+          ],
+          "source_id": "DELL-S25H",
+          "pdf_page": 16,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=16",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        }
+      ],
+      "stock_quantity": null,
+      "delivery_lead_days": null
+    },
+    {
+      "sku": "MON-002",
+      "model": "S2725H",
+      "screen_inches": 27,
+      "resolution": "1920x1080",
+      "max_refresh_hz": 100,
+      "usb_c_video": false,
+      "usb_c_pd_watts": 0,
+      "usb_c_downstream_charge_watts": 0,
+      "brand": "Dell",
+      "name": "Dell S2725H Monitor",
+      "category": "monitor",
+      "unit": "piece",
+      "aliases": [
+        "S2725H",
+        "Dell S2725H",
+        "MON-002"
+      ],
+      "video_inputs": [
+        "HDMI"
+      ],
+      "source_id": "DELL-S25H",
+      "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us",
+      "retrieved_at": "2026-09-14T06:01:05.725765+00:00",
+      "source_type": "public_manufacturer_specification",
+      "notes": "Use the S2725H column of the shared specifications table.",
+      "dataset_version": "2026-09-14.v1",
+      "price": {
+        "sku": "MON-002",
+        "currency": "SGD",
+        "unit_price_cents": 18900,
+        "price_version": "demo-v1",
+        "effective_date": "2026-09-14",
+        "price_source_type": "synthetic"
+      },
+      "evidence": [
+        {
+          "sku": "MON-002",
+          "field": "model",
+          "value": "S2725H",
+          "source_id": "DELL-S25H",
+          "pdf_page": 1,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=1",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-002",
+          "field": "screen_inches",
+          "value": 27,
+          "source_id": "DELL-S25H",
+          "pdf_page": 16,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=16",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-002",
+          "field": "resolution",
+          "value": "1920x1080",
+          "source_id": "DELL-S25H",
+          "pdf_page": 19,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=19",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-002",
+          "field": "max_refresh_hz",
+          "value": 100,
+          "source_id": "DELL-S25H",
+          "pdf_page": 19,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=19",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "Use the S2725H column of the shared specifications table."
+        },
+        {
+          "sku": "MON-002",
+          "field": "usb_c_video",
+          "value": false,
+          "source_id": "DELL-S25H",
+          "pdf_page": 16,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=16",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "Use the S2725H column of the shared specifications table."
+        },
+        {
+          "sku": "MON-002",
+          "field": "usb_c_pd_watts",
+          "value": 0,
+          "source_id": "DELL-S25H",
+          "pdf_page": 16,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=16",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "Use the S2725H column of the shared specifications table."
+        },
+        {
+          "sku": "MON-002",
+          "field": "usb_c_downstream_charge_watts",
+          "value": 0,
+          "source_id": "DELL-S25H",
+          "pdf_page": 16,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=16",
+          "method": "no_usb_connector_in_connectivity_list",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "Use the S2725H column of the shared specifications table."
+        },
+        {
+          "sku": "MON-002",
+          "field": "video_inputs",
+          "value": [
+            "HDMI"
+          ],
+          "source_id": "DELL-S25H",
+          "pdf_page": 16,
+          "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us#page=16",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        }
+      ],
+      "stock_quantity": null,
+      "delivery_lead_days": null
+    },
+    {
+      "sku": "MON-003",
+      "model": "P2225H",
+      "screen_inches": 21.5,
+      "resolution": "1920x1080",
+      "max_refresh_hz": 100,
+      "usb_c_video": false,
+      "usb_c_pd_watts": 0,
+      "usb_c_downstream_charge_watts": 15,
+      "brand": "Dell",
+      "name": "Dell P2225H Monitor",
+      "category": "monitor",
+      "unit": "piece",
+      "aliases": [
+        "P2225H",
+        "Dell P2225H",
+        "MON-003"
+      ],
+      "video_inputs": [
+        "HDMI",
+        "DisplayPort",
+        "VGA"
+      ],
+      "source_id": "DELL-P25H",
+      "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us",
+      "retrieved_at": "2026-09-14T06:00:47.144491+00:00",
+      "source_type": "public_manufacturer_specification",
+      "notes": "USB-C is downstream charging only, not a video input. The 100 Hz maximum applies to HDMI/DP; VGA maximum is 60 Hz.",
+      "dataset_version": "2026-09-14.v1",
+      "price": {
+        "sku": "MON-003",
+        "currency": "SGD",
+        "unit_price_cents": 17900,
+        "price_version": "demo-v1",
+        "effective_date": "2026-09-14",
+        "price_source_type": "synthetic"
+      },
+      "evidence": [
+        {
+          "sku": "MON-003",
+          "field": "model",
+          "value": "P2225H",
+          "source_id": "DELL-P25H",
+          "pdf_page": 1,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=1",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-003",
+          "field": "screen_inches",
+          "value": 21.5,
+          "source_id": "DELL-P25H",
+          "pdf_page": 17,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=17",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-003",
+          "field": "resolution",
+          "value": "1920x1080",
+          "source_id": "DELL-P25H",
+          "pdf_page": 25,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=25",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-003",
+          "field": "max_refresh_hz",
+          "value": 100,
+          "source_id": "DELL-P25H",
+          "pdf_page": 25,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=25",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C is downstream charging only, not a video input. The 100 Hz maximum applies to HDMI/DP; VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-003",
+          "field": "usb_c_video",
+          "value": false,
+          "source_id": "DELL-P25H",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=18",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C is downstream charging only, not a video input. The 100 Hz maximum applies to HDMI/DP; VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-003",
+          "field": "usb_c_pd_watts",
+          "value": 0,
+          "source_id": "DELL-P25H",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=18",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C is downstream charging only, not a video input. The 100 Hz maximum applies to HDMI/DP; VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-003",
+          "field": "usb_c_downstream_charge_watts",
+          "value": 15,
+          "source_id": "DELL-P25H",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=18",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C is downstream charging only, not a video input. The 100 Hz maximum applies to HDMI/DP; VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-003",
+          "field": "video_inputs",
+          "value": [
+            "HDMI",
+            "DisplayPort",
+            "VGA"
+          ],
+          "source_id": "DELL-P25H",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=18",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        }
+      ],
+      "stock_quantity": null,
+      "delivery_lead_days": null
+    },
+    {
+      "sku": "MON-004",
+      "model": "P2425H",
+      "screen_inches": 23.81,
+      "resolution": "1920x1080",
+      "max_refresh_hz": 100,
+      "usb_c_video": false,
+      "usb_c_pd_watts": 0,
+      "usb_c_downstream_charge_watts": 15,
+      "brand": "Dell",
+      "name": "Dell P2425H Monitor",
+      "category": "monitor",
+      "unit": "piece",
+      "aliases": [
+        "P2425H",
+        "Dell P2425H",
+        "MON-004"
+      ],
+      "video_inputs": [
+        "HDMI",
+        "DisplayPort",
+        "VGA"
+      ],
+      "source_id": "DELL-P25H",
+      "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us",
+      "retrieved_at": "2026-09-14T06:00:47.144491+00:00",
+      "source_type": "public_manufacturer_specification",
+      "notes": "USB-C is downstream charging only, not a video input. The 100 Hz maximum applies to HDMI/DP; VGA maximum is 60 Hz.",
+      "dataset_version": "2026-09-14.v1",
+      "price": {
+        "sku": "MON-004",
+        "currency": "SGD",
+        "unit_price_cents": 20900,
+        "price_version": "demo-v1",
+        "effective_date": "2026-09-14",
+        "price_source_type": "synthetic"
+      },
+      "evidence": [
+        {
+          "sku": "MON-004",
+          "field": "model",
+          "value": "P2425H",
+          "source_id": "DELL-P25H",
+          "pdf_page": 1,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=1",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-004",
+          "field": "screen_inches",
+          "value": 23.81,
+          "source_id": "DELL-P25H",
+          "pdf_page": 19,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=19",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-004",
+          "field": "resolution",
+          "value": "1920x1080",
+          "source_id": "DELL-P25H",
+          "pdf_page": 25,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=25",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-004",
+          "field": "max_refresh_hz",
+          "value": 100,
+          "source_id": "DELL-P25H",
+          "pdf_page": 25,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=25",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C is downstream charging only, not a video input. The 100 Hz maximum applies to HDMI/DP; VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-004",
+          "field": "usb_c_video",
+          "value": false,
+          "source_id": "DELL-P25H",
+          "pdf_page": 20,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=20",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C is downstream charging only, not a video input. The 100 Hz maximum applies to HDMI/DP; VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-004",
+          "field": "usb_c_pd_watts",
+          "value": 0,
+          "source_id": "DELL-P25H",
+          "pdf_page": 20,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=20",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C is downstream charging only, not a video input. The 100 Hz maximum applies to HDMI/DP; VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-004",
+          "field": "usb_c_downstream_charge_watts",
+          "value": 15,
+          "source_id": "DELL-P25H",
+          "pdf_page": 20,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=20",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C is downstream charging only, not a video input. The 100 Hz maximum applies to HDMI/DP; VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-004",
+          "field": "video_inputs",
+          "value": [
+            "HDMI",
+            "DisplayPort",
+            "VGA"
+          ],
+          "source_id": "DELL-P25H",
+          "pdf_page": 20,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=20",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        }
+      ],
+      "stock_quantity": null,
+      "delivery_lead_days": null
+    },
+    {
+      "sku": "MON-005",
+      "model": "P2425",
+      "screen_inches": 24.07,
+      "resolution": "1920x1200",
+      "max_refresh_hz": 100,
+      "usb_c_video": false,
+      "usb_c_pd_watts": 0,
+      "usb_c_downstream_charge_watts": 15,
+      "brand": "Dell",
+      "name": "Dell P2425 Monitor",
+      "category": "monitor",
+      "unit": "piece",
+      "aliases": [
+        "P2425",
+        "Dell P2425",
+        "MON-005"
+      ],
+      "video_inputs": [
+        "HDMI",
+        "DisplayPort",
+        "VGA"
+      ],
+      "source_id": "DELL-P25H",
+      "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us",
+      "retrieved_at": "2026-09-14T06:00:47.144491+00:00",
+      "source_type": "public_manufacturer_specification",
+      "notes": "16:10 model P2425 is different from P2425H and P2425E. USB-C downstream only. VGA maximum is 60 Hz.",
+      "dataset_version": "2026-09-14.v1",
+      "price": {
+        "sku": "MON-005",
+        "currency": "SGD",
+        "unit_price_cents": 22900,
+        "price_version": "demo-v1",
+        "effective_date": "2026-09-14",
+        "price_source_type": "synthetic"
+      },
+      "evidence": [
+        {
+          "sku": "MON-005",
+          "field": "model",
+          "value": "P2425",
+          "source_id": "DELL-P25H",
+          "pdf_page": 1,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=1",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-005",
+          "field": "screen_inches",
+          "value": 24.07,
+          "source_id": "DELL-P25H",
+          "pdf_page": 21,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=21",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-005",
+          "field": "resolution",
+          "value": "1920x1200",
+          "source_id": "DELL-P25H",
+          "pdf_page": 25,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=25",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-005",
+          "field": "max_refresh_hz",
+          "value": 100,
+          "source_id": "DELL-P25H",
+          "pdf_page": 25,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=25",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "16:10 model P2425 is different from P2425H and P2425E. USB-C downstream only. VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-005",
+          "field": "usb_c_video",
+          "value": false,
+          "source_id": "DELL-P25H",
+          "pdf_page": 22,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=22",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "16:10 model P2425 is different from P2425H and P2425E. USB-C downstream only. VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-005",
+          "field": "usb_c_pd_watts",
+          "value": 0,
+          "source_id": "DELL-P25H",
+          "pdf_page": 22,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=22",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "16:10 model P2425 is different from P2425H and P2425E. USB-C downstream only. VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-005",
+          "field": "usb_c_downstream_charge_watts",
+          "value": 15,
+          "source_id": "DELL-P25H",
+          "pdf_page": 22,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=22",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "16:10 model P2425 is different from P2425H and P2425E. USB-C downstream only. VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-005",
+          "field": "video_inputs",
+          "value": [
+            "HDMI",
+            "DisplayPort",
+            "VGA"
+          ],
+          "source_id": "DELL-P25H",
+          "pdf_page": 22,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=22",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        }
+      ],
+      "stock_quantity": null,
+      "delivery_lead_days": null
+    },
+    {
+      "sku": "MON-006",
+      "model": "P2725H",
+      "screen_inches": 27,
+      "resolution": "1920x1080",
+      "max_refresh_hz": 100,
+      "usb_c_video": false,
+      "usb_c_pd_watts": 0,
+      "usb_c_downstream_charge_watts": 15,
+      "brand": "Dell",
+      "name": "Dell P2725H Monitor",
+      "category": "monitor",
+      "unit": "piece",
+      "aliases": [
+        "P2725H",
+        "Dell P2725H",
+        "MON-006"
+      ],
+      "video_inputs": [
+        "HDMI",
+        "DisplayPort",
+        "VGA"
+      ],
+      "source_id": "DELL-P25H",
+      "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us",
+      "retrieved_at": "2026-09-14T06:00:47.144491+00:00",
+      "source_type": "public_manufacturer_specification",
+      "notes": "USB-C downstream charging is not laptop video/charging upstream. VGA maximum is 60 Hz.",
+      "dataset_version": "2026-09-14.v1",
+      "price": {
+        "sku": "MON-006",
+        "currency": "SGD",
+        "unit_price_cents": 24900,
+        "price_version": "demo-v1",
+        "effective_date": "2026-09-14",
+        "price_source_type": "synthetic"
+      },
+      "evidence": [
+        {
+          "sku": "MON-006",
+          "field": "model",
+          "value": "P2725H",
+          "source_id": "DELL-P25H",
+          "pdf_page": 1,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=1",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-006",
+          "field": "screen_inches",
+          "value": 27,
+          "source_id": "DELL-P25H",
+          "pdf_page": 23,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=23",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-006",
+          "field": "resolution",
+          "value": "1920x1080",
+          "source_id": "DELL-P25H",
+          "pdf_page": 25,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=25",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-006",
+          "field": "max_refresh_hz",
+          "value": 100,
+          "source_id": "DELL-P25H",
+          "pdf_page": 25,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=25",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C downstream charging is not laptop video/charging upstream. VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-006",
+          "field": "usb_c_video",
+          "value": false,
+          "source_id": "DELL-P25H",
+          "pdf_page": 24,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=24",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C downstream charging is not laptop video/charging upstream. VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-006",
+          "field": "usb_c_pd_watts",
+          "value": 0,
+          "source_id": "DELL-P25H",
+          "pdf_page": 24,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=24",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C downstream charging is not laptop video/charging upstream. VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-006",
+          "field": "usb_c_downstream_charge_watts",
+          "value": 15,
+          "source_id": "DELL-P25H",
+          "pdf_page": 24,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=24",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C downstream charging is not laptop video/charging upstream. VGA maximum is 60 Hz."
+        },
+        {
+          "sku": "MON-006",
+          "field": "video_inputs",
+          "value": [
+            "HDMI",
+            "DisplayPort",
+            "VGA"
+          ],
+          "source_id": "DELL-P25H",
+          "pdf_page": 24,
+          "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us#page=24",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        }
+      ],
+      "stock_quantity": null,
+      "delivery_lead_days": null
+    },
+    {
+      "sku": "MON-007",
+      "model": "P2425HE",
+      "screen_inches": 23.81,
+      "resolution": "1920x1080",
+      "max_refresh_hz": 100,
+      "usb_c_video": true,
+      "usb_c_pd_watts": 90,
+      "usb_c_downstream_charge_watts": 15,
+      "brand": "Dell",
+      "name": "Dell P2425HE Monitor",
+      "category": "monitor",
+      "unit": "piece",
+      "aliases": [
+        "P2425HE",
+        "Dell P2425HE",
+        "MON-007"
+      ],
+      "video_inputs": [
+        "HDMI",
+        "DisplayPort",
+        "USB-C DP Alt Mode"
+      ],
+      "source_id": "DELL-P25HE",
+      "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us",
+      "retrieved_at": "2026-09-14T06:00:54.825893+00:00",
+      "source_type": "public_manufacturer_specification",
+      "notes": "USB-C upstream supports video and up to 90 W PD. Host and cable must support the required mode.",
+      "dataset_version": "2026-09-14.v1",
+      "price": {
+        "sku": "MON-007",
+        "currency": "SGD",
+        "unit_price_cents": 28900,
+        "price_version": "demo-v1",
+        "effective_date": "2026-09-14",
+        "price_source_type": "synthetic"
+      },
+      "evidence": [
+        {
+          "sku": "MON-007",
+          "field": "model",
+          "value": "P2425HE",
+          "source_id": "DELL-P25HE",
+          "pdf_page": 1,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=1",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-007",
+          "field": "screen_inches",
+          "value": 23.81,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 17,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=17",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-007",
+          "field": "resolution",
+          "value": "1920x1080",
+          "source_id": "DELL-P25HE",
+          "pdf_page": 23,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=23",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-007",
+          "field": "max_refresh_hz",
+          "value": 100,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 23,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=23",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C upstream supports video and up to 90 W PD. Host and cable must support the required mode."
+        },
+        {
+          "sku": "MON-007",
+          "field": "usb_c_video",
+          "value": true,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=18",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C upstream supports video and up to 90 W PD. Host and cable must support the required mode."
+        },
+        {
+          "sku": "MON-007",
+          "field": "usb_c_pd_watts",
+          "value": 90,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=18",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C upstream supports video and up to 90 W PD. Host and cable must support the required mode."
+        },
+        {
+          "sku": "MON-007",
+          "field": "usb_c_downstream_charge_watts",
+          "value": 15,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=18",
+          "method": "derived_5_volts_times_3_amps",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C upstream supports video and up to 90 W PD. Host and cable must support the required mode."
+        },
+        {
+          "sku": "MON-007",
+          "field": "video_inputs",
+          "value": [
+            "HDMI",
+            "DisplayPort",
+            "USB-C DP Alt Mode"
+          ],
+          "source_id": "DELL-P25HE",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=18",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        }
+      ],
+      "stock_quantity": null,
+      "delivery_lead_days": null
+    },
+    {
+      "sku": "MON-008",
+      "model": "P2425E",
+      "screen_inches": 24.07,
+      "resolution": "1920x1200",
+      "max_refresh_hz": 100,
+      "usb_c_video": true,
+      "usb_c_pd_watts": 90,
+      "usb_c_downstream_charge_watts": 15,
+      "brand": "Dell",
+      "name": "Dell P2425E Monitor",
+      "category": "monitor",
+      "unit": "piece",
+      "aliases": [
+        "P2425E",
+        "Dell P2425E",
+        "MON-008"
+      ],
+      "video_inputs": [
+        "HDMI",
+        "DisplayPort",
+        "USB-C DP Alt Mode"
+      ],
+      "source_id": "DELL-P25HE",
+      "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us",
+      "retrieved_at": "2026-09-14T06:00:54.825893+00:00",
+      "source_type": "public_manufacturer_specification",
+      "notes": "16:10 USB-C model, distinct from the FHD P2425HE. Up to 90 W host power.",
+      "dataset_version": "2026-09-14.v1",
+      "price": {
+        "sku": "MON-008",
+        "currency": "SGD",
+        "unit_price_cents": 31900,
+        "price_version": "demo-v1",
+        "effective_date": "2026-09-14",
+        "price_source_type": "synthetic"
+      },
+      "evidence": [
+        {
+          "sku": "MON-008",
+          "field": "model",
+          "value": "P2425E",
+          "source_id": "DELL-P25HE",
+          "pdf_page": 1,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=1",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-008",
+          "field": "screen_inches",
+          "value": 24.07,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 19,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=19",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-008",
+          "field": "resolution",
+          "value": "1920x1200",
+          "source_id": "DELL-P25HE",
+          "pdf_page": 23,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=23",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-008",
+          "field": "max_refresh_hz",
+          "value": 100,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 23,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=23",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "16:10 USB-C model, distinct from the FHD P2425HE. Up to 90 W host power."
+        },
+        {
+          "sku": "MON-008",
+          "field": "usb_c_video",
+          "value": true,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 20,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=20",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "16:10 USB-C model, distinct from the FHD P2425HE. Up to 90 W host power."
+        },
+        {
+          "sku": "MON-008",
+          "field": "usb_c_pd_watts",
+          "value": 90,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 20,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=20",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "16:10 USB-C model, distinct from the FHD P2425HE. Up to 90 W host power."
+        },
+        {
+          "sku": "MON-008",
+          "field": "usb_c_downstream_charge_watts",
+          "value": 15,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 20,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=20",
+          "method": "derived_5_volts_times_3_amps",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "16:10 USB-C model, distinct from the FHD P2425HE. Up to 90 W host power."
+        },
+        {
+          "sku": "MON-008",
+          "field": "video_inputs",
+          "value": [
+            "HDMI",
+            "DisplayPort",
+            "USB-C DP Alt Mode"
+          ],
+          "source_id": "DELL-P25HE",
+          "pdf_page": 20,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=20",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        }
+      ],
+      "stock_quantity": null,
+      "delivery_lead_days": null
+    },
+    {
+      "sku": "MON-009",
+      "model": "P2725HE",
+      "screen_inches": 27,
+      "resolution": "1920x1080",
+      "max_refresh_hz": 100,
+      "usb_c_video": true,
+      "usb_c_pd_watts": 90,
+      "usb_c_downstream_charge_watts": 15,
+      "brand": "Dell",
+      "name": "Dell P2725HE Monitor",
+      "category": "monitor",
+      "unit": "piece",
+      "aliases": [
+        "P2725HE",
+        "Dell P2725HE",
+        "MON-009"
+      ],
+      "video_inputs": [
+        "HDMI",
+        "DisplayPort",
+        "USB-C DP Alt Mode"
+      ],
+      "source_id": "DELL-P25HE",
+      "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us",
+      "retrieved_at": "2026-09-14T06:00:54.825893+00:00",
+      "source_type": "public_manufacturer_specification",
+      "notes": "27-inch FHD USB-C hub model; up to 90 W host power.",
+      "dataset_version": "2026-09-14.v1",
+      "price": {
+        "sku": "MON-009",
+        "currency": "SGD",
+        "unit_price_cents": 34900,
+        "price_version": "demo-v1",
+        "effective_date": "2026-09-14",
+        "price_source_type": "synthetic"
+      },
+      "evidence": [
+        {
+          "sku": "MON-009",
+          "field": "model",
+          "value": "P2725HE",
+          "source_id": "DELL-P25HE",
+          "pdf_page": 1,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=1",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-009",
+          "field": "screen_inches",
+          "value": 27,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 21,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=21",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-009",
+          "field": "resolution",
+          "value": "1920x1080",
+          "source_id": "DELL-P25HE",
+          "pdf_page": 23,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=23",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-009",
+          "field": "max_refresh_hz",
+          "value": 100,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 23,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=23",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "27-inch FHD USB-C hub model; up to 90 W host power."
+        },
+        {
+          "sku": "MON-009",
+          "field": "usb_c_video",
+          "value": true,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 22,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=22",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "27-inch FHD USB-C hub model; up to 90 W host power."
+        },
+        {
+          "sku": "MON-009",
+          "field": "usb_c_pd_watts",
+          "value": 90,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 22,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=22",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "27-inch FHD USB-C hub model; up to 90 W host power."
+        },
+        {
+          "sku": "MON-009",
+          "field": "usb_c_downstream_charge_watts",
+          "value": 15,
+          "source_id": "DELL-P25HE",
+          "pdf_page": 22,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=22",
+          "method": "derived_5_volts_times_3_amps",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "27-inch FHD USB-C hub model; up to 90 W host power."
+        },
+        {
+          "sku": "MON-009",
+          "field": "video_inputs",
+          "value": [
+            "HDMI",
+            "DisplayPort",
+            "USB-C DP Alt Mode"
+          ],
+          "source_id": "DELL-P25HE",
+          "pdf_page": 22,
+          "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us#page=22",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        }
+      ],
+      "stock_quantity": null,
+      "delivery_lead_days": null
+    },
+    {
+      "sku": "MON-010",
+      "model": "U2724D",
+      "screen_inches": 27,
+      "resolution": "2560x1440",
+      "max_refresh_hz": 120,
+      "usb_c_video": false,
+      "usb_c_pd_watts": 0,
+      "usb_c_downstream_charge_watts": 15,
+      "brand": "Dell",
+      "name": "Dell U2724D Monitor",
+      "category": "monitor",
+      "unit": "piece",
+      "aliases": [
+        "U2724D",
+        "Dell U2724D",
+        "MON-010"
+      ],
+      "video_inputs": [
+        "HDMI",
+        "DisplayPort"
+      ],
+      "source_id": "DELL-U2724D",
+      "source_url": "https://dl.dell.com/content/manual17047281-dell-ultrasharp-27-monitor-u2724d-user-s-guide.pdf?language=en-us",
+      "retrieved_at": "2026-09-14T06:01:14.043358+00:00",
+      "source_type": "public_manufacturer_specification",
+      "notes": "USB-C upstream is explicitly data only. The 15 W USB-C downstream port is not video input. Do not confuse with U2724DE.",
+      "dataset_version": "2026-09-14.v1",
+      "price": {
+        "sku": "MON-010",
+        "currency": "SGD",
+        "unit_price_cents": 45900,
+        "price_version": "demo-v1",
+        "effective_date": "2026-09-14",
+        "price_source_type": "synthetic"
+      },
+      "evidence": [
+        {
+          "sku": "MON-010",
+          "field": "model",
+          "value": "U2724D",
+          "source_id": "DELL-U2724D",
+          "pdf_page": 1,
+          "local_path": "data/raw/dell/U2724D_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17047281-dell-ultrasharp-27-monitor-u2724d-user-s-guide.pdf?language=en-us#page=1",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-010",
+          "field": "screen_inches",
+          "value": 27,
+          "source_id": "DELL-U2724D",
+          "pdf_page": 16,
+          "local_path": "data/raw/dell/U2724D_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17047281-dell-ultrasharp-27-monitor-u2724d-user-s-guide.pdf?language=en-us#page=16",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-010",
+          "field": "resolution",
+          "value": "2560x1440",
+          "source_id": "DELL-U2724D",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/U2724D_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17047281-dell-ultrasharp-27-monitor-u2724d-user-s-guide.pdf?language=en-us#page=18",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-010",
+          "field": "max_refresh_hz",
+          "value": 120,
+          "source_id": "DELL-U2724D",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/U2724D_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17047281-dell-ultrasharp-27-monitor-u2724d-user-s-guide.pdf?language=en-us#page=18",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C upstream is explicitly data only. The 15 W USB-C downstream port is not video input. Do not confuse with U2724DE."
+        },
+        {
+          "sku": "MON-010",
+          "field": "usb_c_video",
+          "value": false,
+          "source_id": "DELL-U2724D",
+          "pdf_page": 17,
+          "local_path": "data/raw/dell/U2724D_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17047281-dell-ultrasharp-27-monitor-u2724d-user-s-guide.pdf?language=en-us#page=17",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C upstream is explicitly data only. The 15 W USB-C downstream port is not video input. Do not confuse with U2724DE."
+        },
+        {
+          "sku": "MON-010",
+          "field": "usb_c_pd_watts",
+          "value": 0,
+          "source_id": "DELL-U2724D",
+          "pdf_page": 17,
+          "local_path": "data/raw/dell/U2724D_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17047281-dell-ultrasharp-27-monitor-u2724d-user-s-guide.pdf?language=en-us#page=17",
+          "method": "normalized_from_exhaustive_connectivity_list_and_port_direction",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C upstream is explicitly data only. The 15 W USB-C downstream port is not video input. Do not confuse with U2724DE."
+        },
+        {
+          "sku": "MON-010",
+          "field": "usb_c_downstream_charge_watts",
+          "value": 15,
+          "source_id": "DELL-U2724D",
+          "pdf_page": 17,
+          "local_path": "data/raw/dell/U2724D_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17047281-dell-ultrasharp-27-monitor-u2724d-user-s-guide.pdf?language=en-us#page=17",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "USB-C upstream is explicitly data only. The 15 W USB-C downstream port is not video input. Do not confuse with U2724DE."
+        },
+        {
+          "sku": "MON-010",
+          "field": "video_inputs",
+          "value": [
+            "HDMI",
+            "DisplayPort"
+          ],
+          "source_id": "DELL-U2724D",
+          "pdf_page": 17,
+          "local_path": "data/raw/dell/U2724D_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17047281-dell-ultrasharp-27-monitor-u2724d-user-s-guide.pdf?language=en-us#page=17",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        }
+      ],
+      "stock_quantity": null,
+      "delivery_lead_days": null
+    },
+    {
+      "sku": "MON-011",
+      "model": "U2724DE",
+      "screen_inches": 27,
+      "resolution": "2560x1440",
+      "max_refresh_hz": 120,
+      "usb_c_video": true,
+      "usb_c_pd_watts": 90,
+      "usb_c_downstream_charge_watts": 15,
+      "brand": "Dell",
+      "name": "Dell U2724DE Monitor",
+      "category": "monitor",
+      "unit": "piece",
+      "aliases": [
+        "U2724DE",
+        "Dell U2724DE",
+        "MON-011"
+      ],
+      "video_inputs": [
+        "HDMI",
+        "DisplayPort",
+        "Thunderbolt 4 / USB-C DP Alt Mode"
+      ],
+      "source_id": "DELL-U2724DE",
+      "source_url": "https://dl.dell.com/content/manual17050394-dell-ultrasharp-27-thunderbolt-hub-monitor-u2724de-user-s-guide.pdf?language=en-us",
+      "retrieved_at": "2026-09-14T06:01:21.064538+00:00",
+      "source_type": "public_manufacturer_specification",
+      "notes": "Use the Thunderbolt 4 upstream connector for video and up to 90 W PD. A separate USB-C upstream connector is data only.",
+      "dataset_version": "2026-09-14.v1",
+      "price": {
+        "sku": "MON-011",
+        "currency": "SGD",
+        "unit_price_cents": 62900,
+        "price_version": "demo-v1",
+        "effective_date": "2026-09-14",
+        "price_source_type": "synthetic"
+      },
+      "evidence": [
+        {
+          "sku": "MON-011",
+          "field": "model",
+          "value": "U2724DE",
+          "source_id": "DELL-U2724DE",
+          "pdf_page": 1,
+          "local_path": "data/raw/dell/U2724DE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17050394-dell-ultrasharp-27-thunderbolt-hub-monitor-u2724de-user-s-guide.pdf?language=en-us#page=1",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-011",
+          "field": "screen_inches",
+          "value": 27,
+          "source_id": "DELL-U2724DE",
+          "pdf_page": 17,
+          "local_path": "data/raw/dell/U2724DE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17050394-dell-ultrasharp-27-thunderbolt-hub-monitor-u2724de-user-s-guide.pdf?language=en-us#page=17",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-011",
+          "field": "resolution",
+          "value": "2560x1440",
+          "source_id": "DELL-U2724DE",
+          "pdf_page": 19,
+          "local_path": "data/raw/dell/U2724DE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17050394-dell-ultrasharp-27-thunderbolt-hub-monitor-u2724de-user-s-guide.pdf?language=en-us#page=19",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-011",
+          "field": "max_refresh_hz",
+          "value": 120,
+          "source_id": "DELL-U2724DE",
+          "pdf_page": 19,
+          "local_path": "data/raw/dell/U2724DE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17050394-dell-ultrasharp-27-thunderbolt-hub-monitor-u2724de-user-s-guide.pdf?language=en-us#page=19",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "Use the Thunderbolt 4 upstream connector for video and up to 90 W PD. A separate USB-C upstream connector is data only."
+        },
+        {
+          "sku": "MON-011",
+          "field": "usb_c_video",
+          "value": true,
+          "source_id": "DELL-U2724DE",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/U2724DE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17050394-dell-ultrasharp-27-thunderbolt-hub-monitor-u2724de-user-s-guide.pdf?language=en-us#page=18",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "Use the Thunderbolt 4 upstream connector for video and up to 90 W PD. A separate USB-C upstream connector is data only."
+        },
+        {
+          "sku": "MON-011",
+          "field": "usb_c_pd_watts",
+          "value": 90,
+          "source_id": "DELL-U2724DE",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/U2724DE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17050394-dell-ultrasharp-27-thunderbolt-hub-monitor-u2724de-user-s-guide.pdf?language=en-us#page=18",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "Use the Thunderbolt 4 upstream connector for video and up to 90 W PD. A separate USB-C upstream connector is data only."
+        },
+        {
+          "sku": "MON-011",
+          "field": "usb_c_downstream_charge_watts",
+          "value": 15,
+          "source_id": "DELL-U2724DE",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/U2724DE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17050394-dell-ultrasharp-27-thunderbolt-hub-monitor-u2724de-user-s-guide.pdf?language=en-us#page=18",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "Use the Thunderbolt 4 upstream connector for video and up to 90 W PD. A separate USB-C upstream connector is data only."
+        },
+        {
+          "sku": "MON-011",
+          "field": "video_inputs",
+          "value": [
+            "HDMI",
+            "DisplayPort",
+            "Thunderbolt 4 / USB-C DP Alt Mode"
+          ],
+          "source_id": "DELL-U2724DE",
+          "pdf_page": 18,
+          "local_path": "data/raw/dell/U2724DE_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual17050394-dell-ultrasharp-27-thunderbolt-hub-monitor-u2724de-user-s-guide.pdf?language=en-us#page=18",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        }
+      ],
+      "stock_quantity": null,
+      "delivery_lead_days": null
+    },
+    {
+      "sku": "MON-012",
+      "model": "S2725QC",
+      "screen_inches": 27,
+      "resolution": "3840x2160",
+      "max_refresh_hz": 120,
+      "usb_c_video": true,
+      "usb_c_pd_watts": 65,
+      "usb_c_downstream_charge_watts": 15,
+      "brand": "Dell",
+      "name": "Dell S2725QC Monitor",
+      "category": "monitor",
+      "unit": "piece",
+      "aliases": [
+        "S2725QC",
+        "Dell S2725QC",
+        "MON-012"
+      ],
+      "video_inputs": [
+        "HDMI",
+        "USB-C DP Alt Mode"
+      ],
+      "source_id": "DELL-S2725QC",
+      "source_url": "https://dl.dell.com/content/manual22980564-dell-s-27-4k-usb-c-monitor-s2725qc-user-s-guide.pdf?language=en-us",
+      "retrieved_at": "2026-09-14T06:01:28.522457+00:00",
+      "source_type": "public_manufacturer_specification",
+      "notes": "4K USB-C model with up to 65 W host PD. A 100 W rated cable does not mean the monitor provides 100 W.",
+      "dataset_version": "2026-09-14.v1",
+      "price": {
+        "sku": "MON-012",
+        "currency": "SGD",
+        "unit_price_cents": 49900,
+        "price_version": "demo-v1",
+        "effective_date": "2026-09-14",
+        "price_source_type": "synthetic"
+      },
+      "evidence": [
+        {
+          "sku": "MON-012",
+          "field": "model",
+          "value": "S2725QC",
+          "source_id": "DELL-S2725QC",
+          "pdf_page": 1,
+          "local_path": "data/raw/dell/S2725QC_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual22980564-dell-s-27-4k-usb-c-monitor-s2725qc-user-s-guide.pdf?language=en-us#page=1",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-012",
+          "field": "screen_inches",
+          "value": 27,
+          "source_id": "DELL-S2725QC",
+          "pdf_page": 14,
+          "local_path": "data/raw/dell/S2725QC_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual22980564-dell-s-27-4k-usb-c-monitor-s2725qc-user-s-guide.pdf?language=en-us#page=14",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-012",
+          "field": "resolution",
+          "value": "3840x2160",
+          "source_id": "DELL-S2725QC",
+          "pdf_page": 15,
+          "local_path": "data/raw/dell/S2725QC_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual22980564-dell-s-27-4k-usb-c-monitor-s2725qc-user-s-guide.pdf?language=en-us#page=15",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        },
+        {
+          "sku": "MON-012",
+          "field": "max_refresh_hz",
+          "value": 120,
+          "source_id": "DELL-S2725QC",
+          "pdf_page": 15,
+          "local_path": "data/raw/dell/S2725QC_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual22980564-dell-s-27-4k-usb-c-monitor-s2725qc-user-s-guide.pdf?language=en-us#page=15",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "4K USB-C model with up to 65 W host PD. A 100 W rated cable does not mean the monitor provides 100 W."
+        },
+        {
+          "sku": "MON-012",
+          "field": "usb_c_video",
+          "value": true,
+          "source_id": "DELL-S2725QC",
+          "pdf_page": 14,
+          "local_path": "data/raw/dell/S2725QC_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual22980564-dell-s-27-4k-usb-c-monitor-s2725qc-user-s-guide.pdf?language=en-us#page=14",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "4K USB-C model with up to 65 W host PD. A 100 W rated cable does not mean the monitor provides 100 W."
+        },
+        {
+          "sku": "MON-012",
+          "field": "usb_c_pd_watts",
+          "value": 65,
+          "source_id": "DELL-S2725QC",
+          "pdf_page": 14,
+          "local_path": "data/raw/dell/S2725QC_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual22980564-dell-s-27-4k-usb-c-monitor-s2725qc-user-s-guide.pdf?language=en-us#page=14",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "4K USB-C model with up to 65 W host PD. A 100 W rated cable does not mean the monitor provides 100 W."
+        },
+        {
+          "sku": "MON-012",
+          "field": "usb_c_downstream_charge_watts",
+          "value": 15,
+          "source_id": "DELL-S2725QC",
+          "pdf_page": 14,
+          "local_path": "data/raw/dell/S2725QC_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual22980564-dell-s-27-4k-usb-c-monitor-s2725qc-user-s-guide.pdf?language=en-us#page=14",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": "4K USB-C model with up to 65 W host PD. A 100 W rated cable does not mean the monitor provides 100 W."
+        },
+        {
+          "sku": "MON-012",
+          "field": "video_inputs",
+          "value": [
+            "HDMI",
+            "USB-C DP Alt Mode"
+          ],
+          "source_id": "DELL-S2725QC",
+          "pdf_page": 14,
+          "local_path": "data/raw/dell/S2725QC_user_guide.pdf",
+          "source_url": "https://dl.dell.com/content/manual22980564-dell-s-27-4k-usb-c-monitor-s2725qc-user-s-guide.pdf?language=en-us#page=14",
+          "method": "direct_specification",
+          "review_status": "assistant_checked_against_downloaded_manual",
+          "note": ""
+        }
+      ],
+      "stock_quantity": null,
+      "delivery_lead_days": null
+    }
+  ]
+}
