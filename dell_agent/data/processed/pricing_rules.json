@@ -1,0 +1,17 @@
+{
+  "rule_version": "demo-v1",
+  "price_version": "demo-v1",
+  "currency": "SGD",
+  "effective_date": "2026-09-14",
+  "discount_limit_bps": 500,
+  "default_discount_bps": 0,
+  "rounding": "half_up_per_line_discount",
+  "shipping_fee_cents": 0,
+  "validity_days": 7,
+  "tax_mode": "not_modelled",
+  "tax_note": "Demo quotation: tax is not modelled; this is not a tax invoice.",
+  "confirmation_required": true,
+  "inventory_mode": "not_available",
+  "delivery_commitment": "not_available",
+  "source_type": "synthetic"
+}
