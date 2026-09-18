@@ -30,12 +30,13 @@ NUS-ISS Hackathon 选题 **Quotation Preparation**。在 10 天内完成一个�
 
 ## 先读这些文件
 
-1. `docs/10-day-plan-zh.md`：四人分工、每日任务、亮点、AWS 架构和 30 分钟视频结构；
-2. `data/README.md`：数据字段、来源、运行方法和可信范围；
-3. `docs/quotation-preparation-three-week-plan-zh.md`：完整 workflow，仅在需要背景或扩展步骤时阅读；
-4. `data/agent/catalog.json`：Agent/后端运行时数据；
-5. `data/agent/bedrock_tool_config.json`：Bedrock Converse 工具定义；
-6. `data/evaluation/demo_scenarios.jsonl`：三条固定演示故事。
+1. `docs/project-plan-zh.md`：唯一项目总规划，包含当前进展、剩余 Gate、分工、验收指标和视频结构；
+2. `README.md` / `README.zh-CN.md`：英文仓库入口和中文说明；
+3. `data/README.md`：数据字段、来源、运行方法和可信范围；
+4. `docs/api-contract.md`：冻结的工具和 HTTP 契约；
+5. `data/agent/catalog.json`：Agent/后端运行时数据；
+6. `data/agent/bedrock_tool_config.json`：Bedrock Converse 工具定义；
+7. `data/evaluation/demo_scenarios.jsonl`：三条固定演示故事。
 
 ## 已有工具
 
