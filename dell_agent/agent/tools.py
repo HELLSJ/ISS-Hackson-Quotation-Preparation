@@ -88,6 +88,23 @@ _SEARCH_ALLOWED_KEYS = frozenset(
 )
 
 
+def _exact_query_skus(query: str) -> set:
+    """Resolve an exact model/SKU/alias before allowing substring search.
+
+    This prevents an exact request for U2724D or P2425 from silently expanding
+    to U2724DE/P2425HE variants that may have materially different ports.
+    """
+    needle = query.strip().lower()
+    if not needle:
+        return set()
+    exact = set()
+    for product in catalog.all_products():
+        values = [product.model, product.sku, product.name, *product.aliases]
+        if needle in {(value or "").strip().lower() for value in values}:
+            exact.add(product.sku)
+    return exact
+
+
 def _query_matches(product: Product, query: str) -> bool:
     """Case-insensitive substring match of ``query`` against keyword fields.
 
@@ -142,10 +159,37 @@ def search_products(args: Optional[Dict[str, Any]] = None) -> Any:
     min_refresh_hz = args.get("min_refresh_hz")
     max_unit_price_cents = args.get("max_unit_price_cents")
 
+    if query is not None and not isinstance(query, str):
+        return _error("bad_argument", "query must be text.")
+    if usb_c_video is not None and not isinstance(usb_c_video, bool):
+        return _error("bad_argument", "usb_c_video must be boolean.")
+    for key, value in (
+        ("min_pd_watts", min_pd_watts),
+        ("min_refresh_hz", min_refresh_hz),
+        ("max_unit_price_cents", max_unit_price_cents),
+    ):
+        if value is not None and (not _is_int(value) or value < 0):
+            return _error("bad_argument", f"{key} must be a non-negative integer.")
+    for key, value in (
+        ("min_screen_inches", min_screen_inches),
+        ("max_screen_inches", max_screen_inches),
+    ):
+        if value is not None and (
+            isinstance(value, bool) or not isinstance(value, (int, float)) or value <= 0
+        ):
+            return _error("bad_argument", f"{key} must be a positive number.")
+    if resolution is not None and not isinstance(resolution, str):
+        return _error("bad_argument", "resolution must be text such as 2560x1440.")
+
+    exact_skus = _exact_query_skus(query) if query else set()
     matches: List[Product] = []
     for product in catalog.all_products():
-        # query: keyword substring over model/sku/name/aliases (Req 2.2).
-        if query is not None and not _query_matches(product, str(query)):
+        # Exact model/SKU/alias selection wins over substring matching. This is
+        # a safety property: U2724D must not silently become U2724DE.
+        if exact_skus:
+            if product.sku not in exact_skus:
+                continue
+        elif query is not None and not _query_matches(product, query):
             continue
 
         # usb_c_video: only products whose upstream USB-C carries video
@@ -457,6 +501,8 @@ def dispatch(name: str, args: Optional[Dict[str, Any]] = None) -> Any:
         The tool's JSON-serialisable result, or ``{"error": "unknown_tool", ...}``
         when ``name`` is not a registered tool.
     """
+    if args is not None and not isinstance(args, dict):
+        return _error("bad_argument", "Tool arguments must be a JSON object.")
     tool = _TOOLS.get(name)
     if tool is None:
         return _error(

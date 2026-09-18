@@ -140,4 +140,4 @@ python scripts/validate_data.py
 
 规格源自 `sources.csv` 中链接的 Dell 官方英文手册。原 PDF 保留 Dell 版权；公开下载不等于开放数据许可。本包保存原件供溯源，公开发布原件前检查再分发条件。生成的价格、规则和询价均明确标记为模拟，不代表 Dell 报价、库存或商业政策。
 
-原工作流程见 [开发 workflow](../docs/quotation-preparation-three-week-plan-zh.md)。数据部分已经落地，可从连接查询和计价工具继续开发。
+完整项目范围、当前进展和后续 Gate 见 [项目总规划](../docs/project-plan-zh.md)。数据部分已经落地；后续按总规划完成独立冻结、真实 Bedrock、确认/diff/PDF 和正式评估。

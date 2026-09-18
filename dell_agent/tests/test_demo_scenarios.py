@@ -207,26 +207,16 @@ class Demo02DataOnlyUsbCTest(DemoScenarioTestBase):
 
         result = OfflineDriver().run(turns)
 
-        if result.status == state_mod.EXPLAIN_LIMITATION:
-            surfaced = {c["sku"] for c in result.candidates}
-            surfaced |= {ev.get("sku") for ev in result.citations}
-            self.assertIn(
-                "MON-010",
-                surfaced,
-                "the explained limitation should be attributed to MON-010",
-            )
-            # A limitation is explained, never a fabricated quote.
-            self.assertIsNone(result.quote_draft)
-        else:
-            self.skipTest(
-                "OfflineDriver did not classify the DEMO-02 turn as "
-                "explain_limitation: its limitation detector requires an "
-                "explicit USB-C token, but the turn phrases USB-C functionally "
-                "('one-cable laptop video'). This is a known heuristic "
-                f"limitation of the offline driver (got status {result.status!r} "
-                "for MON-010). The priced alternative MON-011 is verified via a "
-                "direct calculate_quote dispatch in the companion test."
-            )
+        self.assertEqual(result.status, state_mod.EXPLAIN_LIMITATION)
+        surfaced = {c["sku"] for c in result.candidates}
+        surfaced |= {ev.get("sku") for ev in result.citations}
+        self.assertIn(
+            "MON-010",
+            surfaced,
+            "the explained limitation should be attributed to MON-010",
+        )
+        # A limitation is explained, never a fabricated quote.
+        self.assertIsNone(result.quote_draft)
 
 
 # --------------------------------------------------------------------------- #

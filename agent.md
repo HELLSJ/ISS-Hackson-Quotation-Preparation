@@ -11,33 +11,36 @@ NUS-ISS Hackathon 选题 **Quotation Preparation**。在 10 天内完成一个�
      → 工具计价 → 保存 v1/v2 → 显示 diff → 导出 PDF
 ```
 
-## 当前状态（2026-09-14）
+## 当前状态（2026-09-15）
 
-数据和离线工具已经完成，应用、AWS Agent、报价保存、页面和 PDF 尚未开发。
+数据、离线 Agent、FastAPI、SQLite 报价快照和三栏浏览器工作台已经打通；真实 Bedrock 调用、报价 PDF 和版本 diff 尚未完成。
 
 - 6 份 Dell 官方英文 PDF，共 522 页；
 - 12 个显示器型号、12 条模拟 SGD 价格；
-- 96 条字段级证据，记录 PDF 来源和页码；
+- 96 条字段级证据，可从页面打开 PDF 对应页；
 - 20 条 dev、20 条 holdout、3 条视频演示案例；
-- 14 项离线测试全部通过；
+- `tests/` 15 项通过，`dell_agent/tests/` 63 项通过、7 项明确 skip；
+- 三条固定演示均可离线运行，包括 U2724D data-only 陷阱；
+- `app/` 支持对话恢复、候选选择、确定性计价和幂等保存 v1/v2；
 - 数据版本：`2026-09-14.v1`；
-- 尚未调用模型或创建 AWS 资源；不能声称模型评估已通过；
+- 尚未使用团队 AWS 账户调用模型；不能声称模型评估已通过；
 - 还需队员独立抽查 6 个型号，每个核对 2 个字段，然后冻结数据。
 
 不需要继续下载产品、实时价格、库存或客户数据。规格来自官方资料；价格、规则和询价均为比赛用模拟数据。
 
 ## 先读这些文件
 
-1. `docs/10-day-plan-zh.md`：四人分工、每日任务、亮点、AWS 架构和 30 分钟视频结构；
-2. `data/README.md`：数据字段、来源、运行方法和可信范围；
-3. `docs/quotation-preparation-three-week-plan-zh.md`：完整 workflow，仅在需要背景或扩展步骤时阅读；
-4. `data/agent/catalog.json`：Agent/后端运行时数据；
-5. `data/agent/bedrock_tool_config.json`：Bedrock Converse 工具定义；
-6. `data/evaluation/demo_scenarios.jsonl`：三条固定演示故事。
+1. `docs/project-plan-zh.md`：唯一项目总规划，包含当前进展、剩余 Gate、分工、验收指标和视频结构；
+2. `README.md` / `README.zh-CN.md`：英文仓库入口和中文说明；
+3. `data/README.md`：数据字段、来源、运行方法和可信范围；
+4. `docs/api-contract.md`：冻结的工具和 HTTP 契约；
+5. `data/agent/catalog.json`：Agent/后端运行时数据；
+6. `data/agent/bedrock_tool_config.json`：Bedrock Converse 工具定义；
+7. `data/evaluation/demo_scenarios.jsonl`：三条固定演示故事。
 
 ## 已有工具
 
-`scripts/catalog_tools.py` 提供三个冻结工具：
+`dell_agent.agent.tools.dispatch` 提供三个冻结工具，`scripts/catalog_tools.py` 只是一层 CLI 包装：
 
 - `search_products`：结构化产品筛选；
 - `get_product`：读取 SKU、模拟价格和字段证据；
@@ -57,15 +60,24 @@ python scripts/catalog_tools.py calculate_quote '{"items":[{"sku":"MON-007","qua
 ## 推荐实现
 
 ```text
-Web UI
-  → FastAPI
-      → Amazon Bedrock Converse（理解、追问、选择工具）
-      → catalog_tools.py（查事实、查价格、算金额）
-      → SQLite（报价和版本快照）
-      → PDF generator
+Browser workbench (`app/static/`)
+  → FastAPI (`app/main.py`)
+      → QuotationService：有序轮次重放、回复与替代建议
+      → OfflineDriver / Amazon Bedrock Converse
+      → dell_agent.agent.tools.dispatch（唯一查事实和计价实现）
+      → SQLite `storage/app.sqlite`（消息和不可变报价版本）
+      → 本地官方 PDF 证据页
 ```
 
-优先使用 Bedrock Converse client-side tool use。先确认团队账户所选 Region 和模型支持 Converse/tool use。10 天范围内不增加 Knowledge Base、向量数据库、模型微调或复杂多 Agent。
+本地运行：
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+浏览器打开 `http://127.0.0.1:8000`。Bedrock 配置见根 `README.md`；没有配置时使用确定性 OfflineDriver。
 
 ## 三条固定演示故事
 
@@ -84,10 +96,10 @@ Day 1 冻结 API 契约，之后四人并行；每天用第一条演示故事做
 
 ## 下一步
 
-1. 完成数据人工抽查并冻结 `2026-09-14.v1`；
-2. 建立 FastAPI 和报价业务表；
-3. 冻结三个工具的 API 入参、返回和错误码；
-4. Bedrock 与前端分别先用 mock 接口并行开发；
-5. Day 3 前打通第一条端到端询价。
+1. 用团队 AWS 账户完成一次真实 Bedrock Converse 工具调用，确认未走 fallback；
+2. 完成数据人工抽查并冻结 `2026-09-14.v1`；
+3. 基于 `quote_versions.payload_json` 实现 v1/v2 diff 和 PDF；
+4. 运行 holdout 首轮评估并保留失败项；
+5. 每天用三条演示故事做端到端回归。
 
 继续开发时先检查实际文件和测试结果，不要重新下载或重建已经完成的数据，也不要把 holdout 案例放入提示词或知识库。

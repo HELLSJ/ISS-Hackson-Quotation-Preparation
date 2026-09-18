@@ -95,29 +95,17 @@ KNOWN_HEURISTIC_LIMITATIONS: Dict[str, str] = {
     # routed to needs_clarification rather than no_match.
     "DEV-015": "Unknown model 'XYZ999' -> needs_clarification instead of no_match.",
     "HOLDOUT-015": "Unknown model 'NONEXIST-2026' -> needs_clarification instead of no_match.",
-    # Two named products with a single quantity phrasing not resolved to a quote.
-    "HOLDOUT-002": "'4 P2425E plus 2 S2725QC' not resolved to ready_to_quote.",
-    # Implicit-quantity phrasing ('for our office') not detected as missing qty.
-    "HOLDOUT-005": "Implicit missing-quantity phrasing -> answer_with_evidence, not needs_clarification.",
     # Strict-diagonal / marketed-size limitation not detected.
     "HOLDOUT-008": "Strict 24.0-inch diagonal limitation -> answer_with_evidence, not explain_limitation.",
     # Downstream-charge vs host-charge nuance across two SKUs not detected.
     "HOLDOUT-009": "Host-vs-downstream 90W nuance -> answer_with_evidence, not explain_limitation.",
     # Cable-vs-port 100W nuance not detected as a limitation.
     "HOLDOUT-011": "Cable-vs-port 100W nuance -> answer_with_evidence, not explain_limitation.",
-    # Resolution-comparison question mis-parsed as a quantity clarification.
-    "HOLDOUT-012": "Resolution comparison -> needs_clarification, not answer_with_evidence.",
     # 140Hz refresh constraint not modelled; search does not return empty.
     "HOLDOUT-013": "140Hz constraint not modelled -> answer_with_evidence, not no_match.",
     # Named-SKU budget request is quoted (with over_budget flag) rather than
     # routed to budget_conflict; totals still match (asserted below).
     "HOLDOUT-014": "Named-SKU over-budget -> ready_to_quote (over_budget_cents set), not budget_conflict.",
-    # Second-turn revision 'Make that 6' not applied to the carried line.
-    "HOLDOUT-016": "Revision 'Make that 6' not carried forward.",
-    # Multi-line resolution + line removal picks the wrong SKU/quantity.
-    "HOLDOUT-017": "P2225H/S2725H resolution + removal mismatch.",
-    # Negative quantity phrasing 'minus two' not detected as invalid_quantity.
-    "HOLDOUT-020": "'minus two' not detected as an invalid quantity.",
 }
 
 

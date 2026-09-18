@@ -94,6 +94,7 @@ class SearchExampleTests(unittest.TestCase):
         result = tools.search_products({"colour": "black"})
         self.assertIsInstance(result, dict)
         self.assertEqual(result["error"], "bad_argument")
+        self.assertEqual(tools.dispatch("search_products", [] )["error"], "bad_argument")
 
 
 class NullFieldFilterTests(unittest.TestCase):
