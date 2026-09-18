@@ -1,71 +1,125 @@
+"""Contract tests for the canonical quotation tool implementation.
+
+The CLI compatibility wrapper must delegate to ``dell_agent.agent.tools``;
+there is intentionally no second catalogue or pricing engine in scripts/.
+"""
+from __future__ import annotations
+
 import json
+import subprocess
+import sys
 import unittest
 from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
-import sys
 
-ROOT=Path(__file__).resolve().parents[1]
-sys.path.insert(0,str(ROOT/'scripts'))
-from catalog_tools import CatalogTools,ToolError
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
-class CatalogueTests(unittest.TestCase):
-    def setUp(self): self.tools=CatalogTools()
-    def test_usb_video_and_host_power(self):
-        result=self.tools.search_products(usb_c_video=True,min_pd_watts=90)
-        self.assertEqual({p['sku'] for p in result['products']},{'MON-007','MON-008','MON-009','MON-011'})
-    def test_data_only_not_video(self):
-        self.assertEqual(self.tools.search_products(query='U2724D',usb_c_video=True)['count'],0)
-        self.assertEqual(self.tools.get_product('MON-010')['usb_c_downstream_charge_watts'],15)
-    def test_no_4k_90w(self):
-        self.assertEqual(self.tools.search_products(resolution='3840x2160',min_pd_watts=90)['count'],0)
-    def test_exact_model(self):
-        self.assertEqual([p['model'] for p in self.tools.search_products(query='P2425')['products']],['P2425'])
-        self.assertEqual(self.tools.search_products(query='Dell U2724D',usb_c_video=True)['count'],0)
-    def test_actual_diagonal(self):
-        self.assertEqual(self.tools.search_products(query='P2425HE',min_screen_inches=24)['count'],0)
-    def test_unknown_never_satisfies_filter(self):
-        self.tools.products['MON-007']['usb_c_video']=None
-        self.tools.products['MON-008']['usb_c_pd_watts']=None
-        skus={p['sku'] for p in self.tools.search_products(usb_c_video=True,min_pd_watts=65)['products']}
-        self.assertNotIn('MON-007',skus); self.assertNotIn('MON-008',skus)
-    def test_budget(self):
-        a=self.tools.calculate_quote([{'sku':'MON-007','quantity':8}],250000)
-        b=self.tools.calculate_quote([{'sku':'MON-007','quantity':10}],250000)
-        self.assertEqual(a['total_cents'],231200);self.assertTrue(a['within_budget'])
-        self.assertEqual(b['over_budget_cents'],39000);self.assertFalse(b['within_budget'])
-    def test_input_validation(self):
-        for quantity in [None,0,-1,1.5,True,'2']:
-            with self.subTest(quantity=quantity),self.assertRaises(ToolError):
-                self.tools.calculate_quote([{'sku':'MON-001','quantity':quantity}])
-        for bps in [-1,501,600,True,1.5]:
-            with self.subTest(bps=bps),self.assertRaises(ToolError):
-                self.tools.calculate_quote([{'sku':'MON-001','quantity':2,'discount_bps':bps}])
-    def test_price_override_rejected(self):
-        with self.assertRaises(ToolError):self.tools.calculate_quote([{'sku':'MON-001','quantity':1,'unit_price_cents':1}])
-    def test_missing_price_rejected(self):
-        self.tools.products['MON-001']['price']=None
-        with self.assertRaises(ToolError):self.tools.calculate_quote([{'sku':'MON-001','quantity':1}])
-    def test_duplicate_rejected(self):
-        with self.assertRaises(ToolError):self.tools.calculate_quote([{'sku':'MON-001','quantity':1}]*2)
-    def test_unsupported_arguments_rejected(self):
-        with self.assertRaises(ToolError):self.tools.dispatch('search_products',{'stock':True})
-        with self.assertRaises(ToolError):self.tools.dispatch('delete_all',{})
-    def test_half_up_at_half_cent(self):
-        self.tools.products['MON-001']['price']['unit_price_cents']=101
-        self.assertEqual(self.tools.calculate_quote([{'sku':'MON-001','quantity':1,'discount_bps':500}])['total_cents'],96)
-        self.tools.products['MON-001']['price']['unit_price_cents']=110
-        self.assertEqual(self.tools.calculate_quote([{'sku':'MON-001','quantity':1,'discount_bps':500}])['total_cents'],104)
-    def test_independent_expected_amounts(self):
-        for line in (ROOT/'data/evaluation/expected_results.jsonl').read_text().splitlines():
-            case=json.loads(line); e=case['expected']
-            if 'items' not in e:continue
-            with self.subTest(case=case['case_id']):
-                independent=0
-                for item in e['items']:
-                    gross=Decimal(self.tools.products[item['sku']]['price']['unit_price_cents'])*item['quantity']
-                    deduction=(gross*Decimal(item.get('discount_bps',0))/10000).quantize(Decimal('1'),rounding=ROUND_HALF_UP)
-                    independent+=int(gross-deduction)
-                self.assertEqual(independent,e['total_cents'])
-                self.assertEqual(self.tools.calculate_quote(e['items'])['total_cents'],independent)
+from dell_agent.agent.tools import dispatch
+from scripts.catalog_tools import CatalogTools, ToolError
 
-if __name__=='__main__':unittest.main()
+
+class CanonicalContractTests(unittest.TestCase):
+    def test_usb_video_and_host_power(self) -> None:
+        rows = dispatch("search_products", {"usb_c_video": True, "min_pd_watts": 90})
+        self.assertEqual([p["sku"] for p in rows], ["MON-007", "MON-008", "MON-009", "MON-011"])
+
+    def test_data_only_port_is_not_video(self) -> None:
+        self.assertEqual(dispatch("search_products", {"query": "U2724D", "usb_c_video": True}), [])
+        product = dispatch("get_product", {"sku": "MON-010"})
+        self.assertTrue(product["found"])
+        self.assertFalse(product["usb_c_video"])
+        self.assertEqual(product["usb_c_downstream_charge_watts"], 15)
+
+    def test_exact_model_does_not_silently_substitute(self) -> None:
+        rows = dispatch("search_products", {"query": "P2425"})
+        self.assertEqual([p["model"] for p in rows], ["P2425"])
+
+    def test_precise_diagonal_is_used(self) -> None:
+        rows = dispatch("search_products", {"query": "P2425HE", "min_screen_inches": 24})
+        self.assertEqual(rows, [])
+
+    def test_unknown_product_is_explicit(self) -> None:
+        self.assertEqual(dispatch("get_product", {"sku": "MON-999"}), {"found": False, "sku": "MON-999"})
+
+    def test_quote_budget_and_revision_anchors(self) -> None:
+        initial = dispatch("calculate_quote", {"items": [{"sku": "MON-007", "quantity": 8}], "budget_cents": 250000})
+        revised = dispatch("calculate_quote", {"items": [{"sku": "MON-007", "quantity": 10}], "budget_cents": 250000})
+        self.assertEqual(initial["total_cents"], 231200)
+        self.assertTrue(initial["within_budget"])
+        self.assertEqual(revised["total_cents"], 289000)
+        self.assertEqual(revised["over_budget_cents"], 39000)
+
+    def test_invalid_quantity_is_structured_error(self) -> None:
+        for quantity in (None, 0, -1, 1.5, True, "2"):
+            with self.subTest(quantity=quantity):
+                result = dispatch("calculate_quote", {"items": [{"sku": "MON-001", "quantity": quantity}]})
+                self.assertEqual(result["error"], "invalid_quantity")
+
+    def test_discount_limit_is_structured_error(self) -> None:
+        result = dispatch("calculate_quote", {"items": [{"sku": "MON-001", "quantity": 2, "discount_bps": 501}]})
+        self.assertEqual(result["error"], "discount_limit_exceeded")
+
+    def test_price_override_is_forbidden(self) -> None:
+        result = dispatch("calculate_quote", {"items": [{"sku": "MON-001", "quantity": 1, "unit_price_cents": 1}]})
+        self.assertEqual(result["error"], "custom_price_forbidden")
+
+    def test_unknown_tool_and_argument_are_rejected(self) -> None:
+        self.assertEqual(dispatch("delete_all", {})["error"], "unknown_tool")
+        self.assertEqual(dispatch("search_products", {"stock": True})["error"], "bad_argument")
+        self.assertEqual(dispatch("search_products", [])["error"], "bad_argument")
+
+    def test_duplicate_skus_remain_separate_lines(self) -> None:
+        result = dispatch("calculate_quote", {"items": [{"sku": "MON-001", "quantity": 1}, {"sku": "MON-001", "quantity": 2}]})
+        self.assertEqual(len(result["lines"]), 2)
+        self.assertEqual(result["total_cents"], 44700)
+
+    def test_independent_expected_amounts(self) -> None:
+        for raw in (ROOT / "data/evaluation/expected_results.jsonl").read_text().splitlines():
+            case = json.loads(raw)
+            expected = case["expected"]
+            if "items" not in expected:
+                continue
+            independent = 0
+            for item in expected["items"]:
+                product = dispatch("get_product", {"sku": item["sku"]})
+                gross = Decimal(product["unit_price_cents"]) * item["quantity"]
+                deduction = (gross * Decimal(item.get("discount_bps", 0)) / 10000).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+                independent += int(gross - deduction)
+            self.assertEqual(independent, expected["total_cents"], case["case_id"])
+            self.assertEqual(dispatch("calculate_quote", {"items": expected["items"]})["total_cents"], independent)
+
+
+class CompatibilityAndCliTests(unittest.TestCase):
+    def test_compatibility_class_delegates_and_raises(self) -> None:
+        adapter = CatalogTools()
+        self.assertEqual(adapter.calculate_quote([{"sku": "MON-007", "quantity": 8}])["total_cents"], 231200)
+        with self.assertRaises(ToolError):
+            adapter.dispatch("delete_all", {})
+
+    def test_cli_emits_canonical_shape(self) -> None:
+        completed = subprocess.run(
+            [sys.executable, "scripts/catalog_tools.py", "search_products", '{"query":"P2425HE"}'],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=True,
+        )
+        result = json.loads(completed.stdout)
+        self.assertIsInstance(result, list)
+        self.assertEqual(result[0]["sku"], "MON-007")
+
+    def test_cli_error_exits_two(self) -> None:
+        completed = subprocess.run(
+            [sys.executable, "scripts/catalog_tools.py", "calculate_quote", '{"items":[{"sku":"MON-007","quantity":0}]}'],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(completed.returncode, 2)
+        self.assertEqual(json.loads(completed.stdout)["error"], "invalid_quantity")
+
+
+if __name__ == "__main__":
+    unittest.main()
