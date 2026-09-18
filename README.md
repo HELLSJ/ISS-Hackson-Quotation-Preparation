@@ -18,29 +18,42 @@ NUS-ISS Hackathon 选题 **Quotation Preparation**。一个虚构办公设备分
 
 ## 当前状态
 
-数据层和离线确定性工具已完成并通过校验；**Web 应用、Bedrock 实际调用、报价持久化、版本 diff 和 PDF 导出尚未开发**。
+数据、确定性工具、FastAPI、SQLite 报价快照和三栏浏览器工作台已打通；Bedrock 代码路径已接入但**尚未用团队 AWS 账户完成真实模型调用**。PDF 报价导出与版本 diff 属于下一阶段。
 
 | 项目 | 状态 |
 |---|---|
 | 6 份 Dell 官方手册（522 页，43.9 MB） | 已下载，含 provenance 记录 |
 | 12 个显示器型号 + 12 条模拟 SGD 价格 | 已核对，`dataset_version = 2026-09-14.v1` |
-| 96 条字段级证据（PDF 页码 + 推导方法） | 已生成 |
-| 20 dev + 20 holdout + 3 演示场景 | 已生成（fixture，非实测结果） |
-| 三个确定性工具 | 两套实现，均通过测试（见下方"两套工具实现"） |
-| 离线测试 | `tests/` 14 项通过；`dell_agent/tests/` 63 项通过、14 项 skip |
-| 模型评估 | **未运行**，没有调用过任何模型 API |
+| 96 条字段级证据（PDF 页码 + 推导方法） | 已生成，可从页面打开本地 PDF 对应页 |
+| 20 dev + 20 holdout + 3 演示场景 | 已生成（fixture，非实测模型结果） |
+| 三个确定性工具 | 已收敛到 `dell_agent.agent.tools.dispatch` 唯一实现 |
+| FastAPI + SQLite + 三栏工作台 | 可运行；支持多轮恢复、候选选择、计价、幂等保存 v1/v2 |
+| 离线测试 | `tests/` 15 项通过；`dell_agent/tests/` 63 项通过、7 项 skip |
+| 模型评估 | **未运行**，当前环境没有 AWS 凭据或 Bedrock model ID |
 | 人工独立抽查 | **未完成**，规格由 assistant 核对，冻结前需队员复核 |
-| AWS 资源 | 未创建 |
+| PDF 报价导出 / 版本 diff | 尚未开发 |
 
 不需要继续下载产品资料、实时价格、库存或客户数据。
 
 ## 快速开始
 
-只需要 Python 标准库，已在 Python 3.9 和 3.14 上验证。目录数据已提交在仓库里，**不需要**跑任何 fetch 或下载脚本。
+Agent 内核和数据流水线只需要 Python 标准库（已在 Python 3.9/3.14 验证）；Web 应用使用 FastAPI，要求 Python 3.10+。目录数据已提交，**不需要**重新 fetch 或下载。
 
 ```bash
-git clone <repo> && cd show_me_your_agent_hackason
+git clone https://github.com/HELLSJ/ISS-Hackson-Quotation-Preparation.git
+cd ISS-Hackson-Quotation-Preparation
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
 
+# 启动工作台
+.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+浏览器打开 <http://127.0.0.1:8000>。页面默认使用确定性 `OfflineDriver`，无需云凭据；刷新后会从 `storage/app.sqlite` 恢复当前会话和已保存版本。
+
+### 离线数据与工具
+
+```bash
 # 0. 生成本地目录数据库（storage/ 不入版本库，是可重建产物）
 python scripts/build_data.py
 
@@ -49,7 +62,7 @@ python scripts/validate_data.py
 
 # 2. dell_agent 全套离线测试
 python -m unittest discover -s dell_agent/tests
-# → Ran 63 tests ... OK (skipped=14)
+# → Ran 63 tests ... OK (skipped=7)
 
 # 3. 查产品：USB-C 视频 + 至少 90W 主机供电
 python scripts/catalog_tools.py search_products '{"usb_c_video":true,"min_pd_watts":90}'
@@ -74,6 +87,11 @@ print(r.status, r.quote_draft['total_cents'], r.quote_draft['within_budget'])
 ## 仓库结构
 
 ```text
+app/                           # FastAPI、SQLite repository/service、三栏静态工作台
+  main.py                      # HTTP 路由与静态文件入口
+  repository.py                # conversations/messages/quote_versions
+  service.py                   # 有状态重放、回复文案、替代项建议
+  static/                      # index.html / styles.css / app.js
 data/                          # 数据包（详见 data/README.md）
   raw/dell/*.pdf               # 6 份官方手册原件，不覆盖
   raw/download_log.json        # 实际下载时间、地址、字节数
@@ -120,20 +138,11 @@ agent.md                       # 团队交接说明
 | `get_product` | 单个 SKU 的公开规格、模拟价格、字段级证据（source_id + PDF 页码 + 推导方法）；库存交期报告为不可用 |
 | `calculate_quote` | 仅用目录价计算草稿。拒绝自定义单价、非正整数数量、超过 5% 的折扣（拒绝而非截断） |
 
-### 两套工具实现（当前的主要技术债）
+### 唯一工具实现
 
-同样这三个工具存在**两份独立实现，契约不一致**：
+`dell_agent.agent.tools.dispatch(name, args)` 是产品事实和金额的唯一运行时实现。`OfflineDriver`、Bedrock Converse、FastAPI、测试和 CLI 都经过这个入口。`scripts/catalog_tools.py` 只保留无业务逻辑的 CLI/兼容包装，不再加载第二份目录或重复计算金额。
 
-| | `scripts/catalog_tools.py` | `dell_agent/agent/tools.py` |
-|---|---|---|
-| 错误方式 | 抛 `ToolError` | 返回 `{"error": code, "message": ...}` |
-| 错误码 | 大写：`UNKNOWN_SKU`、`MISSING_PRICE`、`DUPLICATE_SKU` | 小写：`unknown_sku`、`missing_price`、`custom_price_forbidden`、`bad_argument` |
-| `search_products` 返回 | `{dataset_version, count, products}` | 裸 list |
-| `calculate_quote` 返回 | `status: draft_requires_review`，字段名 `items`、含 `subtotal_cents` | `status: draft`，字段名 `lines` |
-| 重复 SKU | 拒绝，要求合并数量 | 允许，作为独立行 |
-| 折扣上限来源 | 读 `rules.discount_limit_bps` | 硬编码 `500` |
-
-两边的数据文件目前 sha1 完全一致（`catalog.json`、`pricing_rules.json`、`bedrock_tool_config.json`、`instructions.md`、4 个 evaluation jsonl）。但两边各有独立的加载和计算代码，一旦有人只改一边，两套测试会同时"通过"却给出不同的报价结构。**Web 后端接入前必须选定一个为唯一契约**，另一边改为引用或删除。
+成功返回工具的业务 JSON；普通输入错误返回 `{"error": code, "message": ...}`，不抛业务异常。精确型号/SKU/别名优先于子串搜索，因此 `U2724D` 不会静默扩展成 `U2724DE`，`P2425` 也不会扩展成带后缀的型号。完整冻结契约见 [docs/api-contract.md](docs/api-contract.md)。
 
 ## 计价口径
 
@@ -176,38 +185,34 @@ no_match        budget_conflict      rule_violation      invalid_quantity
 ### 接 Bedrock
 
 ```bash
-pip install boto3
+.venv/bin/pip install -r requirements-cloud.txt
+cp .env.example .env   # .env 已被 gitignore；不要放 AWS access key
 ```
 
-```python
-from dell_agent.agent.loop import ConverseDriver
-r = ConverseDriver(model_id="<bedrock-model-id>", region="us-east-1").run(
-    "We need 8 monitors that charge our laptops over one cable. Budget SGD 2500."
-)
-print(r.status, r.notes)
+应用配置：
+
+```bash
+export AGENT_DRIVER=converse
+export BEDROCK_MODEL_ID='<bedrock-model-id>'
+export AWS_REGION='us-east-1'
+.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-**`ConverseDriver` 不读环境变量**，`model_id` 必须显式传入，否则它会立刻降级到 `OfflineDriver` 且**不报错**。调试时务必检查 `r.notes` 里有没有 `used the deterministic offline driver`，否则分不清"模型真的跑了"和"悄悄回退了"。凭据通过标准 AWS 配置提供，不写进源码、日志或录屏。
+凭据通过 AWS 标准 credential chain 提供，不写入源码、`.env`、日志或录屏。应用配置层会把 model ID/region 显式传入 `ConverseDriver`。任何 Bedrock 失败都会降级到 `OfflineDriver`，响应的 `latest_result.used_fallback=true`，原因保存在 `notes`/`trace`；调试时必须检查它，不能把回退误当成真实模型成功。
 
 ## 测试与可信范围
 
 ```bash
-python scripts/validate_data.py                      # 数据关系校验 + tests/ 14 项
-python -m unittest discover -s dell_agent/tests      # 63 项，其中 14 项 skip
+python scripts/validate_data.py                      # 数据关系校验 + tests/ 15 项
+python -m unittest discover -s dell_agent/tests      # 63 项，其中 7 项 skip
 python -m unittest dell_agent.tests.test_pricing     # 单个套件
 ```
 
 `validate_data.py` 会校验 SKU 唯一性、价格与规则一致性、证据页码落在实际页数内、PDF 字节数与下载记录一致、SQLite 与 `catalog.json` 完全相同、评估集 ID 不重复，然后写出 `data/validation/report.json`。
 
-**14 个 skip 不是缺凭据，是 `OfflineDriver` 自己声明的启发式能力缺口**，包括 13 条 dev/holdout 分类案例和 `DEMO-02`。已知缺口：
+三条固定演示故事现在全部在离线路径通过，包括功能化表述 `one-cable laptop video` 对 U2724D data-only 陷阱的阻断。原有 14 个 skip 已降至 **7 个**；同时转为真实回归的表达包括多产品数量、带问号的报价请求、`Compare`、`Make that 6`、`cancel` 和 `minus two`。
 
-- `DEMO-02`（U2724D 的 data-only 陷阱）用功能化表述 "one-cable laptop video" 时检测不到，被判成 `ready_to_quote` 并给出报价 —— 这正是应该被拦住的行为。**这是三条演示故事里最关键的一条，目前是坏的。**
-- 未知型号（`XYZ999`）判成 `needs_clarification` 而非 `no_match`
-- 数量修改 "Make that 6" 不会往后传递
-- "minus two" 未被识别为非法数量
-- 多产品组合 "4 P2425E plus 2 S2725QC" 解析不出
-
-这些语义缺口是留给 LLM 路径的。当前状态是：**金额可信，语言理解未接入**。
+剩余 7 项是明确记录的 `OfflineDriver` 启发式边界：未知型号状态、严格 24.0 英寸限制、跨两个 SKU 的 host-PD 对比、100W 线缆与 65W 端口区别、140Hz 无匹配，以及指定型号超预算的状态标签。它们不会影响三条固定演示，但仍需用真实 LLM 路径测评。
 
 必须如实声明的边界：40 个自然语言场景由开发 Agent 编写，**未经独立人工审核，也未用真实模型测评**。它们是可用的测试素材，不是准确率证据。`report.json` 里 `model_evaluation` 和 `human_review` 都标记为未完成。不得把 holdout 答案放进提示词或知识库。
 
@@ -237,20 +242,19 @@ python scripts/validate_data.py
 
 ## 已知问题
 
-1. **两套工具契约不一致**（见上）。接后端前必须收敛成一套。
-2. **`DEMO-02` 在离线路径上是坏的**。要么接 Bedrock 让模型处理功能化表述，要么给离线检测器补上 "one-cable / charge over USB / single cable" 这类同义表述。建议都做，后者能保住兜底演示。
-3. **`source_manifest.json` 漏了型号 `P2425`**：`DELL-P25H` 那条只记了 P2225H/P2425H/P2725H，但手册封面还有 P2425（24 英寸 16:10、1920x1200）。`curated_specs.json` 里 `MON-005` 已经用了它。
-4. **`download_log.json` 与实际文件不一致**：只有 2 条记录，实际 6 个 PDF 都在。`download_sources.py` 遇到"文件存在但无 provenance"会抛错。
-5. **`scripts/`、`tests/`、`agent.md` 尚未提交到 git**（当前仅 95 个文件被跟踪）。`data/README.md` 里引用的所有命令都依赖这些未提交的脚本。
-6. **数据未冻结**：还需队员独立抽查 6 个型号、每个核对 2 个字段。
+1. **真实 Bedrock 调用尚未验证**：当前开发环境没有 AWS CLI/凭据，也没有 `BEDROCK_MODEL_ID`；现阶段页面使用确定性离线 driver。
+2. **Converse 原生结果组装仍比 OfflineDriver 简化**：原生模型路径对 `candidates`、`citations` 和 `ask_for` 的结构化填充还需实测完善。
+3. **剩余 7 条离线语义边界**见上方测试说明；三条固定演示不在其中。
+4. **PDF 报价导出和版本 diff 尚未实现**：已保存 v1/v2 不可变快照，下一阶段在快照上生成 PDF/diff。
+5. **数据未冻结**：还需队员独立抽查 6 个型号、每个核对 2 个字段。
 
 ## 下一步
 
-按 [docs/10-day-plan-zh.md](docs/10-day-plan-zh.md) 执行。最近的三件事：
+按 [docs/10-day-plan-zh.md](docs/10-day-plan-zh.md) 执行。当前纵向切片已完成，接下来依次做：
 
-1. 收敛工具契约，冻结入参、返回和错误码
-2. 建 FastAPI 与报价业务表（报价、条目、价格与规则快照、版本）
-3. Day 3 前打通第一条端到端询价，之后每天用 `DEMO-01` 做一次集成回归
+1. 用团队 AWS 账户完成一次 Bedrock Converse 真实工具调用，并保存 trace
+2. 基于已保存的 quote snapshot 实现 v1/v2 diff 和 PDF 导出
+3. 跑 20 条 holdout 首轮结果，人工复核失败项和金额，再冻结演示数据
 
 ## 来源与许可
 

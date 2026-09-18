@@ -1,19 +1,20 @@
-test_actual_diagonal (test_catalog_tools.CatalogueTests.test_actual_diagonal) ... ok
-test_budget (test_catalog_tools.CatalogueTests.test_budget) ... ok
-test_data_only_not_video (test_catalog_tools.CatalogueTests.test_data_only_not_video) ... ok
-test_duplicate_rejected (test_catalog_tools.CatalogueTests.test_duplicate_rejected) ... ok
-test_exact_model (test_catalog_tools.CatalogueTests.test_exact_model) ... ok
-test_half_up_at_half_cent (test_catalog_tools.CatalogueTests.test_half_up_at_half_cent) ... ok
-test_independent_expected_amounts (test_catalog_tools.CatalogueTests.test_independent_expected_amounts) ... ok
-test_input_validation (test_catalog_tools.CatalogueTests.test_input_validation) ... ok
-test_missing_price_rejected (test_catalog_tools.CatalogueTests.test_missing_price_rejected) ... ok
-test_no_4k_90w (test_catalog_tools.CatalogueTests.test_no_4k_90w) ... ok
-test_price_override_rejected (test_catalog_tools.CatalogueTests.test_price_override_rejected) ... ok
-test_unknown_never_satisfies_filter (test_catalog_tools.CatalogueTests.test_unknown_never_satisfies_filter) ... ok
-test_unsupported_arguments_rejected (test_catalog_tools.CatalogueTests.test_unsupported_arguments_rejected) ... ok
-test_usb_video_and_host_power (test_catalog_tools.CatalogueTests.test_usb_video_and_host_power) ... ok
+test_data_only_port_is_not_video (test_catalog_tools.CanonicalContractTests.test_data_only_port_is_not_video) ... ok
+test_discount_limit_is_structured_error (test_catalog_tools.CanonicalContractTests.test_discount_limit_is_structured_error) ... ok
+test_duplicate_skus_remain_separate_lines (test_catalog_tools.CanonicalContractTests.test_duplicate_skus_remain_separate_lines) ... ok
+test_exact_model_does_not_silently_substitute (test_catalog_tools.CanonicalContractTests.test_exact_model_does_not_silently_substitute) ... ok
+test_independent_expected_amounts (test_catalog_tools.CanonicalContractTests.test_independent_expected_amounts) ... ok
+test_invalid_quantity_is_structured_error (test_catalog_tools.CanonicalContractTests.test_invalid_quantity_is_structured_error) ... ok
+test_precise_diagonal_is_used (test_catalog_tools.CanonicalContractTests.test_precise_diagonal_is_used) ... ok
+test_price_override_is_forbidden (test_catalog_tools.CanonicalContractTests.test_price_override_is_forbidden) ... ok
+test_quote_budget_and_revision_anchors (test_catalog_tools.CanonicalContractTests.test_quote_budget_and_revision_anchors) ... ok
+test_unknown_product_is_explicit (test_catalog_tools.CanonicalContractTests.test_unknown_product_is_explicit) ... ok
+test_unknown_tool_and_argument_are_rejected (test_catalog_tools.CanonicalContractTests.test_unknown_tool_and_argument_are_rejected) ... ok
+test_usb_video_and_host_power (test_catalog_tools.CanonicalContractTests.test_usb_video_and_host_power) ... ok
+test_cli_emits_canonical_shape (test_catalog_tools.CompatibilityAndCliTests.test_cli_emits_canonical_shape) ... ok
+test_cli_error_exits_two (test_catalog_tools.CompatibilityAndCliTests.test_cli_error_exits_two) ... ok
+test_compatibility_class_delegates_and_raises (test_catalog_tools.CompatibilityAndCliTests.test_compatibility_class_delegates_and_raises) ... ok
 
 ----------------------------------------------------------------------
-Ran 14 tests in 0.003s
+Ran 15 tests in 0.060s
 
 OK
