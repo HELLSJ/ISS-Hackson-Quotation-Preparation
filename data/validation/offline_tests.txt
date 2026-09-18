@@ -14,6 +14,6 @@ test_unsupported_arguments_rejected (test_catalog_tools.CatalogueTests.test_unsu
 test_usb_video_and_host_power (test_catalog_tools.CatalogueTests.test_usb_video_and_host_power) ... ok
 
 ----------------------------------------------------------------------
-Ran 14 tests in 0.002s
+Ran 14 tests in 0.003s
 
 OK

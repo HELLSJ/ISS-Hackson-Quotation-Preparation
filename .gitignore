@@ -1,3 +1,55 @@
-﻿__pycache__/
-*.pyc
-*.pyo
+﻿# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- Node / frontend (Web 工作台后续加入) ---
+node_modules/
+.next/
+dist-web/
+*.tsbuildinfo
+
+# --- Secrets and local config: 绝不提交凭据 ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials
+.aws/
+
+# --- Regenerable build output ---
+# storage/ 是可重建的目录数据库，由 scripts/build_data.py 生成，不是报价库。
+# 克隆后先跑 build_data.py 再跑 validate_data.py。
+storage/
+# 导出的报价 PDF 属于运行产物；提交固定示例时用 git add -f。
+outputs/
+
+# --- OS / editor ---
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
+.idea/
+*.swp
+*.swo
+*~
+
+# --- 不要忽略：data/、docs/、scripts/、tests/、dell_agent/、
+#     .kiro/skills/、skills-lock.json、data/validation/ 都是交付物。 ---
