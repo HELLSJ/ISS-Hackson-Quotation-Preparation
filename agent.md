@@ -1,75 +1,45 @@
-# Project handoff — Quotation Preparation Agent
+# Quotation Preparation Agent — 简要交接
 
-## 项目目标
+## 项目信息
 
-NUS-ISS Hackathon 选题 **Quotation Preparation**。在 10 天内完成一个报价 Agent：读取不完整的英文客户询价，主动追问缺失条件，从有证据的产品目录筛选型号，用确定性工具计价，经用户确认后保存报价版本并导出 PDF。
-
-主线流程：
+NUS-ISS Hackathon 报价编制 Agent：把不完整的英文客户询价经过澄清、产品筛选、证据核对和确定性计价，转成可保存、可修改、最终可导出的报价。
 
 ```text
-询价 → 提取需求 → 追问 → 搜索产品 → 展示证据 → 用户确认
-     → 工具计价 → 保存 v1/v2 → 显示 diff → 导出 PDF
+询价 → 追问 → 查询产品 → 展示证据 → 用户选择
+→ 工具计价 → 保存版本 → 版本 diff → 确认 → PDF
 ```
 
-## 当前状态（2026-09-15）
+核心原则：**模型负责理解和追问；`dell_agent.agent.tools.dispatch` 负责所有产品事实、价格、规则和金额。** 产品规格来自 Dell 官方手册；价格、规则和询价均为模拟数据。库存、交期和税费未知，不能推断。
 
-数据、离线 Agent、FastAPI、SQLite 报价快照和三栏浏览器工作台已经打通；真实 Bedrock 调用、报价 PDF 和版本 diff 尚未完成。
+## 已完成
 
-- 6 份 Dell 官方英文 PDF，共 522 页；
-- 12 个显示器型号、12 条模拟 SGD 价格；
-- 96 条字段级证据，可从页面打开 PDF 对应页；
-- 20 条 dev、20 条 holdout、3 条视频演示案例；
-- `tests/` 15 项通过，`dell_agent/tests/` 63 项通过、7 项明确 skip；
-- 三条固定演示均可离线运行，包括 U2724D data-only 陷阱；
-- `app/` 支持对话恢复、候选选择、确定性计价和幂等保存 v1/v2；
-- 数据版本：`2026-09-14.v1`；
-- 尚未使用团队 AWS 账户调用模型；不能声称模型评估已通过；
-- 还需队员独立抽查 6 个型号，每个核对 2 个字段，然后冻结数据。
+- 6 份 Dell 官方手册、12 个显示器 SKU、12 条模拟 SGD 价格和 96 条字段证据；
+- `search_products`、`get_product`、`calculate_quote` 三个统一工具；
+- OfflineDriver：支持澄清、限制说明、规则阻断、计价和多轮修改；
+- FastAPI、`storage/app.sqlite` 和三栏浏览器工作台；
+- 产品选择、PDF 规格证据、预算提示、刷新恢复；
+- schema-v2 `saved_draft` v1/v2、完整版本元数据、重复保存幂等和 stale 保存保护；
+- append-only 人工确认、confirmed version、结构化 diff 和 confirmed-only 报价 PDF；
+- 18 项临时数据库后端集成测试，覆盖迁移、并发、确认、diff、PDF、故障注入和 HTTP；
+- 三条固定演示可离线运行；
+- 33 项目录/后端测试和 63 项 Agent 测试通过，另有 7 项明确记录的离线语言边界；
+- 英文/中文 README、API 契约和统一项目规划。
 
-不需要继续下载产品、实时价格、库存或客户数据。规格来自官方资料；价格、规则和询价均为比赛用模拟数据。
+当前后端可以生成**不可变 confirmed version 和报价 PDF**；浏览器确认/diff/PDF 按钮由前端任务继续接入。真实 Bedrock 模型评估尚未完成。
 
-## 先读这些文件
+## 后续工作（按顺序）
 
-1. `docs/project-plan-zh.md`：唯一项目总规划，包含当前进展、剩余 Gate、分工、验收指标和视频结构；
-2. `README.md` / `README.zh-CN.md`：英文仓库入口和中文说明；
-3. `data/README.md`：数据字段、来源、运行方法和可信范围；
-4. `docs/api-contract.md`：冻结的工具和 HTTP 契约；
-5. `data/agent/catalog.json`：Agent/后端运行时数据；
-6. `data/agent/bedrock_tool_config.json`：Bedrock Converse 工具定义；
-7. `data/evaluation/demo_scenarios.jsonl`：三条固定演示故事。
+1. 由队员抽查 6 个 SKU × 2 个字段，冻结数据版本；
+2. 使用团队 AWS 账户跑通真实 Bedrock Converse，确认 `used_fallback=false`；
+3. 完善 Converse 的 `ask_for`、候选、引用、错误状态和有限重试；
+4. 将已完成的 confirmation、diff 和 PDF API 接入浏览器；
+5. 审核并运行正式 holdout，保留首轮和修复后结果；
+6. 人工复算报价、实测效率、冻结演示数据；
+7. 彩排、录制 30 分钟视频并完成提交检查。
 
-## 已有工具
+不要继续增加产品、真实价格、库存、税费、登录、复杂多 Agent 或向量数据库。
 
-`dell_agent.agent.tools.dispatch` 提供三个冻结工具，`scripts/catalog_tools.py` 只是一层 CLI 包装：
-
-- `search_products`：结构化产品筛选；
-- `get_product`：读取 SKU、模拟价格和字段证据；
-- `calculate_quote`：使用服务器价格与固定规则计算草稿。
-
-不要让模型或前端生成单价、计算金额或覆盖工具价格。金额使用整数分，折扣上限为 500 bps（5%），舍入为 half-up。库存、交期和税费没有数据，必须显示为未知或转人工确认。
-
-常用命令：
-
-```bash
-python scripts/validate_data.py
-python -m unittest discover -s tests -v
-python scripts/catalog_tools.py search_products '{"usb_c_video":true,"min_pd_watts":90}'
-python scripts/catalog_tools.py calculate_quote '{"items":[{"sku":"MON-007","quantity":8}],"budget_cents":250000}'
-```
-
-## 推荐实现
-
-```text
-Browser workbench (`app/static/`)
-  → FastAPI (`app/main.py`)
-      → QuotationService：有序轮次重放、回复与替代建议
-      → OfflineDriver / Amazon Bedrock Converse
-      → dell_agent.agent.tools.dispatch（唯一查事实和计价实现）
-      → SQLite `storage/app.sqlite`（消息和不可变报价版本）
-      → 本地官方 PDF 证据页
-```
-
-本地运行：
+## 运行
 
 ```bash
 python3 -m venv .venv
@@ -77,29 +47,22 @@ python3 -m venv .venv
 .venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-浏览器打开 `http://127.0.0.1:8000`。Bedrock 配置见根 `README.md`；没有配置时使用确定性 OfflineDriver。
+浏览器：`http://127.0.0.1:8000`
 
-## 三条固定演示故事
+验证：
 
-1. **模糊询价：** 8 台 USB-C 显示器、预算 SGD 2,500。追问视频和供电后选 P2425HE；8 台为 SGD 2,312。改为 10 台生成 v2，SGD 2,890，超预算 SGD 390。
-2. **规格陷阱：** U2724D 有 USB-C data-only，不能满足一线视频和 90 W 供电；用户同意后才可推荐 U2724DE。
-3. **政策边界：** 5 台 S2725QC、6% 折扣、承诺明日交付。必须拒绝超出 5% 的折扣，并把交期标为待确认，不得显示为已批准。
+```bash
+python scripts/build_data.py
+python scripts/validate_data.py
+python -m unittest discover -s dell_agent/tests
+```
 
-## 四人主责
+## 关键文档
 
-- A：数据与评估；
-- B：FastAPI、报价后端、版本和 PDF；
-- C：AWS Bedrock Agent、状态机和失败回退；
-- D：前端、证据交互、视频和提交。
+- `README.md` / `README.zh-CN.md`：项目入口；
+- `docs/project-plan-zh.md`：唯一完整规划；
+- `docs/api-contract.md`：工具和 HTTP 契约；
+- `data/README.md`：数据、字段、来源与可信边界；
+- `data/evaluation/demo_scenarios.jsonl`：三条固定演示。
 
-Day 1 冻结 API 契约，之后四人并行；每天用第一条演示故事做一次端到端集成。Day 8 功能冻结，Day 9 彩排，Day 10 录制和提交。
-
-## 下一步
-
-1. 用团队 AWS 账户完成一次真实 Bedrock Converse 工具调用，确认未走 fallback；
-2. 完成数据人工抽查并冻结 `2026-09-14.v1`；
-3. 基于 `quote_versions.payload_json` 实现 v1/v2 diff 和 PDF；
-4. 运行 holdout 首轮评估并保留失败项；
-5. 每天用三条演示故事做端到端回归。
-
-继续开发时先检查实际文件和测试结果，不要重新下载或重建已经完成的数据，也不要把 holdout 案例放入提示词或知识库。
+继续开发前先检查实际代码和测试结果；不要把 holdout 或 expected answers 放入提示词、知识库或运行时上下文。

@@ -25,7 +25,7 @@ The model and browser cannot provide a unit price, calculate a total, silently s
 
 ## Current status
 
-The usable vertical slice is complete: deterministic tools, an offline Agent, FastAPI, SQLite persistence, a responsive three-panel workbench, local source-PDF evidence, and immutable saved draft versions.
+The usable vertical slice and backend quote lifecycle are complete: deterministic tools, an offline Agent, FastAPI, SQLite persistence, a responsive three-panel workbench, local source-PDF evidence, immutable schema-v2 draft versions, append-only confirmation, structured diff, and confirmed-snapshot PDF export.
 
 | Area | Status |
 |---|---|
@@ -36,11 +36,13 @@ The usable vertical slice is complete: deterministic tools, an offline Agent, Fa
 | Canonical tools | `search_products`, `get_product`, and `calculate_quote` through one dispatcher |
 | Offline Agent | Clarification, limitations, policy blocking, pricing, and revisions |
 | Application | FastAPI + `app.sqlite` + browser workbench |
-| Saved versions | Immutable, idempotent, and protected against stale-tab saves |
-| Offline validation | 15/15 catalogue tests; 63 Agent tests with 7 documented heuristic skips |
-| Live Bedrock run | **Not completed**: this environment has no AWS credentials, Region, or model ID |
+| Saved versions | Validated schema-v2 snapshots; immutable, idempotent, and protected against stale saves |
+| Confirmation | Append-only immutable confirmed snapshot with exact-token idempotency |
+| Version diff and quote PDF | Backend APIs complete; PDF is confirmed-snapshot-only and never re-prices |
+| Automated validation | 33 catalogue/backend tests; 63 Agent tests with 7 documented heuristic skips |
+| Live Bedrock run | **Not completed**: no verified live model trace yet |
 | Independent data review | **Not completed** |
-| Confirmation, version diff, quote PDF | **Not implemented yet** |
+| Browser confirmation/diff/PDF controls | **Not implemented yet** |
 | Formal model/holdout evaluation | **Not completed** |
 
 The authoritative remaining-work sequence and acceptance criteria are in the [consolidated project plan](docs/project-plan-zh.md).
@@ -92,9 +94,9 @@ Browser workbench (`app/static/`)
       → `storage/app.sqlite`
           → conversations
           → messages + AgentResult/trace
-          → immutable quote_versions
+          → immutable quote_versions + append-only confirmations
       → allow-listed local Dell source PDFs
-      → future confirmation, diff, and quote-PDF layer
+      → stored-snapshot diff and confirmed quote-PDF renderer
 ```
 
 `storage/catalog.sqlite` is a regenerable catalogue cache. `storage/app.sqlite` stores application conversations and saved quote-draft snapshots. Neither database is committed.
@@ -176,14 +178,17 @@ python scripts/extract_sources.py
 ## Tests and evidence boundaries
 
 ```bash
+.venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
-python scripts/validate_data.py
-python -m unittest discover -s dell_agent/tests
+python scripts/validate_data.py                            # 15 data/tool checks
+.venv/bin/python -m unittest discover -s tests            # 33 catalogue/backend tests
+.venv/bin/python -m unittest discover -s dell_agent/tests # 63 Agent tests
 ```
 
 The current suites report:
 
 - 15 catalogue/CLI contract tests passing;
+- 18 temporary-database backend tests passing (migration, snapshots, concurrency, confirmation, diff, PDF, fault injection and HTTP);
 - 63 Agent tests passing, with 7 explicitly documented OfflineDriver heuristic skips;
 - all three fixed demo scenarios passing in the offline path.
 
@@ -220,24 +225,22 @@ The live cloud path remains unfinished: the team still needs to run the three de
 
 1. Independently review six SKUs × two evidence fields and freeze the data version.
 2. Complete a real Bedrock Converse tool-use run and structured AgentResult assembly.
-3. Add explicit human confirmation and complete snapshot metadata.
-4. Implement v1/v2 structured diff and quote PDF export from confirmed snapshots only.
-5. Add application/repository integration tests and failure injection.
-6. Run and preserve the first formal holdout evaluation, then separate fixes from the original result.
-7. Measure five manual-versus-Agent cases, rehearse, record the 30-minute video, and submit.
+3. Connect the completed confirmation/diff/PDF backend APIs to browser controls.
+4. Run and preserve the first formal holdout evaluation, then separate fixes from the original result.
+5. Measure five manual-versus-Agent cases, rehearse, record the 30-minute video, and submit.
 
 See [docs/project-plan-zh.md](docs/project-plan-zh.md) for owners, acceptance criteria, evaluation thresholds, exception coverage, and the video plan.
 
 ## Repository map
 
 ```text
-app/                    FastAPI, SQLite service/repository, browser workbench
+app/                    FastAPI, SQLite lifecycle, snapshot validation, diff/PDF, browser workbench
 data/                   source, curated, generated, evaluation, and validation data
 dell_agent/             typed catalogue, pricing, state machine, tools, drivers
 docs/api-contract.md    frozen tool and HTTP contract
 docs/project-plan-zh.md single authoritative project plan
 scripts/                download, extraction, build, validation, and CLI entry points
-tests/                  canonical catalogue/CLI contract tests
+tests/                  catalogue/CLI and quote-backend integration tests
 agent.md                concise engineering handoff
 ```
 

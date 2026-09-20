@@ -71,6 +71,13 @@ class Rules:
     validity_days: int  # 7
     tax_mode: str  # "not_modelled"
     source_type: str  # "synthetic"
+    rule_version: str
+    price_version: str
+    effective_date: str
+    tax_note: str
+    confirmation_required: bool
+    inventory_mode: str
+    delivery_commitment: str
 
 
 @dataclass(frozen=True)

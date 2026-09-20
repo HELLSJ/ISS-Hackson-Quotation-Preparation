@@ -1,13 +1,18 @@
-"""SQLite persistence for conversations, messages and quote snapshots."""
+"""SQLite persistence for conversations and immutable quote snapshots."""
 from __future__ import annotations
 
 import hashlib
 import json
 import sqlite3
 import uuid
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
+
+from .snapshots import SnapshotError, build_confirmed_snapshot, build_saved_snapshot
+
+SCHEMA_VERSION = 2
 
 
 def utc_now() -> str:
@@ -18,37 +23,48 @@ def canonical_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
-class Repository:
-    """Small repository with one connection per operation.
+def fingerprint(value: Any) -> str:
+    return hashlib.sha256(canonical_json(value).encode("utf-8")).hexdigest()
 
-    The application DB is intentionally separate from ``catalog.sqlite``. Quote
-    payloads are immutable snapshots: later catalogue changes cannot rewrite an
-    already saved version.
-    """
+
+class Repository:
+    """Application repository; catalogue data lives in a separate database."""
 
     def __init__(self, path: Path) -> None:
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.initialize()
 
-    def connect(self) -> sqlite3.Connection:
+    @contextmanager
+    def connect(self) -> Iterator[sqlite3.Connection]:
         db = sqlite3.connect(self.path, timeout=15)
         db.row_factory = sqlite3.Row
         db.execute("PRAGMA foreign_keys = ON")
         db.execute("PRAGMA journal_mode = WAL")
-        return db
+        try:
+            with db:
+                yield db
+        finally:
+            db.close()
 
     def initialize(self) -> None:
+        """Create a fresh schema or migrate the original quote_versions table.
+
+        Existing payload_json and fingerprints are never rewritten. They remain
+        schema-v1 legacy saved drafts and are readable/diffable but not confirmable.
+        """
         with self.connect() as db:
-            db.executescript(
-                """
-                CREATE TABLE IF NOT EXISTS conversations (
+            db.execute("BEGIN IMMEDIATE")
+            db.execute(
+                """CREATE TABLE IF NOT EXISTS conversations (
                     id TEXT PRIMARY KEY,
                     driver TEXT NOT NULL CHECK(driver IN ('offline','converse')),
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL
-                );
-                CREATE TABLE IF NOT EXISTS messages (
+                )"""
+            )
+            db.execute(
+                """CREATE TABLE IF NOT EXISTS messages (
                     id TEXT PRIMARY KEY,
                     conversation_id TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
                     seq INTEGER NOT NULL,
@@ -57,23 +73,58 @@ class Repository:
                     result_json TEXT,
                     created_at TEXT NOT NULL,
                     UNIQUE(conversation_id, seq)
-                );
-                CREATE TABLE IF NOT EXISTS quote_versions (
+                )"""
+            )
+            db.execute(
+                """CREATE TABLE IF NOT EXISTS quote_versions (
                     id TEXT PRIMARY KEY,
                     conversation_id TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
                     version INTEGER NOT NULL,
                     fingerprint TEXT NOT NULL,
                     payload_json TEXT NOT NULL,
                     created_at TEXT NOT NULL,
+                    snapshot_schema_version INTEGER NOT NULL DEFAULT 1,
+                    source_result_message_id TEXT,
                     UNIQUE(conversation_id, version),
                     UNIQUE(conversation_id, fingerprint)
-                );
-                CREATE INDEX IF NOT EXISTS idx_messages_conversation
-                    ON messages(conversation_id, seq);
-                CREATE INDEX IF NOT EXISTS idx_quotes_conversation
-                    ON quote_versions(conversation_id, version);
-                """
+                )"""
             )
+            columns = {
+                row["name"] for row in db.execute("PRAGMA table_info(quote_versions)").fetchall()
+            }
+            if "snapshot_schema_version" not in columns:
+                db.execute(
+                    "ALTER TABLE quote_versions ADD COLUMN snapshot_schema_version INTEGER NOT NULL DEFAULT 1"
+                )
+            if "source_result_message_id" not in columns:
+                db.execute("ALTER TABLE quote_versions ADD COLUMN source_result_message_id TEXT")
+            db.execute(
+                """CREATE TABLE IF NOT EXISTS quote_confirmations (
+                    id TEXT PRIMARY KEY,
+                    quote_version_id TEXT NOT NULL UNIQUE REFERENCES quote_versions(id) ON DELETE CASCADE,
+                    conversation_id TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+                    snapshot_token TEXT NOT NULL,
+                    confirmed_snapshot_json TEXT NOT NULL,
+                    confirmed_fingerprint TEXT NOT NULL,
+                    confirmed_at TEXT NOT NULL,
+                    UNIQUE(quote_version_id, snapshot_token)
+                )"""
+            )
+            db.execute(
+                "CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(conversation_id, seq)"
+            )
+            db.execute(
+                "CREATE INDEX IF NOT EXISTS idx_quotes_conversation ON quote_versions(conversation_id, version)"
+            )
+            db.execute(
+                """CREATE UNIQUE INDEX IF NOT EXISTS uq_quote_source_result
+                ON quote_versions(conversation_id, source_result_message_id)
+                WHERE source_result_message_id IS NOT NULL"""
+            )
+            db.execute(
+                "CREATE INDEX IF NOT EXISTS idx_confirmations_conversation ON quote_confirmations(conversation_id, confirmed_at)"
+            )
+            db.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
 
     def create_conversation(self, driver: str) -> dict[str, Any]:
         conversation_id = str(uuid.uuid4())
@@ -95,9 +146,7 @@ class Repository:
 
     def get_user_turns(self, conversation_id: str) -> list[str] | None:
         with self.connect() as db:
-            exists = db.execute(
-                "SELECT 1 FROM conversations WHERE id=?", (conversation_id,)
-            ).fetchone()
+            exists = db.execute("SELECT 1 FROM conversations WHERE id=?", (conversation_id,)).fetchone()
             if not exists:
                 return None
             rows = db.execute(
@@ -122,24 +171,57 @@ class Repository:
             ).fetchone()
             next_seq = int(row["seq"]) + 1
             db.execute(
-                "INSERT INTO messages VALUES (?,?,?,?,?,?,?)",
+                "INSERT INTO messages(id,conversation_id,seq,role,content,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
                 (str(uuid.uuid4()), conversation_id, next_seq, "user", user_content, None, now),
             )
             db.execute(
-                "INSERT INTO messages VALUES (?,?,?,?,?,?,?)",
-                (
-                    str(uuid.uuid4()),
-                    conversation_id,
-                    next_seq + 1,
-                    "assistant",
-                    assistant_content,
-                    canonical_json(result),
-                    now,
-                ),
+                "INSERT INTO messages(id,conversation_id,seq,role,content,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
+                (str(uuid.uuid4()), conversation_id, next_seq + 1, "assistant", assistant_content, canonical_json(result), now),
             )
-            db.execute(
-                "UPDATE conversations SET updated_at=? WHERE id=?", (now, conversation_id)
-            )
+            db.execute("UPDATE conversations SET updated_at=? WHERE id=?", (now, conversation_id))
+
+    @staticmethod
+    def _quote_select(where: str) -> str:
+        return f"""SELECT q.id,q.conversation_id,q.version,q.fingerprint,q.payload_json,q.created_at,
+            q.snapshot_schema_version,q.source_result_message_id,
+            c.id AS confirmation_id,c.snapshot_token,c.confirmed_snapshot_json,
+            c.confirmed_fingerprint,c.confirmed_at
+            FROM quote_versions q
+            LEFT JOIN quote_confirmations c ON c.quote_version_id=q.id
+            WHERE {where}"""
+
+    @classmethod
+    def _quote_row(cls, row: sqlite3.Row) -> dict[str, Any]:
+        payload = json.loads(row["payload_json"])
+        schema_version = int(row["snapshot_schema_version"] or 1)
+        confirmation = None
+        if row["confirmation_id"]:
+            confirmed_snapshot = json.loads(row["confirmed_snapshot_json"])
+            confirmation = {
+                "id": row["confirmation_id"],
+                "confirmed_at": row["confirmed_at"],
+                "confirmed_by": confirmed_snapshot["confirmation"]["confirmed_by"],
+                "fingerprint": row["confirmed_fingerprint"],
+                "snapshot": confirmed_snapshot,
+            }
+        status = "confirmed" if confirmation else (
+            "saved_draft" if schema_version == 2 else "legacy_saved_draft"
+        )
+        return {
+            "id": row["id"],
+            "conversation_id": row["conversation_id"],
+            "version": row["version"],
+            "status": status,
+            "is_confirmed": confirmation is not None,
+            "snapshot_schema_version": schema_version,
+            "snapshot_token": row["fingerprint"],
+            "confirmable": schema_version == 2 and confirmation is None,
+            "exportable": confirmation is not None,
+            "payload": payload,
+            "confirmation": confirmation,
+            "pdf_url": f"/api/quotes/{row['id']}/pdf" if confirmation else None,
+            "created_at": row["created_at"],
+        }
 
     def get_conversation(self, conversation_id: str) -> dict[str, Any] | None:
         with self.connect() as db:
@@ -154,7 +236,7 @@ class Repository:
                 (conversation_id,),
             ).fetchall()
             quote_rows = db.execute(
-                "SELECT id,version,payload_json,created_at FROM quote_versions WHERE conversation_id=? ORDER BY version",
+                self._quote_select("q.conversation_id=?") + " ORDER BY q.version",
                 (conversation_id,),
             ).fetchall()
 
@@ -163,11 +245,8 @@ class Repository:
         latest_result_message_id = None
         for row in message_rows:
             message = {
-                "id": row["id"],
-                "seq": row["seq"],
-                "role": row["role"],
-                "content": row["content"],
-                "created_at": row["created_at"],
+                "id": row["id"], "seq": row["seq"], "role": row["role"],
+                "content": row["content"], "created_at": row["created_at"],
             }
             if row["result_json"]:
                 message["result"] = json.loads(row["result_json"])
@@ -176,35 +255,38 @@ class Repository:
             messages.append(message)
 
         quotes = []
+        latest_quote_version = max((row["version"] for row in quote_rows), default=0)
         for row in quote_rows:
-            payload = json.loads(row["payload_json"])
+            quote = self._quote_row(row)
+            if not quote["is_confirmed"] and quote["version"] != latest_quote_version:
+                quote["confirmable"] = False
+            payload = quote["confirmation"]["snapshot"] if quote["confirmation"] else quote["payload"]
             quotes.append(
                 {
-                    "id": row["id"],
-                    "version": row["version"],
-                    "total_cents": payload["total_cents"],
-                    "currency": payload["currency"],
+                    "id": quote["id"], "version": quote["version"],
+                    "status": quote["status"], "is_confirmed": quote["is_confirmed"],
+                    "confirmable": quote["confirmable"], "exportable": quote["exportable"],
+                    "total_cents": payload.get("total_cents"),
+                    "currency": payload.get("currency"),
                     "line_count": len(payload.get("lines", [])),
-                    "created_at": row["created_at"],
+                    "created_at": quote["created_at"],
                 }
             )
         return {
-            **dict(conversation),
-            "messages": messages,
-            "latest_result": latest_result,
-            "latest_result_message_id": latest_result_message_id,
-            "quote_versions": quotes,
+            **dict(conversation), "messages": messages, "latest_result": latest_result,
+            "latest_result_message_id": latest_result_message_id, "quote_versions": quotes,
         }
 
     def save_latest_quote(
-        self, conversation_id: str, result_message_id: str
+        self,
+        conversation_id: str,
+        result_message_id: str,
+        customer_display_name: str | None = None,
     ) -> tuple[dict[str, Any] | None, str | None]:
+        customer = customer_display_name.strip() if customer_display_name else None
         with self.connect() as db:
             db.execute("BEGIN IMMEDIATE")
-            conversation = db.execute(
-                "SELECT 1 FROM conversations WHERE id=?", (conversation_id,)
-            ).fetchone()
-            if not conversation:
+            if not db.execute("SELECT 1 FROM conversations WHERE id=?", (conversation_id,)).fetchone():
                 return None, "not_found"
             row = db.execute(
                 "SELECT id,result_json FROM messages WHERE conversation_id=? AND role='assistant' ORDER BY seq DESC LIMIT 1",
@@ -212,22 +294,22 @@ class Repository:
             ).fetchone()
             if not row or row["id"] != result_message_id:
                 return None, "stale_draft"
-            result = json.loads(row["result_json"]) if row["result_json"] else {}
-            draft = result.get("quote_draft")
-            if not isinstance(draft, dict) or draft.get("total_cents") is None:
-                return None, "no_draft"
 
-            payload = dict(draft)
-            payload["status"] = "saved_draft"
-            payload["is_confirmed"] = False
-            fingerprint = hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
             existing = db.execute(
-                "SELECT id,version,payload_json,created_at FROM quote_versions WHERE conversation_id=? AND fingerprint=?",
-                (conversation_id, fingerprint),
+                self._quote_select("q.conversation_id=? AND q.source_result_message_id=?"),
+                (conversation_id, result_message_id),
             ).fetchone()
             if existing:
-                return self._quote_row(existing, conversation_id), None
+                quote = self._quote_row(existing)
+                existing_customer = (quote["payload"].get("customer") or {}).get("display_name")
+                if customer and existing_customer and customer != existing_customer:
+                    return None, "save_conflict"
+                return quote, None
 
+            result = json.loads(row["result_json"]) if row["result_json"] else {}
+            draft = result.get("quote_draft")
+            if not isinstance(draft, dict):
+                return None, "no_draft"
             version = int(
                 db.execute(
                     "SELECT COALESCE(MAX(version),0)+1 FROM quote_versions WHERE conversation_id=?",
@@ -236,37 +318,111 @@ class Repository:
             )
             quote_id = str(uuid.uuid4())
             now = utc_now()
-            db.execute(
-                "INSERT INTO quote_versions VALUES (?,?,?,?,?,?)",
-                (quote_id, conversation_id, version, fingerprint, canonical_json(payload), now),
-            )
-            db.execute(
-                "UPDATE conversations SET updated_at=? WHERE id=?", (now, conversation_id)
-            )
-        return {
-            "id": quote_id,
-            "conversation_id": conversation_id,
-            "version": version,
-            "payload": payload,
-            "created_at": now,
-        }, None
+            quote_number = f"Q-{now[:10].replace('-', '')}-{conversation_id[:8].upper()}-V{version}"
+            try:
+                payload = build_saved_snapshot(
+                    draft, quote_id=quote_id, quote_number=quote_number,
+                    quote_version=version, source_result_message_id=result_message_id,
+                    created_at=now, customer_display_name=customer,
+                )
+            except SnapshotError as exc:
+                return None, exc.code
+            token = fingerprint(payload)
+            try:
+                db.execute(
+                    """INSERT INTO quote_versions
+                    (id,conversation_id,version,fingerprint,payload_json,created_at,
+                     snapshot_schema_version,source_result_message_id)
+                    VALUES (?,?,?,?,?,?,?,?)""",
+                    (
+                        quote_id, conversation_id, version, token, canonical_json(payload), now,
+                        payload["schema_version"], result_message_id,
+                    ),
+                )
+            except sqlite3.IntegrityError:
+                winner = db.execute(
+                    self._quote_select("q.conversation_id=? AND q.source_result_message_id=?"),
+                    (conversation_id, result_message_id),
+                ).fetchone()
+                if winner:
+                    return self._quote_row(winner), None
+                raise
+            db.execute("UPDATE conversations SET updated_at=? WHERE id=?", (now, conversation_id))
+            saved = db.execute(self._quote_select("q.id=?"), (quote_id,)).fetchone()
+            return self._quote_row(saved), None
 
-    @staticmethod
-    def _quote_row(row: sqlite3.Row, conversation_id: str) -> dict[str, Any]:
-        return {
-            "id": row["id"],
-            "conversation_id": conversation_id,
-            "version": row["version"],
-            "payload": json.loads(row["payload_json"]),
-            "created_at": row["created_at"],
-        }
+    def confirm_quote(
+        self,
+        quote_id: str,
+        snapshot_token: str,
+        customer_display_name: str,
+        confirmed_by: str,
+    ) -> tuple[dict[str, Any] | None, str | None, list[str]]:
+        with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            row = db.execute(self._quote_select("q.id=?"), (quote_id,)).fetchone()
+            if not row:
+                return None, "not_found", []
+            quote = self._quote_row(row)
+            if quote["confirmation"]:
+                confirmed_snapshot = quote["confirmation"]["snapshot"]
+                same_confirmation = (
+                    snapshot_token == quote["snapshot_token"]
+                    and (confirmed_snapshot.get("customer") or {}).get("display_name") == customer_display_name.strip()
+                    and (confirmed_snapshot.get("confirmation") or {}).get("confirmed_by") == confirmed_by.strip()
+                )
+                if same_confirmation:
+                    return quote, None, []
+                return None, "already_confirmed", []
+            if snapshot_token != quote["snapshot_token"]:
+                return None, "stale_confirmation", []
+            if quote["snapshot_schema_version"] != 2:
+                return None, "not_confirmable", ["schema_version"]
+            latest = db.execute(
+                "SELECT MAX(version) FROM quote_versions WHERE conversation_id=?",
+                (quote["conversation_id"],),
+            ).fetchone()[0]
+            if quote["version"] != latest:
+                return None, "stale_confirmation", []
+            now = utc_now()
+            try:
+                confirmed = build_confirmed_snapshot(
+                    quote["payload"], customer_display_name=customer_display_name,
+                    confirmed_by=confirmed_by, confirmed_at=now,
+                )
+            except SnapshotError as exc:
+                return None, exc.code, exc.missing_fields
+            confirmation_id = str(uuid.uuid4())
+            confirmed_fingerprint = fingerprint(confirmed)
+            try:
+                db.execute(
+                    """INSERT INTO quote_confirmations
+                    (id,quote_version_id,conversation_id,snapshot_token,
+                     confirmed_snapshot_json,confirmed_fingerprint,confirmed_at)
+                    VALUES (?,?,?,?,?,?,?)""",
+                    (
+                        confirmation_id, quote_id, quote["conversation_id"], snapshot_token,
+                        canonical_json(confirmed), confirmed_fingerprint, now,
+                    ),
+                )
+            except sqlite3.IntegrityError:
+                winner = db.execute(self._quote_select("q.id=?"), (quote_id,)).fetchone()
+                if winner and winner["confirmation_id"]:
+                    return self._quote_row(winner), None, []
+                raise
+            confirmed_row = db.execute(self._quote_select("q.id=?"), (quote_id,)).fetchone()
+            return self._quote_row(confirmed_row), None, []
 
     def get_quote(self, quote_id: str) -> dict[str, Any] | None:
         with self.connect() as db:
-            row = db.execute(
-                "SELECT id,conversation_id,version,payload_json,created_at FROM quote_versions WHERE id=?",
-                (quote_id,),
-            ).fetchone()
-        if not row:
-            return None
-        return self._quote_row(row, row["conversation_id"])
+            row = db.execute(self._quote_select("q.id=?"), (quote_id,)).fetchone()
+            if not row:
+                return None
+            quote = self._quote_row(row)
+            latest = db.execute(
+                "SELECT MAX(version) FROM quote_versions WHERE conversation_id=?",
+                (quote["conversation_id"],),
+            ).fetchone()[0]
+        if not quote["is_confirmed"] and quote["version"] != latest:
+            quote["confirmable"] = False
+        return quote

@@ -75,8 +75,15 @@ class LoadValidCatalogTests(unittest.TestCase):
             )
 
     def test_rules_discount_limit(self) -> None:
-        """The synthetic discount ceiling is 500 bps (Req 1.5)."""
+        """The synthetic discount ceiling and snapshot provenance are frozen."""
         self.assertEqual(self.rules.discount_limit_bps, 500)
+        self.assertEqual(self.rules.rule_version, "demo-v1")
+        self.assertEqual(self.rules.price_version, "demo-v1")
+        self.assertEqual(self.rules.effective_date, "2026-09-14")
+        self.assertEqual(self.rules.rounding, "half_up_per_line_discount")
+        self.assertEqual(self.rules.tax_mode, "not_modelled")
+        self.assertEqual(self.rules.source_type, "synthetic")
+        self.assertTrue(self.rules.confirmation_required)
 
 
 class CorruptedCatalogTests(unittest.TestCase):
