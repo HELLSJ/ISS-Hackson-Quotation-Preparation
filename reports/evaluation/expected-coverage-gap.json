@@ -1,0 +1,98 @@
+{
+  "generated_at": "2026-09-20T07:49:43.673001+00:00",
+  "total_expected_cases": 40,
+  "known_offline_limitations": {
+    "DEV-015": "Unknown model token is classified as needs_clarification instead of no_match.",
+    "HOLDOUT-008": "Strict 24.0-inch diagonal limitation is not detected.",
+    "HOLDOUT-009": "Host-vs-downstream 90 W nuance is not detected.",
+    "HOLDOUT-011": "Cable-vs-port 100 W nuance is not detected.",
+    "HOLDOUT-013": "140 Hz constraint is not modelled by the offline search heuristic.",
+    "HOLDOUT-014": "Named-SKU over-budget request is quoted rather than classified as budget_conflict.",
+    "HOLDOUT-015": "Unknown model token is classified as needs_clarification instead of no_match."
+  },
+  "machine_asserted_fields": [
+    "ask_for",
+    "items",
+    "over_budget_cents",
+    "status",
+    "total_cents",
+    "within_budget"
+  ],
+  "human_semantic_fields_by_case": {
+    "DEV-005": [
+      "must_not"
+    ],
+    "DEV-009": [
+      "sku",
+      "usb_c_pd_watts",
+      "usb_c_video"
+    ],
+    "DEV-010": [
+      "sku",
+      "usb_c_pd_watts",
+      "usb_c_video"
+    ],
+    "DEV-011": [
+      "port",
+      "sku"
+    ],
+    "DEV-012": [
+      "different_models",
+      "usb_c_video_by_sku"
+    ],
+    "DEV-013": [
+      "acceptable_skus"
+    ],
+    "DEV-014": [
+      "cheapest_matching_sku"
+    ],
+    "DEV-015": [
+      "must_not"
+    ],
+    "DEV-016": [
+      "previous_total_cents"
+    ],
+    "DEV-019": [
+      "must_not"
+    ],
+    "DEV-020": [
+      "must_not"
+    ],
+    "HOLDOUT-008": [
+      "actual_diagonal",
+      "meets_strict_minimum",
+      "sku"
+    ],
+    "HOLDOUT-009": [
+      "usb_c_pd_watts_by_sku"
+    ],
+    "HOLDOUT-010": [
+      "sku",
+      "usb_c_pd_watts",
+      "usb_c_video"
+    ],
+    "HOLDOUT-011": [
+      "sku",
+      "usb_c_pd_watts"
+    ],
+    "HOLDOUT-012": [
+      "resolution_by_sku"
+    ],
+    "HOLDOUT-013": [
+      "acceptable_skus"
+    ],
+    "HOLDOUT-015": [
+      "must_not"
+    ],
+    "HOLDOUT-016": [
+      "previous_total_cents"
+    ],
+    "HOLDOUT-019": [
+      "must_not"
+    ],
+    "HOLDOUT-020": [
+      "must_not"
+    ]
+  },
+  "warning": "Existing holdout cases are loaded by repository tests and must be described as a regression set, not a blind holdout."
+}
