@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-09-20T07:49:43.673001+00:00",
+  "status": "MACHINE_PREPARED_PENDING_INDEPENDENT_HUMAN_REVIEW",
+  "dataset_version": "2026-09-14.v1",
+  "price_version": "demo-v1",
+  "rule_version": "demo-v1",
+  "sample_size": 24,
+  "sample_design": "12 SKUs x 2 fields = 24 review points; every SKU is reviewed for USB-C video input and host charging watts.",
+  "input_sha256": {
+    "data\\curated_specs.json": "46d321f4f67b72d7ef383998f91be2483ae660d9531e93a5445aafe0bdf8a746",
+    "data\\synthetic_business.json": "47383de0ed31cdf56705704388346dabc6c127f1c1636eb7f5f9e073f7e971cf",
+    "data\\processed\\field_evidence.csv": "8974e3be063e488a52f57984e5ee1013d9d598d0a4d87eafcb5f38764430ac21",
+    "data\\processed\\prices.csv": "6519e0f98ae73c4c437c82184a958c2e37fba7a206291650f1623073886879a4",
+    "data\\processed\\pricing_rules.json": "4fe19a45c094fed6b3170f57cb7c72e66f77bf4396ed4a326755904978a29ef7",
+    "data\\evaluation\\expected_results.jsonl": "fac61cc35266eb113c1c5ec76911ac8bda3fa608474e47d246865c5ba19c9859",
+    "data\\evaluation\\enquiries_dev.jsonl": "8199ff8de2f0198f9ff661ac139366662219f5586693ff406e944683602991a8",
+    "data\\evaluation\\enquiries_holdout.jsonl": "fa14f79620a694d480f7fcb82f825314dff9c44f90f8b1d6abf88f96f85b0d52"
+  },
+  "required_next_action": "An independent human reviewer must complete data-freeze-review.csv before calling this dataset frozen."
+}
