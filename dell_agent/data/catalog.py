@@ -135,6 +135,13 @@ def _build_rules(raw: dict) -> Rules:
         validity_days=raw["validity_days"],
         tax_mode=raw["tax_mode"],
         source_type=raw["source_type"],
+        rule_version=raw["rule_version"],
+        price_version=raw["price_version"],
+        effective_date=raw["effective_date"],
+        tax_note=raw["tax_note"],
+        confirmation_required=raw["confirmation_required"],
+        inventory_mode=raw["inventory_mode"],
+        delivery_commitment=raw["delivery_commitment"],
     )
 
 
@@ -147,6 +154,11 @@ EXPECTED_PRODUCT_COUNT = 12
 
 # The synthetic discount ceiling the rules block must declare (Req 1.5, 1.6).
 EXPECTED_DISCOUNT_LIMIT_BPS = 500
+
+
+def doc_version_is_valid(value: object) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
 
 # Product-record keys that must be present for a record to be usable. Mirrors
 # the model contract in Req 1.2 (``price`` supplies ``unit_price_cents`` and is
@@ -207,7 +219,8 @@ def _validate_catalog(raw_products: List[dict], raw_rules: Optional[dict], path:
                 f"'price.unit_price_cents' in {path}."
             )
 
-    # The discount ceiling is a hard invariant of the synthetic rule set.
+    # The discount ceiling and provenance fields are hard invariants of the
+    # synthetic rule set used in quote snapshots.
     if raw_rules is not None:
         limit = raw_rules.get("discount_limit_bps")
         if limit != EXPECTED_DISCOUNT_LIMIT_BPS:
@@ -215,6 +228,17 @@ def _validate_catalog(raw_products: List[dict], raw_rules: Optional[dict], path:
                 f"Rules discount_limit_bps must be {EXPECTED_DISCOUNT_LIMIT_BPS}, "
                 f"found {limit!r}."
             )
+        required_rule_fields = (
+            "rule_version", "price_version", "effective_date", "tax_note",
+            "confirmation_required", "inventory_mode", "delivery_commitment",
+        )
+        missing = [field for field in required_rule_fields if field not in raw_rules]
+        if missing:
+            raise CatalogError(
+                "Rules block missing snapshot metadata: " + ", ".join(missing) + "."
+            )
+        if not doc_version_is_valid(raw_rules.get("rule_version")) or not doc_version_is_valid(raw_rules.get("price_version")):
+            raise CatalogError("Rules version fields must be non-empty strings.")
 
 
 def _read_json(path: Path) -> dict:
@@ -255,6 +279,11 @@ def load_catalog(
     rules_file = Path(rules_path) if rules_path is not None else DEFAULT_RULES_PATH
 
     doc = _read_json(catalog_path)
+    dataset_version = doc.get("dataset_version")
+    if not doc_version_is_valid(dataset_version):
+        raise CatalogError(
+            f"Catalogue {catalog_path} requires a non-empty dataset_version."
+        )
 
     raw_products = doc.get("products")
     if not isinstance(raw_products, list):
@@ -316,9 +345,36 @@ def rules() -> Rules:
     return r
 
 
+@lru_cache(maxsize=1)
+def dataset_version() -> str:
+    """Return the frozen catalogue dataset version used by quote snapshots."""
+    doc = _read_json(DEFAULT_CATALOG_PATH)
+    version = doc.get("dataset_version")
+    if not doc_version_is_valid(version):
+        raise CatalogError("Catalogue requires a non-empty dataset_version.")
+    return version
+
+
+def pricing_context() -> dict:
+    """Return immutable server-owned pricing provenance for a quote draft."""
+    current = rules()
+    return {
+        "dataset_version": dataset_version(),
+        "price_version": current.price_version,
+        "rule_version": current.rule_version,
+        "price_effective_date": current.effective_date,
+        "rounding": current.rounding,
+        "tax_mode": current.tax_mode,
+        "source_type": current.source_type,
+        "inventory": current.inventory_mode,
+        "delivery": current.delivery_commitment,
+    }
+
+
 def reload() -> None:
     """Clear the module-level cache so the next access reloads from disk.
 
     Primarily useful for tests that swap in a different catalogue file.
     """
     _cache.cache_clear()
+    dataset_version.cache_clear()

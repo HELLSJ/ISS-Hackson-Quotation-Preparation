@@ -7,13 +7,15 @@ from typing import Any, Literal
 
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from dell_agent.agent.tools import dispatch
 
 from .config import ROOT, load_settings
+from .quote_diff import compare_quotes
+from .quote_pdf import PdfRenderError, render_confirmed_quote, safe_filename
 from .repository import Repository
 from .service import QuotationService
 
@@ -49,10 +51,19 @@ class QuoteRequest(BaseModel):
 
 class SaveQuoteRequest(BaseModel):
     result_message_id: str = Field(min_length=1)
+    customer_display_name: str | None = Field(default=None, max_length=200)
 
 
-def fail(status: int, error: str, message: str) -> None:
-    raise HTTPException(status_code=status, detail={"error": error, "message": message})
+class ConfirmQuoteRequest(BaseModel):
+    snapshot_token: str = Field(min_length=64, max_length=64)
+    customer_display_name: str = Field(min_length=1, max_length=200)
+    confirmed_by: str = Field(min_length=1, max_length=120)
+
+
+def fail(status: int, error: str, message: str, **extra: Any) -> None:
+    detail: dict[str, Any] = {"error": error, "message": message}
+    detail.update(extra)
+    raise HTTPException(status_code=status, detail=detail)
 
 
 @app.exception_handler(RequestValidationError)
@@ -173,11 +184,17 @@ def calculate_quote(body: QuoteRequest) -> dict[str, Any]:
 
 @app.post("/api/conversations/{conversation_id}/quotes", status_code=201)
 def save_quote(conversation_id: str, body: SaveQuoteRequest) -> dict[str, Any]:
-    quote, error = repository.save_latest_quote(conversation_id, body.result_message_id)
+    quote, error = repository.save_latest_quote(
+        conversation_id, body.result_message_id, body.customer_display_name
+    )
     if error == "not_found":
         fail(404, "not_found", "Conversation was not found.")
     if error == "stale_draft":
         fail(409, "stale_draft", "The displayed draft is no longer the latest result. Refresh before saving.")
+    if error == "save_conflict":
+        fail(409, "save_conflict", "This Agent result was already saved with different metadata.")
+    if error in {"invalid_snapshot", "not_confirmable"}:
+        fail(409, error, "The calculated draft is incomplete or inconsistent and cannot be saved.")
     if error == "no_draft":
         fail(409, "no_draft", "The latest turn has no calculated quote to save.")
     return quote  # type: ignore[return-value]
@@ -189,3 +206,56 @@ def quote(quote_id: str) -> dict[str, Any]:
     if result is None:
         fail(404, "not_found", "Quote version was not found.")
     return result
+
+
+@app.post("/api/quotes/{quote_id}/confirm")
+def confirm_quote(quote_id: str, body: ConfirmQuoteRequest) -> dict[str, Any]:
+    result, error, missing_fields = repository.confirm_quote(
+        quote_id,
+        body.snapshot_token,
+        body.customer_display_name,
+        body.confirmed_by,
+    )
+    if error == "not_found":
+        fail(404, "not_found", "Quote version was not found.")
+    if error == "already_confirmed":
+        fail(409, "already_confirmed", "This quote was already confirmed with different confirmation details.")
+    if error == "stale_confirmation":
+        fail(409, "stale_confirmation", "This is not the latest unconfirmed snapshot or the token is stale.")
+    if error in {"not_confirmable", "invalid_snapshot"}:
+        fail(409, error, "The saved snapshot is incomplete and cannot be confirmed.", missing_fields=missing_fields)
+    return result  # type: ignore[return-value]
+
+
+@app.get("/api/quotes/{from_quote_id}/diff/{to_quote_id}")
+def quote_diff(from_quote_id: str, to_quote_id: str) -> dict[str, Any]:
+    before = repository.get_quote(from_quote_id)
+    after = repository.get_quote(to_quote_id)
+    if before is None or after is None:
+        fail(404, "not_found", "One or both quote versions were not found.")
+    try:
+        return compare_quotes(before, after)
+    except ValueError as exc:
+        if str(exc) == "cross_conversation":
+            fail(409, "cross_conversation", "Quote versions must belong to the same conversation.")
+        raise
+
+
+@app.get("/api/quotes/{quote_id}/pdf")
+def quote_pdf(quote_id: str) -> StreamingResponse:
+    quote = repository.get_quote(quote_id)
+    if quote is None:
+        fail(404, "not_found", "Quote version was not found.")
+    if not quote["exportable"] or not quote["confirmation"]:
+        fail(409, "not_exportable", "Only a confirmed schema-v2 quote can be exported.")
+    snapshot = quote["confirmation"]["snapshot"]
+    try:
+        pdf = render_confirmed_quote(snapshot)
+    except PdfRenderError as exc:
+        fail(500, "pdf_generation_failed", str(exc))
+    filename = safe_filename(snapshot)
+    return StreamingResponse(
+        iter([pdf]),
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )

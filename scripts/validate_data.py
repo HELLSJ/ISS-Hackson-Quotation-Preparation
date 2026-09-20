@@ -65,7 +65,9 @@ def main():
     assert {r['toolSpec']['name'] for r in schemas}=={'get_product','search_products','calculate_quote'}
     for t in schemas:assert t['toolSpec']['inputSchema']['json']['type']=='object'
     stream=io.StringIO()
-    suite=unittest.defaultTestLoader.discover(str(ROOT/'tests'))
+    suite=unittest.defaultTestLoader.discover(
+        str(ROOT/'tests'), pattern='test_catalog_tools.py'
+    )
     result=unittest.TextTestRunner(stream=stream,verbosity=2).run(suite)
     report=dict(checked_at=datetime.now(timezone.utc).isoformat(),dataset_version=catalog['dataset_version'],
                 source_pdf_count=len(sources),source_page_count=sum(page_counts.values()),

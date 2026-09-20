@@ -101,7 +101,7 @@ from dell_agent.agent.tools import dispatch
 2. `saved_draft`：已保存的不可变版本，但仍未批准；
 3. `confirmed/exportable`：用户明确确认、通过完整性检查、可以导出 PDF 的版本。
 
-当前代码完成了前两项，第三项属于后续 P0 工作。页面、视频和文档不能把 `saved_draft` 描述成批准报价。
+当前后端已完成三个状态及其强制边界：`draft` 只存在于计算结果，schema-v2 `saved_draft` 是不可变未批准版本，`confirmed/exportable` 通过独立 append-only confirmation 记录产生。浏览器仍需由前端任务接入确认、diff 和 PDF 按钮。
 
 ## 4. 当前基线
 
@@ -119,18 +119,22 @@ from dell_agent.agent.tools import dispatch
 | 演示回归 | Story A/B/C 均可在 OfflineDriver 运行 |
 | FastAPI | 产品、证据 PDF、会话、消息、计价、保存和读取版本接口 |
 | 业务存储 | `storage/app.sqlite` 保存 conversations、messages、quote_versions |
-| 版本安全 | 不可变快照、内容指纹幂等、stale result ID 阻断 |
+| 版本安全 | schema-v2 完整快照、内容指纹幂等、stale result ID 阻断 |
+| 人工确认 | 独立 append-only confirmation，精确 token 重试幂等，旧 schema 不可确认 |
+| 版本 diff | 只比较存储快照，支持 added/removed/changed、金额及元数据差异 |
+| 报价 PDF | ReportLab 从 confirmed snapshot 生成，不调用 Agent、目录或计价工具 |
+| 应用测试 | 18 项临时数据库测试覆盖迁移、并发、确认、diff、PDF、故障注入和 HTTP |
 | 浏览器工作台 | 三栏页面、候选选择、规格证据、预算、数量修改、刷新恢复 |
 | 云失败回退 | Converse 设置或调用失败时显式回退 OfflineDriver |
 
-当前机器报告记录：目录工具测试 15 项通过；Agent 测试 63 项通过，其中 7 项是明确记录的 OfflineDriver 启发式边界。三条固定演示不在 skip 中。
+当前机器报告记录：15 项目录工具测试通过；18 项后端生命周期测试通过；Agent 测试 63 项通过，其中 7 项是明确记录的 OfflineDriver 启发式边界。三条固定演示不在 skip 中。
 
 ### 4.2 部分完成
 
 | 能力 | 已有部分 | 仍缺部分 |
 |---|---|---|
 | Bedrock Converse | client、tool-use loop、toolConfig、fallback | 团队账户真实调用、完整结构化结果、有限重试和真实评估 |
-| 报价版本 | v1/v2 不可变保存、幂等和 stale 防护 | 显式人工确认、版本元数据、结构化 diff |
+| 报价版本后端 | schema-v2 保存、确认、diff、PDF、故障注入和自动化测试 | D 接入浏览器确认/diff/PDF 操作；A 独立复核 PDF 模板 |
 | Agent 评估 | dev/holdout fixtures 和预期结果 | 独立审核 expected、真实模型首轮 holdout、失败分类 |
 | 审计 | 每轮 `AgentResult.trace` 随消息保存 | 可读工具审计页、CloudWatch/部署日志验证 |
 | 证据展示 | 本地官方 PDF 与页码链接 | 发布前确认 PDF 再分发条件或改为来源下载链接 |
@@ -138,10 +142,7 @@ from dell_agent.agent.tools import dispatch
 ### 4.3 未完成
 
 - 非原数据整理者进行的独立数据抽查和正式冻结；
-- 可导出版本的人工确认语义；
-- v1/v2 结构化差异；
-- 报价 PDF 生成和失败重试；
-- FastAPI/repository 自动化集成测试；
+- confirmation、diff 和 PDF 的浏览器操作；
 - 团队 AWS 账户上的真实 Bedrock tool-use；
 - 正式 holdout 首轮结果和修复后结果；
 - 5 个案例的人工流程与 Agent 流程计时；
@@ -152,7 +153,7 @@ from dell_agent.agent.tools import dispatch
 
 - 不能把 fixture 数量写成模型准确率；
 - 不能把 OfflineDriver fallback 写成 Bedrock 成功；
-- 不能把 15 项工具测试写成完整应用测试；
+- 不能把 15 项数据/工具测试或 18 项后端测试写成模型准确率；
 - 不能把 `saved_draft` 写成已批准报价；
 - 不能在未计时前声称“提升 80%”；
 - 不能承诺库存、交期、税费或真实 Dell 价格。
@@ -170,16 +171,16 @@ Browser workbench
       → `storage/app.sqlite`
           → conversations
           → messages + AgentResult/trace
-          → immutable quote_versions
+          → immutable quote_versions + append-only quote_confirmations
       → allow-listed local source PDFs
-      → future quote diff / PDF exporter
+      → stored-snapshot diff / confirmed-only PDF exporter
 ```
 
 数据库职责必须分开：
 
 - `storage/catalog.sqlite`：从数据包生成的目录缓存，可删除重建，不存客户或报价历史；
-- `storage/app.sqlite`：应用运行数据，保存对话和不可变报价草稿版本；
-- 后续报价 PDF：只读取 `app.sqlite` 的已确认快照。
+- `storage/app.sqlite`：应用运行数据，保存对话、不可变 schema-v2 草稿和 append-only confirmed snapshots；
+- 报价 diff 和 PDF：只读取 `app.sqlite` 的存储快照，不重新查询目录或计价。
 
 ## 6. 数据准备与可信链
 
@@ -288,45 +289,37 @@ rule_violation       invalid_quantity
 
 **验收：**三条 Story 的真实模型路径均调用工具；事实和金额来自工具；金额与离线路径逐分一致；无隐式 fallback；失败时回退可见且状态保留。
 
-### Gate C（P0）：确认语义、快照元数据和应用测试
+### Gate C（P0）：确认语义、快照元数据和应用测试——后端已完成
 
-**主责：B 报价后端；D 配合；预计 1 天。**
+**主责：B 报价后端。状态：完成并通过自动化测试。**
 
-工作：
+已交付：
 
-1. 明确“保存草稿”和“确认可导出”是两个动作；
-2. 增加显式确认 endpoint 或确认 token；
-3. 确认前检查客户显示名、型号、数量、折扣和计算状态；
-4. 快照补充 `dataset_version`、`price_version`、`rule_version`、客户名、报价日期、有效期和条款；
-5. 保留现有 result message ID 前置条件；
-6. 给 FastAPI/repository 增加临时数据库测试：消息重放、无 draft、stale ID、重复保存、版本递增、fallback 和并发保护。
+1. `draft → saved_draft → confirmed/exportable` 明确分离；
+2. schema-v2 快照包含 line ID、型号、金额、budget、dataset/price/rule version、报价日期、有效期和条款；
+3. 启动时将旧行原样迁移为不可确认的 `legacy_saved_draft`，不伪造历史 provenance；
+4. result message ID 阻止 stale 保存，source result 和内容指纹保证幂等；
+5. `POST /api/quotes/{id}/confirm` 通过精确 snapshot token 创建 append-only confirmed snapshot；
+6. malformed arithmetic、旧 schema、旧版本、错误 token 和不同确认重试均被阻断；
+7. 临时 SQLite 测试覆盖迁移、四线程并发保存、确认和 HTTP 生命周期；数据库保存故障注入验证草稿保留及重试。
 
-**验收：**未确认版本不能导出；确认不会重新定价；旧版本重开金额不变；重复请求不增版本；stale 保存为 409；应用成功和错误路径都有自动化回归。
+**后续前端工作：**D 将客户名、确认状态和确认按钮接到现有 API。
 
-### Gate D（P1）：版本 diff 与报价 PDF
+### Gate D（P1）：版本 diff 与报价 PDF——后端已完成
 
-**主责：B；D 负责页面；A 复核；预计 1–1.5 天。**
+**主责：B。状态：后端 API、renderer 和测试完成；D 负责页面接入。**
 
-工作：
+已交付：
 
-1. 计算两个保存版本之间的条目、型号、数量、折扣和总额差异；
-2. 页面版本时间线增加 diff 视图；
-3. 选择并固定 PDF 库和版本；
-4. 固定模板：报价编号、版本、日期、有效期、客户显示名、产品明细、折扣、总额和模拟条款；
-5. 只允许从 confirmed snapshot 导出；
-6. PDF 生成不调用模型、不查询最新价格；
-7. 导出失败保留草稿并允许重试。
+1. `GET /api/quotes/{from}/diff/{to}` 返回 added/removed/changed、数量/折扣/金额 delta 和元数据变化；
+2. schema-v2 使用稳定 line ID，legacy 使用明确标记的 SKU occurrence fallback；
+3. ReportLab 5.0.1 固定依赖和分页表格模板；
+4. `GET /api/quotes/{id}/pdf` 只允许 confirmed schema-v2 snapshot；
+5. PDF 包含报价号、版本、客户、日期、有效期、确认人、产品明细、总额、模拟条款和版本 provenance；
+6. renderer 不导入 Agent、目录或计价工具，导出不会重新定价；
+7. pypdf 测试从实际 PDF 提取并核对客户、P2425HE 和 SGD 2,312.00；PDF 渲染故障注入验证 confirmed snapshot 保留及重试。
 
-**金额锚点：**
-
-```text
-Story A v1: 8 × MON-007 = 231200 cents
-Story A v2: 10 × MON-007 = 289000 cents
-v2 − v1: 57800 cents
-v2 over budget: 39000 cents
-```
-
-**验收：**v1 不变；v2 和 diff 正确；页面、数据库和 PDF 逐分一致；长名称、分页、页边距正常；失败后可重试。
+**仍需 D/A 完成：**页面版本时间线增加确认、diff 和下载入口；A 人工核对最终模板和分页。
 
 ### Gate E（P1）：正式评估与异常验收
 
@@ -381,9 +374,23 @@ v2 over budget: 39000 cents
 | 成员 | 主责 | 后续交付 |
 |---|---|---|
 | A：数据与评估 | 人工冻结、expected 审核、holdout、金额复核、指标 | 冻结记录、首轮/修复后报告、计时结果 |
-| B：报价后端 | 确认语义、快照 schema、应用测试、diff、PDF | API、不可变 confirmed version、diff、PDF |
+| B：报价后端 | 确认语义、schema migration、应用测试、diff、PDF、故障注入和 API 交接已完成 | 维护 API；向 D 提供接入契约，向 A 提供模板复核样本 |
 | C：AWS Agent | Bedrock 真实调用、结果组装、重试、fallback、trace | 三条 Story 的真实 trace 和模型评估元数据 |
 | D：前端与演示 | 确认/diff/PDF 页面、异常入口、恢复、视频 | 完整工作台、演示模式、30 分钟视频 |
+
+### B：报价后端执行清单（2026-09-20）
+
+此清单只跟踪 B 可交付的后端工作；D 的页面实现和 A 的独立模板复核由各自主责验收。
+
+- [x] 确认 `draft → saved_draft → confirmed`、schema-v2 快照和旧版本迁移；临时 SQLite 测试已覆盖。
+- [x] 完成保存/确认的幂等、stale 保护与并发测试；未确认版本不可导出。
+- [x] 完成只比较保存快照的版本 diff API 与 confirmed-only PDF API；API 契约已记录。
+- [x] 补齐数据库保存失败与 PDF 生成失败的故障注入，验证状态保留及重试路径；`tests/` 33 项通过（其中后端 18 项）。
+- [x] 渲染并目视检查[标准报价](../output/pdf/quotation-qa-standard.pdf)（1 页）和[长表报价](../output/pdf/quotation-qa-long.pdf)（5 页）：金额、换行、跨页表头、总额/条款及页脚页码正常。样本为合成 QA 数据，已备 A 独立复核。
+- [x] 核对 D 所需的保存、确认、diff、下载接口与响应示例；Story A 的 v1/v2 HTTP 链路已通过，调用顺序和错误恢复见 [API 契约](api-contract.md#browser-integration-handoff-for-d)。
+- [x] 运行 B 相关回归并同步本文、API 契约和交付清单的最终状态；目录/后端 33 项通过，Agent 63 项通过（7 项明确 skip），`git diff --check` 通过。
+
+B 的后端交付已完成。D 的浏览器按钮和 A 的独立模板验收仍由各自主责完成；A 可用上面的两份 QA PDF 核对合成价格、行明细、分页表头、条款和版本 provenance。
 
 协作规则：
 
@@ -457,15 +464,17 @@ v2 over budget: 39000 cents
 - [x] 12 个产品、模拟价格、规则和字段证据；
 - [x] 唯一确定性工具层；
 - [x] OfflineDriver 和三条固定演示回归；
-- [x] FastAPI、SQLite 会话和 saved draft versions；
-- [x] 三栏浏览器工作台和本地 PDF 证据；
+- [x] FastAPI、SQLite 会话和 schema-v2 saved draft versions；
+- [x] append-only 人工确认与不可变 confirmed snapshots；
+- [x] v1/v2 结构化 diff API；
+- [x] confirmed-only 报价 PDF renderer 和下载 API；
+- [x] 18 项后端 migration/concurrency/lifecycle/diff/PDF/fault-injection/HTTP 测试；
+- [x] 三栏浏览器工作台和本地规格 PDF 证据；
 - [ ] 团队独立数据冻结记录；
 - [ ] 真实 Bedrock tool-use trace；
 - [ ] 完整 Converse AgentResult 和有限重试；
-- [ ] 显式人工确认与完整版本元数据；
-- [ ] v1/v2 diff；
-- [ ] 报价 PDF 和示例文件；
-- [ ] 应用集成测试和异常注入结果；
+- [ ] confirmation/diff/报价 PDF 的浏览器操作；
+- [x] 数据库保存与 PDF 渲染故障注入结果；
 - [ ] 正式 holdout 首轮/修复后报告；
 - [ ] 5 个案例人工/Agent 计时；
 - [ ] 30 分钟视频和提交确认。

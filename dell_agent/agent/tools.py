@@ -334,7 +334,9 @@ def _quote_line_dict(line: QuoteLine) -> Dict[str, Any]:
     }
 
 
-def _quote_draft_dict(draft: QuoteDraft, budget_given: bool) -> Dict[str, Any]:
+def _quote_draft_dict(
+    draft: QuoteDraft, budget_cents: Optional[int]
+) -> Dict[str, Any]:
     """Serialise a :class:`QuoteDraft` to a JSON-serialisable dict (Req 4.10, 5.8).
 
     Emits only the quote-facing fields: currency, lines, total, budget outcome
@@ -347,13 +349,17 @@ def _quote_draft_dict(draft: QuoteDraft, budget_given: bool) -> Dict[str, Any]:
         "is_confirmed": draft.is_confirmed,
         "currency": draft.currency,
         "lines": [_quote_line_dict(line) for line in draft.lines],
+        "subtotal_cents": sum(line.net_cents for line in draft.lines),
+        "shipping_fee_cents": catalog.rules().shipping_fee_cents,
         "total_cents": draft.total_cents,
     }
     # Budget outcome is present only when the caller supplied a budget (Req 4.8).
-    if budget_given:
+    if budget_cents is not None:
+        result["budget_cents"] = budget_cents
         result["within_budget"] = draft.within_budget
         result["over_budget_cents"] = draft.over_budget_cents
     result["validity_days"] = draft.validity_days
+    result["pricing_context"] = catalog.pricing_context()
     result["tax_note"] = draft.tax_note
     result["disclaimer"] = draft.disclaimer
     return result
@@ -474,7 +480,15 @@ def calculate_quote(args: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         )
 
     draft = pricing.compute_quote(lines, catalog.rules(), budget_cents)
-    return _quote_draft_dict(draft, budget_given)
+    result = _quote_draft_dict(draft, budget_cents)
+    occurrences: Dict[str, int] = {}
+    for line, item in zip(result["lines"], items):
+        sku = str(item["sku"])
+        occurrences[sku] = occurrences.get(sku, 0) + 1
+        product = catalog.get(sku)
+        line["line_id"] = f"line-{sku.lower()}-{occurrences[sku]:03d}"
+        line["model"] = product.model if product else sku
+    return result
 
 
 # --------------------------------------------------------------------------- #
