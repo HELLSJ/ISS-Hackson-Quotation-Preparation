@@ -268,8 +268,18 @@ function renderVersions() {
   const versions = state.conversation?.quote_versions || [];
   $("#versionCount").textContent = versions.length;
   $("#versionList").innerHTML = versions.length
-    ? versions.map((version) => `<div class="version-item"><span>Version ${version.version} · ${version.line_count} line${version.line_count === 1 ? "" : "s"}</span><strong>${money(version.total_cents)}</strong></div>`).join("")
+    ? versions.map((version, index) => `<div class="version-item">
+        <div><span>Version ${version.version} · ${version.line_count} line${version.line_count === 1 ? "" : "s"}</span><small>${escapeHtml(version.status.replaceAll("_", " "))}</small></div>
+        <strong>${money(version.total_cents)}</strong>
+        <div class="version-actions">
+          ${index ? `<button class="compare-version" data-from="${escapeHtml(versions[index - 1].id)}" data-to="${escapeHtml(version.id)}" type="button">Compare v${versions[index - 1].version} → v${version.version}</button>` : ""}
+          ${version.confirmable ? `<button class="confirm-version" data-id="${escapeHtml(version.id)}" type="button">Confirm</button>` : ""}
+          ${version.exportable ? `<a href="/api/quotes/${encodeURIComponent(version.id)}/pdf" download>Download PDF</a>` : ""}
+        </div>
+      </div>`).join("")
     : "<p>No versions saved yet.</p>";
+  $$(".compare-version").forEach((button) => button.addEventListener("click", () => openDiff(button.dataset.from, button.dataset.to)));
+  $$(".confirm-version").forEach((button) => button.addEventListener("click", () => confirmVersion(button.dataset.id)));
 }
 
 async function saveQuote() {
@@ -278,7 +288,10 @@ async function saveQuote() {
   try {
     const saved = await api(`/api/conversations/${state.conversation.id}/quotes`, {
       method: "POST",
-      body: JSON.stringify({ result_message_id: state.conversation.latest_result_message_id }),
+      body: JSON.stringify({
+        result_message_id: state.conversation.latest_result_message_id,
+        customer_display_name: $("#customerName").value.trim() || null,
+      }),
     });
     state.conversation = await api(`/api/conversations/${state.conversation.id}`);
     renderVersions();
@@ -288,6 +301,43 @@ async function saveQuote() {
     showToast(error.message);
   } finally {
     button.disabled = false;
+  }
+}
+
+async function confirmVersion(quoteId) {
+  const customer = $("#customerName").value.trim();
+  const confirmedBy = $("#confirmedBy").value.trim();
+  if (!customer || !confirmedBy) return showToast("Customer and confirmer are required.");
+  try {
+    const quote = await api(`/api/quotes/${encodeURIComponent(quoteId)}`);
+    await api(`/api/quotes/${encodeURIComponent(quoteId)}/confirm`, {
+      method: "POST",
+      body: JSON.stringify({
+        snapshot_token: quote.snapshot_token,
+        customer_display_name: customer,
+        confirmed_by: confirmedBy,
+      }),
+    });
+    state.conversation = await api(`/api/conversations/${state.conversation.id}`);
+    renderVersions();
+    showToast(`Version ${quote.version} confirmed and ready to export.`);
+  } catch (error) {
+    showToast(error.message);
+  }
+}
+
+async function openDiff(fromId, toId) {
+  try {
+    const diff = await api(`/api/quotes/${encodeURIComponent(fromId)}/diff/${encodeURIComponent(toId)}`);
+    const changes = diff.lines.changed || [];
+    $("#diffTitle").textContent = `Version ${diff.from.version} → Version ${diff.to.version}`;
+    $("#diffContent").innerHTML = `
+      <div class="diff-summary"><span>Total before</span><strong>${money(diff.totals.total_cents.from)}</strong><span>Total after</span><strong>${money(diff.totals.total_cents.to)}</strong><span>Net change</span><strong>${money(diff.totals.total_cents.delta)}</strong></div>
+      ${changes.length ? changes.map((line) => `<div class="diff-line"><strong>${escapeHtml(line.after?.model || line.before?.model || line.line_id)}</strong>${Object.entries(line.changes).map(([field, value]) => `<span>${escapeHtml(field.replaceAll("_", " "))}: ${escapeHtml(value.from)} → ${escapeHtml(value.to)}${value.delta === undefined ? "" : ` (Δ ${escapeHtml(value.delta)})`}</span>`).join("")}</div>`).join("") : "<p class=\"availability-warning\">No line changes.</p>"}
+    `;
+    $("#diffDialog").showModal();
+  } catch (error) {
+    showToast(error.message);
   }
 }
 
@@ -330,8 +380,12 @@ $("#newConversation").addEventListener("click", async () => {
 });
 $("#saveQuote").addEventListener("click", saveQuote);
 $("#closeEvidence").addEventListener("click", () => $("#evidenceDialog").close());
+$("#closeDiff").addEventListener("click", () => $("#diffDialog").close());
 $("#evidenceDialog").addEventListener("click", (event) => {
   if (event.target === $("#evidenceDialog")) $("#evidenceDialog").close();
+});
+$("#diffDialog").addEventListener("click", (event) => {
+  if (event.target === $("#diffDialog")) $("#diffDialog").close();
 });
 
 document.addEventListener("DOMContentLoaded", boot);

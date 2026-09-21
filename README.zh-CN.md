@@ -39,10 +39,10 @@
 | 保存版本 | 经过完整校验的 schema-v2 快照，不可变、幂等并阻止 stale 保存 |
 | 人工确认 | append-only confirmed snapshot，精确 token 重试幂等 |
 | 版本 diff 和报价 PDF | 后端 API 已完成；PDF 只读取 confirmed snapshot，不重新计价 |
-| 自动化校验 | 33 项目录/后端测试；63 项 Agent 测试，7 项明确 skip |
+| 自动化校验 | 38 项目录/后端/失败路径/评测门禁测试；63 项 Agent 测试，7 项明确 skip |
 | 真实 Bedrock | **未完成**：尚无经验证的真实模型调用 trace |
-| 独立数据复核 | **未完成** |
-| 浏览器 confirmation/diff/PDF 操作 | **尚未实现** |
+| 独立数据复核 | 已完成：24/24 条证据核对已签核，`2026-09-14.v1` 已冻结 |
+| 浏览器 confirmation/diff/PDF 操作 | 已实现，并通过 Chrome 端到端验收 |
 | 正式模型/holdout 评估 | **未完成** |
 
 所有后续工作及验收标准见唯一的[项目总规划](docs/project-plan-zh.md)。
@@ -176,7 +176,7 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 项数据/工具检查
-.venv/bin/python -m unittest discover -s tests            # 33 项目录/后端测试
+.venv/bin/python -m unittest discover -s tests            # 38 项目录/后端/失败路径/评测门禁测试
 .venv/bin/python -m unittest discover -s dell_agent/tests # 63 项 Agent 测试
 ```
 
@@ -187,7 +187,7 @@ python scripts/validate_data.py                            # 15 项数据/工具
 - 63 项 Agent 测试通过，7 项是明确记录的 OfflineDriver 启发式 skip；
 - 三条固定演示均在离线路径通过。
 
-这不是模型准确率。40 条自然语言案例仍需独立审核 expected label；holdout 答案和校验报告不得进入系统提示词或运行时知识库。
+这不是模型准确率。现有 40 条自然语言案例的 expected label 已独立审核；新建 sealed holdout 仍需非作者审核，其答案和校验报告不得进入系统提示词或运行时知识库。
 
 ## 可选 Bedrock 路径
 
@@ -211,11 +211,9 @@ AWS 凭据必须通过标准 credential chain 提供，不能写入源码或 `.e
 
 ## 后续关键路径
 
-1. 独立抽查 6 个 SKU × 2 个证据字段并冻结数据；
-2. 完成真实 Bedrock tool-use 和结构化 AgentResult；
-3. 将已完成的 confirmation/diff/PDF 后端 API 接到浏览器操作；
-4. 保留正式 holdout 首轮结果，并将修复后结果分开；
-5. 实测 5 个案例，彩排、录制 30 分钟视频并提交。
+1. 完成真实 Bedrock tool-use 和结构化 AgentResult；
+2. 保留正式 sealed holdout 首轮结果，并将修复后结果分开；
+3. 实测 5 个案例，彩排、录制 30 分钟视频并提交。
 
 详细负责人、验收标准、指标、异常矩阵和视频结构见 [docs/project-plan-zh.md](docs/project-plan-zh.md)。
 

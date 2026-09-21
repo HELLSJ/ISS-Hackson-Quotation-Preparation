@@ -191,6 +191,7 @@ class RepositoryLifecycleTests(unittest.TestCase):
         )
         self.assertIsNone(error)
         pdf = render_confirmed_quote(quote["confirmation"]["snapshot"])
+        self.assertEqual(pdf, render_confirmed_quote(quote["confirmation"]["snapshot"]))
         self.assertTrue(pdf.startswith(b"%PDF-"))
         self.assertGreater(len(pdf), 10_000)
         reader = PdfReader(io.BytesIO(pdf))

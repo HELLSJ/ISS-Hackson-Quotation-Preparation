@@ -82,6 +82,8 @@
         </div>
       </div>
       <div id="quoteActions" class="quote-actions" hidden>
+        <label>Customer<input id="customerName" type="text" maxlength="200" value="Example Customer" autocomplete="organization"></label>
+        <label>Confirmed by<input id="confirmedBy" type="text" maxlength="120" value="Sales Admin" autocomplete="name"></label>
         <button id="saveQuote" class="primary-button" type="button">Save draft version</button>
         <span id="saveStatus" role="status"></span>
       </div>
@@ -107,6 +109,17 @@
       <button id="closeEvidence" class="icon-button" type="button" aria-label="Close evidence">×</button>
     </div>
     <div id="evidenceContent"></div>
+  </dialog>
+
+  <dialog id="diffDialog" class="evidence-dialog" aria-labelledby="diffTitle">
+    <div class="dialog-heading">
+      <div>
+        <span>Stored snapshot comparison</span>
+        <h2 id="diffTitle">Version difference</h2>
+      </div>
+      <button id="closeDiff" class="icon-button" type="button" aria-label="Close difference">×</button>
+    </div>
+    <div id="diffContent"></div>
   </dialog>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>

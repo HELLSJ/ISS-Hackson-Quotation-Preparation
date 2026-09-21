@@ -39,10 +39,10 @@ The usable vertical slice and backend quote lifecycle are complete: deterministi
 | Saved versions | Validated schema-v2 snapshots; immutable, idempotent, and protected against stale saves |
 | Confirmation | Append-only immutable confirmed snapshot with exact-token idempotency |
 | Version diff and quote PDF | Backend APIs complete; PDF is confirmed-snapshot-only and never re-prices |
-| Automated validation | 33 catalogue/backend tests; 63 Agent tests with 7 documented heuristic skips |
+| Automated validation | 38 catalogue/backend/failure-path/evaluation-gate tests; 63 Agent tests with 7 documented heuristic skips |
 | Live Bedrock run | **Not completed**: no verified live model trace yet |
-| Independent data review | **Not completed** |
-| Browser confirmation/diff/PDF controls | **Not implemented yet** |
+| Independent data review | Complete: 24/24 evidence checks signed and dataset `2026-09-14.v1` frozen |
+| Browser confirmation/diff/PDF controls | Implemented and exercised end to end in headless Chrome |
 | Formal model/holdout evaluation | **Not completed** |
 
 The authoritative remaining-work sequence and acceptance criteria are in the [consolidated project plan](docs/project-plan-zh.md).
@@ -181,7 +181,7 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 data/tool checks
-.venv/bin/python -m unittest discover -s tests            # 33 catalogue/backend tests
+.venv/bin/python -m unittest discover -s tests            # 38 catalogue/backend/failure-path/evaluation-gate tests
 .venv/bin/python -m unittest discover -s dell_agent/tests # 63 Agent tests
 ```
 
@@ -192,7 +192,7 @@ The current suites report:
 - 63 Agent tests passing, with 7 explicitly documented OfflineDriver heuristic skips;
 - all three fixed demo scenarios passing in the offline path.
 
-These numbers are not a model accuracy claim. The 40 natural-language evaluation cases are development fixtures whose expected semantic labels still require independent review. The holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.
+These numbers are not a model accuracy claim. The expected semantic labels for the existing 40 natural-language fixtures have passed independent review; the new sealed holdout still requires a non-author review. Holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.
 
 ## Optional Amazon Bedrock path
 
@@ -223,11 +223,9 @@ The live cloud path remains unfinished: the team still needs to run the three de
 
 ## Remaining critical path
 
-1. Independently review six SKUs × two evidence fields and freeze the data version.
-2. Complete a real Bedrock Converse tool-use run and structured AgentResult assembly.
-3. Connect the completed confirmation/diff/PDF backend APIs to browser controls.
-4. Run and preserve the first formal holdout evaluation, then separate fixes from the original result.
-5. Measure five manual-versus-Agent cases, rehearse, record the 30-minute video, and submit.
+1. Complete a real Bedrock Converse tool-use run and structured AgentResult assembly.
+2. Run and preserve the first formal sealed-holdout evaluation, then separate fixes from the original result.
+3. Measure five manual-versus-Agent cases, rehearse, record the 30-minute video, and submit.
 
 See [docs/project-plan-zh.md](docs/project-plan-zh.md) for owners, acceptance criteria, evaluation thresholds, exception coverage, and the video plan.
 

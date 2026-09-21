@@ -256,7 +256,9 @@ button:focus-visible, textarea:focus-visible, input:focus-visible, a:focus-visib
 .total-row strong { font-size: 29px; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
 .budget-row { margin-top: 7px; color: var(--success); font-size: 12px; }
 .budget-row.over { color: var(--danger); font-weight: 650; }
-.quote-actions { padding: 12px 18px; border-top: 1px solid var(--line-strong); display: flex; align-items: center; gap: 12px; }
+.quote-actions { padding: 12px 18px; border-top: 1px solid var(--line-strong); display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+.quote-actions label { display: grid; gap: 3px; color: var(--muted); font-size: 10px; }
+.quote-actions input { width: 130px; padding: 7px 8px; border: 1px solid var(--line-strong); border-radius: 3px; color: var(--ink); }
 .quote-actions span { color: var(--success); font-size: 12px; }
 .versions { border-top: 1px solid var(--line-strong); padding: 14px 18px; }
 .versions-title { display: flex; justify-content: space-between; align-items: center; }
@@ -264,8 +266,16 @@ button:focus-visible, textarea:focus-visible, input:focus-visible, a:focus-visib
 .versions-title span { color: var(--muted); }
 .version-list { margin-top: 8px; }
 .version-list p { margin: 0; color: var(--muted); font-size: 12px; }
-.version-item { display: flex; justify-content: space-between; padding: 7px 0; border-top: 1px solid var(--line); font-size: 12px; }
+.version-item { display: grid; grid-template-columns: 1fr auto; gap: 5px 12px; padding: 9px 0; border-top: 1px solid var(--line); font-size: 12px; }
+.version-item small { display: block; color: var(--muted); text-transform: capitalize; }
 .version-item strong { font-variant-numeric: tabular-nums; }
+.version-actions { grid-column: 1 / -1; display: flex; gap: 10px; flex-wrap: wrap; }
+.version-actions button, .version-actions a { border: 0; padding: 2px 0; background: transparent; color: var(--blue-dark); font-size: 11px; font-weight: 650; text-decoration: none; }
+.diff-summary { display: grid; grid-template-columns: 1fr auto; gap: 7px 18px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.diff-summary span { color: var(--muted); }
+.diff-line { display: grid; gap: 5px; padding: 13px 20px; border-bottom: 1px solid var(--line); }
+.diff-line span { color: #354553; font-size: 12px; }
+#diffContent { max-height: 65vh; overflow-y: auto; }
 .legal-note { margin: 0; padding: 9px 18px; background: #f2f4f6; color: var(--muted); font-size: 10px; border-top: 1px solid var(--line); }
 
 .evidence-dialog {

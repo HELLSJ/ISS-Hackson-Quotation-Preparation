@@ -10,6 +10,7 @@ dist/
 .ruff_cache/
 .coverage
 htmlcov/
+tmp/
 
 # --- Virtual environments ---
 .venv/
@@ -31,6 +32,16 @@ dist-web/
 *.key
 credentials
 .aws/
+
+# --- Sealed evaluation material ---
+# Keep prompts/answers private until the untouched first-pass model run is saved.
+data/evaluation/sealed_holdout_enquiries.jsonl
+reports/evaluation/sealed_holdout_expected.jsonl
+reports/evaluation/sealed-holdout-review.csv
+reports/evaluation/runs/*-readiness-smoke/
+reports/evaluation/runs/*-credential-check/
+reports/evaluation/timing/*-gate-credential-check/
+reports/evaluation/browser_acceptance/*/*.log
 
 # --- Regenerable build output ---
 # storage/ 是可重建的目录数据库，由 scripts/build_data.py 生成，不是报价库。

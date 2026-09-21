@@ -1,0 +1,34 @@
+{
+  "checked_at": "2026-09-21T12:22:34.200299+00:00",
+  "complete": false,
+  "gates": {
+    "data_freeze": {
+      "passed": true,
+      "evidence": "reports/evaluation/freeze-manifest.json"
+    },
+    "sealed_non_author_review": {
+      "passed": false,
+      "evidence": "reports/evaluation/sealed-holdout-manifest.json"
+    },
+    "real_model_first_pass": {
+      "passed": false,
+      "evidence": "missing"
+    },
+    "formal_metrics": {
+      "passed": false,
+      "evidence": "missing"
+    },
+    "browser_acceptance": {
+      "passed": true,
+      "evidence": "reports/evaluation/browser_acceptance/20260921T074342Z/result.json"
+    },
+    "pdf_independent_review": {
+      "passed": false,
+      "evidence": "reports/evaluation/pdf-template-review.csv (0/8 signed PASS)"
+    },
+    "five_case_efficiency": {
+      "passed": false,
+      "evidence": "missing"
+    }
+  }
+}

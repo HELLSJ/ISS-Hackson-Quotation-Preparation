@@ -134,15 +134,13 @@ from dell_agent.agent.tools import dispatch
 | 能力 | 已有部分 | 仍缺部分 |
 |---|---|---|
 | Bedrock Converse | client、tool-use loop、toolConfig、fallback | 团队账户真实调用、完整结构化结果、有限重试和真实评估 |
-| 报价版本后端 | schema-v2 保存、确认、diff、PDF、故障注入和自动化测试 | D 接入浏览器确认/diff/PDF 操作；A 独立复核 PDF 模板 |
-| Agent 评估 | dev/holdout fixtures 和预期结果 | 独立审核 expected、真实模型首轮 holdout、失败分类 |
+| 报价版本与页面 | schema-v2 保存、确认、diff、PDF、故障注入、页面操作和自动化验收 | A 独立复核最终 PDF 模板 |
+| Agent 评估 | dev/holdout fixtures 的 expected 已独立审核；新建 sealed holdout 与隔离运行器已就绪 | sealed expected 非作者审核、真实模型首轮结果和失败分类 |
 | 审计 | 每轮 `AgentResult.trace` 随消息保存 | 可读工具审计页、CloudWatch/部署日志验证 |
 | 证据展示 | 本地官方 PDF 与页码链接 | 发布前确认 PDF 再分发条件或改为来源下载链接 |
 
 ### 4.3 未完成
 
-- 非原数据整理者进行的独立数据抽查和正式冻结；
-- confirmation、diff 和 PDF 的浏览器操作；
 - 团队 AWS 账户上的真实 Bedrock tool-use；
 - 正式 holdout 首轮结果和修复后结果；
 - 5 个案例的人工流程与 Agent 流程计时；
@@ -258,9 +256,9 @@ rule_violation       invalid_quantity
 
 后续不再按已经过去的 Day 1–Day 6 重复排期，而按以下 Gate 顺序推进。P0 是提交关键路径，P1 是正式验收关键路径，P2 是视频和交付。
 
-### Gate A（P0）：数据人工冻结
+### Gate A（P0）：数据人工冻结——已完成
 
-**主责：A 数据与评估；预计 0.5 天，可与 Gate B 并行。**
+**主责：A 数据与评估。状态：24 条证据核对全部 PASS，`2026-09-14.v1` 已冻结。**
 
 工作和验收见第 6.2 节。完成后更新校验报告中的 human review 状态，并固定演示数据库种子。
 
@@ -268,9 +266,12 @@ rule_violation       invalid_quantity
 
 **主责：C AWS Agent；B 配合；预计 1 天。**
 
+**2026-09-22 状态：**`showme-agent` Profile 已通过排除环境变量后的 STS 验证；当前角色调用 `bedrock:ListFoundationModels` 时被 AWS Organizations 的 Service Control Policy（SCP）显式拒绝。需由组织管理员调整 SCP，或改用允许 Bedrock 的账户/角色，并提供可调用的 model ID，才能继续真实模型评测。
+
 前置条件：
 
 - 团队 AWS 凭据；
+- 按 [AWS 凭据配置指南](aws-credentials-setup-zh.md) 建立可验证的 `showme-agent` Profile；
 - 明确的 Region；
 - 账户可访问且支持 Converse/tool use 的模型 ID；
 - 后端最小 IAM 权限；
@@ -303,11 +304,11 @@ rule_violation       invalid_quantity
 6. malformed arithmetic、旧 schema、旧版本、错误 token 和不同确认重试均被阻断；
 7. 临时 SQLite 测试覆盖迁移、四线程并发保存、确认和 HTTP 生命周期；数据库保存故障注入验证草稿保留及重试。
 
-**后续前端工作：**D 将客户名、确认状态和确认按钮接到现有 API。
+**页面接入状态：**客户名、确认状态、确认按钮、版本 diff 和 PDF 下载已接入现有 API，并通过 Chrome 端到端验收。
 
 ### Gate D（P1）：版本 diff 与报价 PDF——后端已完成
 
-**主责：B。状态：后端 API、renderer 和测试完成；D 负责页面接入。**
+**主责：B/D。状态：后端 API、renderer、页面操作和 Chrome 端到端验收完成。**
 
 已交付：
 
@@ -319,7 +320,7 @@ rule_violation       invalid_quantity
 6. renderer 不导入 Agent、目录或计价工具，导出不会重新定价；
 7. pypdf 测试从实际 PDF 提取并核对客户、P2425HE 和 SGD 2,312.00；PDF 渲染故障注入验证 confirmed snapshot 保留及重试。
 
-**仍需 D/A 完成：**页面版本时间线增加确认、diff 和下载入口；A 人工核对最终模板和分页。
+**仍需 A 完成：**人工核对最终模板和分页。
 
 ### Gate E（P1）：正式评估与异常验收
 
@@ -329,7 +330,7 @@ rule_violation       invalid_quantity
 
 工作：
 
-1. 由非 fixture 作者审核 expected labels；
+1. 由非 fixture 作者审核 sealed holdout expected labels；
 2. 首次解封 20 条 holdout，保存未经修改的首轮结果；
 3. 记录 driver、model ID、Region、prompt、dataset 和规则版本；
 4. 将失败分为需求理解、状态机、工具参数、模型波动、应用或数据问题；
@@ -378,6 +379,21 @@ rule_violation       invalid_quantity
 | C：AWS Agent | Bedrock 真实调用、结果组装、重试、fallback、trace | 三条 Story 的真实 trace 和模型评估元数据 |
 | D：前端与演示 | 确认/diff/PDF 页面、异常入口、恢复、视频 | 完整工作台、演示模式、30 分钟视频 |
 
+### A：数据与评估执行清单（2026-09-21）
+
+- [x] 数据独立冻结：24 条证据核对全部 PASS，冻结记录见 `reports/evaluation/data-freeze-review-signed.csv`。
+- [x] expected 审核：40 条全部 PASS，并记录机器断言范围与 7 个 Offline 限制。
+- [x] 金额复核：15 条独立 Decimal/人工复算全部 PASS。
+- [x] B 后端金额一致性：计算、保存、确认、diff 与 PDF 的 3 条锚点全部 PASS。
+- [ ] sealed blind holdout 已建立并与运行时隔离；仍需非作者完成独立 expected 审核。
+- [ ] 运行真实 Bedrock 首轮评测，保存原始结果、trace 和运行元数据；`showme-agent` credential chain 已于 2026-09-22 验证，当前受组织 SCP 的 Bedrock 显式拒绝阻塞。
+- [ ] 输出正式指标、失败分类及修复后独立报告。
+- [x] Chrome 完成页面保存 v1/v2、diff、确认、下载及页面/快照/PDF 金额一致性验收；证据在 `reports/evaluation/browser_acceptance/`。
+- [ ] A 人工复核最终 PDF 模板和分页。
+- [ ] 完成 5 个案例的人工/Agent 计时，报告样本数、中位数和范围。
+
+A 收口时运行 `.venv/bin/python scripts/check_a_completion.py`；只有生成的 `reports/evaluation/a-completion-status.json` 中全部门禁为 `passed=true`，才能把 A 标为完成。
+
 ### B：报价后端执行清单（2026-09-20）
 
 此清单只跟踪 B 可交付的后端工作；D 的页面实现和 A 的独立模板复核由各自主责验收。
@@ -385,10 +401,10 @@ rule_violation       invalid_quantity
 - [x] 确认 `draft → saved_draft → confirmed`、schema-v2 快照和旧版本迁移；临时 SQLite 测试已覆盖。
 - [x] 完成保存/确认的幂等、stale 保护与并发测试；未确认版本不可导出。
 - [x] 完成只比较保存快照的版本 diff API 与 confirmed-only PDF API；API 契约已记录。
-- [x] 补齐数据库保存失败与 PDF 生成失败的故障注入，验证状态保留及重试路径；`tests/` 33 项通过（其中后端 18 项）。
-- [x] 渲染并目视检查[标准报价](../output/pdf/quotation-qa-standard.pdf)（1 页）和[长表报价](../output/pdf/quotation-qa-long.pdf)（5 页）：金额、换行、跨页表头、总额/条款及页脚页码正常。样本为合成 QA 数据，已备 A 独立复核。
+- [x] 补齐数据库保存失败与 PDF 生成失败的故障注入，验证状态保留及重试路径；后端 18 项通过。
+- [x] 用 `scripts/generate_pdf_qa_samples.py` 可复现生成并渲染检查[标准报价](../output/pdf/quotation-qa-standard.pdf)（1 页）和[长表报价](../output/pdf/quotation-qa-long.pdf)（5 页）；`pdf-machine-precheck.json` 的 9 项页数、字段、跨页表头、45 行、总额/条款和页脚检查通过，样本仍待 A 独立人工签字。
 - [x] 核对 D 所需的保存、确认、diff、下载接口与响应示例；Story A 的 v1/v2 HTTP 链路已通过，调用顺序和错误恢复见 [API 契约](api-contract.md#browser-integration-handoff-for-d)。
-- [x] 运行 B 相关回归并同步本文、API 契约和交付清单的最终状态；目录/后端 33 项通过，Agent 63 项通过（7 项明确 skip），`git diff --check` 通过。
+- [x] 运行相关回归并同步本文、API 契约和交付清单的最终状态；当前目录/后端/失败路径/评测门禁 38 项通过，Agent 63 项通过（7 项明确 skip），`git diff --check` 通过。
 
 B 的后端交付已完成。D 的浏览器按钮和 A 的独立模板验收仍由各自主责完成；A 可用上面的两份 QA PDF 核对合成价格、行明细、分页表头、条款和版本 provenance。
 
@@ -470,10 +486,10 @@ B 的后端交付已完成。D 的浏览器按钮和 A 的独立模板验收仍�
 - [x] confirmed-only 报价 PDF renderer 和下载 API；
 - [x] 18 项后端 migration/concurrency/lifecycle/diff/PDF/fault-injection/HTTP 测试；
 - [x] 三栏浏览器工作台和本地规格 PDF 证据；
-- [ ] 团队独立数据冻结记录；
+- [x] 团队独立数据冻结记录；
 - [ ] 真实 Bedrock tool-use trace；
 - [ ] 完整 Converse AgentResult 和有限重试；
-- [ ] confirmation/diff/报价 PDF 的浏览器操作；
+- [x] confirmation/diff/报价 PDF 的浏览器操作；
 - [x] 数据库保存与 PDF 渲染故障注入结果；
 - [ ] 正式 holdout 首轮/修复后报告；
 - [ ] 5 个案例人工/Agent 计时；

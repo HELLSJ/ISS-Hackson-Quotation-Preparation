@@ -13,6 +13,20 @@ def read(path): return json.loads((ROOT/path).read_text())
 def rows(path):
     with (ROOT/path).open(newline='',encoding='utf-8') as f:return list(csv.DictReader(f))
 
+def human_review_status(dataset_version):
+    path=ROOT/'reports/evaluation/data-freeze-review-signed.csv'
+    if not path.is_file():
+        return 'NOT PERFORMED: independent data-freeze review record is missing.'
+    review=rows('reports/evaluation/data-freeze-review-signed.csv')
+    passed=[r for r in review if r['dataset_version']==dataset_version and r['independent_human_result']=='PASS']
+    if len(review)==24 and len(passed)==24:
+        reviewers=sorted({r['reviewer'] for r in passed if r['reviewer']})
+        dates=sorted({r['reviewed_at'] for r in passed if r['reviewed_at']})
+        if len(reviewers)==1 and len(dates)==1:
+            return (f'PASSED: 24/24 independent evidence checks signed by {reviewers[0]} '
+                    f'on {dates[0]}; see reports/evaluation/data-freeze-review-signed.csv.')
+    return 'NOT PASSED: independent data-freeze review is incomplete or inconsistent.'
+
 def main():
     catalog=read('data/agent/catalog.json')
     curated=read('data/curated_specs.json')
@@ -76,7 +90,7 @@ def main():
                 demo_cases=3,offline_tests_run=result.testsRun,offline_test_failures=len(result.failures),
                 offline_test_errors=len(result.errors),data_integrity='passed',
                 model_evaluation='NOT RUN: no model API invoked; natural-language cases are fixtures, not measured accuracy.',
-                human_review='NOT PERFORMED: specifications reviewed by assistant; independent team review recommended before submission.')
+                human_review=human_review_status(catalog['dataset_version']))
     output=ROOT/'data/validation'
     output.mkdir(parents=True,exist_ok=True)
     (output/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
