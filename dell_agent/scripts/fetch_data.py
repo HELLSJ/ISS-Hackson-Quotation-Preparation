@@ -6,7 +6,7 @@ the GitHub CLI (``gh``). Relative paths are preserved so the layout matches the
 target repo:
 
     data/agent/catalog.json
-    data/agent/bedrock_tool_config.json
+    data/agent/tool_schemas.json
     data/agent/instructions.md
     data/agent/knowledge/MON-*.md
     data/processed/pricing_rules.json
@@ -40,7 +40,7 @@ DATA_ROOT = Path(__file__).resolve().parent.parent / "data"
 # Explicit single-file paths (repo-relative) to copy verbatim.
 EXPLICIT_FILES = [
     "data/agent/catalog.json",
-    "data/agent/bedrock_tool_config.json",
+    "data/agent/tool_schemas.json",
     "data/agent/instructions.md",
     "data/processed/pricing_rules.json",
 ]

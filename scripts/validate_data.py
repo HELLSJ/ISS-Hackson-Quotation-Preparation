@@ -75,9 +75,10 @@ def main():
     answers=[json.loads(l) for l in (ROOT/'data/evaluation/expected_results.jsonl').read_text().splitlines()]
     assert len(ids)==len(set(ids))==40 and set(ids)=={r['case_id'] for r in answers}
     assert len(list((ROOT/'data/agent/knowledge').glob('MON-*.md')))==12
-    schemas=read('data/agent/bedrock_tool_config.json')['tools']
-    assert {r['toolSpec']['name'] for r in schemas}=={'get_product','search_products','calculate_quote'}
-    for t in schemas:assert t['toolSpec']['inputSchema']['json']['type']=='object'
+    schemas=read('data/agent/tool_schemas.json')['tools']
+    assert {r['function']['name'] for r in schemas}=={'get_product','search_products','calculate_quote'}
+    for t in schemas:
+        assert t['type']=='function' and t['function']['parameters']['type']=='object'
     stream=io.StringIO()
     suite=unittest.defaultTestLoader.discover(
         str(ROOT/'tests'), pattern='test_catalog_tools.py'

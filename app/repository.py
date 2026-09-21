@@ -12,7 +12,7 @@ from typing import Any, Iterator
 
 from .snapshots import SnapshotError, build_confirmed_snapshot, build_saved_snapshot
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 
 def utc_now() -> str:
@@ -53,12 +53,13 @@ class Repository:
         Existing payload_json and fingerprints are never rewritten. They remain
         schema-v1 legacy saved drafts and are readable/diffable but not confirmable.
         """
+        self._migrate_conversation_drivers()
         with self.connect() as db:
             db.execute("BEGIN IMMEDIATE")
             db.execute(
                 """CREATE TABLE IF NOT EXISTS conversations (
                     id TEXT PRIMARY KEY,
-                    driver TEXT NOT NULL CHECK(driver IN ('offline','converse')),
+                    driver TEXT NOT NULL CHECK(driver IN ('offline','gateway')),
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL
                 )"""
@@ -126,7 +127,39 @@ class Repository:
             )
             db.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
 
+    def _migrate_conversation_drivers(self) -> None:
+        """Rebuild the driver constraint and map legacy ``converse`` rows."""
+        db = sqlite3.connect(self.path, timeout=15)
+        try:
+            row = db.execute(
+                "SELECT sql FROM sqlite_master WHERE type='table' AND name='conversations'"
+            ).fetchone()
+            if row is None or "'gateway'" in (row[0] or ""):
+                return
+            db.execute("PRAGMA foreign_keys = OFF")
+            with db:
+                db.execute(
+                    """CREATE TABLE conversations_v3 (
+                        id TEXT PRIMARY KEY,
+                        driver TEXT NOT NULL CHECK(driver IN ('offline','gateway')),
+                        created_at TEXT NOT NULL,
+                        updated_at TEXT NOT NULL
+                    )"""
+                )
+                db.execute(
+                    """INSERT INTO conversations_v3(id,driver,created_at,updated_at)
+                    SELECT id, CASE WHEN driver='converse' THEN 'gateway' ELSE driver END,
+                           created_at, updated_at
+                    FROM conversations"""
+                )
+                db.execute("DROP TABLE conversations")
+                db.execute("ALTER TABLE conversations_v3 RENAME TO conversations")
+        finally:
+            db.close()
+
     def create_conversation(self, driver: str) -> dict[str, Any]:
+        if driver not in {"offline", "gateway"}:
+            raise ValueError("driver must be 'offline' or 'gateway'")
         conversation_id = str(uuid.uuid4())
         now = utc_now()
         with self.connect() as db:

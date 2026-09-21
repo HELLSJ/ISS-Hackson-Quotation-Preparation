@@ -1,27 +1,185 @@
-"""Failure-path checks needed by the formal acceptance matrix."""
+"""Gateway driver integration and failure-path checks."""
 from __future__ import annotations
 
+import json
 import unittest
 from unittest.mock import patch
 
-from dell_agent.agent.loop import ConverseDriver
+from dell_agent.agent.loop import GatewayClient, GatewayDriver
+
+
+class _SequenceClient:
+    protocol = "injected"
+
+    def __init__(self, responses: list[dict]):
+        self.responses = list(responses)
+        self.messages: list[list[dict]] = []
+
+    def chat(self, messages: list[dict], _tools: list[dict]) -> dict:
+        self.messages.append(list(messages))
+        return self.responses.pop(0)
+
+
+class _OpenAISequenceClient(_SequenceClient):
+    protocol = "openai"
 
 
 class _TimeoutClient:
-    def converse(self, **_: object) -> dict:
-        raise TimeoutError("injected Bedrock timeout")
+    protocol = "injected"
+
+    def chat(self, _messages: list[dict], _tools: list[dict]) -> dict:
+        raise TimeoutError("injected gateway timeout")
+
+
+class _Response:
+    def __init__(self, payload: dict):
+        self.payload = json.dumps(payload).encode()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_args):
+        return False
+
+    def read(self) -> bytes:
+        return self.payload
 
 
 class AgentFailurePathTests(unittest.TestCase):
-    def test_bedrock_timeout_is_visible_and_falls_back_without_losing_quote(self) -> None:
-        with patch("boto3.client", return_value=_TimeoutClient()):
-            result = ConverseDriver(model_id="test-model", region="us-east-1").run(
-                "Quote 8 P2425HE. Budget SGD 2500."
-            )
+    def test_gateway_timeout_is_visible_and_falls_back_without_losing_quote(self) -> None:
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret", model="test-model",
+            client=_TimeoutClient(),
+        ).run("Quote 8 P2425HE. Budget SGD 2500.")
         self.assertEqual(result.status, "ready_to_quote")
         self.assertEqual(result.quote_draft["total_cents"], 231200)
         self.assertTrue(any("TimeoutError" in note for note in result.notes))
-        self.assertEqual(result.trace[-1]["step"], "converse_fallback")
+        self.assertEqual(result.trace[-1]["step"], "gateway_fallback")
+        self.assertNotIn("secret", json.dumps(result.to_dict()))
+
+    def test_missing_gateway_configuration_falls_back(self) -> None:
+        result = GatewayDriver().run("Quote 1 S2425H.")
+        self.assertEqual(result.status, "ready_to_quote")
+        self.assertEqual(result.trace[-1]["step"], "gateway_fallback")
+
+    def test_native_tool_call_uses_local_pricing(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": "", "tool_calls": [{
+                "id": "call-1", "type": "function", "function": {
+                    "name": "calculate_quote",
+                    "arguments": {"items": [{"sku": "MON-007", "quantity": 8}]},
+                },
+            }]}},
+            {"message": {"content": "The draft is ready.", "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret", model="test-model", client=client
+        ).run("Quote 8 P2425HE.")
+        self.assertEqual(result.status, "ready_to_quote")
+        self.assertEqual(result.quote_draft["total_cents"], 231200)
+        self.assertTrue(any(row.get("role") == "tool" for row in client.messages[-1]))
+
+    def test_openai_transcript_serializes_tool_arguments(self) -> None:
+        client = _OpenAISequenceClient([
+            {"message": {"content": "", "tool_calls": [{
+                "id": "call-1", "type": "function", "function": {
+                    "name": "calculate_quote",
+                    "arguments": {"items": [{"sku": "MON-001", "quantity": 1}]},
+                },
+            }]}},
+            {"message": {"content": "Done.", "tool_calls": []}},
+        ])
+        GatewayDriver(
+            base_url="https://gateway.example/v1", api_key="secret",
+            model="test-model", client=client,
+        ).run("Quote 1 S2425H.")
+        second_request = client.messages[-1]
+        assistant = next(row for row in second_request if row.get("tool_calls"))
+        tool_result = next(row for row in second_request if row.get("role") == "tool")
+        self.assertIsInstance(assistant["tool_calls"][0]["function"]["arguments"], str)
+        self.assertEqual(tool_result["tool_call_id"], "call-1")
+
+    def test_manual_json_tool_call_is_supported(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": '{"tool":"calculate_quote","args":{"items":[{"sku":"MON-001","quantity":2}]}}', "tool_calls": []}},
+            {"message": {"content": "Done.", "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret", model="test-model", client=client
+        ).run("Quote 2 S2425H.")
+        self.assertEqual(result.status, "ready_to_quote")
+        self.assertEqual(result.quote_draft["total_cents"], 29800)
+
+    def test_structured_clarification_populates_ask_for(self) -> None:
+        client = _SequenceClient([{"message": {
+            "content": json.dumps({
+                "status": "needs_clarification",
+                "ask_for": ["quantity"],
+                "message": "How many monitors should the quotation include?",
+            }),
+            "tool_calls": [],
+        }}])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret",
+            model="test-model", client=client,
+        ).run("Quote P2425HE.")
+        self.assertEqual(result.status, "needs_clarification")
+        self.assertEqual(result.ask_for, ["quantity"])
+        self.assertIn("How many monitors", result.notes[-1])
+
+    def test_ollama_client_uses_gateway_header_and_endpoint(self) -> None:
+        captured = {}
+
+        def fake_urlopen(request, timeout):
+            captured["url"] = request.full_url
+            captured["key"] = request.get_header("X-api-key")
+            captured["timeout"] = timeout
+            return _Response({"message": {"content": "ok", "tool_calls": []}})
+
+        client = GatewayClient("https://gateway.example", "team-key", "model", timeout=7)
+        with patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            response = client.chat([{"role": "user", "content": "hi"}], [])
+        self.assertEqual(captured, {"url": "https://gateway.example/api/chat", "key": "team-key", "timeout": 7})
+        self.assertEqual(response["message"]["content"], "ok")
+
+    def test_gateway_transport_retries_once(self) -> None:
+        client = GatewayClient(
+            "https://gateway.example", "team-key", "model",
+            max_retries=1, retry_delay=0,
+        )
+        outcomes = [
+            TimeoutError("first request timed out"),
+            _Response({"message": {"content": "ok", "tool_calls": []}}),
+        ]
+        with patch("urllib.request.urlopen", side_effect=outcomes) as request:
+            response = client.chat([{"role": "user", "content": "hi"}], [])
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(response["message"]["content"], "ok")
+
+    def test_openai_client_uses_v1_endpoint_and_normalizes_arguments(self) -> None:
+        captured = {}
+
+        def fake_urlopen(request, timeout):
+            captured["url"] = request.full_url
+            captured["authorization"] = request.get_header("Authorization")
+            captured["key"] = request.get_header("X-api-key")
+            return _Response({"choices": [{"message": {
+                "content": None,
+                "tool_calls": [{"id": "call-1", "type": "function", "function": {
+                    "name": "get_product", "arguments": '{"sku":"MON-001"}',
+                }}],
+            }}]})
+
+        client = GatewayClient("https://gateway.example/v1", "team-key", "model")
+        with patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            response = client.chat([{"role": "user", "content": "hi"}], [])
+        self.assertEqual(captured["url"], "https://gateway.example/v1/chat/completions")
+        self.assertEqual(captured["authorization"], "Bearer team-key")
+        self.assertEqual(captured["key"], "team-key")
+        self.assertEqual(
+            response["message"]["tool_calls"][0]["function"]["arguments"],
+            {"sku": "MON-001"},
+        )
 
 
 if __name__ == "__main__":

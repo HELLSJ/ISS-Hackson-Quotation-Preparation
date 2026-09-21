@@ -192,13 +192,13 @@ scripts/validate_data.py
 
 ## 7. 仍未完成的事项
 
-真实 Bedrock / 大模型：
+组织者 LLM Gateway / 大模型：
 
 ```text
-真实模型首轮评测（dev + holdout）
-真实 tool-use trace 与 fallback 检查
-记录 model ID、Region、prompt 与各版本
-Offline 与真实模型结果对比
+使用团队 API URL、API key 和 model 完成真实模型首轮评测
+保存真实 tool-use trace，并确认没有 gateway_fallback
+记录 model ID、Gateway URL 哈希、prompt 与各版本（不记录 API key）
+对比 Offline 与真实模型结果
 ```
 
 由 A 在真实首轮前后完成：
@@ -231,9 +231,9 @@ Offline 与真实模型结果对比
 - Chrome 153 真实页面完成 v1/v2 保存、diff、确认、PDF 下载以及页面/快照/PDF 金额一致性验收；报告和截图在 `browser_acceptance/20260921T074342Z/`。
 - 9 项异常矩阵全部通过，见 `exception-acceptance.md`。
 - 五案例 Agent 计时工具和真人交互计时工具已就绪。Offline readiness 数据有效但不属于真实模型效率指标；真实计时只有在无 fallback、Agent 结果正确且 5 条人工记录完整并核对 PASS 时才通过门禁。
-- 2026-09-22 已用排除 `AWS_ACCESS_KEY_ID`、`AWS_SECRET_ACCESS_KEY` 和 `AWS_SESSION_TOKEN` 环境变量的 STS 命令验证 `showme-agent` Profile。随后只读调用 `bedrock:ListFoundationModels` 被 AWS Organizations SCP 显式拒绝；凭证链已就绪，但当前账户/角色尚不能用于发现 Bedrock 模型。
-- 2026-09-22 又用独立长期 Bedrock API key 在 `ap-southeast-1` 调用 `amazon.nova-lite-v1:0` 的 `Converse`。AWS 已识别关联 IAM 用户，说明 bearer token 认证有效；`bedrock:InvokeModel` 随后被同一 SCP `p-md82f7b5` 显式拒绝。该证据排除了本机凭据格式、SSO Session 过期和仅 `us-east-1` 区域限制，真实推理仍待组织策略解除或更换账户。
+- 历史记录（已由组织者澄清取代）：2026-09-22 验证过 AWS Profile，但直接模型服务调用受组织策略拒绝。该 Profile 现在只用于 Lightsail 托管。
+- 组织者最新说明要求模型推理使用团队 API URL 与 API key。项目已移除直接模型服务依赖，新增 Gateway client、原生/JSON 工具回路、有限重试、显式 fallback、连接检查和评测参数。
 
-完成 A 的最终交付仍需：非作者签核 sealed expected 与 PDF 模板、解除当前 Bedrock SCP 限制或切换到允许 Bedrock 的账户/角色、取得可调用的 Bedrock model ID，以及 5 次真人计时。
+完成 A 的最终交付仍需：非作者签核 sealed expected 与 PDF 模板、使用组织者团队 Gateway 完成真实首轮评测，以及 5 次真人计时。
 
 可运行 `.venv/bin/python scripts/check_a_completion.py` 统一检查上述证据门禁；它会写入 `a-completion-status.json`，在所有门禁通过前返回非零退出码。

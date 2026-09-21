@@ -5,7 +5,7 @@ import re
 import threading
 from typing import Any
 
-from dell_agent.agent.loop import ConverseDriver, OfflineDriver
+from dell_agent.agent.loop import GatewayDriver, OfflineDriver
 from dell_agent.agent.tools import dispatch
 
 from .config import Settings
@@ -26,14 +26,15 @@ class QuotationService:
         self.repository = repository
         self.settings = settings
         self.offline = OfflineDriver()
-        self.converse = ConverseDriver(
-            model_id=settings.bedrock_model_id,
-            region=settings.aws_region,
+        self.gateway = GatewayDriver(
+            base_url=settings.gateway_url,
+            api_key=settings.gateway_api_key,
+            model=settings.llm_model,
         )
         self._message_lock = threading.Lock()
 
     def driver(self, name: str):
-        return self.converse if name == "converse" else self.offline
+        return self.gateway if name == "gateway" else self.offline
 
     def process_message(self, conversation_id: str, content: str) -> dict[str, Any] | None:
         """Replay all durable user turns and atomically append the new exchange."""
@@ -47,8 +48,8 @@ class QuotationService:
             result = agent_result.to_dict()
             result["configured_driver"] = conversation["driver"]
             result["used_fallback"] = any(
-                "used the deterministic offline driver" in note.lower()
-                for note in result.get("notes", [])
+                isinstance(row, dict) and row.get("step") == "gateway_fallback"
+                for row in result.get("trace", [])
             )
             result["conflicts"] = self._identify_conflicts(content, result)
             result["suggestions"] = self._suggest_alternatives(content, result)
@@ -112,7 +113,7 @@ class QuotationService:
         status = result.get("status")
         candidates = result.get("candidates") or []
         suggestions = result.get("suggestions") or []
-        if result.get("configured_driver") == "converse" and not result.get("used_fallback") and status != "ready_to_quote":
+        if result.get("configured_driver") == "gateway" and not result.get("used_fallback") and status != "ready_to_quote":
             model_notes = [
                 note for note in result.get("notes", [])
                 if "synthetic/demo data" not in note.lower()

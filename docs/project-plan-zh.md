@@ -43,7 +43,7 @@
 - 税费、多币种和复杂企业审批流；
 - 登录、多租户和复杂权限；
 - 真实发送邮件、锁库存、创建订单或采购单；
-- 模型微调、复杂多 Agent、向量数据库或临时增加 Bedrock Knowledge Base；
+- 模型微调、复杂多 Agent、向量数据库或临时增加云端 Knowledge Base；
 - 为视频效果增加与核心流程无关的动画。
 
 任何新增需求必须直接改善三条演示故事或验收指标，否则进入赛后路线图。
@@ -101,7 +101,7 @@ from dell_agent.agent.tools import dispatch
 2. `saved_draft`：已保存的不可变版本，但仍未批准；
 3. `confirmed/exportable`：用户明确确认、通过完整性检查、可以导出 PDF 的版本。
 
-当前后端已完成三个状态及其强制边界：`draft` 只存在于计算结果，schema-v2 `saved_draft` 是不可变未批准版本，`confirmed/exportable` 通过独立 append-only confirmation 记录产生。浏览器仍需由前端任务接入确认、diff 和 PDF 按钮。
+当前后端已完成三个状态及其强制边界：`draft` 只存在于计算结果，schema-v2 `saved_draft` 是不可变未批准版本，`confirmed/exportable` 通过独立 append-only confirmation 记录产生。浏览器已接入确认、diff 和 PDF 按钮并通过端到端验收。
 
 ## 4. 当前基线
 
@@ -123,17 +123,17 @@ from dell_agent.agent.tools import dispatch
 | 人工确认 | 独立 append-only confirmation，精确 token 重试幂等，旧 schema 不可确认 |
 | 版本 diff | 只比较存储快照，支持 added/removed/changed、金额及元数据差异 |
 | 报价 PDF | ReportLab 从 confirmed snapshot 生成，不调用 Agent、目录或计价工具 |
-| 应用测试 | 18 项临时数据库测试覆盖迁移、并发、确认、diff、PDF、故障注入和 HTTP |
+| 应用测试 | 19 项临时数据库测试覆盖迁移、并发、确认、diff、PDF、故障注入和 HTTP |
 | 浏览器工作台 | 三栏页面、候选选择、规格证据、预算、数量修改、刷新恢复 |
-| 云失败回退 | Converse 设置或调用失败时显式回退 OfflineDriver |
+| 云失败回退 | Gateway 配置或调用失败时显式回退 OfflineDriver |
 
-当前机器报告记录：15 项目录工具测试通过；18 项后端生命周期测试通过；Agent 测试 63 项通过，其中 7 项是明确记录的 OfflineDriver 启发式边界。三条固定演示不在 skip 中。
+当前机器报告记录：15 项目录工具测试通过；19 项后端生命周期测试通过；Agent 测试 63 项通过，其中 7 项是明确记录的 OfflineDriver 启发式边界。三条固定演示不在 skip 中。
 
 ### 4.2 部分完成
 
 | 能力 | 已有部分 | 仍缺部分 |
 |---|---|---|
-| Bedrock Converse | client、tool-use loop、toolConfig、fallback | 团队账户真实调用、完整结构化结果、有限重试和真实评估 |
+| 组织者 LLM Gateway | client、原生/JSON tool loop、通用 schema、一次有限重试、显式 fallback 和结构化结果已完成 | 团队 API key 真实调用和正式评估 |
 | 报价版本与页面 | schema-v2 保存、确认、diff、PDF、故障注入、页面操作和自动化验收 | A 独立复核最终 PDF 模板 |
 | Agent 评估 | dev/holdout fixtures 的 expected 已独立审核；新建 sealed holdout 与隔离运行器已就绪 | sealed expected 非作者审核、真实模型首轮结果和失败分类 |
 | 审计 | 每轮 `AgentResult.trace` 随消息保存 | 可读工具审计页、CloudWatch/部署日志验证 |
@@ -141,7 +141,7 @@ from dell_agent.agent.tools import dispatch
 
 ### 4.3 未完成
 
-- 团队 AWS 账户上的真实 Bedrock tool-use；
+- 使用团队 API key 的组织者 Gateway 真实 tool-use；
 - 正式 holdout 首轮结果和修复后结果；
 - 5 个案例的人工流程与 Agent 流程计时；
 - 一键恢复固定演示数据；
@@ -150,8 +150,8 @@ from dell_agent.agent.tools import dispatch
 ### 4.4 不能声称已经完成的事项
 
 - 不能把 fixture 数量写成模型准确率；
-- 不能把 OfflineDriver fallback 写成 Bedrock 成功；
-- 不能把 15 项数据/工具测试或 18 项后端测试写成模型准确率；
+- 不能把 OfflineDriver fallback 写成 Gateway 成功；
+- 不能把 15 项数据/工具测试或 19 项后端测试写成模型准确率；
 - 不能把 `saved_draft` 写成已批准报价；
 - 不能在未计时前声称“提升 80%”；
 - 不能承诺库存、交期、税费或真实 Dell 价格。
@@ -163,7 +163,7 @@ Browser workbench
   → FastAPI (`app/main.py`)
       → QuotationService
           → OfflineDriver
-          → ConverseDriver → Amazon Bedrock Converse
+          → GatewayDriver → 组织者 LLM Gateway
       → `dell_agent.agent.tools.dispatch`
           → frozen `catalog.json` / pricing rules / evidence
       → `storage/app.sqlite`
@@ -262,33 +262,31 @@ rule_violation       invalid_quantity
 
 工作和验收见第 6.2 节。完成后更新校验报告中的 human review 状态，并固定演示数据库种子。
 
-### Gate B（P0）：真实 Bedrock 调用与结果完整化
+### Gate B（P0）：组织者 LLM Gateway 迁移与真实调用
 
-**主责：C AWS Agent；B 配合；预计 1 天。**
+**主责：C Gateway Agent；B 配合。代码迁移已完成，团队 API 真实运行待执行。**
 
-**2026-09-22 状态：**`showme-agent` Profile 已通过排除环境变量后的 STS 验证；该角色调用 `bedrock:ListFoundationModels` 被 SCP 显式拒绝。随后创建的独立长期 Bedrock API key 已成功认证为关联 IAM 用户，但在 `ap-southeast-1` 调用 Nova Lite `Converse` 时，`bedrock:InvokeModel` 仍被同一 SCP `p-md82f7b5` 显式拒绝。这确认阻塞位于账户/OU 的组织策略层，而非本机凭据格式或单一区域。需由组织管理员调整 SCP，或改用允许 Bedrock 的账户/角色，才能继续真实模型评测。
+**2026-09-22 状态：**组织者澄清模型推理必须使用邮件提供的 API URL 与团队 API key，AWS 账户用于托管。项目已移除直接模型服务依赖和云 SDK，改为 `GatewayDriver`。旧 SQLite `converse` 会迁移为 `gateway`。
 
-前置条件：
+已完成：
 
-- 团队 AWS 凭据；
-- 按 [AWS 凭据配置指南](aws-credentials-setup-zh.md) 建立可验证的 `showme-agent` Profile；
-- 明确的 Region；
-- 账户可访问且支持 Converse/tool use 的模型 ID；
-- 后端最小 IAM 权限；
-- `requirements-cloud.txt` 已安装。
+1. `LLM_GATEWAY_URL`、`LLM_GATEWAY_API_KEY`、`LLM_MODEL` 三项环境配置；
+2. Ollama 兼容 `/api/chat` + `X-API-Key`，以及 `/v1` OpenAI 兼容地址；
+3. 原生 `tool_calls` 与 JSON `{tool,args}` 工具请求回路；
+4. 所有工具在本地通过 `dispatch` 执行，事实和金额不交给模型；
+5. HTTP 429/5xx、网络超时最多重试一次；失败写入 `gateway_fallback`；
+6. API key 不进入 trace、数据库或评测报告；报告只保存 Gateway URL 哈希；
+7. 应用、评测、效率计时、UI 标签、tool schema 和配置文档统一切换；
+8. 自动化覆盖原生调用、JSON fallback、超时 fallback、请求头和旧数据库迁移。
 
-工作：
+待团队 API 执行：
 
-1. 用 Story A 完成第一次真实 `converse` 调用；
-2. 确认 `configured_driver=converse`、`used_fallback=false`；
-3. 保存真实 `converse_start → toolUse → toolResult` trace；
-4. 补齐原生 Converse 的 `ask_for`、`candidates` 和 `citations` 组装；
-5. 将工具错误映射到八种业务状态；
-6. 对可重试的超时/限流最多重试一次；
-7. 用 Story A/B/C 对比 Offline 和 Converse 的事实、金额与阻断结果；
-8. 模拟调用失败，确认页面显示 Offline fallback 且不丢状态。
+1. 按 [LLM Gateway 配置指南](llm-gateway-setup-zh.md) 运行连通性检查；
+2. 用 Story A/B/C 确认 `configured_driver=gateway`、`used_fallback=false`；
+3. 保存真实 `gateway_start → gateway_turn_* tool → final_text` trace；
+4. 完成 sealed holdout 首轮评测和真实效率计时。
 
-**验收：**三条 Story 的真实模型路径均调用工具；事实和金额来自工具；金额与离线路径逐分一致；无隐式 fallback；失败时回退可见且状态保留。
+**验收：**三条 Story 的真实 Gateway 路径均调用本地工具；事实和金额来自工具；金额与离线路径逐分一致；无隐式 fallback；失败时回退可见且状态保留。
 
 ### Gate C（P0）：确认语义、快照元数据和应用测试——后端已完成
 
@@ -332,7 +330,7 @@ rule_violation       invalid_quantity
 
 1. 由非 fixture 作者审核 sealed holdout expected labels；
 2. 首次解封 20 条 holdout，保存未经修改的首轮结果；
-3. 记录 driver、model ID、Region、prompt、dataset 和规则版本；
+3. 记录 driver、model ID、Gateway URL 哈希、prompt、dataset 和规则版本，不保存 API key；
 4. 将失败分为需求理解、状态机、工具参数、模型波动、应用或数据问题；
 5. 修复根因，只重测相关案例；
 6. 首轮和修复后结果分开保存；
@@ -360,7 +358,7 @@ rule_violation       invalid_quantity
 工作：
 
 1. 增加一键恢复固定演示数据；
-2. 固定 model、Region、prompt、dataset、price 和 rule 版本；
+2. 固定 model、Gateway 配置哈希、prompt、dataset、price 和 rule 版本；
 3. 输出评估表、失败案例和人工复算结果；
 4. 从干净环境完整启动并走 Story A/B/C；
 5. 检查源码、日志、终端历史和录屏没有凭据或客户数据；
@@ -376,7 +374,7 @@ rule_violation       invalid_quantity
 |---|---|---|
 | A：数据与评估 | 人工冻结、expected 审核、holdout、金额复核、指标 | 冻结记录、首轮/修复后报告、计时结果 |
 | B：报价后端 | 确认语义、schema migration、应用测试、diff、PDF、故障注入和 API 交接已完成 | 维护 API；向 D 提供接入契约，向 A 提供模板复核样本 |
-| C：AWS Agent | Bedrock 真实调用、结果组装、重试、fallback、trace | 三条 Story 的真实 trace 和模型评估元数据 |
+| C：Gateway Agent | 组织者 API 真实调用、结果组装、重试、fallback、trace | 三条 Story 的真实 trace 和模型评估元数据 |
 | D：前端与演示 | 确认/diff/PDF 页面、异常入口、恢复、视频 | 完整工作台、演示模式、30 分钟视频 |
 
 ### A：数据与评估执行清单（2026-09-21）
@@ -386,7 +384,7 @@ rule_violation       invalid_quantity
 - [x] 金额复核：15 条独立 Decimal/人工复算全部 PASS。
 - [x] B 后端金额一致性：计算、保存、确认、diff 与 PDF 的 3 条锚点全部 PASS。
 - [ ] sealed blind holdout 已建立并与运行时隔离；仍需非作者完成独立 expected 审核。
-- [ ] 运行真实 Bedrock 首轮评测，保存原始结果、trace 和运行元数据；`showme-agent` credential chain 已于 2026-09-22 验证，当前受组织 SCP 的 Bedrock 显式拒绝阻塞。
+- [ ] 使用组织者 LLM Gateway 运行真实首轮评测，保存原始结果、trace 和脱敏运行元数据。
 - [ ] 输出正式指标、失败分类及修复后独立报告。
 - [x] Chrome 完成页面保存 v1/v2、diff、确认、下载及页面/快照/PDF 金额一致性验收；证据在 `reports/evaluation/browser_acceptance/`。
 - [ ] A 人工复核最终 PDF 模板和分页。
@@ -401,10 +399,10 @@ A 收口时运行 `.venv/bin/python scripts/check_a_completion.py`；只有生�
 - [x] 确认 `draft → saved_draft → confirmed`、schema-v2 快照和旧版本迁移；临时 SQLite 测试已覆盖。
 - [x] 完成保存/确认的幂等、stale 保护与并发测试；未确认版本不可导出。
 - [x] 完成只比较保存快照的版本 diff API 与 confirmed-only PDF API；API 契约已记录。
-- [x] 补齐数据库保存失败与 PDF 生成失败的故障注入，验证状态保留及重试路径；后端 18 项通过。
+- [x] 补齐数据库保存失败与 PDF 生成失败的故障注入，验证状态保留及重试路径；后端 19 项通过。
 - [x] 用 `scripts/generate_pdf_qa_samples.py` 可复现生成并渲染检查[标准报价](../output/pdf/quotation-qa-standard.pdf)（1 页）和[长表报价](../output/pdf/quotation-qa-long.pdf)（5 页）；`pdf-machine-precheck.json` 的 9 项页数、字段、跨页表头、45 行、总额/条款和页脚检查通过，样本仍待 A 独立人工签字。
 - [x] 核对 D 所需的保存、确认、diff、下载接口与响应示例；Story A 的 v1/v2 HTTP 链路已通过，调用顺序和错误恢复见 [API 契约](api-contract.md#browser-integration-handoff-for-d)。
-- [x] 运行相关回归并同步本文、API 契约和交付清单的最终状态；当前目录/后端/失败路径/评测门禁 38 项通过，Agent 63 项通过（7 项明确 skip），`git diff --check` 通过。
+- [x] 运行相关回归并同步本文、API 契约和交付清单的最终状态；当前目录/后端/Gateway/评测门禁 47 项通过，Agent 63 项通过（7 项明确 skip），`git diff --check` 通过。
 
 B 的后端交付已完成。D 的浏览器按钮和 A 的独立模板验收仍由各自主责完成；A 可用上面的两份 QA PDF 核对合成价格、行明细、分页表头、条款和版本 provenance。
 
@@ -448,7 +446,7 @@ B 的后端交付已完成。D 的浏览器按钮和 A 的独立模板验收仍�
 | 06:00–14:00 | Story A 完整流程 | 追问、候选、证据、v1/v2、diff、PDF |
 | 14:00–18:00 | Story B 规格陷阱 | U2724D/U2724DE PDF 页码 |
 | 18:00–21:00 | Story C 政策边界 | 5% 阻断和交期未知 |
-| 21:00–25:00 | Bedrock 与确定性工具架构 | 真实 tool-use trace、fallback |
+| 21:00–25:00 | 组织者 Gateway 与确定性工具架构 | 真实 tool-use trace、fallback |
 | 25:00–28:00 | holdout、金额核对和耗时 | 首轮结果、失败项、实测数据 |
 | 28:00–30:00 | 交付结果和赛后路线 | 最终报价、可扩展 ERP/CRM 接口 |
 
@@ -484,11 +482,11 @@ B 的后端交付已完成。D 的浏览器按钮和 A 的独立模板验收仍�
 - [x] append-only 人工确认与不可变 confirmed snapshots；
 - [x] v1/v2 结构化 diff API；
 - [x] confirmed-only 报价 PDF renderer 和下载 API；
-- [x] 18 项后端 migration/concurrency/lifecycle/diff/PDF/fault-injection/HTTP 测试；
+- [x] 19 项后端 migration/concurrency/lifecycle/diff/PDF/fault-injection/HTTP 测试；
 - [x] 三栏浏览器工作台和本地规格 PDF 证据；
 - [x] 团队独立数据冻结记录；
-- [ ] 真实 Bedrock tool-use trace；
-- [ ] 完整 Converse AgentResult 和有限重试；
+- [ ] 组织者 Gateway 真实 tool-use trace；
+- [x] Gateway AgentResult、原生/JSON 工具回路和有限重试；
 - [x] confirmation/diff/报价 PDF 的浏览器操作；
 - [x] 数据库保存与 PDF 渲染故障注入结果；
 - [ ] 正式 holdout 首轮/修复后报告；

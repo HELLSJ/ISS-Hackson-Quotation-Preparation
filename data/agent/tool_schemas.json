@@ -1,0 +1,112 @@
+{
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "search_products",
+        "description": "Search this fixed Dell monitor catalogue using explicit structured constraints. query is a model/name keyword, not a natural language request. Size is actual viewable diagonal; 23.81-inch products are marketed as 24-inch but do not meet a strict 24.0-inch minimum. Prices are synthetic SGD demo prices. Unknown fields do not satisfy filters.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string"
+            },
+            "usb_c_video": {
+              "type": "boolean"
+            },
+            "min_pd_watts": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "min_screen_inches": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "max_screen_inches": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "resolution": {
+              "type": "string",
+              "description": "Exact native resolution, e.g. 1920x1080, 1920x1200, 2560x1440 or 3840x2160"
+            },
+            "min_refresh_hz": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_unit_price_cents": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "get_product",
+        "description": "Get a confirmed SKU, its public specifications, field-level PDF evidence, and synthetic price. No stock or lead-time data is available.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sku": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "sku"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "calculate_quote",
+        "description": "Calculate an unapproved quotation draft using catalogue prices and fixed rules. Never pass custom unit prices. Discount is in basis points, 500 means 5 percent; do not offer discounts without explicit user confirmation. Never invent a quantity. Inventory, delivery and taxes are not modelled.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "sku": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "discount_bps": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 500
+                  }
+                },
+                "required": [
+                  "sku",
+                  "quantity"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "budget_cents": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "items"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

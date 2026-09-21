@@ -36,8 +36,8 @@ def main() -> int:
     freeze = read_json(ROOT / "reports/evaluation/freeze-manifest.json")
     sealed = read_json(ROOT / "reports/evaluation/sealed-holdout-manifest.json")
     browser_path = latest("reports/evaluation/browser_acceptance/*/result.json")
-    formal_path = latest("reports/evaluation/runs/*-converse-first-pass/metrics.json")
-    timing_path = latest("reports/evaluation/timing/*-converse-first-pass/summary.json")
+    formal_path = latest("reports/evaluation/runs/*-gateway-first-pass/metrics.json")
+    timing_path = latest("reports/evaluation/timing/*-gateway-first-pass/summary.json")
     pdf_signed, pdf_detail = signed_csv(
         ROOT / "reports/evaluation/pdf-template-review.csv", 8
     )

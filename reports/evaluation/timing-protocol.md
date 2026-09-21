@@ -22,14 +22,12 @@
 
 ```bash
 .venv/bin/python scripts/run_efficiency_timing.py \
-  --driver converse \
-  --model-id "$BEDROCK_MODEL_ID" \
-  --region "$AWS_REGION" \
+  --driver gateway \
   --manual-csv reports/evaluation/manual-timing-input.csv \
   --label first-pass
 ```
 
-计时从调用 Driver 前开始，到结构化 `AgentResult` 返回时停止。若任何案例走 fallback，报告会把 `valid_real_model_timing` 标为 `false`。
+计时从调用 Driver 前开始，到结构化 `AgentResult` 返回时停止。若任何案例走 fallback、缺少 `gateway_start`，或整轮没有真实工具调用，报告会把 `valid_real_model_timing` 标为 `false`。
 真实模型命令只有在无 fallback、5 条 Agent 结果均正确、5 条人工记录完整且均核对为 `PASS` 时才以成功状态结束；否则保留报告并返回非零退出码。
 
 ## 验收

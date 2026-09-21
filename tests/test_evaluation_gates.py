@@ -15,14 +15,22 @@ from scripts import run_formal_evaluation as formal
 
 class EvaluationGateTests(unittest.TestCase):
     def test_fallback_detection_uses_trace_marker(self):
-        fallback = {"trace": [{"step": "converse_fallback", "result": "failure"}], "notes": []}
+        fallback = {"trace": [{"step": "gateway_fallback", "result": "failure"}], "notes": []}
         ordinary = {"trace": [], "notes": ["offline driver text is not a trace marker"]}
         self.assertTrue(formal.has_fallback(fallback))
         self.assertTrue(timing.has_fallback(fallback))
         self.assertFalse(formal.has_fallback(ordinary))
         self.assertFalse(timing.has_fallback(ordinary))
+        real_trace = {
+            "trace": [
+                {"step": "gateway_start", "result": {"model": "test"}},
+                {"step": "gateway_turn_0", "tool": "calculate_quote", "result": "ok"},
+            ]
+        }
+        self.assertEqual(formal.gateway_trace_counts(real_trace), (True, 1))
+        self.assertEqual(timing.gateway_trace_counts(real_trace), (True, 1))
 
-    def test_converse_preflight_rejects_pending_review(self):
+    def test_gateway_preflight_rejects_pending_review(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             inputs = root / "inputs.jsonl"

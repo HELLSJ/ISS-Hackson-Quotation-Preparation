@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from dell_agent.agent.loop import ConverseDriver, OfflineDriver
+from dell_agent.agent.loop import GatewayDriver, OfflineDriver
 
 SEALED_INPUTS = ROOT / "data/evaluation/sealed_holdout_enquiries.jsonl"
 SEALED_EXPECTED = ROOT / "reports/evaluation/sealed_holdout_expected.jsonl"
@@ -56,9 +56,24 @@ def git_state() -> dict[str, Any]:
 
 def has_fallback(result: dict[str, Any]) -> bool:
     return any(
-        isinstance(row, dict) and row.get("step") == "converse_fallback"
+        isinstance(row, dict) and row.get("step") == "gateway_fallback"
         for row in result.get("trace", [])
     )
+
+
+def gateway_trace_counts(result: dict[str, Any]) -> tuple[bool, int]:
+    trace = result.get("trace", [])
+    started = any(
+        isinstance(row, dict) and row.get("step") == "gateway_start"
+        for row in trace
+    )
+    tool_calls = sum(
+        isinstance(row, dict)
+        and str(row.get("step", "")).startswith("gateway_turn_")
+        and bool(row.get("tool"))
+        for row in trace
+    )
+    return started, tool_calls
 
 
 def verify_manifest(require_review: bool) -> dict[str, Any]:
@@ -139,19 +154,22 @@ def rate(scored: list[dict[str, Any]], key: str) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--driver", choices=("offline", "converse"), required=True)
-    parser.add_argument("--model-id", default=os.getenv("BEDROCK_MODEL_ID", ""))
-    parser.add_argument("--region", default=os.getenv("AWS_REGION") or os.getenv("AWS_DEFAULT_REGION") or "")
+    parser.add_argument("--driver", choices=("offline", "gateway"), required=True)
+    parser.add_argument("--gateway-url", default=os.getenv("LLM_GATEWAY_URL", ""))
+    parser.add_argument("--model-id", default=os.getenv("LLM_MODEL", ""))
     parser.add_argument("--label", default="first-pass")
     args = parser.parse_args()
-    if args.driver == "converse" and (not args.model_id or not args.region):
-        parser.error("converse evaluation requires --model-id and --region")
+    gateway_key = os.getenv("LLM_GATEWAY_API_KEY", "")
+    if args.driver == "gateway" and (not args.gateway_url or not gateway_key or not args.model_id):
+        parser.error("gateway evaluation requires LLM_GATEWAY_URL, LLM_GATEWAY_API_KEY and LLM_MODEL")
 
-    manifest = verify_manifest(require_review=args.driver == "converse")
+    manifest = verify_manifest(require_review=args.driver == "gateway")
     cases = load_jsonl(SEALED_INPUTS)
     if len(cases) != manifest["case_count"]:
         raise SystemExit("sealed input count does not match the manifest")
-    driver = OfflineDriver() if args.driver == "offline" else ConverseDriver(model_id=args.model_id, region=args.region)
+    driver = OfflineDriver() if args.driver == "offline" else GatewayDriver(
+        base_url=args.gateway_url, api_key=gateway_key, model=args.model_id
+    )
     started = datetime.now(timezone.utc)
     run_id = started.strftime("%Y%m%dT%H%M%SZ") + f"-{args.driver}-{args.label}"
     out = RUNS / run_id
@@ -183,6 +201,9 @@ def main() -> int:
     raw_by_id = {row["case_id"]: row for row in raw}
     scored = [score(case, raw_by_id[case["case_id"]]["result"], expected[case["case_id"]]) for case in cases]
     fallback_count = sum(bool(row["result"].get("used_fallback")) for row in raw)
+    gateway_traces = [gateway_trace_counts(row["result"]) for row in raw]
+    gateway_started_count = sum(started for started, _ in gateway_traces)
+    gateway_tool_call_count = sum(count for _, count in gateway_traces)
     metrics = {
         "run_id": run_id,
         "label": args.label,
@@ -190,7 +211,7 @@ def main() -> int:
         "finished_at": datetime.now(timezone.utc).isoformat(),
         "driver": args.driver,
         "model_id": args.model_id or None,
-        "region": args.region or None,
+        "gateway_url_sha256": hashlib.sha256(args.gateway_url.encode()).hexdigest() if args.gateway_url else None,
         "git_commit": git_head(),
         "dataset_version": cases[0]["dataset_version"],
         "price_version": "demo-v1",
@@ -200,7 +221,14 @@ def main() -> int:
         "answer_key_loaded_after_inference": True,
         "case_count": len(cases),
         "fallback_count": fallback_count,
-        "valid_real_model_run": args.driver == "converse" and fallback_count == 0,
+        "gateway_started_count": gateway_started_count,
+        "gateway_tool_call_count": gateway_tool_call_count,
+        "valid_real_model_run": (
+            args.driver == "gateway"
+            and fallback_count == 0
+            and gateway_started_count == len(cases)
+            and gateway_tool_call_count > 0
+        ),
         "metrics": {key: rate(scored, key) for key in ("status", "clarification", "selection", "amount", "policy_block", "evidence")},
         "all_machine_checks": {"passed": sum(row["passed"] for row in scored), "total": len(scored), "rate": sum(row["passed"] for row in scored) / len(scored)},
         "failure_categories": {name: sum(row["failure_category"] == name for row in scored) for name in sorted({row["failure_category"] for row in scored if row["failure_category"]})},
@@ -210,7 +238,7 @@ def main() -> int:
     (out / "metrics.json").write_text(json.dumps(metrics, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     lines = [
         f"# Formal evaluation — {run_id}", "",
-        f"- Driver: `{args.driver}`", f"- Model: `{args.model_id or 'none'}`", f"- Region: `{args.region or 'none'}`",
+        f"- Driver: `{args.driver}`", f"- Model: `{args.model_id or 'none'}`",
         f"- Valid real-model run: **{metrics['valid_real_model_run']}**", f"- Fallbacks: **{fallback_count}**", "",
         "## Metrics", "", "| Metric | Passed | Total | Rate |", "|---|---:|---:|---:|",
     ]

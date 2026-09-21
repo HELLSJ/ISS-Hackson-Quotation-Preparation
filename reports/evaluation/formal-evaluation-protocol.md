@@ -23,18 +23,17 @@
 
 ```bash
 .venv/bin/python scripts/run_formal_evaluation.py \
-  --driver converse \
-  --model-id "$BEDROCK_MODEL_ID" \
-  --region "$AWS_REGION" \
+  --driver gateway \
   --label first-pass
 ```
 
 正式运行必须满足：
 
-- `driver=converse`；
+- `driver=gateway`；
 - `fallback_count=0`；
+- `gateway_started_count=20` 且 `gateway_tool_call_count>0`；
 - `valid_real_model_run=true`；
-- 保存 model ID、Region、Git commit、dataset/price/rule version 和输入/答案哈希。
+- 保存 model ID、Gateway URL 哈希、Git commit、dataset/price/rule version 和输入/答案哈希；不保存 API key。
 
 运行器会在推理前校验输入哈希和 manifest 审核状态；全部原始结果逐条落盘后才读取并校验答案哈希。真实运行若未审核或发生 fallback 会返回非零退出码。
 

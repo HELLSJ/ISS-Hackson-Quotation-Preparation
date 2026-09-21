@@ -15,7 +15,7 @@
 | [processed/field_evidence.csv](processed/field_evidence.csv) | 96 条字段级证据 | 型号、尺寸、分辨率、刷新率、USB-C 功能等对应的 PDF 页码 |
 | [processed/sources.csv](processed/sources.csv) | 来源链接和文件信息 | 原件来源、下载日期、页数、使用说明 |
 | [../storage/catalog.sqlite](../storage/catalog.sqlite) | 已导入的目录数据库 | products 表包含完整 JSON，prices 表包含模拟价；无客户数据 |
-| [agent/bedrock_tool_config.json](agent/bedrock_tool_config.json) | 3 个工具定义 | 对应 Bedrock Converse 的 toolConfig 结构 |
+| [agent/tool_schemas.json](agent/tool_schemas.json) | 3 个工具定义 | OpenAI/Ollama 兼容的 function schema |
 | [agent/instructions.md](agent/instructions.md) | Agent 数据使用说明 | 用于系统提示词的起点 |
 | [agent/knowledge/](agent/knowledge/) | 12 份规格知识卡片 | 可选检索输入；不包含价格和评估答案 |
 | [evaluation/](evaluation/) | 20 个开发案例、20 个验收案例、3 个演示故事及预期结果 | 用于后续测试，不上传到 Agent 知识库 |
@@ -88,17 +88,16 @@ python scripts/catalog_tools.py calculate_quote '{"items":[{"sku":"MON-007","qua
 
 所有工具返回的金额是整数分。`calculate_quote` 只计算草稿，不保存版本、不审批、不生成 PDF、不发消息。不要把它的成功返回当作用户已经确认。
 
-## 如何接到 AWS / Bedrock
+## 如何接到组织者 LLM Gateway
 
-1. 将 `data/agent/catalog.json` 放在后端可读取的位置；最简单的是与后端部署包一起提供，也可以存入自己的私有 S3 桶后由后端加载。
-2. 将 `scripts/catalog_tools.py` 作为后端工具模块；实例化 `CatalogTools()` 后使用 `dispatch(tool_name, arguments)`。
-3. 加载 `data/agent/bedrock_tool_config.json` 作为 Converse 请求中的 `toolConfig`，选择支持工具调用且账户可访问的模型。
-4. 模型返回工具调用时，由后端执行 `dispatch`，再把 JSON 结果作为对应工具结果交回模型。
-5. 如果使用知识检索，仅索引 `agent/knowledge/` 中的规格卡片；价格仍从工具读取并计算。
+1. 后端从 `data/agent/catalog.json` 和规则文件加载冻结数据。
+2. `dell_agent.agent.tools.dispatch` 是唯一工具入口。
+3. `data/agent/tool_schemas.json` 提供 OpenAI/Ollama 兼容的三个 function schema。
+4. `GatewayDriver` 把 schema 发给组织者 Gateway，在本地执行模型请求的工具，再把 JSON 结果发回。
+5. Gateway 不支持原生工具调用时，驱动也能解析组织者示例中的 `{"tool":"...","args":{...}}`。
+6. 知识检索只允许读取 `agent/knowledge/` 规格卡；价格始终由工具读取和计算。
 
-工具格式依据 [AWS ToolSpecification](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ToolSpecification.html) 与 [Converse 的 toolConfig 定义](https://docs.aws.amazon.com/cli/latest/reference/bedrock-runtime/converse.html)。该配置适用于 Converse 工具调用，不是 Bedrock Agents Action Group 的导入文件。
-
-目前未创建 AWS 资源、未上传数据、未调用任何模型。数据包和离线工具已经可用；云端权限、模型调用循环及应用界面属于后续集成。
+真实 API key 只通过 `LLM_GATEWAY_API_KEY` 环境变量提供，不能写进数据包或仓库。配置步骤见 [组织者 LLM Gateway 配置指南](../docs/llm-gateway-setup-zh.md)。
 
 ## 如何重新下载、提取和构建
 
@@ -140,4 +139,4 @@ python scripts/validate_data.py
 
 规格源自 `sources.csv` 中链接的 Dell 官方英文手册。原 PDF 保留 Dell 版权；公开下载不等于开放数据许可。本包保存原件供溯源，公开发布原件前检查再分发条件。生成的价格、规则和询价均明确标记为模拟，不代表 Dell 报价、库存或商业政策。
 
-完整项目范围、当前进展和后续 Gate 见 [项目总规划](../docs/project-plan-zh.md)。数据部分已经落地；后续按总规划完成独立冻结、真实 Bedrock、确认/diff/PDF 和正式评估。
+完整项目范围、当前进展和后续 Gate 见 [项目总规划](../docs/project-plan-zh.md)。数据部分已经落地；后续按总规划完成组织者 Gateway 真实评测和最终验收。

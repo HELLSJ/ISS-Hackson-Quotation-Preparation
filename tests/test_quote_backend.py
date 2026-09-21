@@ -258,6 +258,37 @@ class DiffEdgeCaseTests(unittest.TestCase):
 
 
 class LegacyMigrationTests(unittest.TestCase):
+    def test_legacy_driver_rows_migrate_to_gateway_without_losing_messages(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "converse.sqlite"
+            with closing(sqlite3.connect(path)) as db:
+                with db:
+                    db.executescript(
+                        """PRAGMA foreign_keys=ON;
+                        CREATE TABLE conversations(
+                            id TEXT PRIMARY KEY,
+                            driver TEXT NOT NULL CHECK(driver IN ('offline','converse')),
+                            created_at TEXT NOT NULL,
+                            updated_at TEXT NOT NULL
+                        );
+                        CREATE TABLE messages(
+                            id TEXT PRIMARY KEY,
+                            conversation_id TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
+                            seq INTEGER NOT NULL,
+                            role TEXT NOT NULL,
+                            content TEXT NOT NULL,
+                            result_json TEXT,
+                            created_at TEXT NOT NULL
+                        );"""
+                    )
+                    db.execute("INSERT INTO conversations VALUES ('c','converse','t','t')")
+                    db.execute("INSERT INTO messages VALUES ('m','c',1,'user','hello',NULL,'t')")
+            repo = Repository(path)
+            with repo.connect() as db:
+                self.assertEqual(db.execute("SELECT driver FROM conversations WHERE id='c'").fetchone()[0], "gateway")
+                self.assertEqual(db.execute("SELECT content FROM messages WHERE id='m'").fetchone()[0], "hello")
+                self.assertEqual(db.execute("PRAGMA foreign_key_check").fetchall(), [])
+
     def test_v1_row_is_byte_preserved_and_not_confirmable(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "legacy.sqlite"
@@ -278,7 +309,7 @@ class LegacyMigrationTests(unittest.TestCase):
                 self.assertEqual(stored["payload_json"], payload)
                 self.assertEqual(stored["fingerprint"], token)
                 self.assertEqual(stored["snapshot_schema_version"], 1)
-                self.assertEqual(db.execute("PRAGMA user_version").fetchone()[0], 2)
+                self.assertEqual(db.execute("PRAGMA user_version").fetchone()[0], 3)
             quote = repo.get_quote("q")
             self.assertEqual(quote["status"], "legacy_saved_draft")
             self.assertFalse(quote["confirmable"])

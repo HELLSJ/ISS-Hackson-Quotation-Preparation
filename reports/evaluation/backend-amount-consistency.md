@@ -66,4 +66,4 @@ output/pdf/*.pdf      示例 PDF
 
 - 本验证只覆盖后端 API 和 PDF 渲染层。
 - 浏览器 confirmation/diff/PDF 已通过 Chrome 端到端验收，证据单独保存在 `browser_acceptance/20260921T074342Z/`。
-- sealed holdout 和运行器已建立；真实 Bedrock 首轮指标、非作者审核以及人工与真实模型计时仍待完成。
+- sealed holdout 和运行器已建立；组织者 Gateway 真实首轮指标、非作者审核以及人工与真实模型计时仍待完成。

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import os
 import statistics
@@ -16,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from dell_agent.agent.loop import ConverseDriver, OfflineDriver
+from dell_agent.agent.loop import GatewayDriver, OfflineDriver
 
 CASES = [
     ("TIME-001", "Exact quote: 8 P2425HE with SGD 2500 budget", ["Quote 8 P2425HE. Budget SGD 2500."], "ready_to_quote", 231200),
@@ -30,9 +31,24 @@ CASE_IDS = {row[0] for row in CASES}
 
 def has_fallback(result: dict[str, Any]) -> bool:
     return any(
-        isinstance(row, dict) and row.get("step") == "converse_fallback"
+        isinstance(row, dict) and row.get("step") == "gateway_fallback"
         for row in result.get("trace", [])
     )
+
+
+def gateway_trace_counts(result: dict[str, Any]) -> tuple[bool, int]:
+    trace = result.get("trace", [])
+    started = any(
+        isinstance(row, dict) and row.get("step") == "gateway_start"
+        for row in trace
+    )
+    tool_calls = sum(
+        isinstance(row, dict)
+        and str(row.get("step", "")).startswith("gateway_turn_")
+        and bool(row.get("tool"))
+        for row in trace
+    )
+    return started, tool_calls
 
 
 def load_manual(path: Path) -> list[dict[str, Any]]:
@@ -70,16 +86,19 @@ def stats(values: list[float]) -> dict[str, float] | None:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--driver", choices=("offline", "converse"), required=True)
-    parser.add_argument("--model-id", default=os.getenv("BEDROCK_MODEL_ID", ""))
-    parser.add_argument("--region", default=os.getenv("AWS_REGION") or os.getenv("AWS_DEFAULT_REGION") or "")
+    parser.add_argument("--driver", choices=("offline", "gateway"), required=True)
+    parser.add_argument("--gateway-url", default=os.getenv("LLM_GATEWAY_URL", ""))
+    parser.add_argument("--model-id", default=os.getenv("LLM_MODEL", ""))
     parser.add_argument("--manual-csv", type=Path, default=ROOT / "reports/evaluation/manual-timing-input.csv")
     parser.add_argument("--label", default="first-pass")
     args = parser.parse_args()
-    if args.driver == "converse" and (not args.model_id or not args.region):
-        parser.error("converse timing requires --model-id and --region")
+    gateway_key = os.getenv("LLM_GATEWAY_API_KEY", "")
+    if args.driver == "gateway" and (not args.gateway_url or not gateway_key or not args.model_id):
+        parser.error("gateway timing requires LLM_GATEWAY_URL, LLM_GATEWAY_API_KEY and LLM_MODEL")
 
-    driver = OfflineDriver() if args.driver == "offline" else ConverseDriver(model_id=args.model_id, region=args.region)
+    driver = OfflineDriver() if args.driver == "offline" else GatewayDriver(
+        base_url=args.gateway_url, api_key=gateway_key, model=args.model_id
+    )
     run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + f"-{args.driver}-{args.label}"
     out = ROOT / "reports/evaluation/timing" / run_id
     out.mkdir(parents=True, exist_ok=False)
@@ -90,12 +109,14 @@ def main() -> int:
         result = driver.run(turns).to_dict()
         duration = time.perf_counter() - tick
         used_fallback = has_fallback(result)
+        gateway_started, gateway_tool_calls = gateway_trace_counts(result)
         total = (result.get("quote_draft") or {}).get("total_cents")
         rows.append({
             "case_id": case_id, "scenario": scenario, "driver": args.driver,
-            "model_id": args.model_id, "region": args.region, "started_at": started.isoformat(),
+            "model_id": args.model_id, "started_at": started.isoformat(),
             "duration_seconds": round(duration, 6), "status": result.get("status"),
             "total_cents": total if total is not None else "", "used_fallback": used_fallback,
+            "gateway_started": gateway_started, "gateway_tool_calls": gateway_tool_calls,
             "result_check": result.get("status") == expected_status and (expected_total is None or total == expected_total),
         })
     with (out / "agent-timing.csv").open("w", newline="", encoding="utf-8") as stream:
@@ -107,12 +128,22 @@ def main() -> int:
     manual_stats = stats([float(row["duration_seconds"]) for row in manual])
     human_complete = manual_is_complete(manual)
     fallbacks = sum(bool(row["used_fallback"]) for row in rows)
-    real_model_valid = args.driver == "converse" and fallbacks == 0
+    gateway_starts = sum(bool(row["gateway_started"]) for row in rows)
+    gateway_tool_calls = sum(int(row["gateway_tool_calls"]) for row in rows)
+    real_model_valid = (
+        args.driver == "gateway"
+        and fallbacks == 0
+        and gateway_starts == len(rows)
+        and gateway_tool_calls > 0
+    )
     agent_correct = all(row["result_check"] for row in rows)
     summary = {
-        "run_id": run_id, "driver": args.driver, "model_id": args.model_id or None, "region": args.region or None,
+        "run_id": run_id, "driver": args.driver, "model_id": args.model_id or None,
+        "gateway_url_sha256": hashlib.sha256(args.gateway_url.encode()).hexdigest() if args.gateway_url else None,
         "case_count": len(rows), "all_results_correct": agent_correct,
         "fallback_count": fallbacks, "valid_real_model_timing": real_model_valid,
+        "gateway_started_count": gateway_starts,
+        "gateway_tool_call_count": gateway_tool_calls,
         "agent": agent_stats, "human": manual_stats,
         "human_records_complete_and_correct": human_complete,
         "comparison_complete": real_model_valid and agent_correct and human_complete,
@@ -129,9 +160,9 @@ def main() -> int:
         encoding="utf-8",
     )
     print(out.relative_to(ROOT))
-    if args.driver == "converse" and not real_model_valid:
+    if args.driver == "gateway" and not real_model_valid:
         return 2
-    if args.driver == "converse" and not summary["comparison_complete"]:
+    if args.driver == "gateway" and not summary["comparison_complete"]:
         return 3
     return 0
 

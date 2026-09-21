@@ -75,7 +75,7 @@ async function boot() {
   try {
     [state.health, state.catalog] = await Promise.all([api("/api/health"), api("/api/products")]);
     $("#datasetBadge").textContent = `Catalogue ${state.health.dataset_version}`;
-    $("#driverBadge").textContent = state.health.configured_driver === "converse" ? "Bedrock Converse" : "Deterministic offline";
+    $("#driverBadge").textContent = state.health.configured_driver === "gateway" ? "Organizer LLM Gateway" : "Deterministic offline";
     await restoreConversation();
     render();
   } catch (error) {
@@ -121,7 +121,7 @@ function renderStatus() {
   const driver = result?.configured_driver || state.health?.configured_driver || "offline";
   $("#driverBadge").textContent = result?.used_fallback
     ? "Offline fallback"
-    : driver === "converse" ? "Bedrock Converse" : "Deterministic offline";
+    : driver === "gateway" ? "Organizer LLM Gateway" : "Deterministic offline";
   const labels = {
     needs_clarification: "Needs details",
     ready_to_quote: "Draft ready",
