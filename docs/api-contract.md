@@ -108,7 +108,7 @@ Budget fields are omitted when no budget is supplied. Discounts must be in `[0,5
 
 ## Agent result
 
-Both drivers return:
+`OfflineDriver` and `GatewayDriver` return the same base shape:
 
 ```json
 {
@@ -123,6 +123,23 @@ Both drivers return:
 ```
 
 Statuses: `ready_to_quote`, `needs_clarification`, `explain_limitation`, `answer_with_evidence`, `no_match`, `budget_conflict`, `rule_violation`, and `invalid_quantity`.
+
+The application adds `configured_driver` and `used_fallback`. A Gateway result
+counts as a real-model result only when `configured_driver="gateway"`,
+`used_fallback=false`, and its trace contains a Gateway tool turn.
+
+```http
+GET /api/health
+POST /api/conversations
+Content-Type: application/json
+
+{"driver":"gateway"}
+```
+
+`GET /api/health` exposes `configured_driver` and the boolean
+`gateway_configured`; it never returns the Gateway URL or API key. Conversation
+drivers are `offline` or `gateway`. Existing SQLite rows using the legacy cloud
+driver name are migrated to `gateway` when schema version 3 is initialized.
 
 ## HTTP errors
 

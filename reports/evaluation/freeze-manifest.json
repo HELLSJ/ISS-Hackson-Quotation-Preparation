@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-09-20T07:49:43.673001+00:00",
-  "status": "MACHINE_PREPARED_PENDING_INDEPENDENT_HUMAN_REVIEW",
+  "status": "FROZEN_INDEPENDENT_HUMAN_REVIEW_PASSED",
   "dataset_version": "2026-09-14.v1",
   "price_version": "demo-v1",
   "rule_version": "demo-v1",
@@ -16,5 +16,13 @@
     "data\\evaluation\\enquiries_dev.jsonl": "8199ff8de2f0198f9ff661ac139366662219f5586693ff406e944683602991a8",
     "data\\evaluation\\enquiries_holdout.jsonl": "fa14f79620a694d480f7fcb82f825314dff9c44f90f8b1d6abf88f96f85b0d52"
   },
-  "required_next_action": "An independent human reviewer must complete data-freeze-review.csv before calling this dataset frozen."
+  "independent_review": {
+    "result": "PASS",
+    "reviewer": "LAI WENDI",
+    "reviewed_at": "2026-09-20",
+    "passed_rows": 24,
+    "total_rows": 24,
+    "record": "reports/evaluation/data-freeze-review-signed.csv"
+  },
+  "required_next_action": null
 }

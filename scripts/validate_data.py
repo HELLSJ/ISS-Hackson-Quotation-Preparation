@@ -13,6 +13,20 @@ def read(path): return json.loads((ROOT/path).read_text())
 def rows(path):
     with (ROOT/path).open(newline='',encoding='utf-8') as f:return list(csv.DictReader(f))
 
+def human_review_status(dataset_version):
+    path=ROOT/'reports/evaluation/data-freeze-review-signed.csv'
+    if not path.is_file():
+        return 'NOT PERFORMED: independent data-freeze review record is missing.'
+    review=rows('reports/evaluation/data-freeze-review-signed.csv')
+    passed=[r for r in review if r['dataset_version']==dataset_version and r['independent_human_result']=='PASS']
+    if len(review)==24 and len(passed)==24:
+        reviewers=sorted({r['reviewer'] for r in passed if r['reviewer']})
+        dates=sorted({r['reviewed_at'] for r in passed if r['reviewed_at']})
+        if len(reviewers)==1 and len(dates)==1:
+            return (f'PASSED: 24/24 independent evidence checks signed by {reviewers[0]} '
+                    f'on {dates[0]}; see reports/evaluation/data-freeze-review-signed.csv.')
+    return 'NOT PASSED: independent data-freeze review is incomplete or inconsistent.'
+
 def main():
     catalog=read('data/agent/catalog.json')
     curated=read('data/curated_specs.json')
@@ -61,9 +75,10 @@ def main():
     answers=[json.loads(l) for l in (ROOT/'data/evaluation/expected_results.jsonl').read_text().splitlines()]
     assert len(ids)==len(set(ids))==40 and set(ids)=={r['case_id'] for r in answers}
     assert len(list((ROOT/'data/agent/knowledge').glob('MON-*.md')))==12
-    schemas=read('data/agent/bedrock_tool_config.json')['tools']
-    assert {r['toolSpec']['name'] for r in schemas}=={'get_product','search_products','calculate_quote'}
-    for t in schemas:assert t['toolSpec']['inputSchema']['json']['type']=='object'
+    schemas=read('data/agent/tool_schemas.json')['tools']
+    assert {r['function']['name'] for r in schemas}=={'get_product','search_products','calculate_quote'}
+    for t in schemas:
+        assert t['type']=='function' and t['function']['parameters']['type']=='object'
     stream=io.StringIO()
     suite=unittest.defaultTestLoader.discover(
         str(ROOT/'tests'), pattern='test_catalog_tools.py'
@@ -76,7 +91,7 @@ def main():
                 demo_cases=3,offline_tests_run=result.testsRun,offline_test_failures=len(result.failures),
                 offline_test_errors=len(result.errors),data_integrity='passed',
                 model_evaluation='NOT RUN: no model API invoked; natural-language cases are fixtures, not measured accuracy.',
-                human_review='NOT PERFORMED: specifications reviewed by assistant; independent team review recommended before submission.')
+                human_review=human_review_status(catalog['dataset_version']))
     output=ROOT/'data/validation'
     output.mkdir(parents=True,exist_ok=True)
     (output/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

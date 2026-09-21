@@ -2,7 +2,7 @@
 
 The only product/pricing implementation lives in ``dell_agent.agent.tools``.
 This module deliberately contains no catalogue loading, filtering, validation,
-or money arithmetic so CLI, Agent, Bedrock and HTTP behavior cannot drift.
+or money arithmetic so CLI, Agent, Gateway and HTTP behavior cannot drift.
 
 Usage:
     python scripts/catalog_tools.py search_products '{"usb_c_video":true}'

@@ -37,7 +37,7 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 class ConversationCreate(BaseModel):
-    driver: Literal["offline", "converse"] | None = None
+    driver: Literal["offline", "gateway"] | None = None
 
 
 class MessageCreate(BaseModel):
@@ -90,7 +90,9 @@ def health() -> dict[str, Any]:
         "status": "ok",
         "dataset_version": "2026-09-14.v1",
         "configured_driver": settings.agent_driver,
-        "bedrock_configured": bool(settings.bedrock_model_id and settings.aws_region),
+        "gateway_configured": bool(
+            settings.gateway_url and settings.gateway_api_key and settings.llm_model
+        ),
         "database": str(settings.app_db_path),
     }
 

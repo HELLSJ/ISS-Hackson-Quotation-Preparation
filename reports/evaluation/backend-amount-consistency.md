@@ -2,7 +2,7 @@
 
 **生成日期：** 2026-09-21  
 **验证对象：** 最新 `main` 分支（提交 `047a9b3`）的报价后端更新 `feat: complete quote backend lifecycle and handoff`。  
-**验证范围：** 后端 API 与 PDF 层的金额一致性；不包含浏览器端到端页面（等 D）和真实模型评测（等 C）。  
+**验证范围：** 后端 API 与 PDF 层的金额一致性；浏览器端到端结果另见 `browser_acceptance/20260921T074342Z/`，真实模型评测另按正式评估协议执行。
 **验证方式：** 在独立 git worktree（`iss-main-verify`）运行，不影响 A 的审核工作树。
 
 ## 1. 结论
@@ -60,10 +60,10 @@ output/pdf/*.pdf      示例 PDF
 
 ## 7. 人工签核
 
-核对表：`backend-amount-consistency-signed.csv`（3 条，`independent_human_result` 均为 `PENDING`）。请人工核对上述金额链路后填写 `PASS/FAIL`、`reviewer`、`reviewed_at` 和结论。
+核对表：`backend-amount-consistency-signed.csv`。3 条记录均由 LAI WENDI 于 2026-09-21 签核为 `PASS`。
 
 ## 8. 边界
 
 - 本验证只覆盖后端 API 和 PDF 渲染层。
-- README 说明浏览器 confirmation/diff/PDF 操作尚未实现，因此完整页面端到端仍不能验证（等 D）。
-- 真实模型评测、sealed holdout、人工与 Agent 计时仍需等 C 和完整流程。
+- 浏览器 confirmation/diff/PDF 已通过 Chrome 端到端验收，证据单独保存在 `browser_acceptance/20260921T074342Z/`。
+- sealed holdout 和运行器已建立；组织者 Gateway 真实首轮指标、非作者审核以及人工与真实模型计时仍待完成。

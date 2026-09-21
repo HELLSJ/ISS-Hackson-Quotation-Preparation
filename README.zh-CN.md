@@ -39,10 +39,10 @@
 | 保存版本 | 经过完整校验的 schema-v2 快照，不可变、幂等并阻止 stale 保存 |
 | 人工确认 | append-only confirmed snapshot，精确 token 重试幂等 |
 | 版本 diff 和报价 PDF | 后端 API 已完成；PDF 只读取 confirmed snapshot，不重新计价 |
-| 自动化校验 | 33 项目录/后端测试；63 项 Agent 测试，7 项明确 skip |
-| 真实 Bedrock | **未完成**：尚无经验证的真实模型调用 trace |
-| 独立数据复核 | **未完成** |
-| 浏览器 confirmation/diff/PDF 操作 | **尚未实现** |
+| 自动化校验 | 47 项目录/后端/Gateway/评测门禁测试；63 项 Agent 测试，7 项明确 skip |
+| 组织者 LLM Gateway | client、原生/JSON 工具回路、有限重试、显式 fallback 和测试已完成；待团队密钥真实运行 |
+| 独立数据复核 | 已完成：24/24 条证据核对已签核，`2026-09-14.v1` 已冻结 |
+| 浏览器 confirmation/diff/PDF 操作 | 已实现，并通过 Chrome 端到端验收 |
 | 正式模型/holdout 评估 | **未完成** |
 
 所有后续工作及验收标准见唯一的[项目总规划](docs/project-plan-zh.md)。
@@ -88,7 +88,7 @@ Browser workbench (`app/static/`)
   → FastAPI (`app/main.py`)
       → QuotationService
           → OfflineDriver
-          → ConverseDriver → Amazon Bedrock Converse（可选）
+          → GatewayDriver → 组织者 LLM Gateway（可选）
       → 唯一工具入口 (`dell_agent.agent.tools.dispatch`)
           → 冻结目录、计价规则和字段证据
       → `storage/app.sqlite`
@@ -103,7 +103,7 @@ Browser workbench (`app/static/`)
 
 ## 三个确定性工具
 
-所有运行路径——CLI、OfflineDriver、ConverseDriver、FastAPI 和测试——均调用：
+所有运行路径——CLI、OfflineDriver、GatewayDriver、FastAPI 和测试——均调用：
 
 ```python
 from dell_agent.agent.tools import dispatch
@@ -176,32 +176,35 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 项数据/工具检查
-.venv/bin/python -m unittest discover -s tests            # 33 项目录/后端测试
+.venv/bin/python -m unittest discover -s tests            # 47 项目录/后端/Gateway/评测门禁测试
 .venv/bin/python -m unittest discover -s dell_agent/tests # 63 项 Agent 测试
 ```
 
 当前结果：
 
 - 15 项目录/CLI 契约测试通过；
-- 18 项临时数据库后端测试通过，覆盖迁移、快照、并发、确认、diff、PDF、故障注入和 HTTP；
+- 19 项临时数据库后端测试通过，覆盖迁移、快照、并发、确认、diff、PDF、故障注入和 HTTP；
 - 63 项 Agent 测试通过，7 项是明确记录的 OfflineDriver 启发式 skip；
 - 三条固定演示均在离线路径通过。
 
-这不是模型准确率。40 条自然语言案例仍需独立审核 expected label；holdout 答案和校验报告不得进入系统提示词或运行时知识库。
+这不是模型准确率。现有 40 条自然语言案例的 expected label 已独立审核；新建 sealed holdout 仍需非作者审核，其答案和校验报告不得进入系统提示词或运行时知识库。
 
-## 可选 Bedrock 路径
+## 组织者 LLM Gateway 路径
+
+应用直接调用组织者提供的 Gateway，不直接调用 Amazon Bedrock，也不需要额外云 SDK。把团队邮件中的三个值配置到当前终端：
 
 ```bash
-.venv/bin/pip install -r requirements-cloud.txt
-export AGENT_DRIVER=converse
-export BEDROCK_MODEL_ID='<supported-bedrock-model-id>'
-export AWS_REGION='<enabled-region>'
+read -r "LLM_GATEWAY_URL?Gateway URL: "
+read -s "LLM_GATEWAY_API_KEY?Team API key: "; echo
+read -r "LLM_MODEL?Model name: "
+export LLM_GATEWAY_URL LLM_GATEWAY_API_KEY LLM_MODEL
+export AGENT_DRIVER=gateway
 .venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-AWS 凭据必须通过标准 credential chain 提供，不能写入源码或 `.env`。页面会显示实际使用 Bedrock 还是 Offline fallback。只有 `used_fallback=false` 且 trace 中存在真实 tool-use 才能算云端验证成功。
+客户端支持 Starter Kit 的 Ollama 兼容 `/api/chat` + `X-API-Key` 协议，也支持以 `/v1` 结尾的 OpenAI 兼容地址；同时处理原生 `tool_calls` 和 JSON 工具请求 fallback。API key 只从环境变量读取，不写入 trace、报告或数据库。具体步骤见 [LLM Gateway 配置指南](docs/llm-gateway-setup-zh.md)。AWS 凭据只用于部署 Lightsail，见 [AWS 托管指南](docs/aws-hosting-setup-zh.md)。
 
-当前真实云路径仍未完成：团队还需用自己的 AWS 账户运行三条故事，补齐原生 `ask_for`、候选和引用组装，并为可重试错误增加一次有限重试。
+只有 `configured_driver=gateway`、`used_fallback=false` 且 trace 中存在 Gateway 工具调用，才算真实模型路径成功。
 
 ## 三条固定演示
 
@@ -211,11 +214,9 @@ AWS 凭据必须通过标准 credential chain 提供，不能写入源码或 `.e
 
 ## 后续关键路径
 
-1. 独立抽查 6 个 SKU × 2 个证据字段并冻结数据；
-2. 完成真实 Bedrock tool-use 和结构化 AgentResult；
-3. 将已完成的 confirmation/diff/PDF 后端 API 接到浏览器操作；
-4. 保留正式 holdout 首轮结果，并将修复后结果分开；
-5. 实测 5 个案例，彩排、录制 30 分钟视频并提交。
+1. 使用组织者 LLM Gateway 跑通三条演示故事并保存首次真实 trace；
+2. 保留正式 sealed holdout 首轮结果，并将修复后结果分开；
+3. 实测 5 个案例，彩排、录制 30 分钟视频并提交。
 
 详细负责人、验收标准、指标、异常矩阵和视频结构见 [docs/project-plan-zh.md](docs/project-plan-zh.md)。
 

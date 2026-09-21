@@ -39,10 +39,10 @@ The usable vertical slice and backend quote lifecycle are complete: deterministi
 | Saved versions | Validated schema-v2 snapshots; immutable, idempotent, and protected against stale saves |
 | Confirmation | Append-only immutable confirmed snapshot with exact-token idempotency |
 | Version diff and quote PDF | Backend APIs complete; PDF is confirmed-snapshot-only and never re-prices |
-| Automated validation | 33 catalogue/backend tests; 63 Agent tests with 7 documented heuristic skips |
-| Live Bedrock run | **Not completed**: no verified live model trace yet |
-| Independent data review | **Not completed** |
-| Browser confirmation/diff/PDF controls | **Not implemented yet** |
+| Automated validation | 47 catalogue/backend/gateway/evaluation-gate tests; 63 Agent tests with 7 documented heuristic skips |
+| Organizer LLM Gateway | Client, native/manual tool loop, bounded retry, visible fallback, and tests complete; live team-key run pending |
+| Independent data review | Complete: 24/24 evidence checks signed and dataset `2026-09-14.v1` frozen |
+| Browser confirmation/diff/PDF controls | Implemented and exercised end to end in headless Chrome |
 | Formal model/holdout evaluation | **Not completed** |
 
 The authoritative remaining-work sequence and acceptance criteria are in the [consolidated project plan](docs/project-plan-zh.md).
@@ -88,7 +88,7 @@ Browser workbench (`app/static/`)
   → FastAPI (`app/main.py`)
       → QuotationService
           → OfflineDriver
-          → ConverseDriver → Amazon Bedrock Converse (optional)
+          → GatewayDriver → organizer LLM Gateway (optional)
       → canonical tool dispatcher (`dell_agent.agent.tools.dispatch`)
           → frozen catalogue, pricing rules, and field evidence
       → `storage/app.sqlite`
@@ -103,7 +103,7 @@ Browser workbench (`app/static/`)
 
 ## Canonical tools
 
-All runtime paths—CLI, OfflineDriver, ConverseDriver, FastAPI, and tests—use:
+All runtime paths—CLI, OfflineDriver, GatewayDriver, FastAPI, and tests—use:
 
 ```python
 from dell_agent.agent.tools import dispatch
@@ -181,39 +181,35 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 data/tool checks
-.venv/bin/python -m unittest discover -s tests            # 33 catalogue/backend tests
+.venv/bin/python -m unittest discover -s tests            # 47 catalogue/backend/gateway/evaluation-gate tests
 .venv/bin/python -m unittest discover -s dell_agent/tests # 63 Agent tests
 ```
 
 The current suites report:
 
 - 15 catalogue/CLI contract tests passing;
-- 18 temporary-database backend tests passing (migration, snapshots, concurrency, confirmation, diff, PDF, fault injection and HTTP);
+- 19 temporary-database backend tests passing (migration, snapshots, concurrency, confirmation, diff, PDF, fault injection and HTTP);
 - 63 Agent tests passing, with 7 explicitly documented OfflineDriver heuristic skips;
 - all three fixed demo scenarios passing in the offline path.
 
-These numbers are not a model accuracy claim. The 40 natural-language evaluation cases are development fixtures whose expected semantic labels still require independent review. The holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.
+These numbers are not a model accuracy claim. The expected semantic labels for the existing 40 natural-language fixtures have passed independent review; the new sealed holdout still requires a non-author review. Holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.
 
-## Optional Amazon Bedrock path
+## Organizer LLM Gateway path
 
-Install the separately pinned cloud dependency:
-
-```bash
-.venv/bin/pip install -r requirements-cloud.txt
-```
-
-Configure the application without putting AWS keys in source files or `.env`:
+The application calls the organizer supplied gateway directly and does not invoke Amazon Bedrock. No extra cloud SDK is required. Configure the three values from the team email in the current shell:
 
 ```bash
-export AGENT_DRIVER=converse
-export BEDROCK_MODEL_ID='<supported-bedrock-model-id>'
-export AWS_REGION='<enabled-region>'
+read -r "LLM_GATEWAY_URL?Gateway URL: "
+read -s "LLM_GATEWAY_API_KEY?Team API key: "; echo
+read -r "LLM_MODEL?Model name: "
+export LLM_GATEWAY_URL LLM_GATEWAY_API_KEY LLM_MODEL
+export AGENT_DRIVER=gateway
 .venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-Credentials must come from the standard AWS credential chain. The UI shows whether a result used Bedrock or the deterministic fallback. A configured model is not considered verified until `used_fallback=false` and the trace contains a real Converse tool-use cycle.
+The client supports the organizer kit's Ollama-compatible `/api/chat` protocol with `X-API-Key`, plus an OpenAI-compatible URL ending in `/v1`. It accepts native `tool_calls` and the documented JSON tool-request fallback. The API key is read only from the environment and never written to traces, reports, or the database. See [docs/llm-gateway-setup-zh.md](docs/llm-gateway-setup-zh.md). AWS credentials remain relevant only when deploying the app to Lightsail; see [docs/aws-hosting-setup-zh.md](docs/aws-hosting-setup-zh.md).
 
-The live cloud path remains unfinished: the team still needs to run the three demo stories with its AWS account, complete native `ask_for`/candidate/citation assembly, and add a bounded retry for retryable failures.
+A live run is valid only when `configured_driver=gateway`, `used_fallback=false`, and the trace contains gateway tool calls.
 
 ## Fixed demo stories
 
@@ -223,11 +219,9 @@ The live cloud path remains unfinished: the team still needs to run the three de
 
 ## Remaining critical path
 
-1. Independently review six SKUs × two evidence fields and freeze the data version.
-2. Complete a real Bedrock Converse tool-use run and structured AgentResult assembly.
-3. Connect the completed confirmation/diff/PDF backend APIs to browser controls.
-4. Run and preserve the first formal holdout evaluation, then separate fixes from the original result.
-5. Measure five manual-versus-Agent cases, rehearse, record the 30-minute video, and submit.
+1. Run the three demo stories against the organizer LLM Gateway and preserve the first live traces.
+2. Run and preserve the first formal sealed-holdout evaluation, then separate fixes from the original result.
+3. Measure five manual-versus-Agent cases, rehearse, record the 30-minute video, and submit.
 
 See [docs/project-plan-zh.md](docs/project-plan-zh.md) for owners, acceptance criteria, evaluation thresholds, exception coverage, and the video plan.
 

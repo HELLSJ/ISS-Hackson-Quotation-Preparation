@@ -71,7 +71,7 @@ def _product_summary(product: Product) -> Dict[str, Any]:
 # search_products (task 5.1, Req 2)
 # --------------------------------------------------------------------------- #
 
-# Bedrock tool-schema allow-list. Any other key is rejected with bad_argument
+# Tool-schema allow-list. Any other key is rejected with bad_argument
 # (Req 2.1). Keeps tool selection deterministic and prevents a model from
 # smuggling a free-text sentence or an unsupported filter.
 _SEARCH_ALLOWED_KEYS = frozenset(
@@ -495,7 +495,7 @@ def calculate_quote(args: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
 # Dispatcher (task 7.1, Req 7.2)
 # --------------------------------------------------------------------------- #
 
-# Frozen tool registry. The Converse loop and tests route through this single
+# Frozen tool registry. Both Agent drivers and tests route through this single
 # entry point; an unrecognised name is rejected rather than silently ignored.
 _TOOLS = {
     "search_products": search_products,

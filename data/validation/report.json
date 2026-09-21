@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-18T08:25:45.937636+00:00",
+  "checked_at": "2026-09-21T18:12:03.091090+00:00",
   "dataset_version": "2026-09-14.v1",
   "source_pdf_count": 6,
   "source_page_count": 522,
@@ -17,5 +17,5 @@
   "offline_test_errors": 0,
   "data_integrity": "passed",
   "model_evaluation": "NOT RUN: no model API invoked; natural-language cases are fixtures, not measured accuracy.",
-  "human_review": "NOT PERFORMED: specifications reviewed by assistant; independent team review recommended before submission."
+  "human_review": "PASSED: 24/24 independent evidence checks signed by LAI WENDI on 2026-09-20; see reports/evaluation/data-freeze-review-signed.csv."
 }

@@ -67,6 +67,7 @@ def render_confirmed_quote(snapshot: dict[str, Any]) -> bytes:
         bottomMargin=18 * mm,
         title=str(snapshot.get("quote_number", "Quotation")),
         author="Quotation Preparation Agent",
+        invariant=True,
     )
     styles = getSampleStyleSheet()
     normal = ParagraphStyle("QuoteNormal", parent=styles["BodyText"], fontName=font, fontSize=8.5, leading=11)

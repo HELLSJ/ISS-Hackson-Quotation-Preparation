@@ -1,0 +1,9 @@
+check_id,artifact,check,review_status,reviewer,reviewed_at,review_note,machine_precheck,machine_evidence
+PDF-001,output/pdf/quotation-qa-standard.pdf,"Quotation number, version, customer, dates and confirmer are readable",PENDING_INDEPENDENT_REVIEW,,,,PASS,reports/evaluation/pdf-machine-precheck.json
+PDF-002,output/pdf/quotation-qa-standard.pdf,"SKU, model, quantity, unit price, discount and net amount are readable",PENDING_INDEPENDENT_REVIEW,,,,PASS,reports/evaluation/pdf-machine-precheck.json
+PDF-003,output/pdf/quotation-qa-standard.pdf,"Subtotal, shipping and total agree and use SGD formatting",PENDING_INDEPENDENT_REVIEW,,,,PASS,reports/evaluation/pdf-machine-precheck.json
+PDF-004,output/pdf/quotation-qa-standard.pdf,"Synthetic demo, tax and inventory/delivery limitations are visible",PENDING_INDEPENDENT_REVIEW,,,,PASS,reports/evaluation/pdf-machine-precheck.json
+PDF-005,output/pdf/quotation-qa-standard.pdf,"Dataset, price and rule provenance are visible",PENDING_INDEPENDENT_REVIEW,,,,PASS,reports/evaluation/pdf-machine-precheck.json
+PDF-006,output/pdf/quotation-qa-long.pdf,Product table header repeats on every page,PENDING_INDEPENDENT_REVIEW,,,,PASS,reports/evaluation/pdf-machine-precheck.json
+PDF-007,output/pdf/quotation-qa-long.pdf,"Long rows, totals and terms have no clipping or overlap",PENDING_INDEPENDENT_REVIEW,,,,PASS,reports/evaluation/pdf-machine-precheck.json
+PDF-008,output/pdf/quotation-qa-long.pdf,Footer disclaimer and page number are present on every page,PENDING_INDEPENDENT_REVIEW,,,,PASS,reports/evaluation/pdf-machine-precheck.json

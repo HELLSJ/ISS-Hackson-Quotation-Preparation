@@ -1,8 +1,8 @@
 # A：数据与评估——当前可完成工作记录
 
-**生成日期：** 2026-09-20  
-**当前范围：** 不调用真实大模型 API、不改变报价业务逻辑、不修改原始数据或 evaluation fixture。  
-**目的：** 为 A 的数据冻结、expected 审核、Offline 回归基线和金额复核建立可追溯工件；不把机器检查误写为人工审计或模型评测。
+**生成日期：** 2026-09-20；最近更新：2026-09-22
+**当前范围：** A 的数据冻结、评估、验收和效率证据；不改变冻结数据与报价规则。
+**目的：** 保存可追溯工件，并明确区分人工审核、Offline readiness、浏览器验收和真实模型指标。
 
 ## 1. 当前结论
 
@@ -22,7 +22,7 @@
 - expected 审核：40 条全部 PASS（`expected-label-review-signed.csv`，2026-09-20）；
 - 金额复核：15 条全部 PASS（`money-reconciliation-signed.csv`，2026-09-21）。
 
-以下事项**仍未**完成，需等 B/C/D 或真实模型 API：真实模型评测、sealed blind holdout、confirmed 版本/diff/PDF 一致性验证、正式人工与 Agent 效率计时。
+以下事项**仍未**完成：真实模型评测、sealed blind holdout 的非作者审核、正式指标报告、最终 PDF 模板人工复核和人工与 Agent 效率计时。
 
 ## 2. 新增工件
 
@@ -42,6 +42,7 @@
 | `offline-regression-baseline.md` | 本次数据验证及 Offline 回归的真实基线 | 已生成 |
 | `backend-amount-consistency.md` | B 后端金额一致性核对说明（计算=快照=确认=diff=PDF） | 已生成 |
 | `backend-amount-consistency-signed.csv` | B 后端金额一致性人工签核结果 | 已完成；3 条 PASS，LAI WENDI，2026-09-21 |
+| `pdf-machine-precheck.json` | 标准/长表 PDF 的页数、字段、逐页表头、页脚、45 行及总额/条款检查 | 9 项机器预检通过；独立人工签字待完成 |
 
 ## 3. 实现方式
 
@@ -189,33 +190,26 @@ scripts/validate_data.py
 4. 本轮人工审核未发现需要修复的事实错误。若日后发现错误，应按项目数据流程修正后，重新执行构建、验证和相关脚本，并更新对应 signed 文件。
 5. B 后端金额一致性核对：针对最新 `main`（提交 `047a9b3`）的报价后端更新，验证“计算 → 保存快照 → 人工确认 → 版本 diff → 导出 PDF”金额逐分一致。结果记录在 `backend-amount-consistency-signed.csv`：3 条 PASS，2026-09-21；详情见 `backend-amount-consistency.md`。
 
-## 7. 仍未完成、需等待的事项
+## 7. 仍未完成的事项
 
-以下事项 A 现在无法独立完成，需等 C（真实模型）或 D（前端页面）：
-
-等 C（真实 Bedrock / 大模型）：
+组织者 LLM Gateway / 大模型：
 
 ```text
-真实模型首轮评测（dev + holdout）
-真实 tool-use trace 与 fallback 检查
-记录 model ID、Region、prompt 与各版本
-Offline 与真实模型结果对比
+使用团队 API URL、API key 和 model 完成真实模型首轮评测
+保存真实 tool-use trace，并确认没有 gateway_fallback
+记录 model ID、Gateway URL 哈希、prompt 与各版本（不记录 API key）
+对比 Offline 与真实模型结果
 ```
 
-等 C 并由 A 完成：
+由 A 在真实首轮前后完成：
 
 ```text
-新建 sealed holdout（现有 holdout 仅为回归集，不是盲测）
+由非作者审核新建 sealed holdout 的 expected
 正式指标报告：首轮与修复后分开保存
 失败分类
 ```
 
-等 D（浏览器 confirmation/diff/PDF 页面接通）：
-
-```text
-浏览器端到端流程验证
-人工 vs Agent 效率计时
-```
+浏览器 confirmation/diff/PDF 页面已接通，并由 Chrome headless 完成 Story A 的 v1/v2、diff、确认、下载和 PDF 金额一致性验收。人工与 Agent 效率比较仍需 5 条真人计时记录。
 
 ## 8. A 侧当前完成情况
 
@@ -224,6 +218,22 @@ Offline 与真实模型结果对比
 [x] expected 审核：40 条 PASS（LAI WENDI，2026-09-20）
 [x] 金额复核：15 条 PASS（LAI WENDI，2026-09-21）
 [x] B 后端金额一致性核对：3 条 PASS（LAI WENDI，2026-09-21）
-[ ] 真实模型评测 / sealed holdout / 指标（等 C）
-[ ] 浏览器端到端与效率计时（等 D）
+[ ] sealed holdout 非作者审核、真实模型评测和正式指标
+[x] 浏览器端到端验收：Chrome 真实页面操作通过
+[ ] 最终 PDF 模板人工复核与 5 案例真人效率计时
 ```
+
+## 9. 2026-09-21 后续执行记录
+
+- 数据冻结状态已同步到 `data/validation/report.json`、`freeze-manifest.json`、README 和项目规划。
+- 新建 20 条 `SEALED-*` holdout；输入和答案分文件保存，运行器先保存全部推理结果再读取答案。哈希与隔离说明见 `sealed-holdout-manifest.json`，非作者审核表为 `sealed-holdout-review.csv`。
+- `run_formal_evaluation.py` 已通过 Offline readiness smoke；它会校验 sealed 输入哈希和审核状态，逐条持久化原始结果后才读取答案。未完成 20 条非作者签核时，真实运行会在推理前拒绝；发生任何 fallback 也会判为无效真实模型运行。
+- Chrome 153 真实页面完成 v1/v2 保存、diff、确认、PDF 下载以及页面/快照/PDF 金额一致性验收；报告和截图在 `browser_acceptance/20260921T074342Z/`。
+- 9 项异常矩阵全部通过，见 `exception-acceptance.md`。
+- 五案例 Agent 计时工具和真人交互计时工具已就绪。Offline readiness 数据有效但不属于真实模型效率指标；真实计时只有在无 fallback、Agent 结果正确且 5 条人工记录完整并核对 PASS 时才通过门禁。
+- 历史记录（已由组织者澄清取代）：2026-09-22 验证过 AWS Profile，但直接模型服务调用受组织策略拒绝。该 Profile 现在只用于 Lightsail 托管。
+- 组织者最新说明要求模型推理使用团队 API URL 与 API key。项目已移除直接模型服务依赖，新增 Gateway client、原生/JSON 工具回路、有限重试、显式 fallback、连接检查和评测参数。
+
+完成 A 的最终交付仍需：非作者签核 sealed expected 与 PDF 模板、使用组织者团队 Gateway 完成真实首轮评测，以及 5 次真人计时。
+
+可运行 `.venv/bin/python scripts/check_a_completion.py` 统一检查上述证据门禁；它会写入 `a-completion-status.json`，在所有门禁通过前返回非零退出码。

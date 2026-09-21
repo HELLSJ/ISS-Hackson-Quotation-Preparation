@@ -20,22 +20,21 @@ NUS-ISS Hackathon 报价编制 Agent：把不完整的英文客户询价经过�
 - 产品选择、PDF 规格证据、预算提示、刷新恢复；
 - schema-v2 `saved_draft` v1/v2、完整版本元数据、重复保存幂等和 stale 保存保护；
 - append-only 人工确认、confirmed version、结构化 diff 和 confirmed-only 报价 PDF；
-- 18 项临时数据库后端集成测试，覆盖迁移、并发、确认、diff、PDF、故障注入和 HTTP；
+- 19 项临时数据库后端集成测试，覆盖迁移、并发、确认、diff、PDF、故障注入和 HTTP；
 - 三条固定演示可离线运行；
-- 33 项目录/后端测试和 63 项 Agent 测试通过，另有 7 项明确记录的离线语言边界；
+- 47 项目录/后端/Gateway/评测门禁测试和 63 项 Agent 测试通过，另有 7 项明确记录的离线语言边界；
 - 英文/中文 README、API 契约和统一项目规划。
 
-当前后端可以生成**不可变 confirmed version 和报价 PDF**；浏览器确认/diff/PDF 按钮由前端任务继续接入。真实 Bedrock 模型评估尚未完成。
+当前后端可以生成**不可变 confirmed version 和报价 PDF**；浏览器已接通保存、确认、diff 和 PDF 下载并通过 Chrome 端到端验收。组织者 LLM Gateway 的代码迁移已完成，真实团队 API 评估尚未运行。
 
 ## 后续工作（按顺序）
 
-1. 由队员抽查 6 个 SKU × 2 个字段，冻结数据版本；
-2. 使用团队 AWS 账户跑通真实 Bedrock Converse，确认 `used_fallback=false`；
-3. 完善 Converse 的 `ask_for`、候选、引用、错误状态和有限重试；
-4. 将已完成的 confirmation、diff 和 PDF API 接入浏览器；
-5. 审核并运行正式 holdout，保留首轮和修复后结果；
-6. 人工复算报价、实测效率、冻结演示数据；
-7. 彩排、录制 30 分钟视频并完成提交检查。
+1. 非作者签核 sealed holdout expected 和最终 PDF 模板；
+2. 在同一终端配置组织者 Gateway URL、团队 API key 和 model；
+3. 用三条 Story 验证 `configured_driver=gateway`、`used_fallback=false` 和真实工具 trace；
+4. 运行 sealed holdout，保留首轮和修复后结果；
+5. 完成 5 个案例的真人效率计时；
+6. 彩排、录制 30 分钟视频并完成提交检查。
 
 不要继续增加产品、真实价格、库存、税费、登录、复杂多 Agent 或向量数据库。
 
@@ -62,6 +61,7 @@ python -m unittest discover -s dell_agent/tests
 - `README.md` / `README.zh-CN.md`：项目入口；
 - `docs/project-plan-zh.md`：唯一完整规划；
 - `docs/api-contract.md`：工具和 HTTP 契约；
+- `docs/llm-gateway-setup-zh.md`：组织者 Gateway 配置与验证；
 - `data/README.md`：数据、字段、来源与可信边界；
 - `data/evaluation/demo_scenarios.jsonl`：三条固定演示。
 

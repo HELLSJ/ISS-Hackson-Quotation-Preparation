@@ -1,7 +1,7 @@
 # Offline Regression Baseline
 
 **Recorded at:** 2026-09-20T07:37:37Z  
-**Scope:** Local deterministic data validation and `OfflineDriver` regression only. No Bedrock, external LLM, or model API was invoked.
+**Scope:** Local deterministic data validation and `OfflineDriver` regression only. No external LLM or model API was invoked.
 
 ## Commands executed
 
@@ -36,4 +36,4 @@ The following seven cases are deliberately skipped by the existing OfflineDriver
 
 ## Interpretation boundary
 
-This is a deterministic OfflineDriver regression baseline. It does **not** measure real LLM accuracy, Bedrock tool use, model latency, or a blind holdout score. The repository's current `holdout` fixtures are already loaded by ordinary tests and must be described as a regression set rather than a sealed blind evaluation set.
+This is a deterministic OfflineDriver regression baseline. It does **not** measure real LLM accuracy, Gateway tool use, model latency, or a blind holdout score. The repository's current `holdout` fixtures are already loaded by ordinary tests and must be described as a regression set rather than a sealed blind evaluation set.

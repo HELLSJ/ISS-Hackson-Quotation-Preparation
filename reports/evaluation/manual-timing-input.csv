@@ -1,0 +1,6 @@
+case_id,scenario,operator,started_at,finished_at,duration_seconds,result_check,notes
+TIME-001,Exact quote: 8 P2425HE with SGD 2500 budget,,,,,,
+TIME-002,Multi-line quote: 2 S2425H and 1 U2724DE,,,,,,
+TIME-003,Discount quote: 2 P2725HE at 5 percent,,,,,,
+TIME-004,Revision: 8 P2425HE changed to 10,,,,,,
+TIME-005,Policy boundary: 5 S2725QC at 6 percent with delivery request,,,,,,

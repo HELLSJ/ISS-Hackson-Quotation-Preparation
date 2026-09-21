@@ -33,7 +33,7 @@ from the target repository `lwd0110/ISS-Hackson-Quotation-Preparation` into
 
 ```text
 dell_agent/data/agent/catalog.json                 # 12 Dell monitor SKUs + evidence
-dell_agent/data/agent/bedrock_tool_config.json     # Converse toolConfig (3 tools)
+dell_agent/data/agent/tool_schemas.json            # OpenAI/Ollama function schemas (3 tools)
 dell_agent/data/agent/instructions.md              # system prompt
 dell_agent/data/agent/knowledge/MON-*.md           # per-SKU spec cards
 dell_agent/data/processed/pricing_rules.json       # synthetic SGD rules
@@ -120,27 +120,23 @@ python -m unittest discover -s dell_agent/tests
 python -m unittest dell_agent.tests.test_catalog
 ```
 
-## Optional Bedrock / Converse wiring
+## Organizer LLM Gateway wiring
 
-The deterministic **`OfflineDriver`** in `dell_agent/agent/loop.py` is the
-default path and needs nothing beyond the standard library. It classifies each
-turn with the state machine, performs structured `search_products` /
-`get_product` lookups, and only calls `calculate_quote` when the turn is
-`ready_to_quote`:
+The deterministic **`OfflineDriver`** needs no external service. The optional **`GatewayDriver`** sends the conversation and provider-neutral schemas to the organizer supplied Gateway, executes every requested tool locally through `dispatch`, and feeds the JSON result back to the model. It supports native `tool_calls` and the Gateway's JSON request fallback.
 
 ```python
-from dell_agent.agent.loop import OfflineDriver
+import os
+from dell_agent.agent.loop import GatewayDriver
 
-result = OfflineDriver().run("Please quote 8 Dell P2425HE monitors, budget SGD 2500.")
-print(result.status, result.quote_draft)
+driver = GatewayDriver(
+    base_url=os.environ["LLM_GATEWAY_URL"],
+    api_key=os.environ["LLM_GATEWAY_API_KEY"],
+    model=os.environ["LLM_MODEL"],
+)
+result = driver.run("Please quote 8 Dell P2425HE monitors, budget SGD 2500.")
 ```
 
-An optional LLM path (the **`ConverseDriver`**) is designed to drive the same
-three tools through a Bedrock Converse tool-calling loop, using the verbatim
-`toolConfig` served by `dell_agent/agent/tool_config.py` and the
-`instructions.md` system prompt. It requires `boto3` plus AWS credentials and a
-configured model. When those are unavailable, the workflow **degrades to the
-`OfflineDriver`**, so evaluation and demos never depend on any cloud resource.
+When configuration or transport fails, the result contains a visible `gateway_fallback` trace and the deterministic OfflineDriver result. The API key is never written to the result.
 
 Knowledge retrieval (`dell_agent/knowledge.py`) indexes **only** the
 `data/agent/knowledge/MON-*.md` spec cards behind an explicit allow-list;
@@ -156,8 +152,8 @@ into any runtime knowledge store.
 | `dell_agent/pricing.py` | `Decimal` half-up line/quote money math (integer cents only). |
 | `dell_agent/agent/tools.py` | The three frozen tools + `dispatch(name, args)`. |
 | `dell_agent/agent/state.py` | Deterministic status classifier and clarification/conflict/injection detectors. |
-| `dell_agent/agent/loop.py` | `OfflineDriver` (deterministic) and the optional `ConverseDriver` (LLM), both returning a uniform `AgentResult`. |
-| `dell_agent/agent/tool_config.py` | Loads/serves the Bedrock Converse `toolConfig` verbatim. |
+| `dell_agent/agent/loop.py` | `OfflineDriver` (deterministic) and the optional `GatewayDriver` (LLM), both returning a uniform `AgentResult`. |
+| `dell_agent/agent/tool_schemas.py` | Loads provider-neutral OpenAI/Ollama function schemas. |
 | `dell_agent/knowledge.py` | Allow-listed spec-card (`MON-*.md`) keyword retrieval. |
 | `dell_agent/scripts/fetch_data.py` | One-time `gh`-based mirror of the frozen data package. |
 | `dell_agent/data/` | Mirrored data package (catalogue, rules, evidence, knowledge, evaluation). |
