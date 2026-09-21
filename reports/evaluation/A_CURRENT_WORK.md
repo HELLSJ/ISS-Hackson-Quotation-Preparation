@@ -232,6 +232,7 @@ Offline 与真实模型结果对比
 - 9 项异常矩阵全部通过，见 `exception-acceptance.md`。
 - 五案例 Agent 计时工具和真人交互计时工具已就绪。Offline readiness 数据有效但不属于真实模型效率指标；真实计时只有在无 fallback、Agent 结果正确且 5 条人工记录完整并核对 PASS 时才通过门禁。
 - 2026-09-22 已用排除 `AWS_ACCESS_KEY_ID`、`AWS_SECRET_ACCESS_KEY` 和 `AWS_SESSION_TOKEN` 环境变量的 STS 命令验证 `showme-agent` Profile。随后只读调用 `bedrock:ListFoundationModels` 被 AWS Organizations SCP 显式拒绝；凭证链已就绪，但当前账户/角色尚不能用于发现 Bedrock 模型。
+- 2026-09-22 又用独立长期 Bedrock API key 在 `ap-southeast-1` 调用 `amazon.nova-lite-v1:0` 的 `Converse`。AWS 已识别关联 IAM 用户，说明 bearer token 认证有效；`bedrock:InvokeModel` 随后被同一 SCP `p-md82f7b5` 显式拒绝。该证据排除了本机凭据格式、SSO Session 过期和仅 `us-east-1` 区域限制，真实推理仍待组织策略解除或更换账户。
 
 完成 A 的最终交付仍需：非作者签核 sealed expected 与 PDF 模板、解除当前 Bedrock SCP 限制或切换到允许 Bedrock 的账户/角色、取得可调用的 Bedrock model ID，以及 5 次真人计时。
 

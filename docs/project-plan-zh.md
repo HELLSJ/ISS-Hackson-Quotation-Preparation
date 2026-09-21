@@ -266,7 +266,7 @@ rule_violation       invalid_quantity
 
 **主责：C AWS Agent；B 配合；预计 1 天。**
 
-**2026-09-22 状态：**`showme-agent` Profile 已通过排除环境变量后的 STS 验证；当前角色调用 `bedrock:ListFoundationModels` 时被 AWS Organizations 的 Service Control Policy（SCP）显式拒绝。需由组织管理员调整 SCP，或改用允许 Bedrock 的账户/角色，并提供可调用的 model ID，才能继续真实模型评测。
+**2026-09-22 状态：**`showme-agent` Profile 已通过排除环境变量后的 STS 验证；该角色调用 `bedrock:ListFoundationModels` 被 SCP 显式拒绝。随后创建的独立长期 Bedrock API key 已成功认证为关联 IAM 用户，但在 `ap-southeast-1` 调用 Nova Lite `Converse` 时，`bedrock:InvokeModel` 仍被同一 SCP `p-md82f7b5` 显式拒绝。这确认阻塞位于账户/OU 的组织策略层，而非本机凭据格式或单一区域。需由组织管理员调整 SCP，或改用允许 Bedrock 的账户/角色，才能继续真实模型评测。
 
 前置条件：
 

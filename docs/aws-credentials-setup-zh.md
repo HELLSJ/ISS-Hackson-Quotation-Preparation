@@ -171,6 +171,24 @@ AWS_PROFILE=showme-agent aws sts get-caller-identity
 
 SSO 会话过期后，只需再次执行 `aws sso login --profile showme-agent`，不需要手工更新三项密钥。AWS 官方流程见 [Configuring IAM Identity Center authentication with the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)。
 
+### 5.1 Bedrock API key（开发测试的替代认证）
+
+当前项目的 boto3 版本支持 Bedrock bearer token。API key 与 `showme-agent` Profile 是二选一的运行时认证方式；项目不需要同时使用二者。API key 只适用于 Bedrock/Bedrock Runtime，不能代替 STS 或其他 AWS 服务凭据。
+
+在当前终端安全读入 key：
+
+```bash
+unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_PROFILE
+read -s "AWS_BEARER_TOKEN_BEDROCK?Bedrock API key: "
+echo
+export AWS_BEARER_TOKEN_BEDROCK
+export AWS_REGION="ap-southeast-1"
+export AWS_DEFAULT_REGION="ap-southeast-1"
+export BEDROCK_MODEL_ID="amazon.nova-lite-v1:0"
+```
+
+不要把真实 key 写入仓库、`.env`、Markdown 或 shell 历史。长期 API key 适合探索和短期开发；正式部署应使用短期凭据或工作负载角色。API key 仍受 IAM、SCP、模型和区域权限限制，不能绕过组织策略。
+
 ## 6. 本项目的使用方法
 
 首先确认 Profile 指向正确的 Bedrock 账户：
@@ -243,6 +261,10 @@ aws sso login --profile showme-agent
 ### `AccessDeniedException`
 
 身份有效，但没有目标操作权限。确认所选账户/角色允许目标模型的 `bedrock:InvokeModel`；Converse 推理也受该权限控制。参考 [Amazon Bedrock identity-based policy examples](https://docs.aws.amazon.com/bedrock/latest/userguide/security_iam_id-based-policy-examples.html)。
+
+如果错误包含 `explicit deny in a service control policy`，拒绝来自 AWS Organizations 的 SCP。IAM Allow、Permission Set 或 Bedrock API key 都不能覆盖 SCP 的显式 Deny；组织管理员必须删除该 Deny、缩小其条件范围，或将工作负载移到允许目标 Bedrock 操作的账户/OU。
+
+本项目在 2026-09-22 已分别验证两种身份：SSO 角色的 `bedrock:ListFoundationModels`，以及独立 Bedrock API key IAM 用户在 `ap-southeast-1` 对 Nova Lite 的 `bedrock:InvokeModel`，均被 SCP `p-md82f7b5` 显式拒绝。因此当前阻塞不属于本机配置错误。
 
 ### STS 账户与预期不一致
 
