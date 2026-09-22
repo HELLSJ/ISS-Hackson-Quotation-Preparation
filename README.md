@@ -181,7 +181,7 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 data/tool checks
-.venv/bin/python -m unittest discover -s tests            # 57 catalogue/backend/gateway/evaluation-gate tests
+.venv/bin/python -m unittest discover -s tests            # 58 catalogue/backend/gateway/evaluation-gate tests
 .venv/bin/python -m unittest discover -s dell_agent/tests # 64 Agent tests
 ```
 

@@ -176,7 +176,7 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 项数据/工具检查
-.venv/bin/python -m unittest discover -s tests            # 57 项目录/后端/Gateway/评测门禁测试
+.venv/bin/python -m unittest discover -s tests            # 58 项目录/后端/Gateway/评测门禁测试
 .venv/bin/python -m unittest discover -s dell_agent/tests # 64 项 Agent 测试
 ```
 

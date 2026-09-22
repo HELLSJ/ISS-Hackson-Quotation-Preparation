@@ -191,6 +191,29 @@ class AgentFailurePathTests(unittest.TestCase):
         self.assertEqual({row["sku"] for row in result.candidates}, {"MON-005", "MON-008"})
         self.assertEqual({row["sku"] for row in result.citations}, {"MON-005", "MON-008"})
 
+    def test_same_capability_question_remains_evidence_comparison(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": "", "tool_calls": [{
+                "id": "call-1", "type": "function", "function": {
+                    "name": "get_product", "arguments": {"sku": "MON-005"},
+                },
+            }, {
+                "id": "call-2", "type": "function", "function": {
+                    "name": "get_product", "arguments": {"sku": "MON-008"},
+                },
+            }]}},
+            {"message": {"content": json.dumps({
+                "status": "answer_with_evidence", "ask_for": [],
+                "message": "Their USB-C video capabilities differ.",
+            }), "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret",
+            model="test-model", client=client,
+        ).run("Do P2425 and P2425E have the same USB-C video capability?")
+        self.assertEqual(result.status, "answer_with_evidence")
+        self.assertFalse(any(row.get("step") == "local_policy_guard" for row in result.trace))
+
     def test_named_product_final_answer_without_tool_is_retried(self) -> None:
         client = _SequenceClient([
             {"message": {"content": json.dumps({

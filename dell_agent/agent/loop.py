@@ -1162,7 +1162,12 @@ class GatewayDriver:
         )
         if (
             policy_guard.status == state_mod.EXPLAIN_LIMITATION
-            and re.search(r"\b(compare|comparison|difference|different)\b", enquiry_text, re.IGNORECASE)
+            and re.search(
+                r"\b(compare|comparison|difference|different)\b|\bhave\s+the\s+same\b"
+                r"|\bsame\s+(?:usb-c\s+)?(?:capability|feature|specification)",
+                enquiry_text,
+                re.IGNORECASE,
+            )
         ):
             # A comparison is an evidence answer even when one product lacks a
             # feature. Reserve the hard limitation guard for a customer's stated
