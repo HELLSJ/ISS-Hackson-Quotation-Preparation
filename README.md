@@ -1,49 +1,72 @@
-# Evidence-backed Quotation Preparation Agent
+# Quotation Desk — Evidence-Backed AI Quotation Agent
 
-[中文说明](README.zh-CN.md) · [Project plan (Chinese)](docs/project-plan-zh.md) · [API and tool contract](docs/api-contract.md)
+**[Open the live AWS demo](http://52.221.210.32/)** · [中文说明](README.zh-CN.md) · [60-second walkthrough](#see-it-in-60-seconds) · [Architecture](#architecture) · [API contract](docs/api-contract.md) · [Project plan](docs/project-plan-zh.md)
 
-A quotation-preparation workbench for a fictional office-equipment distributor. It turns an incomplete English customer enquiry into evidence-backed product candidates and a deterministic SGD quote draft while keeping product selection and approval under human control.
+> Turn an ambiguous customer enquiry into a source-linked, versioned and human-approved quotation. Language intelligence handles intent; deterministic tools own product facts and every cent.
+
+![Quotation Desk showing an immutable version comparison and confirmed PDF workflow](reports/evaluation/browser_acceptance/20260921T074342Z/browser-final.png)
+
+## See it in 60 seconds
+
+1. Ask for **eight USB-C monitors under SGD 2,500**. The Agent clarifies whether USB-C must carry video and charge the host laptop.
+2. Confirm **P2425HE at zero discount**. The pricing tool returns **SGD 2,312.00** with source-linked specifications.
+3. Change the quantity to ten. The new draft becomes **SGD 2,890.00** and exposes the **SGD 390.00** budget gap.
+4. Save both immutable versions, inspect the structured diff, confirm the chosen snapshot and export its PDF.
+
+Try the deployed workbench at **[http://52.221.210.32/](http://52.221.210.32/)**. The three demo buttons also exercise the USB-C port trap and the discount policy boundary.
+
+## What makes the workflow trustworthy
+
+- **Evidence at the point of decision.** Important product fields link to the exact Dell manual and PDF page.
+- **Deterministic money.** Catalogue prices, integer cents, half-up rounding and the 5% ceiling live in one tool layer.
+- **Explicit human control.** Suggested alternatives are never silently selected; saved drafts are not treated as approved quotes.
+- **Immutable history.** Version 1 remains unchanged when quantity, product or discount changes in Version 2.
+- **Export from the approved snapshot.** Diff and PDF read stored snapshots and never ask the model to recreate facts or totals.
+- **Visible failure modes.** Unknown stock and delivery stay unknown; policy violations and Gateway fallback remain visible.
+
+## Proof you can inspect
+
+| Evidence | Result |
+|---|---|
+| Real organizer Gateway, final sealed run | **20/20**, every scored dimension 100%, **0 fallback** ([report](reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/report.md)) |
+| Untouched first pass | **10/20 preserved** before fixes, with separate repair reports |
+| Live Gateway tool execution | 20 cases started, 21 local tool calls, no hidden fallback |
+| Browser acceptance | Save, revise, diff, confirm, PDF, policy blocking and evidence rendering passed ([report](reports/evaluation/browser_acceptance/20260922T075400Z/report.md)) |
+| Pricing and application validation | 60 catalogue/backend/Gateway/evaluation tests passed |
+| Agent regression suite | 64 cases completed: 57 passed, 7 documented OfflineDriver heuristic skips |
+| Source base | 6 Dell manuals, 522 pages and 96 field-level evidence records |
+| Real Gateway timing | 5/5 correct; **12.705 s median** ([report](reports/evaluation/timing/20260922T073821Z-gateway-first-pass/report.md)) |
+| Quote PDF QA | 9/9 extraction checks and 8/8 disclosed visual technical checks passed |
+
+The valid first pass and repaired runs are deliberately separate. The final score is a real-model result only when the configured driver is `gateway`, fallback is false and the trace contains Gateway tool turns.
+
+## Product workflow
 
 ```text
 Customer enquiry → clarify requirements → search the frozen catalogue
-→ inspect source evidence → user selects a product → deterministic pricing
+→ inspect source evidence → human selects a product → deterministic pricing
 → save immutable draft versions → compare versions → confirm → export PDF
 ```
 
-## Why this project exists
-
-Wholesale sales administrators repeatedly search catalogues, verify product specifications, calculate discounts, and rebuild quotation files when customers change quantities. That work is slow and error-prone, especially when requirements such as “USB-C” are ambiguous.
-
-This project demonstrates a safer division of responsibility:
-
 > **The model understands language and asks questions; deterministic tools own every fact and every cent.**
 
-The model and browser cannot provide a unit price, calculate a total, silently substitute a SKU, or turn an unknown specification into a fact. Product facts come from frozen source records, and important fields link back to a Dell manual and PDF page.
+The model and browser cannot provide a unit price, calculate a total, silently substitute a SKU, or turn an unknown specification into a fact.
 
 > [!IMPORTANT]
-> Product specifications come from publicly accessible Dell manuals. Prices, discount rules, and customer enquiries are synthetic hackathon data. They do not represent Dell pricing, stock, delivery commitments, or commercial policy. A calculated or saved draft is not an approved quotation or tax invoice.
+> Product specifications come from publicly accessible Dell manuals. Prices, discount rules and customer enquiries are synthetic hackathon data. They do not represent Dell pricing, stock, delivery commitments or commercial policy. A calculated or saved draft is not an approved quotation or tax invoice.
 
-## Current status
+## What is shipped
 
-The usable vertical slice and backend quote lifecycle are complete: deterministic tools, an offline Agent, FastAPI, SQLite persistence, a responsive three-panel workbench, local source-PDF evidence, immutable schema-v2 draft versions, append-only confirmation, structured diff, and confirmed-snapshot PDF export.
-
-| Area | Status |
+| Area | Working implementation |
 |---|---|
-| Source data | 6 Dell manuals, 522 pages, about 43.9 MB |
-| Catalogue | 12 monitor SKUs and 12 synthetic SGD prices |
-| Evidence | 96 field-level records with source ID, PDF page, and method |
-| Evaluation fixtures | 20 development, 20 holdout, and 3 fixed demo scenarios |
-| Canonical tools | `search_products`, `get_product`, and `calculate_quote` through one dispatcher |
-| Offline Agent | Clarification, limitations, policy blocking, pricing, and revisions |
-| Application | FastAPI + `app.sqlite` + browser workbench |
-| Saved versions | Validated schema-v2 snapshots; immutable, idempotent, and protected against stale saves |
-| Confirmation | Append-only immutable confirmed snapshot with exact-token idempotency |
-| Version diff and quote PDF | Backend APIs complete; PDF is confirmed-snapshot-only and never re-prices |
-| Automated validation | 60 catalogue/backend/gateway/evaluation-gate tests passed; 64 Agent tests completed (57 passed, 7 documented skips) |
-| Organizer LLM Gateway | Story A/B/C live checks passed; final sealed run passed 20/20 with 0 fallbacks |
-| Independent data review | Complete: 24/24 evidence checks signed and dataset `2026-09-14.v1` frozen |
-| Browser confirmation/diff/PDF controls | Implemented and exercised end to end in headless Chrome |
-| Formal model/holdout evaluation | Valid first pass preserved (10/20); repaired run passed 20/20, all scored dimensions 100% |
+| Language layer | Organizer LLM Gateway plus explicit OfflineDriver fallback |
+| Trusted tool layer | `search_products`, `get_product` and `calculate_quote` through one dispatcher |
+| Web application | FastAPI, SQLite and responsive three-panel browser workbench |
+| Evidence | 12 monitor SKUs and 96 field-level source records |
+| Quote lifecycle | Draft → immutable saved draft → append-only confirmation → PDF |
+| Revision control | Stable line IDs, stale-save protection, idempotent save/confirm and structured diff |
+| Auditability | Gateway/fallback badge, tool trace, data/rule versions and source-page links |
+| Deployment | Public AWS Lightsail instance behind Nginx |
 
 The authoritative remaining-work sequence and acceptance criteria are in the [consolidated project plan](docs/project-plan-zh.md).
 

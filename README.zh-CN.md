@@ -1,49 +1,72 @@
-# 可追溯报价编制 Agent
+# Quotation Desk：可审计的 AI 报价工作台
 
-[English README](README.md) · [项目总规划](docs/project-plan-zh.md) · [API 与工具契约](docs/api-contract.md) · [前端开发与部署指南](docs/frontend-development-deployment-zh.md)
+**[打开 AWS 在线演示](http://52.221.210.32/)** · [English README](README.md) · [60 秒体验](#60-秒看懂) · [系统架构](#架构) · [API 契约](docs/api-contract.md) · [前端指南](docs/frontend-development-deployment-zh.md) · [项目规划](docs/project-plan-zh.md)
 
-这是一个面向虚构办公设备分销商的报价工作台：把不完整的英文客户询价转成有证据的产品候选和确定性 SGD 报价草稿，同时把产品选择和最终确认留给销售人员。
+> 把含糊的客户询价变成有原文证据、有版本记录、经人工确认的正式报价快照。模型理解语言，确定性工具掌握产品事实和每一分钱。
+
+![Quotation Desk 展示不可变版本比较和确认后 PDF 流程](reports/evaluation/browser_acceptance/20260921T074342Z/browser-final.png)
+
+## 60 秒看懂
+
+1. 输入“需要 **8 台 USB-C 显示器，预算 SGD 2,500**”。Agent 会先问清 USB-C 是否需要视频和笔记本供电。
+2. 确认选择 **P2425HE，零折扣**。计价工具返回 **SGD 2,312.00**，关键规格带 Dell 原文页码。
+3. 把数量改成 10。新草稿变为 **SGD 2,890.00**，明确显示**超预算 SGD 390.00**。
+4. 保存两个不可变版本，查看结构化 diff，人工确认选定快照并导出 PDF。
+
+直接体验：**[http://52.221.210.32/](http://52.221.210.32/)**。页面内三个演示按钮还覆盖 USB-C 端口陷阱和折扣政策边界。
+
+## 为什么这个工作流可信
+
+- **证据就在决策旁边。**关键产品字段可打开对应 Dell 手册和 PDF 页码。
+- **金额由工具确定。**目录价、整数分、half-up 舍入和 5% 上限集中在唯一工具层。
+- **人工控制明确。**推荐替代项不会自动选择，保存草稿不会被当成批准报价。
+- **历史不可变。**修改数量、产品或折扣时，旧版本保持原样。
+- **导出基于确认快照。**diff 和 PDF 只读存储快照，不让模型重新生成事实或金额。
+- **失败状态可见。**库存和交付未知会保留为未知；政策阻断和 Gateway fallback 都会显示。
+
+## 可核验的结果
+
+| 证据 | 结果 |
+|---|---|
+| 组织者真实 Gateway 最终 sealed 评测 | **20/20**，全部计分维度 100%，**0 fallback**（[报告](reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/report.md)） |
+| 未修改的有效首轮 | 修复前 **10/20** 原样保留，修复报告单独保存 |
+| Gateway 工具执行 | 20 条案例启动，21 次本地工具调用，无隐藏 fallback |
+| 浏览器验收 | 保存、修订、diff、确认、PDF、政策阻断和证据渲染通过（[报告](reports/evaluation/browser_acceptance/20260922T075400Z/report.md)） |
+| 计价与应用校验 | 60 项目录/后端/Gateway/评测门禁测试通过 |
+| Agent 回归 | 64 项完成：57 项通过，7 项为已记录的 OfflineDriver 启发式 skip |
+| 证据基础 | 6 份 Dell 手册、522 页、96 条字段级证据 |
+| 真实 Gateway 计时 | 5/5 正确，**中位数 12.705 秒**（[报告](reports/evaluation/timing/20260922T073821Z-gateway-first-pass/report.md)） |
+| 报价 PDF QA | 9/9 机器提取检查和 8/8 已披露视觉技术审核通过 |
+
+有效首轮与修复后运行严格分开。只有 `configured_driver=gateway`、`used_fallback=false` 且 trace 包含 Gateway 工具调用时，结果才计入真实模型评测。
+
+## 产品流程
 
 ```text
 客户询价 → 澄清需求 → 查询冻结目录 → 查看原文证据
-→ 用户选择产品 → 确定性计价 → 保存不可变草稿版本
+→ 人工选择产品 → 确定性计价 → 保存不可变草稿版本
 → 对比版本 → 人工确认 → 导出 PDF
 ```
 
-## 为什么做这个项目
-
-销售行政人员需要反复查目录、核对规格、计算折扣，并在客户修改数量后重做报价。尤其是“需要 USB-C”这样的描述可能只指数据接口，也可能要求一根线同时传视频并给笔记本供电，直接报价很容易选错型号。
-
-本项目采用明确的职责分工：
-
 > **模型负责理解语言和追问；确定性工具拥有所有事实和金额。**
 
-模型和前端不能提供单价、计算总额、静默替换 SKU，或把未知规格变成事实。关键产品字段都能回到 Dell 手册和 PDF 页码。
+模型和前端不能提供单价、计算总额、静默替换 SKU，或把未知规格变成事实。
 
 > [!IMPORTANT]
 > 产品规格来自公开可访问的 Dell 手册。价格、折扣规则和客户询价均为比赛模拟数据，不代表 Dell 的报价、库存、交期或商业政策。计算或保存的草稿不是已批准报价，也不是税务发票。
 
-## 当前状态
+## 已交付能力
 
-可用纵向切片和报价后端生命周期已经完成：确定性工具、离线 Agent、FastAPI、SQLite 持久化、三栏工作台、本地证据 PDF、schema-v2 草稿快照、append-only 人工确认、结构化 diff 和 confirmed snapshot PDF。
-
-| 模块 | 状态 |
+| 模块 | 可运行实现 |
 |---|---|
-| 原始资料 | 6 份 Dell 手册，522 页，约 43.9 MB |
-| 产品目录 | 12 个显示器 SKU、12 条模拟 SGD 价格 |
-| 字段证据 | 96 条，含来源 ID、PDF 页码和方法 |
-| 评估素材 | 20 dev、20 holdout、3 条固定演示故事 |
-| 唯一工具入口 | `search_products`、`get_product`、`calculate_quote` 共用 dispatcher |
-| Offline Agent | 可追问、解释限制、阻断规则、计价和修改 |
-| Web 应用 | FastAPI + `app.sqlite` + 三栏工作台 |
-| 保存版本 | 经过完整校验的 schema-v2 快照，不可变、幂等并阻止 stale 保存 |
-| 人工确认 | append-only confirmed snapshot，精确 token 重试幂等 |
-| 版本 diff 和报价 PDF | 后端 API 已完成；PDF 只读取 confirmed snapshot，不重新计价 |
-| 自动化校验 | 60 项目录/后端/Gateway/评测门禁测试通过；64 项 Agent 测试完成（57 通过、7 项明确 skip） |
-| 组织者 LLM Gateway | Story A/B/C 真实验收通过；最终 sealed 评测 20/20、0 fallback |
-| 独立数据复核 | 已完成：24/24 条证据核对已签核，`2026-09-14.v1` 已冻结 |
-| 浏览器 confirmation/diff/PDF 操作 | 已实现，并通过 Chrome 端到端验收 |
-| 正式模型/holdout 评估 | 有效首轮 10/20 已保留；修复后 20/20，全部计分维度 100% |
+| 语言层 | 组织者 LLM Gateway，以及明确可见的 OfflineDriver fallback |
+| 可信工具层 | `search_products`、`get_product`、`calculate_quote` 共用唯一 dispatcher |
+| Web 应用 | FastAPI、SQLite 和响应式三栏工作台 |
+| 规格证据 | 12 个显示器 SKU、96 条字段级来源记录 |
+| 报价生命周期 | 草稿 → 不可变保存版本 → append-only 人工确认 → PDF |
+| 修订控制 | 稳定 line ID、stale 防护、保存/确认幂等和结构化 diff |
+| 审计能力 | Gateway/fallback 徽章、工具 trace、数据/规则版本和原文页码 |
+| 公网部署 | AWS Lightsail + Nginx |
 
 所有后续工作及验收标准见唯一的[项目总规划](docs/project-plan-zh.md)。
 
