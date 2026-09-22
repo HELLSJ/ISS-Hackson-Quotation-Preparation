@@ -1,6 +1,6 @@
 # Quotation Desk：可审计的 AI 报价工作台
 
-**[打开 AWS 在线演示](http://52.221.210.32/)** · [English README](README.md) · [60 秒体验](#60-秒看懂) · [系统架构](#架构) · [API 契约](docs/api-contract.md) · [前端指南](docs/frontend-development-deployment-zh.md) · [项目规划](docs/project-plan-zh.md)
+**[打开 AWS 在线演示](http://47.131.151.253/)** · [English README](README.md) · [60 秒体验](#60-秒看懂) · [系统架构](#架构) · [API 契约](docs/api-contract.md) · [前端指南](docs/frontend-development-deployment-zh.md) · [项目规划](docs/project-plan-zh.md)
 
 > 把含糊的客户询价变成有原文证据、有版本记录、经人工确认的正式报价快照。模型理解语言，确定性工具掌握产品事实和每一分钱。
 
@@ -13,7 +13,7 @@
 3. 把数量改成 10。新草稿变为 **SGD 2,890.00**，明确显示**超预算 SGD 390.00**。
 4. 保存两个不可变版本，查看结构化 diff，人工确认选定快照并导出 PDF。
 
-直接体验：**[http://52.221.210.32/](http://52.221.210.32/)**。页面内三个演示按钮还覆盖 USB-C 端口陷阱和折扣政策边界。
+直接体验：**[http://47.131.151.253/](http://47.131.151.253/)**。页面内三个演示按钮还覆盖 USB-C 端口陷阱和折扣政策边界。
 
 ## 为什么这个工作流可信
 

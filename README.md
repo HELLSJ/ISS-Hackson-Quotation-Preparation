@@ -1,6 +1,6 @@
 # Quotation Desk — Evidence-Backed AI Quotation Agent
 
-**[Open the live AWS demo](http://52.221.210.32/)** · [中文说明](README.zh-CN.md) · [60-second walkthrough](#see-it-in-60-seconds) · [Architecture](#architecture) · [API contract](docs/api-contract.md) · [Project plan](docs/project-plan-zh.md)
+**[Open the live AWS demo](http://47.131.151.253/)** · [中文说明](README.zh-CN.md) · [60-second walkthrough](#see-it-in-60-seconds) · [Architecture](#architecture) · [API contract](docs/api-contract.md) · [Project plan](docs/project-plan-zh.md)
 
 > Turn an ambiguous customer enquiry into a source-linked, versioned and human-approved quotation. Language intelligence handles intent; deterministic tools own product facts and every cent.
 
@@ -13,7 +13,7 @@
 3. Change the quantity to ten. The new draft becomes **SGD 2,890.00** and exposes the **SGD 390.00** budget gap.
 4. Save both immutable versions, inspect the structured diff, confirm the chosen snapshot and export its PDF.
 
-Try the deployed workbench at **[http://52.221.210.32/](http://52.221.210.32/)**. The three demo buttons also exercise the USB-C port trap and the discount policy boundary.
+Try the deployed workbench at **[http://47.131.151.253/](http://47.131.151.253/)**. The three demo buttons also exercise the USB-C port trap and the discount policy boundary.
 
 ## What makes the workflow trustworthy
 
