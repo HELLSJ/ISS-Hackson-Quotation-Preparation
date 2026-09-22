@@ -299,6 +299,55 @@ button:disabled { cursor: wait; }
 .toast { position: fixed; left: 50%; bottom: 24px; max-width: min(520px, calc(100vw - 32px)); transform: translate(-50%, 18px); opacity: 0; pointer-events: none; background: var(--navy); color: #fff; padding: 11px 15px; border: 1px solid rgba(255,255,255,.14); border-radius: 7px; box-shadow: 0 10px 30px rgba(4,23,39,.24); transition: opacity .18s, transform .18s; z-index: 20; }
 .toast.visible { opacity: 1; transform: translate(-50%, 0); }
 
+/* Desktop workbench: keep the conversation composer and latest reply in view.
+   Each column owns its scroll instead of making the document as tall as the
+   catalogue. Narrow screens retain the natural document flow below. */
+@media (min-width: 1101px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+  .topbar {
+    height: 72px;
+    min-height: 72px;
+  }
+  .workbench {
+    height: calc(100dvh - 72px);
+    min-height: 0;
+    overflow: hidden;
+  }
+  .panel {
+    height: 100%;
+  }
+  .panel-heading,
+  .scenario-strip,
+  .composer,
+  .requirement-ledger,
+  .tool-trace {
+    flex: 0 0 auto;
+  }
+  .message-list,
+  .candidate-list,
+  .quote-panel {
+    min-height: 0;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+  .quote-panel {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .quote-panel .panel-heading {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .quote-panel .quote-body {
+    flex: 0 0 auto;
+    overflow: visible;
+  }
+}
+
 @media (max-width: 1280px) {
   .workbench { grid-template-columns: minmax(300px, .9fr) minmax(360px, 1.08fr) minmax(310px, .92fr); }
   .scenario-strip { grid-template-columns: repeat(3, 122px); }
