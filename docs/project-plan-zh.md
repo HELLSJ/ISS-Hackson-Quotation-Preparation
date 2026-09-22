@@ -109,7 +109,7 @@ from dell_agent.agent.tools import dispatch
 
 | 能力 | 当前实现 |
 |---|---|
-| 原始数据 | 6 份 Dell 官方英文 PDF，共 522 页、约 43.9 MB |
+| 来源基线 | 6 份 Dell 官方英文手册，共 522 页、冻结时约 43.9 MB；原 PDF 不进入比赛提交 |
 | 产品目录 | 12 个型号、12 条模拟 SGD 价格 |
 | 字段证据 | 96 条，包含来源 ID、PDF 页码和推导方式 |
 | 评估素材 | 20 条 dev、20 条 holdout、3 条固定演示故事 |
@@ -117,17 +117,17 @@ from dell_agent.agent.tools import dispatch
 | 唯一工具契约 | `dell_agent.agent.tools.dispatch`；CLI、Agent 和 API 共用 |
 | 离线 Agent | 澄清、查询、限制解释、规则阻断、计价和多轮修改 |
 | 演示回归 | Story A/B/C 均可在 OfflineDriver 运行 |
-| FastAPI | 产品、证据 PDF、会话、消息、计价、保存和读取版本接口 |
+| FastAPI | 产品、官方证据链接、会话、消息、计价、保存和读取版本接口 |
 | 业务存储 | `storage/app.sqlite` 保存 conversations、messages、quote_versions |
 | 版本安全 | schema-v2 完整快照、内容指纹幂等、stale result ID 阻断 |
 | 人工确认 | 独立 append-only confirmation，精确 token 重试幂等，旧 schema 不可确认 |
 | 版本 diff | 只比较存储快照，支持 added/removed/changed、金额及元数据差异 |
 | 报价 PDF | ReportLab 从 confirmed snapshot 生成，不调用 Agent、目录或计价工具 |
-| 应用测试 | 19 项临时数据库测试覆盖迁移、并发、确认、diff、PDF、故障注入和 HTTP |
+| 应用测试 | 20 项临时数据库测试覆盖迁移、并发、确认、diff、PDF、证据链接、故障注入和 HTTP |
 | 浏览器工作台 | 三栏页面、候选选择、规格证据、预算、数量修改、刷新恢复 |
 | 云失败回退 | Gateway 配置或调用失败时显式回退 OfflineDriver |
 
-当前机器报告记录：15 项目录工具测试通过；60 项目录/后端/Gateway/评测门禁测试通过；64 项 Agent 测试完成，其中 57 项通过、7 项是明确记录的 OfflineDriver 启发式边界。三条固定演示不在 skip 中。
+当前机器报告记录：15 项目录工具测试通过；61 项目录/后端/Gateway/评测门禁测试通过；64 项 Agent 测试完成，其中 57 项通过、7 项是明确记录的 OfflineDriver 启发式边界。三条固定演示不在 skip 中。
 
 ### 4.2 部分完成
 
@@ -137,19 +137,19 @@ from dell_agent.agent.tools import dispatch
 | 报价版本与页面 | schema-v2 保存、确认、diff、PDF、故障注入、页面操作、自动化验收和 8/8 Codex PDF 技术审核 | 若声称独立人工审核则由非作者复签 |
 | Agent 评估 | dev/holdout fixtures 的 expected 已独立审核；sealed holdout 完成 20/20 Codex 技术审核、哈希冻结；有效首轮 10/20 与修复后 20/20 报告均已保存 | 若声称独立人工审核则由非作者复签 |
 | 审计 | 每轮 `AgentResult.trace` 随消息保存；页面可展开查看工具、参数和结果 | 部署后日志验证 |
-| 证据展示 | 本地官方 PDF 与页码链接 | 发布前确认 PDF 再分发条件或改为来源下载链接 |
+| 证据展示 | 已改为 Dell 官方 URL 与精确页码；原 PDF 已从比赛提交移除 | 完成 |
 
 ### 4.3 未完成
 
 - 5 个案例的真人流程计时；Agent 真实 Gateway 计时已完成，中位数 12.705 秒；
 - 如需声称独立人工审核，由非作者复签 sealed/PDF 技术审核；
-- 30 分钟视频、最终许可检查和提交。
+- 30 分钟视频和提交。
 
 ### 4.4 不能声称已经完成的事项
 
 - 不能把 fixture 数量写成模型准确率；
 - 不能把 OfflineDriver fallback 写成 Gateway 成功；
-- 不能把 15 项数据/工具测试或 19 项后端测试写成模型准确率；
+- 不能把 15 项数据/工具测试或 20 项后端测试写成模型准确率；
 - 不能把 `saved_draft` 写成已批准报价；
 - 不能在未计时前声称“提升 80%”；
 - 不能承诺库存、交期、税费或真实 Dell 价格。
@@ -168,7 +168,7 @@ Browser workbench
           → conversations
           → messages + AgentResult/trace
           → immutable quote_versions + append-only quote_confirmations
-      → allow-listed local source PDFs
+      → official Dell source URLs with exact page references
       → stored-snapshot diff / confirmed-only PDF exporter
 ```
 
@@ -223,7 +223,7 @@ source_manifest.json
 
 ### 6.3 来源和许可
 
-规格来自 `data/processed/sources.csv` 中列出的 Dell 官方英文手册。公开可下载不等于开放数据许可。公开提交原 PDF 前必须复核再分发条件；如不允许，应只发布事实字段、来源链接和获取说明。价格、规则和询价是模拟数据，界面、PDF 和视频都必须明确标记。
+规格来自 `data/processed/sources.csv` 中列出的 Dell 官方英文手册。公开可下载不等于开放数据许可，因此比赛提交不包含原 PDF，只发布事实字段、冻结提取文本、来源链接、精确页码和获取说明。价格、规则和询价是模拟数据，界面、报价 PDF 和视频都必须明确标记。
 
 ## 7. 用户工作流与状态
 
@@ -395,10 +395,10 @@ A 收口时运行 `.venv/bin/python scripts/check_a_completion.py`。当前技�
 - [x] 确认 `draft → saved_draft → confirmed`、schema-v2 快照和旧版本迁移；临时 SQLite 测试已覆盖。
 - [x] 完成保存/确认的幂等、stale 保护与并发测试；未确认版本不可导出。
 - [x] 完成只比较保存快照的版本 diff API 与 confirmed-only PDF API；API 契约已记录。
-- [x] 补齐数据库保存失败与 PDF 生成失败的故障注入，验证状态保留及重试路径；后端 19 项通过。
+- [x] 补齐数据库保存失败与 PDF 生成失败的故障注入，验证状态保留及重试路径；后端 20 项通过。
 - [x] 用 `scripts/generate_pdf_qa_samples.py` 可复现生成并渲染检查[标准报价](../output/pdf/quotation-qa-standard.pdf)（1 页）和[长表报价](../output/pdf/quotation-qa-long.pdf)（5 页）；9 项机器预检和 8/8 Codex PDF 技术审核通过。若声称独立人工审核则由非作者复签。
 - [x] 核对 D 所需的保存、确认、diff、下载接口与响应示例；Story A 的 v1/v2 HTTP 链路已通过，调用顺序和错误恢复见 [API 契约](api-contract.md#browser-integration-handoff-for-d)。
-- [x] 运行相关回归并同步本文、API 契约和交付清单的最终状态；当前目录/后端/Gateway/评测门禁 60 项通过，Agent 64 项完成（57 通过、7 项明确 skip），`git diff --check` 通过。
+- [x] 运行相关回归并同步本文、API 契约和交付清单的最终状态；当前目录/后端/Gateway/评测门禁 61 项通过，Agent 64 项完成（57 通过、7 项明确 skip），`git diff --check` 通过。
 
 B 的后端交付已完成。D 的浏览器按钮已经接入；A 已用上面的两份 QA PDF 完成合成价格、行明细、分页表头、条款和版本 provenance 技术审核。
 
@@ -478,8 +478,8 @@ B 的后端交付已完成。D 的浏览器按钮已经接入；A 已用上面�
 - [x] append-only 人工确认与不可变 confirmed snapshots；
 - [x] v1/v2 结构化 diff API；
 - [x] confirmed-only 报价 PDF renderer 和下载 API；
-- [x] 19 项后端 migration/concurrency/lifecycle/diff/PDF/fault-injection/HTTP 测试；
-- [x] 三栏浏览器工作台和本地规格 PDF 证据；
+- [x] 20 项后端 migration/concurrency/lifecycle/diff/PDF/evidence-link/fault-injection/HTTP 测试；
+- [x] 三栏浏览器工作台和 Dell 官方来源页码证据；
 - [x] 团队独立数据冻结记录；
 - [x] Story A 组织者 Gateway 真实 tool-use smoke 与脱敏证据；
 - [x] Story B/C 真实 tool-use trace；
@@ -498,7 +498,7 @@ B 的后端交付已完成。D 的浏览器按钮已经接入；A 已用上面�
 1. 从干净或已知状态启动应用；
 2. 完整运行 Story A 到当前最远 Gate；
 3. 验证金额锚点；
-4. 打开至少一个证据 PDF 页；
+4. 打开至少一个 Dell 官方证据链接并核对页码；
 5. 检查 fallback 状态是否真实；
 6. 运行受影响测试；
 7. 记录新发现的阻塞项和负责人。
