@@ -236,6 +236,68 @@ class AgentFailurePathTests(unittest.TestCase):
         self.assertIsNone(result.quote_draft)
         self.assertTrue(any(row.get("step") == "local_policy_guard" for row in result.trace))
 
+    def test_complete_multi_product_order_repairs_missing_quote_tool(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": "", "tool_calls": [{
+                "id": "call-1", "type": "function", "function": {
+                    "name": "get_product", "arguments": {"sku": "MON-001"},
+                },
+            }, {
+                "id": "call-2", "type": "function", "function": {
+                    "name": "get_product", "arguments": {"sku": "MON-011"},
+                },
+            }]}},
+            {"message": {"content": json.dumps({
+                "status": "answer_with_evidence", "ask_for": [],
+                "message": "The selected products are available in the catalogue.",
+            }), "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret",
+            model="test-model", client=client,
+        ).run("Our order needs one S2425H and two U2724DE monitors.")
+        self.assertEqual(result.status, "ready_to_quote")
+        self.assertEqual(result.quote_draft["total_cents"], 140700)
+        self.assertTrue(any(row.get("step") == "gateway_local_tool_repair" for row in result.trace))
+
+    def test_budget_conflict_is_owned_by_local_quote(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": "", "tool_calls": [{
+                "id": "call-1", "type": "function", "function": {
+                    "name": "calculate_quote", "arguments": {
+                        "items": [{"sku": "MON-009", "quantity": 9}],
+                        "budget_cents": 300000,
+                    },
+                },
+            }]}},
+            {"message": {"content": json.dumps({
+                "status": "ready_to_quote", "ask_for": [], "message": "Draft ready.",
+            }), "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret",
+            model="test-model", client=client,
+        ).run("We need nine P2725HE monitors with no discount and cannot exceed SGD 3,000.")
+        self.assertEqual(result.status, "budget_conflict")
+        self.assertEqual(result.quote_draft["over_budget_cents"], 14100)
+
+    def test_word_discount_and_negative_word_quantity_use_hard_guards(self) -> None:
+        for prompt, expected in (
+            ("Apply a seven percent discount to five S2725QC monitors.", "rule_violation"),
+            ("Quote negative three P2425E displays.", "invalid_quantity"),
+        ):
+            with self.subTest(prompt=prompt):
+                client = _SequenceClient([{"message": {"content": json.dumps({
+                    "status": "needs_clarification", "ask_for": ["quantity"],
+                    "message": "Please clarify.",
+                }), "tool_calls": []}}])
+                result = GatewayDriver(
+                    base_url="https://gateway.example", api_key="secret",
+                    model="test-model", client=client,
+                ).run(prompt)
+                self.assertEqual(result.status, expected)
+                self.assertIsNone(result.quote_draft)
+
     def test_ollama_client_uses_gateway_header_and_endpoint(self) -> None:
         captured = {}
 

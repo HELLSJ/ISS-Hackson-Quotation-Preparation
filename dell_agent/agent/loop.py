@@ -196,11 +196,11 @@ def _quantity_before(text: str, sku_span_text: str) -> Optional[int]:
         return None
     prefix = lowered[:idx]
     # Explicit negative phrasing must remain invalid, never become positive.
-    m = re.search(r"\bminus\s+(\d+)\s+(?:dell\s+)?$", prefix)
+    m = re.search(r"\b(?:minus|negative)\s+(\d+)\s+(?:dell\s+)?$", prefix)
     if m:
         value = _digits_to_int(m.group(1))
         return -value if value is not None else None
-    m = re.search(r"\bminus\s+([a-z]+)\s+(?:dell\s+)?$", prefix)
+    m = re.search(r"\b(?:minus|negative)\s+([a-z]+)\s+(?:dell\s+)?$", prefix)
     if m and m.group(1) in _QTY_WORD:
         return -_QTY_WORD[m.group(1)]
     # Numeric quantity right before the token.
@@ -231,7 +231,7 @@ def _first_quantity(text: str) -> Optional[int]:
     reject them instead of silently turning them positive.
     """
     negative = re.search(
-        r"\bminus\s+(\d+|" + "|".join(_QTY_WORD) + r")\b", text, re.IGNORECASE
+        r"\b(?:minus|negative)\s+(\d+|" + "|".join(_QTY_WORD) + r")\b", text, re.IGNORECASE
     )
     if negative:
         raw = negative.group(1).lower()
@@ -254,7 +254,7 @@ def _first_quantity(text: str) -> Optional[int]:
     for cand in re.finditer(r"\b(" + "|".join(_QTY_WORD) + r")\b", text, re.IGNORECASE):
         # Skip a number word that qualifies a discount, e.g. "zero discount".
         following = text[cand.end():cand.end() + 16].lower()
-        if re.match(r"\s*(?:%|percent|discount)", following):
+        if re.match(r"\s*(?:%|percent|discount|[-\s]+cable)", following):
             continue
         wm = cand
         word = _QTY_WORD[cand.group(1).lower()]
@@ -279,6 +279,13 @@ def _parse_discount_bps(text: str) -> Optional[int]:
         except ValueError:
             return None
         return int(round(pct * 100))
+    m = re.search(
+        r"\b(" + "|".join(_QTY_WORD) + r")\s+percent\b",
+        text,
+        re.IGNORECASE,
+    )
+    if m:
+        return _QTY_WORD[m.group(1).lower()] * 100
     return None
 
 
@@ -764,6 +771,8 @@ class OfflineDriver:
         rm = re.search(r"\b(\d{3,4}\s*[x\u00d7]\s*\d{3,4})\b", text, re.IGNORECASE)
         if rm:
             filters["resolution"] = re.sub(r"\s*", "", rm.group(1)).replace("\u00d7", "x")
+        elif re.search(r"\b4k\b", text, re.IGNORECASE):
+            filters["resolution"] = "3840x2160"
 
         # Exact size, e.g. "exactly 27-inch" -> min==max==27.0.
         sm = re.search(r"exactly\s*(\d{2}(?:\.\d+)?)\s*(?:-\s*)?(?:inch|inches|in\b|\")",
@@ -1153,7 +1162,7 @@ class GatewayDriver:
         )
         if (
             policy_guard.status == state_mod.EXPLAIN_LIMITATION
-            and re.search(r"\b(compare|comparison|difference|different|same)\b", enquiry_text, re.IGNORECASE)
+            and re.search(r"\b(compare|comparison|difference|different)\b", enquiry_text, re.IGNORECASE)
         ):
             # A comparison is an evidence answer even when one product lacks a
             # feature. Reserve the hard limitation guard for a customer's stated
@@ -1272,6 +1281,42 @@ class GatewayDriver:
         else:
             trace.append({"step": "gateway_iteration_cap", "result": self.max_iterations})
 
+        # The model can occasionally stop after fetching product facts even
+        # though the deterministic planner has a complete quote request. Run
+        # the same local pricing tool here so money never depends on prose.
+        if (
+            policy_guard
+            and policy_guard.status == state_mod.READY_TO_QUOTE
+            and policy_guard.quote_draft
+            and not any(name == "calculate_quote" for name, _ in tool_results)
+        ):
+            quote_args: dict[str, Any] = {
+                "items": [
+                    {
+                        "sku": line["sku"],
+                        "quantity": line["quantity"],
+                        **(
+                            {"discount_bps": line["discount_bps"]}
+                            if line.get("discount_bps")
+                            else {}
+                        ),
+                    }
+                    for line in policy_guard.quote_draft.get("lines", [])
+                ]
+            }
+            if policy_guard.quote_draft.get("budget_cents") is not None:
+                quote_args["budget_cents"] = policy_guard.quote_draft["budget_cents"]
+            repaired_quote = tools_mod.dispatch("calculate_quote", quote_args)
+            tool_results.append(("calculate_quote", repaired_quote))
+            trace.append({
+                "step": "gateway_local_tool_repair",
+                "tool": "calculate_quote",
+                "args": quote_args,
+                "result": repaired_quote.get("error", "ok")
+                if isinstance(repaired_quote, dict)
+                else "invalid",
+            })
+
         return self._assemble_result(
             final_text, final_envelope, tool_results, trace, policy_guard=policy_guard
         )
@@ -1346,7 +1391,12 @@ class GatewayDriver:
 
         # The model may select the business status, but only when local tool
         # evidence makes that status possible. Facts and money remain tool-owned.
-        if requested_status == state_mod.NEEDS_CLARIFICATION and not result.quote_draft:
+        if (
+            requested_status == state_mod.NEEDS_CLARIFICATION
+            and not result.quote_draft
+            and not saw_empty_search
+            and not saw_missing_product
+        ):
             result.status = state_mod.NEEDS_CLARIFICATION
         elif requested_status == state_mod.EXPLAIN_LIMITATION and result.citations and not result.quote_draft:
             result.status = state_mod.EXPLAIN_LIMITATION
@@ -1367,12 +1417,24 @@ class GatewayDriver:
         elif requested_status == state_mod.READY_TO_QUOTE and result.quote_draft:
             result.status = state_mod.READY_TO_QUOTE
 
+        if result.quote_draft and result.quote_draft.get("within_budget") is False:
+            result.status = state_mod.BUDGET_CONFLICT
+
+        if (
+            policy_guard
+            and policy_guard.status == state_mod.NEEDS_CLARIFICATION
+            and result.status == state_mod.NEEDS_CLARIFICATION
+            and policy_guard.ask_for
+        ):
+            result.ask_for = list(policy_guard.ask_for)
+
         # Hard business boundaries are deterministic. The Gateway still has to
         # invoke local tools for evidence/facts, while the local state machine
         # owns the final refusal/limitation status and unsupported-commitment
         # notes. This is a guardrail, not a transport fallback.
         guarded_statuses = {
             state_mod.EXPLAIN_LIMITATION,
+            state_mod.NO_MATCH,
             state_mod.RULE_VIOLATION,
             state_mod.INVALID_QUANTITY,
         }
@@ -1384,6 +1446,9 @@ class GatewayDriver:
             if guard_can_apply:
                 result.status = policy_guard.status
                 result.quote_draft = None
+                if policy_guard.status == state_mod.NO_MATCH:
+                    result.candidates = []
+                    result.citations = []
                 for note in policy_guard.notes:
                     if note not in result.notes:
                         result.notes.append(note)
