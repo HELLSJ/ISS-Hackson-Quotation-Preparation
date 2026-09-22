@@ -7,6 +7,9 @@ const state = {
   busy: false,
 };
 
+let toastTimer = null;
+let dialogReturnFocus = null;
+
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 const escapeHtml = (value) => String(value ?? "")
@@ -89,13 +92,20 @@ async function api(path, options = {}) {
         detail = { message: detail[0]?.msg || `Request failed (${response.status}).` };
       }
     } catch (_) { /* noop */ }
-    throw new Error(detail.message || detail.error || "Request failed.");
+    const error = new Error(detail.message || detail.error || "Request failed.");
+    error.status = response.status;
+    error.code = detail.error;
+    throw error;
   }
   return response.json();
 }
 
 function money(cents) {
-  return new Intl.NumberFormat("en-SG", { style: "currency", currency: "SGD" }).format((cents || 0) / 100);
+  return new Intl.NumberFormat("en-SG", {
+    style: "currency",
+    currency: "SGD",
+    currencyDisplay: "code",
+  }).format((cents || 0) / 100);
 }
 
 function latestResult() {
@@ -106,7 +116,53 @@ function showToast(message) {
   const toast = $("#toast");
   toast.textContent = message;
   toast.classList.add("visible");
-  window.setTimeout(() => toast.classList.remove("visible"), 2200);
+  window.clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => toast.classList.remove("visible"), 3200);
+}
+
+function setBusy(busy, label = "Checking enquiry…") {
+  state.busy = busy;
+  $("#sendButton").disabled = busy;
+  $("#messageInput").disabled = busy;
+  $("#newConversation").disabled = busy;
+  $("#resetDemo").disabled = busy;
+  $$("[data-prompt], .select-button, [data-quantity-index]").forEach((button) => {
+    button.disabled = busy;
+  });
+  $("#messageList").setAttribute("aria-busy", String(busy));
+  $("#composerHint").textContent = busy ? label : "Enter sends · Shift+Enter adds a line";
+  const existing = $("#processingState");
+  if (busy && !existing) {
+    $("#messageList").insertAdjacentHTML("beforeend", `<div id="processingState" class="message assistant processing-message" role="status"><span class="role">Quotation agent</span><div class="message-body"><span class="spinner" aria-hidden="true"></span><span>${escapeHtml(label)}</span></div></div>`);
+    $("#messageList").scrollTop = $("#messageList").scrollHeight;
+  } else if (!busy && existing) {
+    existing.remove();
+  }
+}
+
+async function refreshConversation() {
+  if (!state.conversation?.id) return;
+  state.conversation = await api(`/api/conversations/${encodeURIComponent(state.conversation.id)}`);
+  render();
+}
+
+async function recoverConflict(error) {
+  if (error.status !== 409) return false;
+  try {
+    await refreshConversation();
+  } catch (_) { /* Keep the original conflict message. */ }
+  return true;
+}
+
+function showDialog(dialog) {
+  dialogReturnFocus = document.activeElement;
+  dialog.showModal();
+  window.requestAnimationFrame(() => dialog.querySelector(".icon-button")?.focus());
+}
+
+function safeLocalHref(value) {
+  const href = String(value || "");
+  return href.startsWith("/api/") ? href : "#";
 }
 
 async function createConversation() {
@@ -140,14 +196,15 @@ async function boot() {
     render();
   } catch (error) {
     showToast(error.message);
-    $("#candidateList").innerHTML = `<div class="empty-state"><strong>Workbench unavailable</strong><span>${escapeHtml(error.message)}</span></div>`;
+    $("#candidateSummary").textContent = "Catalogue unavailable";
+    $("#candidateList").setAttribute("aria-busy", "false");
+    $("#candidateList").innerHTML = `<div class="loading-state"><span class="empty-icon" aria-hidden="true">!</span><strong>Workbench unavailable</strong><span>${escapeHtml(error.message)}</span></div>`;
   }
 }
 
 async function sendMessage(content) {
   if (!content.trim() || state.busy) return;
-  state.busy = true;
-  $("#sendButton").disabled = true;
+  setBusy(true);
   $("#sendButton").textContent = "Checking…";
   try {
     state.conversation = await api(`/api/conversations/${state.conversation.id}/messages`, {
@@ -159,8 +216,7 @@ async function sendMessage(content) {
   } catch (error) {
     showToast(error.message);
   } finally {
-    state.busy = false;
-    $("#sendButton").disabled = false;
+    setBusy(false);
     $("#sendButton").textContent = "Review enquiry";
   }
 }
@@ -179,6 +235,7 @@ function renderStatus() {
   const result = latestResult();
   const chip = $("#conversationStatus");
   const driver = result?.configured_driver || state.health?.configured_driver || "offline";
+  $("#driverBadge").classList.toggle("is-fallback", Boolean(result?.used_fallback));
   $("#driverBadge").textContent = result?.used_fallback
     ? "Offline fallback"
     : driver === "gateway" ? "Organizer LLM Gateway" : "Deterministic offline";
@@ -200,7 +257,7 @@ function renderMessages() {
   const list = $("#messageList");
   const messages = state.conversation?.messages || [];
   if (!messages.length) {
-    list.innerHTML = `<div class="empty-state"><strong>Start with the customer’s words.</strong><span>Use a demo case or paste an English enquiry below.</span></div>`;
+    list.innerHTML = `<div class="empty-state"><span class="empty-icon" aria-hidden="true">→</span><div><strong>Start with the customer’s words.</strong><span>Use a scenario or paste an English enquiry below.</span></div></div>`;
     return;
   }
   list.innerHTML = messages.map((message) => `
@@ -245,6 +302,7 @@ function renderCandidates() {
   const isBrowse = !rows.length;
   if (isBrowse) rows = state.catalog;
   rows = uniqueProducts(rows);
+  $("#candidateList").setAttribute("aria-busy", "false");
   $("#candidateSummary").textContent = suggestions.length
     ? `${suggestions.length} compatible alternative${suggestions.length === 1 ? "" : "s"}`
     : result?.candidates?.length
@@ -279,8 +337,8 @@ function candidateCard(product, flags) {
       <div class="spec-cell"><span>Max preset refresh</span><strong>${escapeHtml(product.max_refresh_hz)} Hz</strong></div>
     </div>
     <div class="candidate-actions">
-      <button class="evidence-button" data-sku="${escapeHtml(product.sku)}" type="button">Inspect source evidence</button>
-      ${canSelect ? `<button class="select-button" data-model="${escapeHtml(product.model)}" type="button">Select for quote</button>` : ""}
+      <button class="evidence-button" data-sku="${escapeHtml(product.sku)}" type="button" aria-label="Inspect source evidence for ${escapeHtml(product.model)}">Inspect source evidence</button>
+      ${canSelect ? `<button class="select-button" data-model="${escapeHtml(product.model)}" type="button" aria-label="Select ${escapeHtml(product.model)} for quote">Select for quote</button>` : ""}
     </div>
   </article>`;
 }
@@ -306,7 +364,7 @@ function renderQuote() {
   const actions = $("#quoteActions");
   const draft = latestResult()?.quote_draft;
   if (!draft) {
-    body.innerHTML = `<div class="empty-quote"><span class="quote-glyph" aria-hidden="true">$</span><strong>No calculated lines</strong><p>Select a product only after the requirements are confirmed.</p></div>`;
+    body.innerHTML = `<div class="empty-quote"><span class="quote-glyph" aria-hidden="true">SGD</span><div><strong>No calculated lines</strong><p>Confirm the requirements and select a product to create a draft.</p></div></div>`;
     actions.hidden = true;
     return;
   }
@@ -315,7 +373,7 @@ function renderQuote() {
       <div class="line-top"><div><strong>${escapeHtml(line.name)}</strong><br><span>${escapeHtml(line.sku)}</span></div><strong>${money(line.net_cents)}</strong></div>
       <div class="line-math">
         <span>${money(line.unit_price_cents)} each · ${(line.discount_bps / 100).toFixed(2)}% discount</span>
-        <div class="quantity-control"><label for="qty-${index}">Qty</label><input id="qty-${index}" type="number" min="1" step="1" value="${line.quantity}"><button type="button" data-quantity-index="${index}" data-model="${escapeHtml(line.name.replace(/^Dell\s+|\s+Monitor$/g, ""))}">Update</button></div>
+        <div class="quantity-control"><label for="qty-${index}">Qty</label><input id="qty-${index}" type="number" min="1" step="1" value="${line.quantity}" aria-label="Quantity for ${escapeHtml(line.name)}"><button type="button" data-quantity-index="${index}" data-model="${escapeHtml(line.name.replace(/^Dell\s+|\s+Monitor$/g, ""))}">Update</button></div>
       </div>
     </div>`).join("")}
     <div class="total-block">
@@ -335,6 +393,7 @@ function renderQuote() {
 function renderVersions() {
   const versions = state.conversation?.quote_versions || [];
   $("#versionCount").textContent = versions.length;
+  $("#versionCount").setAttribute("aria-label", `${versions.length} saved version${versions.length === 1 ? "" : "s"}`);
   $("#versionList").innerHTML = versions.length
     ? versions.map((version, index) => `<div class="version-item">
         <div><span>Version ${version.version} · ${version.line_count} line${version.line_count === 1 ? "" : "s"}</span><small>${escapeHtml(version.status.replaceAll("_", " "))}</small></div>
@@ -347,12 +406,13 @@ function renderVersions() {
       </div>`).join("")
     : "<p>No versions saved yet.</p>";
   $$(".compare-version").forEach((button) => button.addEventListener("click", () => openDiff(button.dataset.from, button.dataset.to)));
-  $$(".confirm-version").forEach((button) => button.addEventListener("click", () => confirmVersion(button.dataset.id)));
+  $$(".confirm-version").forEach((button) => button.addEventListener("click", () => confirmVersion(button.dataset.id, button)));
 }
 
 async function saveQuote() {
   const button = $("#saveQuote");
   button.disabled = true;
+  button.textContent = "Saving…";
   try {
     const saved = await api(`/api/conversations/${state.conversation.id}/quotes`, {
       method: "POST",
@@ -366,16 +426,22 @@ async function saveQuote() {
     $("#saveStatus").textContent = `Version ${saved.version} saved`;
     showToast(`Draft version ${saved.version} saved.`);
   } catch (error) {
+    await recoverConflict(error);
     showToast(error.message);
   } finally {
     button.disabled = false;
+    button.textContent = "Save draft version";
   }
 }
 
-async function confirmVersion(quoteId) {
+async function confirmVersion(quoteId, button) {
   const customer = $("#customerName").value.trim();
   const confirmedBy = $("#confirmedBy").value.trim();
   if (!customer || !confirmedBy) return showToast("Customer and confirmer are required.");
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Confirming…";
+  }
   try {
     const quote = await api(`/api/quotes/${encodeURIComponent(quoteId)}`);
     await api(`/api/quotes/${encodeURIComponent(quoteId)}/confirm`, {
@@ -390,7 +456,13 @@ async function confirmVersion(quoteId) {
     renderVersions();
     showToast(`Version ${quote.version} confirmed and ready to export.`);
   } catch (error) {
+    await recoverConflict(error);
     showToast(error.message);
+  } finally {
+    if (button?.isConnected) {
+      button.disabled = false;
+      button.textContent = "Confirm";
+    }
   }
 }
 
@@ -403,7 +475,7 @@ async function openDiff(fromId, toId) {
       <div class="diff-summary"><span>Total before</span><strong>${money(diff.totals.total_cents.from)}</strong><span>Total after</span><strong>${money(diff.totals.total_cents.to)}</strong><span>Net change</span><strong>${money(diff.totals.total_cents.delta)}</strong></div>
       ${changes.length ? changes.map((line) => `<div class="diff-line"><strong>${escapeHtml(line.after?.model || line.before?.model || line.line_id)}</strong>${Object.entries(line.changes).map(([field, value]) => `<span>${escapeHtml(field.replaceAll("_", " "))}: ${escapeHtml(value.from)} → ${escapeHtml(value.to)}${value.delta === undefined ? "" : ` (Δ ${escapeHtml(value.delta)})`}</span>`).join("")}</div>`).join("") : "<p class=\"availability-warning\">No line changes.</p>"}
     `;
-    $("#diffDialog").showModal();
+    showDialog($("#diffDialog"));
   } catch (error) {
     showToast(error.message);
   }
@@ -421,7 +493,7 @@ async function openEvidence(sku) {
         <span class="value">${escapeHtml(typeof item.value === "object" ? JSON.stringify(item.value) : item.value)}</span>
         <a href="${escapeHtml(item.source_url)}" target="_blank" rel="noopener noreferrer">Dell source · page ${escapeHtml(item.pdf_page)}</a>
       </div>`).join("")}`;
-    $("#evidenceDialog").showModal();
+    showDialog($("#evidenceDialog"));
   } catch (error) {
     showToast(error.message);
   }
@@ -460,6 +532,12 @@ $("#evidenceDialog").addEventListener("click", (event) => {
 });
 $("#diffDialog").addEventListener("click", (event) => {
   if (event.target === $("#diffDialog")) $("#diffDialog").close();
+});
+["#evidenceDialog", "#diffDialog"].forEach((selector) => {
+  $(selector).addEventListener("close", () => {
+    if (dialogReturnFocus?.isConnected) dialogReturnFocus.focus();
+    dialogReturnFocus = null;
+  });
 });
 
 document.addEventListener("DOMContentLoaded", boot);
