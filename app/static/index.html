@@ -5,42 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Evidence-backed Dell monitor quotation workbench">
   <title>Quotation desk</title>
-  <link rel="stylesheet" href="/static/styles.css?v=20260922-2">
+  <link rel="stylesheet" href="/static/styles.css?v=20260922-3">
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="/" aria-label="Quotation desk home">
       <span class="brand-mark" aria-hidden="true"></span>
-      <span>Quotation desk</span>
+      <span class="brand-copy">
+        <strong>Quotation desk</strong>
+        <small>Evidence-backed pricing</small>
+      </span>
     </a>
     <div class="topbar-meta">
-      <span id="datasetBadge">Catalogue loading</span>
+      <span id="datasetBadge" class="dataset-badge">Catalogue loading</span>
       <span id="driverBadge" class="mode-badge">Offline</span>
-      <button id="newConversation" class="text-button" type="button">New enquiry</button>
-      <button id="resetDemo" class="text-button reset-button" type="button">Reset demo</button>
+      <span class="topbar-divider" aria-hidden="true"></span>
+      <button id="newConversation" class="secondary-button" type="button">New enquiry</button>
+      <button id="resetDemo" class="text-button reset-button" type="button">Reset</button>
     </div>
   </header>
 
   <main class="workbench">
     <section class="panel conversation-panel" aria-labelledby="conversationTitle">
       <div class="panel-heading">
-        <div>
-          <h1 id="conversationTitle">Customer enquiry</h1>
-          <p>Resolve what matters before pricing.</p>
+        <span class="panel-index" aria-hidden="true">01</span>
+        <div class="panel-heading-copy">
+          <div>
+            <span class="eyebrow">Understand</span>
+            <h1 id="conversationTitle">Customer enquiry</h1>
+            <p>Resolve what matters before pricing.</p>
+          </div>
+          <span id="conversationStatus" class="status-chip status-idle">Waiting</span>
         </div>
-        <span id="conversationStatus" class="status-chip status-idle">Waiting</span>
       </div>
 
       <div class="scenario-strip" aria-label="Demo scenarios">
-        <button data-prompt="We need 8 monitors with USB-C. Budget SGD 2500." type="button">USB-C office</button>
-        <button data-prompt="Quote 4 U2724D for one-cable laptop video and 90W charging." type="button">Port trap</button>
-        <button data-prompt="Quote 5 S2725QC with a 6% discount and guarantee delivery tomorrow." type="button">Policy boundary</button>
+        <span class="scenario-label">Try a scenario</span>
+        <button data-prompt="We need 8 monitors with USB-C. Budget SGD 2500." type="button"><strong>USB-C office</strong><small>Clarify and quote</small></button>
+        <button data-prompt="Quote 4 U2724D for one-cable laptop video and 90W charging." type="button"><strong>Port trap</strong><small>Check compatibility</small></button>
+        <button data-prompt="Quote 5 S2725QC with a 6% discount and guarantee delivery tomorrow." type="button"><strong>Policy boundary</strong><small>Enforce limits</small></button>
       </div>
 
       <div id="messageList" class="message-list" aria-live="polite">
         <div class="empty-state">
-          <strong>Start with the customer’s words.</strong>
-          <span>Use a demo case or paste an English enquiry below.</span>
+          <span class="empty-icon" aria-hidden="true">→</span>
+          <div><strong>Start with the customer’s words.</strong><span>Use a scenario or paste an English enquiry below.</span></div>
         </div>
       </div>
 
@@ -56,42 +65,55 @@
 
     <section class="panel evidence-panel" aria-labelledby="evidenceTitle">
       <div class="panel-heading">
-        <div>
-          <h2 id="evidenceTitle">Catalogue evidence</h2>
-          <p id="candidateSummary">12 verified Dell monitor records</p>
+        <span class="panel-index" aria-hidden="true">02</span>
+        <div class="panel-heading-copy">
+          <div>
+            <span class="eyebrow">Verify</span>
+            <h2 id="evidenceTitle">Catalogue evidence</h2>
+            <p id="candidateSummary">Loading verified records</p>
+          </div>
+          <span class="evidence-key"><i></i> Source linked</span>
         </div>
-        <span class="evidence-key"><i></i> Source linked</span>
       </div>
       <div id="requirementLedger" class="requirement-ledger" hidden></div>
-      <div id="candidateList" class="candidate-list" aria-live="polite"></div>
+      <div id="candidateList" class="candidate-list" aria-live="polite" aria-busy="true">
+        <div class="loading-state" role="status"><span class="spinner" aria-hidden="true"></span><strong>Loading catalogue evidence</strong><span>Checking the frozen product dataset.</span></div>
+      </div>
       <div id="toolTrace" class="tool-trace"></div>
     </section>
 
     <section class="panel quote-panel" aria-labelledby="quoteTitle">
       <div class="panel-heading">
-        <div>
-          <h2 id="quoteTitle">Quote draft</h2>
-          <p>Every cent comes from the pricing tool.</p>
+        <span class="panel-index" aria-hidden="true">03</span>
+        <div class="panel-heading-copy">
+          <div>
+            <span class="eyebrow">Approve</span>
+            <h2 id="quoteTitle">Quote draft</h2>
+            <p>Every cent comes from the pricing tool.</p>
+          </div>
+          <span class="draft-badge">Unapproved</span>
         </div>
-        <span class="draft-badge">Unapproved</span>
       </div>
       <div id="quoteBody" class="quote-body">
         <div class="empty-quote">
-          <span class="quote-glyph" aria-hidden="true">$</span>
-          <strong>No calculated lines</strong>
-          <p>Select a product only after the requirements are confirmed.</p>
+          <span class="quote-glyph" aria-hidden="true">SGD</span>
+          <div><strong>No calculated lines</strong><p>Confirm the requirements and select a product to create a draft.</p></div>
         </div>
       </div>
       <div id="quoteActions" class="quote-actions" hidden>
-        <label>Customer<input id="customerName" type="text" maxlength="200" value="Example Customer" autocomplete="organization"></label>
-        <label>Confirmed by<input id="confirmedBy" type="text" maxlength="120" value="Sales Admin" autocomplete="name"></label>
-        <button id="saveQuote" class="primary-button" type="button">Save draft version</button>
-        <span id="saveStatus" role="status"></span>
+        <div class="quote-fields">
+          <label>Customer<input id="customerName" type="text" maxlength="200" value="Example Customer" autocomplete="organization"></label>
+          <label>Confirmed by<input id="confirmedBy" type="text" maxlength="120" value="Sales Admin" autocomplete="name"></label>
+        </div>
+        <div class="quote-action-row">
+          <span id="saveStatus" role="status"></span>
+          <button id="saveQuote" class="primary-button" type="button">Save draft version</button>
+        </div>
       </div>
       <div class="versions">
         <div class="versions-title">
           <h3>Saved versions</h3>
-          <span id="versionCount">0</span>
+          <span id="versionCount" class="count-badge" aria-label="0 saved versions">0</span>
         </div>
         <div id="versionList" class="version-list">
           <p>No versions saved yet.</p>
@@ -124,6 +146,6 @@
   </dialog>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="/static/app.js?v=20260922-2" defer></script>
+  <script src="/static/app.js?v=20260922-3" defer></script>
 </body>
 </html>
