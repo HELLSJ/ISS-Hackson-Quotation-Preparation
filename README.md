@@ -39,11 +39,11 @@ The usable vertical slice and backend quote lifecycle are complete: deterministi
 | Saved versions | Validated schema-v2 snapshots; immutable, idempotent, and protected against stale saves |
 | Confirmation | Append-only immutable confirmed snapshot with exact-token idempotency |
 | Version diff and quote PDF | Backend APIs complete; PDF is confirmed-snapshot-only and never re-prices |
-| Automated validation | 47 catalogue/backend/gateway/evaluation-gate tests; 63 Agent tests with 7 documented heuristic skips |
-| Organizer LLM Gateway | Client, native/manual tool loop, bounded retry, visible fallback, and tests complete; live team-key run pending |
+| Automated validation | 60 catalogue/backend/gateway/evaluation-gate tests passed; 64 Agent tests completed (57 passed, 7 documented skips) |
+| Organizer LLM Gateway | Story A/B/C live checks passed; final sealed run passed 20/20 with 0 fallbacks |
 | Independent data review | Complete: 24/24 evidence checks signed and dataset `2026-09-14.v1` frozen |
 | Browser confirmation/diff/PDF controls | Implemented and exercised end to end in headless Chrome |
-| Formal model/holdout evaluation | **Not completed** |
+| Formal model/holdout evaluation | Valid first pass preserved (10/20); repaired run passed 20/20, all scored dimensions 100% |
 
 The authoritative remaining-work sequence and acceptance criteria are in the [consolidated project plan](docs/project-plan-zh.md).
 
@@ -181,18 +181,18 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 data/tool checks
-.venv/bin/python -m unittest discover -s tests            # 47 catalogue/backend/gateway/evaluation-gate tests
-.venv/bin/python -m unittest discover -s dell_agent/tests # 63 Agent tests
+.venv/bin/python -m unittest discover -s tests            # 60 catalogue/backend/gateway/evaluation-gate tests
+.venv/bin/python -m unittest discover -s dell_agent/tests # 64 Agent tests
 ```
 
 The current suites report:
 
 - 15 catalogue/CLI contract tests passing;
 - 19 temporary-database backend tests passing (migration, snapshots, concurrency, confirmation, diff, PDF, fault injection and HTTP);
-- 63 Agent tests passing, with 7 explicitly documented OfflineDriver heuristic skips;
+- 64 Agent tests completed: 57 passed and 7 explicitly documented OfflineDriver heuristic cases were skipped;
 - all three fixed demo scenarios passing in the offline path.
 
-These numbers are not a model accuracy claim. The expected semantic labels for the existing 40 natural-language fixtures have passed independent review; the new sealed holdout still requires a non-author review. Holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.
+These numbers are not a model accuracy claim. The expected semantic labels for the existing 40 natural-language fixtures have passed independent review. The new sealed holdout has passed a disclosed 20/20 Codex technical audit and its hash gate is finalized; a non-author teammate must countersign before describing it as an independent human review. Holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.
 
 ## Organizer LLM Gateway path
 
@@ -219,9 +219,9 @@ A live run is valid only when `configured_driver=gateway`, `used_fallback=false`
 
 ## Remaining critical path
 
-1. Run the three demo stories against the organizer LLM Gateway and preserve the first live traces.
-2. Run and preserve the first formal sealed-holdout evaluation, then separate fixes from the original result.
-3. Measure five manual-versus-Agent cases, rehearse, record the 30-minute video, and submit.
+1. Complete five human timing observations; valid Gateway timing is recorded at 12.705 s median (9.025–19.633 s range).
+2. Ask a non-author teammate to countersign the sealed/PDF technical reviews only if the submission will call them independent human reviews.
+3. Rehearse the fixed stories, record the 30-minute video, and submit.
 
 See [docs/project-plan-zh.md](docs/project-plan-zh.md) for owners, acceptance criteria, evaluation thresholds, exception coverage, and the video plan.
 

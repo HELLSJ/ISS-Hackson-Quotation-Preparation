@@ -206,9 +206,11 @@ _USB_C_RE = re.compile(r"\b(usb[\s\-]?c|type[\s\-]?c|thunderbolt|tb[\s\-]?\d)\b"
 
 # Words that make a USB-C mention concrete about *video* intent.
 _VIDEO_INTENT_RE = re.compile(
-    r"\b(video|display|dp\s*alt|alt\s*mode|screen\s*out|carry\s*video|hdmi|displayport)\b",
+    r"\b(video|picture|display|dp\s*alt|alt\s*mode|screen\s*out|carry\s*video|hdmi|displayport)\b",
     re.IGNORECASE,
 )
+
+_ONE_CABLE_RE = re.compile(r"\b(?:one|single)[\s-]+cable\b", re.IGNORECASE)
 
 # Words that make a USB-C mention concrete about *host charging* intent, or that
 # state an explicit power level (e.g. "90W", "65 watts").
@@ -372,7 +374,10 @@ def missing_slots(state: EnquiryState) -> List[str]:
     # (2) Marketed size + USB-C charging, still under-specified (DEV-008:
     # "Find 24-inch USB-C displays with charging."). The precise diagonal, the
     # minimum host power, and the quantity are all outstanding.
-    if size_needs_clarification(text) and _usb_c_mentioned(text) and _charging_intent(text):
+    if size_needs_clarification(text) and (
+        (_usb_c_mentioned(text) and _charging_intent(text))
+        or _ONE_CABLE_RE.search(text)
+    ):
         slots = [SLOT_ACTUAL_VS_MARKETED, SLOT_MIN_HOST_PD]
         if not any_quantity_stated:
             slots.append(SLOT_QUANTITY)

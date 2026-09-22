@@ -16,6 +16,66 @@ const escapeHtml = (value) => String(value ?? "")
   .replaceAll('"', "&quot;")
   .replaceAll("'", "&#039;");
 
+function inlineMarkdown(value) {
+  return escapeHtml(value)
+    .replace(/\[([^\]]+)\]\((https:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+}
+
+function tableCells(line) {
+  return line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((cell) => cell.trim());
+}
+
+function isTableDivider(line) {
+  const cells = tableCells(line);
+  return cells.length > 1 && cells.every((cell) => /^:?-{3,}:?$/.test(cell));
+}
+
+function renderSafeMarkdown(value) {
+  const lines = String(value ?? "").replaceAll("\r\n", "\n").split("\n");
+  const output = [];
+  let inList = false;
+  const closeList = () => {
+    if (inList) output.push("</ul>");
+    inList = false;
+  };
+  for (let index = 0; index < lines.length; index += 1) {
+    const rawLine = lines[index];
+    const line = rawLine.trim();
+    if (line.includes("|") && index + 1 < lines.length && isTableDivider(lines[index + 1])) {
+      closeList();
+      const headers = tableCells(line);
+      const rows = [];
+      index += 2;
+      while (index < lines.length && lines[index].trim().includes("|")) {
+        rows.push(tableCells(lines[index]));
+        index += 1;
+      }
+      index -= 1;
+      output.push(`<div class="markdown-table-wrap"><table class="markdown-table"><thead><tr>${headers.map((cell) => `<th>${inlineMarkdown(cell)}</th>`).join("")}</tr></thead><tbody>${rows.map((row) => `<tr>${headers.map((_, cellIndex) => `<td>${inlineMarkdown(row[cellIndex] || "")}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`);
+      continue;
+    }
+    const bullet = line.match(/^[-*]\s+(.+)$/);
+    if (bullet) {
+      if (!inList) output.push("<ul>");
+      inList = true;
+      output.push(`<li>${inlineMarkdown(bullet[1])}</li>`);
+      continue;
+    }
+    closeList();
+    if (!line) continue;
+    if (/^-{3,}$/.test(line)) {
+      output.push("<hr>");
+    } else {
+      output.push(`<p>${inlineMarkdown(line)}</p>`);
+    }
+  }
+  closeList();
+  return output.join("");
+}
+
 async function api(path, options = {}) {
   const response = await fetch(path, {
     headers: { "Content-Type": "application/json", ...(options.headers || {}) },
@@ -146,7 +206,7 @@ function renderMessages() {
   list.innerHTML = messages.map((message) => `
     <article class="message ${escapeHtml(message.role)}">
       <span class="role">${message.role === "user" ? "Customer" : "Quotation agent"}</span>
-      <p>${escapeHtml(message.content)}</p>
+      <div class="message-body">${renderSafeMarkdown(message.content)}</div>
     </article>`).join("");
   list.scrollTop = list.scrollHeight;
 }
@@ -227,9 +287,17 @@ function candidateCard(product, flags) {
 
 function renderTrace() {
   const trace = latestResult()?.trace || [];
-  const tools = trace.filter((step) => step.tool).slice(-3);
+  const tools = trace.filter((step) => step.tool);
   $("#toolTrace").innerHTML = tools.length
-    ? `<strong>Verified actions</strong> &nbsp;${tools.map((step) => escapeHtml(step.tool)).join(" → ")}`
+    ? `<div class="trace-summary"><strong>Verified actions</strong><span>${tools.map((step) => escapeHtml(step.tool)).join(" → ")}</span></div>
+      <details class="trace-audit">
+        <summary>Inspect tool audit (${tools.length})</summary>
+        <div class="trace-steps">${tools.map((step, index) => `<div class="trace-step">
+          <strong>${index + 1}. ${escapeHtml(step.tool)}</strong>
+          <span>${escapeHtml(step.result || "completed")}</span>
+          <pre>${escapeHtml(JSON.stringify(step.args || {}, null, 2))}</pre>
+        </div>`).join("")}</div>
+      </details>`
     : `<strong>Tool activity</strong> &nbsp;No lookup or calculation yet`;
 }
 
@@ -377,6 +445,12 @@ $("#newConversation").addEventListener("click", async () => {
   if (state.busy) return;
   await createConversation();
   showToast("New enquiry opened.");
+});
+$("#resetDemo").addEventListener("click", async () => {
+  if (state.busy) return;
+  localStorage.removeItem("quotationConversationId");
+  await createConversation();
+  showToast("Demo reset with a clean enquiry.");
 });
 $("#saveQuote").addEventListener("click", saveQuote);
 $("#closeEvidence").addEventListener("click", () => $("#evidenceDialog").close());

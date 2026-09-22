@@ -113,13 +113,18 @@ class QuotationService:
         status = result.get("status")
         candidates = result.get("candidates") or []
         suggestions = result.get("suggestions") or []
-        if result.get("configured_driver") == "gateway" and not result.get("used_fallback") and status != "ready_to_quote":
+        if (
+            result.get("configured_driver") == "gateway"
+            and not result.get("used_fallback")
+            and status in {"answer_with_evidence", "explain_limitation"}
+        ):
             model_notes = [
                 note for note in result.get("notes", [])
                 if "synthetic/demo data" not in note.lower()
+                and "the named product cannot meet the stated" not in note.lower()
             ]
             if model_notes:
-                return model_notes[-1]
+                return model_notes[0]
         if status == "needs_clarification":
             questions = [
                 _SLOT_QUESTIONS[slot]

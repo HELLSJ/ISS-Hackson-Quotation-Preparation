@@ -87,6 +87,14 @@ class MarketedSizeTest(unittest.TestCase):
         )
         self.assertEqual(classify_status(state), NEEDS_CLARIFICATION)
 
+    def test_one_cable_size_request_asks_for_power_and_quantity(self) -> None:
+        text = "Find 24-inch-class screens for a one-cable laptop setup and quote them."
+        state = EnquiryState(text=text)
+        self.assertEqual(
+            missing_slots(state),
+            ["actual_vs_marketed_diagonal", "minimum_host_pd_watts", "quantity"],
+        )
+
 
 class RuleViolationTest(unittest.TestCase):
     """A requested discount over the 500 bps ceiling is refused."""

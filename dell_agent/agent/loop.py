@@ -196,11 +196,11 @@ def _quantity_before(text: str, sku_span_text: str) -> Optional[int]:
         return None
     prefix = lowered[:idx]
     # Explicit negative phrasing must remain invalid, never become positive.
-    m = re.search(r"\bminus\s+(\d+)\s+(?:dell\s+)?$", prefix)
+    m = re.search(r"\b(?:minus|negative)\s+(\d+)\s+(?:dell\s+)?$", prefix)
     if m:
         value = _digits_to_int(m.group(1))
         return -value if value is not None else None
-    m = re.search(r"\bminus\s+([a-z]+)\s+(?:dell\s+)?$", prefix)
+    m = re.search(r"\b(?:minus|negative)\s+([a-z]+)\s+(?:dell\s+)?$", prefix)
     if m and m.group(1) in _QTY_WORD:
         return -_QTY_WORD[m.group(1)]
     # Numeric quantity right before the token.
@@ -231,7 +231,7 @@ def _first_quantity(text: str) -> Optional[int]:
     reject them instead of silently turning them positive.
     """
     negative = re.search(
-        r"\bminus\s+(\d+|" + "|".join(_QTY_WORD) + r")\b", text, re.IGNORECASE
+        r"\b(?:minus|negative)\s+(\d+|" + "|".join(_QTY_WORD) + r")\b", text, re.IGNORECASE
     )
     if negative:
         raw = negative.group(1).lower()
@@ -254,7 +254,7 @@ def _first_quantity(text: str) -> Optional[int]:
     for cand in re.finditer(r"\b(" + "|".join(_QTY_WORD) + r")\b", text, re.IGNORECASE):
         # Skip a number word that qualifies a discount, e.g. "zero discount".
         following = text[cand.end():cand.end() + 16].lower()
-        if re.match(r"\s*(?:%|percent|discount)", following):
+        if re.match(r"\s*(?:%|percent|discount|[-\s]+cable)", following):
             continue
         wm = cand
         word = _QTY_WORD[cand.group(1).lower()]
@@ -279,6 +279,13 @@ def _parse_discount_bps(text: str) -> Optional[int]:
         except ValueError:
             return None
         return int(round(pct * 100))
+    m = re.search(
+        r"\b(" + "|".join(_QTY_WORD) + r")\s+percent\b",
+        text,
+        re.IGNORECASE,
+    )
+    if m:
+        return _QTY_WORD[m.group(1).lower()] * 100
     return None
 
 
@@ -764,6 +771,8 @@ class OfflineDriver:
         rm = re.search(r"\b(\d{3,4}\s*[x\u00d7]\s*\d{3,4})\b", text, re.IGNORECASE)
         if rm:
             filters["resolution"] = re.sub(r"\s*", "", rm.group(1)).replace("\u00d7", "x")
+        elif re.search(r"\b4k\b", text, re.IGNORECASE):
+            filters["resolution"] = "3840x2160"
 
         # Exact size, e.g. "exactly 27-inch" -> min==max==27.0.
         sm = re.search(r"exactly\s*(\d{2}(?:\.\d+)?)\s*(?:-\s*)?(?:inch|inches|in\b|\")",
@@ -896,25 +905,19 @@ def _read_instructions() -> str:
 
 
 def _catalogue_summary_text() -> str:
-    lines: List[str] = []
-    for product in catalog.all_products():
-        parts: List[str] = [f"{product.sku} ({product.model})"]
-        if product.screen_inches is not None:
-            parts.append(f'{product.screen_inches}"')
-        if product.resolution:
-            parts.append(str(product.resolution))
-        if product.usb_c_video is not None:
-            parts.append("USB-C video" if product.usb_c_video else "no USB-C video")
-        if product.usb_c_pd_watts:
-            parts.append(f"{product.usb_c_pd_watts}W host PD")
-        if product.unit_price_cents is not None:
-            parts.append(f"{product.unit_price_cents} cents")
-        lines.append("- " + ", ".join(parts))
+    lines = [f"- {product.sku} ({product.model})" for product in catalog.all_products()]
     return (
-        "Catalogue summary (synthetic prices in SGD cents; use tools for "
-        "authoritative specifications and every monetary calculation):\n"
+        "Catalogue identity map. It is only for resolving model names to SKUs. "
+        "It intentionally contains no specifications or prices; use tools for "
+        "every product fact, limitation, match and monetary calculation:\n"
         + "\n".join(lines)
     )
+
+
+def _known_model_mentioned(enquiry_or_turns: Union[str, Sequence[str]]) -> bool:
+    turns = [enquiry_or_turns] if isinstance(enquiry_or_turns, str) else enquiry_or_turns
+    text = "\n".join(str(turn) for turn in turns)
+    return bool(_match_sku_in(text, _build_alias_index()))
 
 
 class GatewayRequestError(RuntimeError):
@@ -1128,7 +1131,13 @@ class GatewayDriver:
             + _catalogue_summary_text()
             + "\n\nUse native function calls when available. If unavailable, output only "
             '{"tool":"tool_name","args":{...}} and wait for the tool result. '
-            "For the final response, return JSON with status, ask_for, and message. "
+            "Do not answer a named-product fact, limitation, catalogue match, quote, "
+            "budget, quantity revision, or discount rule from memory or the identity map. "
+            "Call get_product for named-product facts and limitations, search_products for "
+            "constraint matching, and calculate_quote for every quote or pricing-rule check. "
+            "A final response without a tool is allowed only when the customer must clarify "
+            "missing or ambiguous requirements first. For the final response, return a JSON "
+            "object with status, ask_for, and message; ask_for must always be a JSON array. "
             "For clarification use status needs_clarification and ask_for values from: "
             "quantity, product_specification_or_model, usb_c_video_requirement, "
             "host_charging_requirement, actual_vs_marketed_diagonal, "
@@ -1145,6 +1154,25 @@ class GatewayDriver:
         return [{"role": "system", "content": system}, {"role": "user", "content": customer_text}]
 
     def _run_gateway(self, client: Any, enquiry_or_turns: Union[str, Sequence[str]]) -> AgentResult:
+        policy_guard = self._offline.run(enquiry_or_turns)
+        enquiry_text = (
+            enquiry_or_turns
+            if isinstance(enquiry_or_turns, str)
+            else "\n".join(str(turn) for turn in enquiry_or_turns)
+        )
+        if (
+            policy_guard.status == state_mod.EXPLAIN_LIMITATION
+            and re.search(
+                r"\b(compare|comparison|difference|different)\b|\bhave\s+the\s+same\b"
+                r"|\bsame\s+(?:usb-c\s+)?(?:capability|feature|specification)",
+                enquiry_text,
+                re.IGNORECASE,
+            )
+        ):
+            # A comparison is an evidence answer even when one product lacks a
+            # feature. Reserve the hard limitation guard for a customer's stated
+            # requirement that the selected product cannot satisfy.
+            policy_guard = None
         messages = self._build_messages(enquiry_or_turns)
         schemas = _tool_schemas.tool_schemas()
         trace: list[dict[str, Any]] = [
@@ -1153,6 +1181,7 @@ class GatewayDriver:
         final_text = ""
         final_envelope: dict[str, Any] | None = None
         tool_results: list[tuple[str, Any]] = []
+        tool_nudge_sent = False
 
         for iteration in range(self.max_iterations):
             response = client.chat(messages, schemas)
@@ -1164,7 +1193,33 @@ class GatewayDriver:
             calls = native_calls if native_calls else ([] if not content else [_manual_tool_call(content)])
             calls = [call for call in calls if call]
             if not calls:
-                final_envelope = _structured_final(str(content))
+                candidate_envelope = _structured_final(str(content))
+                named_model = _known_model_mentioned(enquiry_or_turns)
+                premature_selection_question = bool(
+                    candidate_envelope
+                    and candidate_envelope["status"] == state_mod.NEEDS_CLARIFICATION
+                    and state_mod.SLOT_PRODUCT_OR_MODEL in candidate_envelope.get("ask_for", [])
+                    and named_model
+                )
+                requires_tool_retry = (
+                    not tool_results
+                    and not tool_nudge_sent
+                    and (candidate_envelope is None or candidate_envelope["status"] != state_mod.NEEDS_CLARIFICATION or premature_selection_question)
+                    and named_model
+                )
+                if requires_tool_retry:
+                    messages.append({"role": "assistant", "content": str(content)})
+                    messages.append({
+                        "role": "user",
+                        "content": (
+                            "No local tool has run yet. Do not finalize from memory. Call the "
+                            "relevant tool now, then return the required JSON status envelope."
+                        ),
+                    })
+                    trace.append({"step": f"gateway_turn_{iteration}", "result": "tool_required_retry"})
+                    tool_nudge_sent = True
+                    continue
+                final_envelope = candidate_envelope
                 final_text = (
                     final_envelope["message"]
                     if final_envelope and final_envelope.get("message")
@@ -1231,7 +1286,45 @@ class GatewayDriver:
         else:
             trace.append({"step": "gateway_iteration_cap", "result": self.max_iterations})
 
-        return self._assemble_result(final_text, final_envelope, tool_results, trace)
+        # The model can occasionally stop after fetching product facts even
+        # though the deterministic planner has a complete quote request. Run
+        # the same local pricing tool here so money never depends on prose.
+        if (
+            policy_guard
+            and policy_guard.status == state_mod.READY_TO_QUOTE
+            and policy_guard.quote_draft
+            and not any(name == "calculate_quote" for name, _ in tool_results)
+        ):
+            quote_args: dict[str, Any] = {
+                "items": [
+                    {
+                        "sku": line["sku"],
+                        "quantity": line["quantity"],
+                        **(
+                            {"discount_bps": line["discount_bps"]}
+                            if line.get("discount_bps")
+                            else {}
+                        ),
+                    }
+                    for line in policy_guard.quote_draft.get("lines", [])
+                ]
+            }
+            if policy_guard.quote_draft.get("budget_cents") is not None:
+                quote_args["budget_cents"] = policy_guard.quote_draft["budget_cents"]
+            repaired_quote = tools_mod.dispatch("calculate_quote", quote_args)
+            tool_results.append(("calculate_quote", repaired_quote))
+            trace.append({
+                "step": "gateway_local_tool_repair",
+                "tool": "calculate_quote",
+                "args": quote_args,
+                "result": repaired_quote.get("error", "ok")
+                if isinstance(repaired_quote, dict)
+                else "invalid",
+            })
+
+        return self._assemble_result(
+            final_text, final_envelope, tool_results, trace, policy_guard=policy_guard
+        )
 
     def _assemble_result(
         self,
@@ -1239,26 +1332,47 @@ class GatewayDriver:
         final_envelope: dict[str, Any] | None,
         tool_results: list[tuple[str, Any]],
         trace: list[dict[str, Any]],
+        policy_guard: AgentResult | None = None,
     ) -> AgentResult:
         result = AgentResult(status=state_mod.NEEDS_CLARIFICATION, trace=trace)
         result.notes.append(_SYNTHETIC_NOTE)
         if final_text:
             result.notes.append(final_text)
-        if final_envelope and final_envelope["status"] == state_mod.NEEDS_CLARIFICATION:
+        requested_status = final_envelope["status"] if final_envelope else None
+        if requested_status == state_mod.NEEDS_CLARIFICATION:
             result.ask_for = list(final_envelope["ask_for"])
+
+        saw_empty_search = False
+        saw_missing_product = False
+        tool_error_codes: set[str] = set()
 
         for name, payload in tool_results:
             if name == "search_products" and isinstance(payload, list):
                 result.candidates = payload
                 if not payload:
+                    saw_empty_search = True
                     result.status = state_mod.NO_MATCH
             elif name == "get_product" and isinstance(payload, dict) and payload.get("found"):
-                result.candidates = [{key: value for key, value in payload.items() if key != "evidence"}]
-                result.citations = list(payload.get("evidence") or [])
+                candidate = {key: value for key, value in payload.items() if key != "evidence"}
+                if not any(row.get("sku") == candidate.get("sku") for row in result.candidates):
+                    result.candidates.append(candidate)
+                existing_citations = {
+                    (row.get("sku"), row.get("field"), row.get("pdf_page"))
+                    for row in result.citations
+                }
+                for citation in payload.get("evidence") or []:
+                    key = (citation.get("sku"), citation.get("field"), citation.get("pdf_page"))
+                    if key not in existing_citations:
+                        result.citations.append(citation)
+                        existing_citations.add(key)
                 result.status = state_mod.ANSWER_WITH_EVIDENCE
+            elif name == "get_product" and isinstance(payload, dict) and payload.get("found") is False:
+                saw_missing_product = True
+                result.status = state_mod.NO_MATCH
             elif name == "calculate_quote" and isinstance(payload, dict):
                 if "error" in payload:
                     code = payload.get("error")
+                    tool_error_codes.add(str(code))
                     if code == "discount_limit_exceeded":
                         result.status = state_mod.RULE_VIOLATION
                     elif code == "invalid_quantity":
@@ -1275,5 +1389,76 @@ class GatewayDriver:
                             result.candidates.append({key: value for key, value in product.items() if key != "evidence"})
                             result.citations.extend(product.get("evidence") or [])
             elif isinstance(payload, dict) and "error" in payload:
+                tool_error_codes.add(str(payload["error"]))
+                if name == "get_product" and payload.get("error") in {"not_found", "missing_price"}:
+                    saw_missing_product = True
                 result.notes.append(f"Tool error ({payload['error']}): {payload.get('message', '')}".strip())
+
+        # The model may select the business status, but only when local tool
+        # evidence makes that status possible. Facts and money remain tool-owned.
+        if (
+            requested_status == state_mod.NEEDS_CLARIFICATION
+            and not result.quote_draft
+            and not saw_empty_search
+            and not saw_missing_product
+        ):
+            result.status = state_mod.NEEDS_CLARIFICATION
+        elif requested_status == state_mod.EXPLAIN_LIMITATION and result.citations and not result.quote_draft:
+            result.status = state_mod.EXPLAIN_LIMITATION
+        elif requested_status == state_mod.ANSWER_WITH_EVIDENCE and result.citations and not result.quote_draft:
+            result.status = state_mod.ANSWER_WITH_EVIDENCE
+        elif requested_status == state_mod.NO_MATCH and (saw_empty_search or saw_missing_product):
+            result.status = state_mod.NO_MATCH
+        elif (
+            requested_status == state_mod.BUDGET_CONFLICT
+            and result.quote_draft
+            and result.quote_draft.get("within_budget") is False
+        ):
+            result.status = state_mod.BUDGET_CONFLICT
+        elif requested_status == state_mod.RULE_VIOLATION and "discount_limit_exceeded" in tool_error_codes:
+            result.status = state_mod.RULE_VIOLATION
+        elif requested_status == state_mod.INVALID_QUANTITY and "invalid_quantity" in tool_error_codes:
+            result.status = state_mod.INVALID_QUANTITY
+        elif requested_status == state_mod.READY_TO_QUOTE and result.quote_draft:
+            result.status = state_mod.READY_TO_QUOTE
+
+        if result.quote_draft and result.quote_draft.get("within_budget") is False:
+            result.status = state_mod.BUDGET_CONFLICT
+
+        if (
+            policy_guard
+            and policy_guard.status == state_mod.NEEDS_CLARIFICATION
+            and result.status == state_mod.NEEDS_CLARIFICATION
+            and policy_guard.ask_for
+        ):
+            result.ask_for = list(policy_guard.ask_for)
+
+        # Hard business boundaries are deterministic. The Gateway still has to
+        # invoke local tools for evidence/facts, while the local state machine
+        # owns the final refusal/limitation status and unsupported-commitment
+        # notes. This is a guardrail, not a transport fallback.
+        guarded_statuses = {
+            state_mod.EXPLAIN_LIMITATION,
+            state_mod.NO_MATCH,
+            state_mod.RULE_VIOLATION,
+            state_mod.INVALID_QUANTITY,
+        }
+        if policy_guard and policy_guard.status in guarded_statuses:
+            guard_can_apply = (
+                policy_guard.status != state_mod.EXPLAIN_LIMITATION
+                or bool(result.citations)
+            )
+            if guard_can_apply:
+                result.status = policy_guard.status
+                result.quote_draft = None
+                if policy_guard.status == state_mod.NO_MATCH:
+                    result.candidates = []
+                    result.citations = []
+                for note in policy_guard.notes:
+                    if note not in result.notes:
+                        result.notes.append(note)
+                result.trace.append({
+                    "step": "local_policy_guard",
+                    "result": policy_guard.status,
+                })
         return result

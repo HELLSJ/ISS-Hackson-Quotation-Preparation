@@ -1,0 +1,44 @@
+{
+  "run_id": "20260922T075400Z",
+  "tested_at": "2026-09-22T07:54:00Z",
+  "browser": "Google Chrome live UI",
+  "driver": "gateway",
+  "dataset_version": "2026-09-14.v1",
+  "reviewer": "Codex browser technical audit",
+  "steps": [
+    {
+      "step": "Organizer Gateway mode is visible",
+      "passed": true,
+      "evidence": "Header badge reads Organizer LLM Gateway."
+    },
+    {
+      "step": "Policy boundary blocks quote",
+      "passed": true,
+      "evidence": "6% S2725QC request renders Policy blocked and no calculated lines."
+    },
+    {
+      "step": "Policy and delivery limitations are both visible",
+      "passed": true,
+      "evidence": "The requested discount exceeds the 5% policy limit, so no quote was calculated. Stock and delivery remain unconfirmed."
+    },
+    {
+      "step": "Policy tool audit is visible",
+      "passed": true,
+      "evidence": "get_product -> calculate_quote"
+    },
+    {
+      "step": "Evidence comparison renders as formatted content",
+      "passed": true,
+      "evidence": "P2425/P2425E comparison displays a five-column HTML table, emphasized labels and HTTPS PDF page links without raw Markdown delimiters."
+    },
+    {
+      "step": "Evidence comparison uses both products",
+      "passed": true,
+      "evidence": "Two catalogue cards and get_product -> get_product are visible."
+    }
+  ],
+  "passed": true,
+  "limitations": [
+    "This is a disclosed Codex browser technical audit, not an independent human usability study."
+  ]
+}

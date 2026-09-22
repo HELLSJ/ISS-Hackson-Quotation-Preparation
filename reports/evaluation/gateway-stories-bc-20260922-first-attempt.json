@@ -1,0 +1,29 @@
+{
+  "checked_at": "2026-09-22T07:10:39.165034+00:00",
+  "model": "global.anthropic.claude-sonnet-4-5-20250929-v1:0",
+  "stories": [
+    {
+      "story": "B",
+      "status": "needs_clarification",
+      "used_fallback": false,
+      "tools": [],
+      "citation_skus": [],
+      "suggestion_skus": [],
+      "has_quote_draft": false,
+      "delivery_unknown_mentioned": false,
+      "passed": false
+    },
+    {
+      "story": "C",
+      "status": "needs_clarification",
+      "used_fallback": false,
+      "tools": [],
+      "citation_skus": [],
+      "suggestion_skus": [],
+      "has_quote_draft": false,
+      "delivery_unknown_mentioned": true,
+      "passed": false
+    }
+  ],
+  "passed": false
+}

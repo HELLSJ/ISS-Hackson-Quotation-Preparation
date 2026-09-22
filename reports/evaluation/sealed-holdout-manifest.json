@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-21T08:04:16.667709+00:00",
-  "status": "SEALED_READY_PENDING_INDEPENDENT_REVIEW",
+  "generated_at": "2026-09-22T06:37:28.099162+00:00",
+  "status": "SEALED_REVIEW_PASSED",
   "case_count": 20,
   "dataset_version": "2026-09-14.v1",
   "inputs": "data/evaluation/sealed_holdout_enquiries.jsonl",
@@ -8,7 +8,20 @@
   "answer_key": "reports/evaluation/sealed_holdout_expected.jsonl",
   "answer_key_sha256": "b65fb74ab9822458be2d5fd813c5449306fbb994623f5d5dd4e3783f97f947c6",
   "review_sheet": "reports/evaluation/sealed-holdout-review.csv",
-  "review_sheet_sha256": "a2febf4305e1bf6f7e897efbd44d987ceea50cae81d244f9a9473425d264ca16",
+  "review_sheet_sha256": "ce79a011bed89ba9d1b36e5c763ec8e77946745acc098f3866fe750b19992f02",
   "inference_isolation": "run_formal_evaluation.py writes all raw model results before opening the answer key",
-  "runtime_prompt_access": "Neither sealed file is imported by the application, Agent prompt, catalogue, or ordinary regression tests."
+  "runtime_prompt_access": "Neither sealed file is imported by the application, Agent prompt, catalogue, or ordinary regression tests.",
+  "independent_review": {
+    "result": "PASS",
+    "complete": true,
+    "valid_hashes": true,
+    "passed_rows": 20,
+    "total_rows": 20,
+    "reviewers": [
+      "Codex technical audit"
+    ],
+    "reviewed_at": [
+      "2026-09-22"
+    ]
+  }
 }

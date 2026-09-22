@@ -1,6 +1,6 @@
 # 可追溯报价编制 Agent
 
-[English README](README.md) · [项目总规划](docs/project-plan-zh.md) · [API 与工具契约](docs/api-contract.md)
+[English README](README.md) · [项目总规划](docs/project-plan-zh.md) · [API 与工具契约](docs/api-contract.md) · [前端开发与部署指南](docs/frontend-development-deployment-zh.md)
 
 这是一个面向虚构办公设备分销商的报价工作台：把不完整的英文客户询价转成有证据的产品候选和确定性 SGD 报价草稿，同时把产品选择和最终确认留给销售人员。
 
@@ -39,11 +39,11 @@
 | 保存版本 | 经过完整校验的 schema-v2 快照，不可变、幂等并阻止 stale 保存 |
 | 人工确认 | append-only confirmed snapshot，精确 token 重试幂等 |
 | 版本 diff 和报价 PDF | 后端 API 已完成；PDF 只读取 confirmed snapshot，不重新计价 |
-| 自动化校验 | 47 项目录/后端/Gateway/评测门禁测试；63 项 Agent 测试，7 项明确 skip |
-| 组织者 LLM Gateway | client、原生/JSON 工具回路、有限重试、显式 fallback 和测试已完成；待团队密钥真实运行 |
+| 自动化校验 | 60 项目录/后端/Gateway/评测门禁测试通过；64 项 Agent 测试完成（57 通过、7 项明确 skip） |
+| 组织者 LLM Gateway | Story A/B/C 真实验收通过；最终 sealed 评测 20/20、0 fallback |
 | 独立数据复核 | 已完成：24/24 条证据核对已签核，`2026-09-14.v1` 已冻结 |
 | 浏览器 confirmation/diff/PDF 操作 | 已实现，并通过 Chrome 端到端验收 |
-| 正式模型/holdout 评估 | **未完成** |
+| 正式模型/holdout 评估 | 有效首轮 10/20 已保留；修复后 20/20，全部计分维度 100% |
 
 所有后续工作及验收标准见唯一的[项目总规划](docs/project-plan-zh.md)。
 
@@ -176,18 +176,18 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 项数据/工具检查
-.venv/bin/python -m unittest discover -s tests            # 47 项目录/后端/Gateway/评测门禁测试
-.venv/bin/python -m unittest discover -s dell_agent/tests # 63 项 Agent 测试
+.venv/bin/python -m unittest discover -s tests            # 60 项目录/后端/Gateway/评测门禁测试
+.venv/bin/python -m unittest discover -s dell_agent/tests # 64 项 Agent 测试
 ```
 
 当前结果：
 
 - 15 项目录/CLI 契约测试通过；
 - 19 项临时数据库后端测试通过，覆盖迁移、快照、并发、确认、diff、PDF、故障注入和 HTTP；
-- 63 项 Agent 测试通过，7 项是明确记录的 OfflineDriver 启发式 skip；
+- 64 项 Agent 测试完成：57 项通过，7 项为明确记录的 OfflineDriver 启发式 skip；
 - 三条固定演示均在离线路径通过。
 
-这不是模型准确率。现有 40 条自然语言案例的 expected label 已独立审核；新建 sealed holdout 仍需非作者审核，其答案和校验报告不得进入系统提示词或运行时知识库。
+这不是模型准确率。现有 40 条自然语言案例的 expected label 已独立审核；新建 sealed holdout 已完成 20/20 Codex 技术审核并冻结哈希门禁。若对外声称“独立人工审核”，仍需一名非作者队员实名复签。其答案和校验报告不得进入系统提示词或运行时知识库。
 
 ## 组织者 LLM Gateway 路径
 
@@ -214,9 +214,9 @@ export AGENT_DRIVER=gateway
 
 ## 后续关键路径
 
-1. 使用组织者 LLM Gateway 跑通三条演示故事并保存首次真实 trace；
-2. 保留正式 sealed holdout 首轮结果，并将修复后结果分开；
-3. 实测 5 个案例，彩排、录制 30 分钟视频并提交。
+1. 完成 5 条真人计时；有效 Gateway 计时中位数为 12.705 秒，范围 9.025–19.633 秒；
+2. 仅当提交材料声称“独立人工审核”时，请非作者队员复签 sealed/PDF 技术审核；
+3. 彩排固定故事、录制 30 分钟视频并提交。
 
 详细负责人、验收标准、指标、异常矩阵和视频结构见 [docs/project-plan-zh.md](docs/project-plan-zh.md)。
 
@@ -227,6 +227,7 @@ app/                    FastAPI、SQLite 生命周期、快照校验、diff/PDF�
 data/                   原始、核对、生成、评估和校验数据
 dell_agent/             类型目录、计价、状态机、工具和 driver
 docs/api-contract.md    冻结的工具与 HTTP 契约
+docs/frontend-development-deployment-zh.md 前端优化、验收、协作与 Lightsail 发布
 docs/project-plan-zh.md 唯一项目总规划
 scripts/                下载、提取、构建、校验和 CLI
 tests/                  目录/CLI 契约与报价后端集成测试

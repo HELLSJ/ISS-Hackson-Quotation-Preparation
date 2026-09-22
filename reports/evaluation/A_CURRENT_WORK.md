@@ -22,7 +22,7 @@
 - expected 审核：40 条全部 PASS（`expected-label-review-signed.csv`，2026-09-20）；
 - 金额复核：15 条全部 PASS（`money-reconciliation-signed.csv`，2026-09-21）。
 
-以下事项**仍未**完成：真实模型评测、sealed blind holdout 的非作者审核、正式指标报告、最终 PDF 模板人工复核和人工与 Agent 效率计时。
+正式 sealed-holdout 评测和 Agent 效率计时现已完成：有效首轮 10/20、0 fallback；两轮修复后分别为 19/20 和 20/20，最终全部计分维度 100%、0 fallback。五案例真实 Gateway 计时 5/5 正确，中位数 12.705 秒，范围 9.025–19.633 秒。仍未完成的是同五案例的真人计时。sealed expected 已完成 20/20 Codex 技术审核并通过哈希门禁；最终 PDF 模板完成 8/8 Codex 技术审核。如果提交材料声称独立人工审核，仍需非作者队员实名复签。
 
 ## 2. 新增工件
 
@@ -42,7 +42,7 @@
 | `offline-regression-baseline.md` | 本次数据验证及 Offline 回归的真实基线 | 已生成 |
 | `backend-amount-consistency.md` | B 后端金额一致性核对说明（计算=快照=确认=diff=PDF） | 已生成 |
 | `backend-amount-consistency-signed.csv` | B 后端金额一致性人工签核结果 | 已完成；3 条 PASS，LAI WENDI，2026-09-21 |
-| `pdf-machine-precheck.json` | 标准/长表 PDF 的页数、字段、逐页表头、页脚、45 行及总额/条款检查 | 9 项机器预检通过；独立人工签字待完成 |
+| `pdf-machine-precheck.json` | 标准/长表 PDF 的页数、字段、逐页表头、页脚、45 行及总额/条款检查 | 9 项机器预检通过；8/8 Codex 视觉技术审核通过 |
 
 ## 3. 实现方式
 
@@ -156,7 +156,7 @@ python -m unittest discover -s dell_agent/tests
 结果：
 
 ```text
-63 tests passed
+57 tests passed
 7 explicit skips
 0 failures
 ```
@@ -192,24 +192,23 @@ scripts/validate_data.py
 
 ## 7. 仍未完成的事项
 
-组织者 LLM Gateway / 大模型：
+已完成的组织者 LLM Gateway / 大模型证据：
 
 ```text
-使用团队 API URL、API key 和 model 完成真实模型首轮评测
-保存真实 tool-use trace，并确认没有 gateway_fallback
-记录 model ID、Gateway URL 哈希、prompt 与各版本（不记录 API key）
-对比 Offline 与真实模型结果
+Story A/B/C 真实 tool-use 验收
+有效首轮、失败分类和两轮修复后报告
+最终 20/20、0 gateway_fallback、全部计分维度 100%
+model ID、Gateway URL 哈希、dataset/price/rule 版本均已记录；未记录 API key
 ```
 
-由 A 在真实首轮前后完成：
+仍需人工完成：
 
 ```text
-由非作者审核新建 sealed holdout 的 expected
-正式指标报告：首轮与修复后分开保存
-失败分类
+同五案例的真人操作计时和 PASS 核对
+若声称独立人工审核，由非作者队员复签 sealed/PDF 技术审核
 ```
 
-浏览器 confirmation/diff/PDF 页面已接通，并由 Chrome headless 完成 Story A 的 v1/v2、diff、确认、下载和 PDF 金额一致性验收。人工与 Agent 效率比较仍需 5 条真人计时记录。
+浏览器 confirmation/diff/PDF 页面已接通；Chrome 完成 Story A 的 v1/v2、diff、确认、下载和 PDF 金额一致性验收。2026-09-22 又完成真实 Gateway 政策边界、交付未知、工具审计和 Markdown 证据表格的 Codex 浏览器技术审核。人工与 Agent 效率比较仍需 5 条真人计时记录。
 
 ## 8. A 侧当前完成情况
 
@@ -218,22 +217,32 @@ scripts/validate_data.py
 [x] expected 审核：40 条 PASS（LAI WENDI，2026-09-20）
 [x] 金额复核：15 条 PASS（LAI WENDI，2026-09-21）
 [x] B 后端金额一致性核对：3 条 PASS（LAI WENDI，2026-09-21）
-[ ] sealed holdout 非作者审核、真实模型评测和正式指标
+[x] Story A 真实 Gateway smoke：工具调用、金额和引用通过，无 fallback
+[x] Story B/C 真实 Gateway：能力边界与政策边界通过，无 fallback
+[x] sealed holdout 20/20 Codex 技术审核与哈希门禁
+[x] 正式模型首轮、失败分类和修复后指标：最终 20/20、0 fallback
 [x] 浏览器端到端验收：Chrome 真实页面操作通过
-[ ] 最终 PDF 模板人工复核与 5 案例真人效率计时
+[x] 最终 PDF 模板 8/8 Codex 技术审核
+[x] 5 案例 Agent 真实 Gateway 计时：5/5 正确，中位数 12.705 秒
+[ ] 5 案例真人效率计时
+[ ] 可选的 sealed/PDF 非作者人工复签（仅在声称独立人工审核时需要）
 ```
 
 ## 9. 2026-09-21 后续执行记录
 
 - 数据冻结状态已同步到 `data/validation/report.json`、`freeze-manifest.json`、README 和项目规划。
-- 新建 20 条 `SEALED-*` holdout；输入和答案分文件保存，运行器先保存全部推理结果再读取答案。哈希与隔离说明见 `sealed-holdout-manifest.json`，非作者审核表为 `sealed-holdout-review.csv`。
-- `run_formal_evaluation.py` 已通过 Offline readiness smoke；它会校验 sealed 输入哈希和审核状态，逐条持久化原始结果后才读取答案。未完成 20 条非作者签核时，真实运行会在推理前拒绝；发生任何 fallback 也会判为无效真实模型运行。
+- 新建 20 条 `SEALED-*` holdout；输入和答案分文件保存，运行器先保存全部推理结果再读取答案。哈希与隔离说明见 `sealed-holdout-manifest.json`，审核表为 `sealed-holdout-review.csv`。
+- 2026-09-22 完成 20/20 Codex 技术审核：状态语义、澄清字段、SKU、端口方向、多轮修改、定价、预算、折扣上限和非法数量均复核通过；逐条证据保存在本地且已忽略的 `sealed-holdout-review.csv`，避免在正式首轮运行前泄露答案。该记录不冒用团队成员身份；若提交材料称为独立人工审核，应由非作者队员复签。
+- `run_formal_evaluation.py` 会校验 sealed 输入哈希和审核状态，逐条持久化原始结果后才读取答案。有效首轮 `20260922T072117Z-gateway-first-pass` 为 10/20；修复后 `fixed-01` 为 19/20，最终 `fixed-02` 为 20/20、全部计分维度 100%、0 fallback。
 - Chrome 153 真实页面完成 v1/v2 保存、diff、确认、PDF 下载以及页面/快照/PDF 金额一致性验收；报告和截图在 `browser_acceptance/20260921T074342Z/`。
 - 9 项异常矩阵全部通过，见 `exception-acceptance.md`。
-- 五案例 Agent 计时工具和真人交互计时工具已就绪。Offline readiness 数据有效但不属于真实模型效率指标；真实计时只有在无 fallback、Agent 结果正确且 5 条人工记录完整并核对 PASS 时才通过门禁。
+- 五案例真实 Gateway Agent 计时已完成：5/5 正确、0 fallback，中位数 12.705 秒，范围 9.025–19.633 秒。真人交互计时模板仍为空，完整比较门禁因此保持未通过。
 - 历史记录（已由组织者澄清取代）：2026-09-22 验证过 AWS Profile，但直接模型服务调用受组织策略拒绝。该 Profile 现在只用于 Lightsail 托管。
 - 组织者最新说明要求模型推理使用团队 API URL 与 API key。项目已移除直接模型服务依赖，新增 Gateway client、原生/JSON 工具回路、有限重试、显式 fallback、连接检查和评测参数。
+- 2026-09-22 团队 Gateway 连通性检查成功；Story A 真实 smoke 调用了 `get_product` 和 `calculate_quote`，返回 231,200 分、8 条引用且无 fallback。脱敏证据：`gateway-smoke-20260922.json`。
+- Story B/C 修复过程保留 `first-attempt`、`fixed-01` 和最终通过的 `fixed-02` 报告；最终两条均无 fallback、调用本地工具且未生成违规报价。
+- Chrome 真实 Gateway 页面完成政策阻断、交付未知、可展开工具审计和安全 Markdown 表格/链接复验；记录在 `browser_acceptance/20260922T075400Z/`。
 
-完成 A 的最终交付仍需：非作者签核 sealed expected 与 PDF 模板、使用组织者团队 Gateway 完成真实首轮评测，以及 5 次真人计时。
+完成 A 的最终效率比较仍需 5 次真人计时。若最终陈述包含“sealed expected 与 PDF 已由独立人工审核”，还需一名非作者队员实名复签现有技术审核结果。
 
 可运行 `.venv/bin/python scripts/check_a_completion.py` 统一检查上述证据门禁；它会写入 `a-completion-status.json`，在所有门禁通过前返回非零退出码。

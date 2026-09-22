@@ -119,9 +119,9 @@ def score(case: dict[str, Any], result: dict[str, Any], expected: dict[str, Any]
     checks: dict[str, bool] = {"status": result.get("status") == expected.get("status")}
     if "ask_for" in expected:
         checks["clarification"] = result.get("ask_for") == expected["ask_for"]
-    if expected.get("items") and expected.get("status") == "ready_to_quote":
+    if expected.get("items"):
         checks["selection"] = line_tuples(result) == expected_line_tuples(expected)
-    if "total_cents" in expected and expected.get("status") == "ready_to_quote":
+    if "total_cents" in expected:
         checks["amount"] = (result.get("quote_draft") or {}).get("total_cents") == expected["total_cents"]
     if "within_budget" in expected:
         checks["budget"] = (result.get("quote_draft") or {}).get("within_budget") == expected["within_budget"]
@@ -132,6 +132,18 @@ def score(case: dict[str, Any], result: dict[str, Any], expected: dict[str, Any]
         checks["evidence"] = bool(citations) and (
             "sku" not in expected or any(row.get("sku") == expected["sku"] for row in citations)
         )
+        if case.get("category") == "model_suffix":
+            checks["evidence"] = checks["evidence"] and len(
+                {row.get("sku") for row in citations if row.get("sku")}
+            ) >= 2
+    if "sku" in expected:
+        observed_skus = {
+            str(row.get("sku"))
+            for key in ("candidates", "citations")
+            for row in (result.get(key) or [])
+            if row.get("sku")
+        }
+        checks["target_sku"] = str(expected["sku"]) in observed_skus
     if expected.get("status") in {"rule_violation", "invalid_quantity"}:
         checks["policy_block"] = checks["status"] and not result.get("quote_draft")
     failed = [name for name, passed in checks.items() if not passed]
@@ -229,7 +241,10 @@ def main() -> int:
             and gateway_started_count == len(cases)
             and gateway_tool_call_count > 0
         ),
-        "metrics": {key: rate(scored, key) for key in ("status", "clarification", "selection", "amount", "policy_block", "evidence")},
+        "metrics": {key: rate(scored, key) for key in (
+            "status", "clarification", "selection", "amount", "budget",
+            "over_budget", "policy_block", "evidence", "target_sku",
+        )},
         "all_machine_checks": {"passed": sum(row["passed"] for row in scored), "total": len(scored), "rate": sum(row["passed"] for row in scored) / len(scored)},
         "failure_categories": {name: sum(row["failure_category"] == name for row in scored) for name in sorted({row["failure_category"] for row in scored if row["failure_category"]})},
         "cases": scored,
