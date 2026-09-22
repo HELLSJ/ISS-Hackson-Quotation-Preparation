@@ -896,25 +896,19 @@ def _read_instructions() -> str:
 
 
 def _catalogue_summary_text() -> str:
-    lines: List[str] = []
-    for product in catalog.all_products():
-        parts: List[str] = [f"{product.sku} ({product.model})"]
-        if product.screen_inches is not None:
-            parts.append(f'{product.screen_inches}"')
-        if product.resolution:
-            parts.append(str(product.resolution))
-        if product.usb_c_video is not None:
-            parts.append("USB-C video" if product.usb_c_video else "no USB-C video")
-        if product.usb_c_pd_watts:
-            parts.append(f"{product.usb_c_pd_watts}W host PD")
-        if product.unit_price_cents is not None:
-            parts.append(f"{product.unit_price_cents} cents")
-        lines.append("- " + ", ".join(parts))
+    lines = [f"- {product.sku} ({product.model})" for product in catalog.all_products()]
     return (
-        "Catalogue summary (synthetic prices in SGD cents; use tools for "
-        "authoritative specifications and every monetary calculation):\n"
+        "Catalogue identity map. It is only for resolving model names to SKUs. "
+        "It intentionally contains no specifications or prices; use tools for "
+        "every product fact, limitation, match and monetary calculation:\n"
         + "\n".join(lines)
     )
+
+
+def _known_model_mentioned(enquiry_or_turns: Union[str, Sequence[str]]) -> bool:
+    turns = [enquiry_or_turns] if isinstance(enquiry_or_turns, str) else enquiry_or_turns
+    text = "\n".join(str(turn) for turn in turns)
+    return bool(_match_sku_in(text, _build_alias_index()))
 
 
 class GatewayRequestError(RuntimeError):
@@ -1128,7 +1122,13 @@ class GatewayDriver:
             + _catalogue_summary_text()
             + "\n\nUse native function calls when available. If unavailable, output only "
             '{"tool":"tool_name","args":{...}} and wait for the tool result. '
-            "For the final response, return JSON with status, ask_for, and message. "
+            "Do not answer a named-product fact, limitation, catalogue match, quote, "
+            "budget, quantity revision, or discount rule from memory or the identity map. "
+            "Call get_product for named-product facts and limitations, search_products for "
+            "constraint matching, and calculate_quote for every quote or pricing-rule check. "
+            "A final response without a tool is allowed only when the customer must clarify "
+            "missing or ambiguous requirements first. For the final response, return a JSON "
+            "object with status, ask_for, and message; ask_for must always be a JSON array. "
             "For clarification use status needs_clarification and ask_for values from: "
             "quantity, product_specification_or_model, usb_c_video_requirement, "
             "host_charging_requirement, actual_vs_marketed_diagonal, "
@@ -1145,6 +1145,20 @@ class GatewayDriver:
         return [{"role": "system", "content": system}, {"role": "user", "content": customer_text}]
 
     def _run_gateway(self, client: Any, enquiry_or_turns: Union[str, Sequence[str]]) -> AgentResult:
+        policy_guard = self._offline.run(enquiry_or_turns)
+        enquiry_text = (
+            enquiry_or_turns
+            if isinstance(enquiry_or_turns, str)
+            else "\n".join(str(turn) for turn in enquiry_or_turns)
+        )
+        if (
+            policy_guard.status == state_mod.EXPLAIN_LIMITATION
+            and re.search(r"\b(compare|comparison|difference|different|same)\b", enquiry_text, re.IGNORECASE)
+        ):
+            # A comparison is an evidence answer even when one product lacks a
+            # feature. Reserve the hard limitation guard for a customer's stated
+            # requirement that the selected product cannot satisfy.
+            policy_guard = None
         messages = self._build_messages(enquiry_or_turns)
         schemas = _tool_schemas.tool_schemas()
         trace: list[dict[str, Any]] = [
@@ -1153,6 +1167,7 @@ class GatewayDriver:
         final_text = ""
         final_envelope: dict[str, Any] | None = None
         tool_results: list[tuple[str, Any]] = []
+        tool_nudge_sent = False
 
         for iteration in range(self.max_iterations):
             response = client.chat(messages, schemas)
@@ -1164,7 +1179,33 @@ class GatewayDriver:
             calls = native_calls if native_calls else ([] if not content else [_manual_tool_call(content)])
             calls = [call for call in calls if call]
             if not calls:
-                final_envelope = _structured_final(str(content))
+                candidate_envelope = _structured_final(str(content))
+                named_model = _known_model_mentioned(enquiry_or_turns)
+                premature_selection_question = bool(
+                    candidate_envelope
+                    and candidate_envelope["status"] == state_mod.NEEDS_CLARIFICATION
+                    and state_mod.SLOT_PRODUCT_OR_MODEL in candidate_envelope.get("ask_for", [])
+                    and named_model
+                )
+                requires_tool_retry = (
+                    not tool_results
+                    and not tool_nudge_sent
+                    and (candidate_envelope is None or candidate_envelope["status"] != state_mod.NEEDS_CLARIFICATION or premature_selection_question)
+                    and named_model
+                )
+                if requires_tool_retry:
+                    messages.append({"role": "assistant", "content": str(content)})
+                    messages.append({
+                        "role": "user",
+                        "content": (
+                            "No local tool has run yet. Do not finalize from memory. Call the "
+                            "relevant tool now, then return the required JSON status envelope."
+                        ),
+                    })
+                    trace.append({"step": f"gateway_turn_{iteration}", "result": "tool_required_retry"})
+                    tool_nudge_sent = True
+                    continue
+                final_envelope = candidate_envelope
                 final_text = (
                     final_envelope["message"]
                     if final_envelope and final_envelope.get("message")
@@ -1231,7 +1272,9 @@ class GatewayDriver:
         else:
             trace.append({"step": "gateway_iteration_cap", "result": self.max_iterations})
 
-        return self._assemble_result(final_text, final_envelope, tool_results, trace)
+        return self._assemble_result(
+            final_text, final_envelope, tool_results, trace, policy_guard=policy_guard
+        )
 
     def _assemble_result(
         self,
@@ -1239,6 +1282,7 @@ class GatewayDriver:
         final_envelope: dict[str, Any] | None,
         tool_results: list[tuple[str, Any]],
         trace: list[dict[str, Any]],
+        policy_guard: AgentResult | None = None,
     ) -> AgentResult:
         result = AgentResult(status=state_mod.NEEDS_CLARIFICATION, trace=trace)
         result.notes.append(_SYNTHETIC_NOTE)
@@ -1302,7 +1346,7 @@ class GatewayDriver:
 
         # The model may select the business status, but only when local tool
         # evidence makes that status possible. Facts and money remain tool-owned.
-        if requested_status == state_mod.NEEDS_CLARIFICATION and not tool_results:
+        if requested_status == state_mod.NEEDS_CLARIFICATION and not result.quote_draft:
             result.status = state_mod.NEEDS_CLARIFICATION
         elif requested_status == state_mod.EXPLAIN_LIMITATION and result.citations and not result.quote_draft:
             result.status = state_mod.EXPLAIN_LIMITATION
@@ -1322,4 +1366,29 @@ class GatewayDriver:
             result.status = state_mod.INVALID_QUANTITY
         elif requested_status == state_mod.READY_TO_QUOTE and result.quote_draft:
             result.status = state_mod.READY_TO_QUOTE
+
+        # Hard business boundaries are deterministic. The Gateway still has to
+        # invoke local tools for evidence/facts, while the local state machine
+        # owns the final refusal/limitation status and unsupported-commitment
+        # notes. This is a guardrail, not a transport fallback.
+        guarded_statuses = {
+            state_mod.EXPLAIN_LIMITATION,
+            state_mod.RULE_VIOLATION,
+            state_mod.INVALID_QUANTITY,
+        }
+        if policy_guard and policy_guard.status in guarded_statuses:
+            guard_can_apply = (
+                policy_guard.status != state_mod.EXPLAIN_LIMITATION
+                or bool(result.citations)
+            )
+            if guard_can_apply:
+                result.status = policy_guard.status
+                result.quote_draft = None
+                for note in policy_guard.notes:
+                    if note not in result.notes:
+                        result.notes.append(note)
+                result.trace.append({
+                    "step": "local_policy_guard",
+                    "result": policy_guard.status,
+                })
         return result

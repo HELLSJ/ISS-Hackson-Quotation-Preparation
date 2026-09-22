@@ -191,6 +191,51 @@ class AgentFailurePathTests(unittest.TestCase):
         self.assertEqual({row["sku"] for row in result.candidates}, {"MON-005", "MON-008"})
         self.assertEqual({row["sku"] for row in result.citations}, {"MON-005", "MON-008"})
 
+    def test_named_product_final_answer_without_tool_is_retried(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": json.dumps({
+                "status": "explain_limitation", "ask_for": [],
+                "message": "The product cannot meet the requirement.",
+            }), "tool_calls": []}},
+            {"message": {"content": "", "tool_calls": [{
+                "id": "call-1", "type": "function", "function": {
+                    "name": "get_product", "arguments": {"sku": "MON-010"},
+                },
+            }]}},
+            {"message": {"content": json.dumps({
+                "status": "explain_limitation", "ask_for": [],
+                "message": "U2724D cannot meet the one-cable requirement.",
+            }), "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret",
+            model="test-model", client=client,
+        ).run("Can U2724D provide one-cable video and 90W charging?")
+        self.assertEqual(result.status, "explain_limitation")
+        self.assertTrue(result.citations)
+        self.assertTrue(any(row.get("result") == "tool_required_retry" for row in result.trace))
+
+    def test_local_policy_guard_overrides_model_clarification(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": "", "tool_calls": [{
+                "id": "call-1", "type": "function", "function": {
+                    "name": "get_product", "arguments": {"sku": "MON-010"},
+                },
+            }]}},
+            {"message": {"content": json.dumps({
+                "status": "needs_clarification",
+                "ask_for": ["product_specification_or_model"],
+                "message": "Would you like a different model?",
+            }), "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret",
+            model="test-model", client=client,
+        ).run("Quote 4 U2724D for one-cable laptop video and 90W charging.")
+        self.assertEqual(result.status, "explain_limitation")
+        self.assertIsNone(result.quote_draft)
+        self.assertTrue(any(row.get("step") == "local_policy_guard" for row in result.trace))
+
     def test_ollama_client_uses_gateway_header_and_endpoint(self) -> None:
         captured = {}
 
