@@ -51,7 +51,7 @@ Success is a bare product-summary array sorted by synthetic unit price. Exact mo
 {"sku":"MON-007"}
 ```
 
-Success returns public specifications, synthetic price, `evidence[]`, and `stock_quantity`/`delivery_lead_days` as `null`. Evidence contains `source_id`, `source_url`, `pdf_page`, `field`, `value`, `method`, and `note`. Unknown SKU returns `{"found":false,"sku":"..."}`.
+Success returns public specifications, synthetic price, `evidence[]`, and `stock_quantity`/`delivery_lead_days` as `null`. Evidence contains `source_id`, `source_url`, `pdf_page`, `field`, `value`, `method`, and `note`. `source_url` is the official Dell URL with a `#page=N` fragment; the HTTP API does not host or redistribute Dell source PDFs. Unknown SKU returns `{"found":false,"sku":"..."}`.
 
 ### `calculate_quote`
 

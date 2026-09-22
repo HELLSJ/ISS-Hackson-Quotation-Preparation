@@ -1,8 +1,8 @@
 # 报价 Agent 数据包
 
-已下载并整理 **6 份 Dell 官方英文手册，覆盖 12 个显示器型号**。产品规格来自手册；12 个销售价格、折扣和报价政策是本项目的模拟业务数据。下载记录包含实际下载时间，数据版本为 `2026-09-14.v1`。
+已从 **6 份 Dell 官方英文手册整理 12 个显示器型号**。产品规格来自手册；12 个销售价格、折扣和报价政策是本项目的模拟业务数据。下载记录包含冻结时的实际下载时间，数据版本为 `2026-09-14.v1`。
 
-先使用 [Agent 目录 catalog.json](agent/catalog.json)，或直接调用本文的本地查询和计价工具。无需重新下载、注册 Icecat 或购买数据。
+先使用 [Agent 目录 catalog.json](agent/catalog.json)，或直接调用本文的本地查询和计价工具。日常运行无需下载原始手册、注册 Icecat 或购买数据。
 
 ## 从哪些文件开始
 
@@ -12,7 +12,7 @@
 | [processed/products.csv](processed/products.csv) | 12 个产品规格 | 人工查看和导入；UTF-8，布尔值为 true/false |
 | [processed/prices.csv](processed/prices.csv) | 模拟 SGD 销售价格 | 整数分，例如 28900 表示 SGD 289.00 |
 | [processed/pricing_rules.json](processed/pricing_rules.json) | 模拟计价规则 | 计价程序读取，不靠模型心算 |
-| [processed/field_evidence.csv](processed/field_evidence.csv) | 96 条字段级证据 | 型号、尺寸、分辨率、刷新率、USB-C 功能等对应的 PDF 页码 |
+| [processed/field_evidence.csv](processed/field_evidence.csv) | 96 条字段级证据 | 型号、尺寸、分辨率、刷新率、USB-C 功能等对应的官方链接和 PDF 页码 |
 | [processed/sources.csv](processed/sources.csv) | 来源链接和文件信息 | 原件来源、下载日期、页数、使用说明 |
 | [../storage/catalog.sqlite](../storage/catalog.sqlite) | 已导入的目录数据库 | products 表包含完整 JSON，prices 表包含模拟价；无客户数据 |
 | [agent/tool_schemas.json](agent/tool_schemas.json) | 3 个工具定义 | OpenAI/Ollama 兼容的 function schema |
@@ -101,9 +101,9 @@ python scripts/catalog_tools.py calculate_quote '{"items":[{"sku":"MON-007","qua
 
 ## 如何重新下载、提取和构建
 
-### 原始资料已在本地
+### 原始资料不随比赛提交
 
-`data/raw/dell/` 保存 6 份原始 PDF，`data/raw/download_log.json` 保存时间和实际地址。`data/extracted/` 保存逐页文本，PDF 页码从 1 开始。PDF 字体可能导致提取文本出现 `/.null` 等噪声，因此最终产品事实来自逐字段核对，不是未经审阅的自动抽取结果。
+比赛仓库不提交 `data/raw/dell/` 下的 6 份 Dell 原始 PDF。`data/raw/download_log.json` 保存冻结时的下载记录，`data/source_manifest.json` 和 `processed/sources.csv` 保存官方来源，`data/extracted/` 保存逐页文本，PDF 页码从 1 开始。PDF 字体可能导致提取文本出现 `/.null` 等噪声，因此最终产品事实来自逐字段核对，不是未经审阅的自动抽取结果。
 
 ### 修改价格或规则后
 
@@ -127,7 +127,7 @@ python scripts/prepare_evaluation.py
 python scripts/validate_data.py
 ```
 
-下载脚本默认复用有下载记录的现有 PDF，防止覆盖固定版本；若源文件更新，应另存新快照后重新核对 `curated_specs.json`。此文件是已检查事实及页码的维护入口，构建脚本不会自动从新手册猜出新字段。`prepare_evaluation.py` 会重建本包的固定测试案例，不要用它覆盖已经手工扩充的评估集。
+下载脚本会按 manifest 获取工作副本；若本地已存在并与冻结日志一致则复用。若源文件更新，应另存新快照后重新核对 `curated_specs.json`。此文件是已检查事实及页码的维护入口，构建脚本不会自动从新手册猜出新字段。`prepare_evaluation.py` 会重建本包的固定测试案例，不要用它覆盖已经手工扩充的评估集。
 
 ## 测试与可信范围
 
@@ -137,6 +137,6 @@ python scripts/validate_data.py
 
 ## 来源和使用
 
-规格源自 `sources.csv` 中链接的 Dell 官方英文手册。原 PDF 保留 Dell 版权；公开下载不等于开放数据许可。本包保存原件供溯源，公开发布原件前检查再分发条件。生成的价格、规则和询价均明确标记为模拟，不代表 Dell 报价、库存或商业政策。
+规格源自 `sources.csv` 中链接的 Dell 官方英文手册。原 PDF 保留 Dell 版权；公开下载不等于开放数据许可，因此本提交只保留事实字段、逐页提取文本、官方来源链接和获取说明，不分发原件。生成的价格、规则和询价均明确标记为模拟，不代表 Dell 报价、库存或商业政策。
 
 完整项目范围、当前进展和后续 Gate 见 [项目总规划](../docs/project-plan-zh.md)。数据部分已经落地；后续按总规划完成组织者 Gateway 真实评测和最终验收。

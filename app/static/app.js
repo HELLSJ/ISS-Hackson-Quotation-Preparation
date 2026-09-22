@@ -491,7 +491,7 @@ async function openEvidence(sku) {
       ${product.evidence.map((item) => `<div class="evidence-row">
         <span class="field">${escapeHtml(item.field.replaceAll("_", " "))}</span>
         <span class="value">${escapeHtml(typeof item.value === "object" ? JSON.stringify(item.value) : item.value)}</span>
-        <a href="${escapeHtml(safeLocalHref(item.local_pdf_url))}" target="_blank" rel="noopener">PDF page ${escapeHtml(item.pdf_page)}</a>
+        <a href="${escapeHtml(item.source_url)}" target="_blank" rel="noopener noreferrer">Dell source · page ${escapeHtml(item.pdf_page)}</a>
       </div>`).join("")}`;
     showDialog($("#evidenceDialog"));
   } catch (error) {
