@@ -32,7 +32,7 @@
 | 未修改的有效首轮 | 修复前 **10/20** 原样保留，修复报告单独保存 |
 | Gateway 工具执行 | 20 条案例启动，21 次本地工具调用，无隐藏 fallback |
 | 浏览器验收 | 保存、修订、diff、确认、PDF、政策阻断和证据渲染通过（[报告](reports/evaluation/browser_acceptance/20260922T075400Z/report.md)） |
-| 计价与应用校验 | 60 项目录/后端/Gateway/评测门禁测试通过 |
+| 计价与应用校验 | 61 项目录/后端/Gateway/评测门禁测试通过 |
 | Agent 回归 | 64 项完成：57 项通过，7 项为已记录的 OfflineDriver 启发式 skip |
 | 证据基础 | 6 份 Dell 手册、522 页、96 条字段级证据 |
 | 真实 Gateway 计时 | 5/5 正确，**中位数 12.705 秒**（[报告](reports/evaluation/timing/20260922T073821Z-gateway-first-pass/report.md)） |
@@ -118,7 +118,7 @@ Browser workbench (`app/static/`)
           → conversations
           → messages + AgentResult/trace
           → immutable quote_versions + append-only confirmations
-      → manifest 白名单中的本地 Dell PDF
+      → Dell 官方来源链接和精确页码
       → stored-snapshot diff 和 confirmed quote PDF renderer
 ```
 
@@ -186,9 +186,10 @@ python scripts/validate_data.py
 - `data/curated_specs.json`：已核对事实和证据页码；
 - `data/synthetic_business.json`：模拟价格和规则。
 
-重新提取 PDF 需要：
+比赛提交物不包含 Dell 原始 PDF。仓库保留官方链接、冻结的逐页提取文本、已核对事实和精确页码。需要在本地复现提取时，先下载来源再安装独立固定的数据依赖：
 
 ```bash
+python scripts/download_sources.py
 .venv/bin/pip install -r scripts/requirements-data.txt
 python scripts/extract_sources.py
 ```
@@ -199,14 +200,14 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 项数据/工具检查
-.venv/bin/python -m unittest discover -s tests            # 60 项目录/后端/Gateway/评测门禁测试
+.venv/bin/python -m unittest discover -s tests            # 61 项目录/后端/Gateway/评测门禁测试
 .venv/bin/python -m unittest discover -s dell_agent/tests # 64 项 Agent 测试
 ```
 
 当前结果：
 
 - 15 项目录/CLI 契约测试通过；
-- 19 项临时数据库后端测试通过，覆盖迁移、快照、并发、确认、diff、PDF、故障注入和 HTTP；
+- 20 项临时数据库后端测试通过，覆盖迁移、快照、并发、确认、diff、PDF、官方证据链接、故障注入和 HTTP；
 - 64 项 Agent 测试完成：57 项通过，7 项为明确记录的 OfflineDriver 启发式 skip；
 - 三条固定演示均在离线路径通过。
 
@@ -259,4 +260,4 @@ agent.md                工程交接摘要
 
 ## 来源和许可
 
-产品规格来自 `data/processed/sources.csv` 中链接的 Dell 手册。原 PDF 保留 Dell 版权；公开可下载不代表可自由再分发，公开提交前必须确认许可。所有价格、规则和询价均明确为模拟数据。
+产品规格来自 `data/processed/sources.csv` 中链接的 Dell 手册。本提交不包含 Dell 原始 PDF；应用会打开记录页码的 Dell 官方链接，需要本地工作副本时可运行 `scripts/download_sources.py`。所有价格、规则和询价均明确为模拟数据。

@@ -42,10 +42,13 @@ def main():
     assert all(r['currency']=='SGD' and int(r['unit_price_cents'])>=0 and r['price_source_type']=='synthetic' for r in prices)
     assert len(evidence)==12*8
     page_counts={}
+    local_source_pdf_count=0
     for s in sources:
         f=ROOT/s['local_path']
-        assert f.is_file() and f.read_bytes().startswith(b'%PDF-')
-        assert f.stat().st_size==log[s['source_id']]['size_bytes']
+        if f.is_file():
+            assert f.read_bytes().startswith(b'%PDF-')
+            assert f.stat().st_size==log[s['source_id']]['size_bytes']
+            local_source_pdf_count+=1
         extracted=read('data/extracted/'+s['source_id']+'.json')
         page_counts[s['source_id']]=extracted['page_count']
         assert len(extracted['pages'])==extracted['page_count']
@@ -85,8 +88,9 @@ def main():
     )
     result=unittest.TextTestRunner(stream=stream,verbosity=2).run(suite)
     report=dict(checked_at=datetime.now(timezone.utc).isoformat(),dataset_version=catalog['dataset_version'],
-                source_pdf_count=len(sources),source_page_count=sum(page_counts.values()),
-                downloaded_bytes=sum(r['size_bytes'] for r in log.values()),products=len(products),
+                source_document_count=len(sources),source_page_count=sum(page_counts.values()),
+                source_pdfs_in_submission=0,local_source_pdf_count=local_source_pdf_count,
+                source_bytes_at_freeze=sum(r['size_bytes'] for r in log.values()),products=len(products),
                 synthetic_prices=len(prices),field_evidence_rows=len(evidence),evaluation_cases=counts,
                 demo_cases=3,offline_tests_run=result.testsRun,offline_test_failures=len(result.failures),
                 offline_test_errors=len(result.errors),data_integrity='passed',

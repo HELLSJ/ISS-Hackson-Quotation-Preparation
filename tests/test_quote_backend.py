@@ -386,6 +386,16 @@ class QuoteApiTests(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         return response.json()
 
+    def test_product_evidence_uses_official_source_without_local_pdf_route(self) -> None:
+        response = self.client.get("/api/products/MON-007")
+        self.assertEqual(response.status_code, 200)
+        evidence = response.json()["evidence"]
+        self.assertEqual(len(evidence), 8)
+        self.assertTrue(all(item["source_url"].startswith("https://dl.dell.com/") for item in evidence))
+        self.assertTrue(all(f"#page={item['pdf_page']}" in item["source_url"] for item in evidence))
+        self.assertTrue(all("local_pdf_url" not in item for item in evidence))
+        self.assertEqual(self.client.get("/api/sources/DELL-P25HE/pdf").status_code, 404)
+
     def test_confirm_diff_and_pdf_http_contract(self) -> None:
         saved = self.create_saved_quote()
         blocked = self.client.get(f"/api/quotes/{saved['id']}/pdf")

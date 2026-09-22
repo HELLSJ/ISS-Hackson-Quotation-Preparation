@@ -32,7 +32,7 @@ Try the deployed workbench at **[http://52.221.210.32/](http://52.221.210.32/)**
 | Untouched first pass | **10/20 preserved** before fixes, with separate repair reports |
 | Live Gateway tool execution | 20 cases started, 21 local tool calls, no hidden fallback |
 | Browser acceptance | Save, revise, diff, confirm, PDF, policy blocking and evidence rendering passed ([report](reports/evaluation/browser_acceptance/20260922T075400Z/report.md)) |
-| Pricing and application validation | 60 catalogue/backend/Gateway/evaluation tests passed |
+| Pricing and application validation | 61 catalogue/backend/Gateway/evaluation tests passed |
 | Agent regression suite | 64 cases completed: 57 passed, 7 documented OfflineDriver heuristic skips |
 | Source base | 6 Dell manuals, 522 pages and 96 field-level evidence records |
 | Real Gateway timing | 5/5 correct; **12.705 s median** ([report](reports/evaluation/timing/20260922T073821Z-gateway-first-pass/report.md)) |
@@ -118,7 +118,7 @@ Browser workbench (`app/static/`)
           → conversations
           → messages + AgentResult/trace
           → immutable quote_versions + append-only confirmations
-      → allow-listed local Dell source PDFs
+      → official Dell source links with exact page references
       → stored-snapshot diff and confirmed quote-PDF renderer
 ```
 
@@ -191,9 +191,10 @@ Only these two files are intended for manual data maintenance:
 - `data/curated_specs.json` — reviewed facts and evidence page numbers;
 - `data/synthetic_business.json` — synthetic prices and business rules.
 
-Re-extracting source PDFs requires the separately pinned data dependency:
+The Dell source PDFs are intentionally excluded from the competition submission. The repository retains official download URLs, frozen extracted text, reviewed facts, and exact page references. To reproduce extraction locally, download the sources first and install the separately pinned data dependency:
 
 ```bash
+python scripts/download_sources.py
 .venv/bin/pip install -r scripts/requirements-data.txt
 python scripts/extract_sources.py
 ```
@@ -204,14 +205,14 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 data/tool checks
-.venv/bin/python -m unittest discover -s tests            # 60 catalogue/backend/gateway/evaluation-gate tests
+.venv/bin/python -m unittest discover -s tests            # 61 catalogue/backend/gateway/evaluation-gate tests
 .venv/bin/python -m unittest discover -s dell_agent/tests # 64 Agent tests
 ```
 
 The current suites report:
 
 - 15 catalogue/CLI contract tests passing;
-- 19 temporary-database backend tests passing (migration, snapshots, concurrency, confirmation, diff, PDF, fault injection and HTTP);
+- 20 temporary-database backend tests passing (migration, snapshots, concurrency, confirmation, diff, PDF, official evidence links, fault injection and HTTP);
 - 64 Agent tests completed: 57 passed and 7 explicitly documented OfflineDriver heuristic cases were skipped;
 - all three fixed demo scenarios passing in the offline path.
 
@@ -263,4 +264,4 @@ agent.md                concise engineering handoff
 
 ## Source and licensing note
 
-Specifications are derived from Dell manuals linked in `data/processed/sources.csv`. The original PDFs remain Dell copyrighted material; public download does not imply an open redistribution licence. Verify redistribution rights before publishing those files. All prices, rules, and enquiries are explicitly synthetic.
+Specifications are derived from Dell manuals linked in `data/processed/sources.csv`. Dell source PDFs are not included in this submission; the application opens the official Dell URL at the recorded page, and `scripts/download_sources.py` can retrieve a local working copy when needed. All prices, rules, and enquiries are explicitly synthetic.

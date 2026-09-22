@@ -1,7 +1,6 @@
 """FastAPI entry point for the quotation workbench."""
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Any, Literal
 
@@ -13,7 +12,7 @@ from pydantic import BaseModel, Field
 
 from dell_agent.agent.tools import dispatch
 
-from .config import ROOT, load_settings
+from .config import load_settings
 from .quote_diff import compare_quotes
 from .quote_pdf import PdfRenderError, render_confirmed_quote, safe_filename
 from .repository import Repository
@@ -23,11 +22,6 @@ settings = load_settings()
 repository = Repository(settings.app_db_path)
 service = QuotationService(repository, settings)
 STATIC_DIR = Path(__file__).resolve().parent / "static"
-SOURCES = {
-    row["source_id"]: row
-    for row in json.loads((ROOT / "data/source_manifest.json").read_text(encoding="utf-8"))
-}
-
 app = FastAPI(
     title="Dell Quotation Workbench",
     version="0.1.0",
@@ -124,23 +118,7 @@ def product(sku: str) -> dict[str, Any]:
     result = dispatch("get_product", {"sku": sku})
     if not result.get("found"):
         fail(404, "not_found", f"Product {sku} was not found.")
-    source_id = result["evidence"][0]["source_id"] if result.get("evidence") else None
-    if source_id:
-        for evidence in result["evidence"]:
-            evidence["local_pdf_url"] = f"/api/sources/{source_id}/pdf#page={evidence['pdf_page']}"
     return result
-
-
-@app.get("/api/sources/{source_id}/pdf", include_in_schema=False)
-def source_pdf(source_id: str) -> FileResponse:
-    source = SOURCES.get(source_id)
-    if source is None:
-        fail(404, "not_found", "Source document was not found.")
-    path = (ROOT / source["local_path"]).resolve()
-    raw_root = (ROOT / "data/raw").resolve()
-    if raw_root not in path.parents or not path.is_file():
-        fail(404, "not_found", "Source document is unavailable.")
-    return FileResponse(path, media_type="application/pdf")
 
 
 @app.get("/api/conversations")
