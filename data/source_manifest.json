@@ -1,8 +1,536 @@
 [
-  {"source_id":"DELL-P25H","models":["P2225H","P2425H","P2425","P2725H"],"title":"Dell P2425H Monitor User's Guide","page_url":"https://www.dell.com/support/product-details/en-us/product/p2425h-monitor/resources/manuals","download_url":"https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us","local_path":"data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf"},
-  {"source_id":"DELL-P25HE","models":["P2425HE","P2425E","P2725HE"],"title":"Dell P2725HE Monitor User's Guide","page_url":"https://www.dell.com/support/product-details/en-us/product/p2725he-monitor/resources/manuals","download_url":"https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us","local_path":"data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf"},
-  {"source_id":"DELL-S25H","models":["S2425H","S2725H"],"title":"Dell S2425H/S2725H Monitor User's Guide","page_url":"https://www.dell.com/support/product-details/en-us/product/s2425h-monitor/resources/manuals","download_url":"https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us","local_path":"data/raw/dell/S2425H_S2725H_user_guide.pdf"},
-  {"source_id":"DELL-U2724D","models":["U2724D"],"title":"Dell UltraSharp 27 Monitor U2724D User's Guide","page_url":"https://www.dell.com/support/product-details/en-us/product/u2724d-monitor/resources/manuals","download_url":"https://dl.dell.com/content/manual17047281-dell-ultrasharp-27-monitor-u2724d-user-s-guide.pdf?language=en-us","local_path":"data/raw/dell/U2724D_user_guide.pdf"},
-  {"source_id":"DELL-U2724DE","models":["U2724DE"],"title":"Dell UltraSharp 27 Thunderbolt Hub Monitor U2724DE User's Guide","page_url":"https://www.dell.com/support/product-details/en-us/product/u2724de-monitor/resources/manuals","download_url":"https://dl.dell.com/content/manual17050394-dell-ultrasharp-27-thunderbolt-hub-monitor-u2724de-user-s-guide.pdf?language=en-us","local_path":"data/raw/dell/U2724DE_user_guide.pdf"},
-  {"source_id":"DELL-S2725QC","models":["S2725QC"],"title":"Dell S 27 4K USB-C Monitor S2725QC User's Guide","page_url":"https://www.dell.com/support/product-details/en-us/product/s2725qc-monitor/resources/manuals","download_url":"https://dl.dell.com/content/manual22980564-dell-s-27-4k-usb-c-monitor-s2725qc-user-s-guide.pdf?language=en-us","local_path":"data/raw/dell/S2725QC_user_guide.pdf"}
+  {
+    "source_id": "DELL-P25H",
+    "models": [
+      "P2225H",
+      "P2425H",
+      "P2425",
+      "P2725H"
+    ],
+    "title": "Dell P2425H Monitor User's Guide",
+    "page_url": "https://www.dell.com/support/product-details/en-us/product/p2425h-monitor/resources/manuals",
+    "download_url": "https://dl.dell.com/content/manual18231535-dell-p2425h-monitor-user-s-guide.pdf?language=en-us",
+    "local_path": "data/raw/dell/P2225H_P2425H_P2725H_user_guide.pdf",
+    "publisher": "Dell",
+    "rights": "Copyright Dell; public download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "DELL-P25HE",
+    "models": [
+      "P2425HE",
+      "P2425E",
+      "P2725HE"
+    ],
+    "title": "Dell P2725HE Monitor User's Guide",
+    "page_url": "https://www.dell.com/support/product-details/en-us/product/p2725he-monitor/resources/manuals",
+    "download_url": "https://dl.dell.com/content/manual18972647-dell-p2725he-monitor-user-s-guide.pdf?language=en-us",
+    "local_path": "data/raw/dell/P2425HE_P2425E_P2725HE_user_guide.pdf",
+    "publisher": "Dell",
+    "rights": "Copyright Dell; public download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "DELL-S25H",
+    "models": [
+      "S2425H",
+      "S2725H"
+    ],
+    "title": "Dell S2425H/S2725H Monitor User's Guide",
+    "page_url": "https://www.dell.com/support/product-details/en-us/product/s2425h-monitor/resources/manuals",
+    "download_url": "https://dl.dell.com/content/manual2749111-dell-s2425h-monitor-user-s-guide.pdf?language=en-us",
+    "local_path": "data/raw/dell/S2425H_S2725H_user_guide.pdf",
+    "publisher": "Dell",
+    "rights": "Copyright Dell; public download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "DELL-U2724D",
+    "models": [
+      "U2724D"
+    ],
+    "title": "Dell UltraSharp 27 Monitor U2724D User's Guide",
+    "page_url": "https://www.dell.com/support/product-details/en-us/product/u2724d-monitor/resources/manuals",
+    "download_url": "https://dl.dell.com/content/manual17047281-dell-ultrasharp-27-monitor-u2724d-user-s-guide.pdf?language=en-us",
+    "local_path": "data/raw/dell/U2724D_user_guide.pdf",
+    "publisher": "Dell",
+    "rights": "Copyright Dell; public download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "DELL-U2724DE",
+    "models": [
+      "U2724DE"
+    ],
+    "title": "Dell UltraSharp 27 Thunderbolt Hub Monitor U2724DE User's Guide",
+    "page_url": "https://www.dell.com/support/product-details/en-us/product/u2724de-monitor/resources/manuals",
+    "download_url": "https://dl.dell.com/content/manual17050394-dell-ultrasharp-27-thunderbolt-hub-monitor-u2724de-user-s-guide.pdf?language=en-us",
+    "local_path": "data/raw/dell/U2724DE_user_guide.pdf",
+    "publisher": "Dell",
+    "rights": "Copyright Dell; public download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "DELL-S2725QC",
+    "models": [
+      "S2725QC"
+    ],
+    "title": "Dell S 27 4K USB-C Monitor S2725QC User's Guide",
+    "page_url": "https://www.dell.com/support/product-details/en-us/product/s2725qc-monitor/resources/manuals",
+    "download_url": "https://dl.dell.com/content/manual22980564-dell-s-27-4k-usb-c-monitor-s2725qc-user-s-guide.pdf?language=en-us",
+    "local_path": "data/raw/dell/S2725QC_user_guide.pdf",
+    "publisher": "Dell",
+    "rights": "Copyright Dell; public download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-P40WD-40",
+    "models": [
+      "P40WD-40"
+    ],
+    "title": "ThinkVision P40WD-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_P40WD_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_P40WD_40_Monitor/ThinkVision_P40WD_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-P40WD-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-L24-45",
+    "models": [
+      "L24-45"
+    ],
+    "title": "Lenovo L24-45 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_L24_45_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_L24_45_Monitor/Lenovo_L24_45_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-L24-45.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-L27-45",
+    "models": [
+      "L27-45"
+    ],
+    "title": "Lenovo L27-45 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_L27_45_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_L27_45_Monitor/Lenovo_L27_45_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-L27-45.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-L27-4C",
+    "models": [
+      "L27-4C"
+    ],
+    "title": "Lenovo L27-4C Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_L27_4C_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_L27_4C_Monitor/Lenovo_L27_4C_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-L27-4C.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-L24-4C",
+    "models": [
+      "L24-4C"
+    ],
+    "title": "Lenovo L24-4C Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_L24_4C_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_L24_4C_Monitor/Lenovo_L24_4C_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-L24-4C.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-L24D-4C",
+    "models": [
+      "L24D-4C"
+    ],
+    "title": "Lenovo L24D-4C Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_L24D_4C_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_L24D_4C_Monitor/Lenovo_L24D_4C_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-L24D-4C.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-P32UD-40",
+    "models": [
+      "P32UD-40"
+    ],
+    "title": "ThinkVision P32UD-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_P32UD_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_P32UD_40_Monitor/ThinkVision_P32UD_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-P32UD-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-T27QD-4V",
+    "models": [
+      "T27QD-4v"
+    ],
+    "title": "ThinkVision T27QD-4v Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_T27QD_4v_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_T27QD_4v_Monitor/ThinkVision_T27QD_4v_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-T27QD-4V.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-T24D-4V",
+    "models": [
+      "T24D-4v"
+    ],
+    "title": "ThinkVision T24D-4v Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_T24D_4v_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_T24D_4v_Monitor/ThinkVision_T24D_4v_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-T24D-4V.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-T24-4V",
+    "models": [
+      "T24-4v"
+    ],
+    "title": "ThinkVision T24-4v Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_T24_4v_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_T24_4v_Monitor/ThinkVision_T24_4v_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-T24-4V.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-E22-40",
+    "models": [
+      "E22-40"
+    ],
+    "title": "ThinkVision E22-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_E22_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_E22_40_Monitor/ThinkVision_E22_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-E22-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-S22-4E",
+    "models": [
+      "S22-4e"
+    ],
+    "title": "ThinkVision S22-4e Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_S22_4e_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_S22_4e_Monitor/ThinkVision_S22_4e_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-S22-4E.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-L22-4E",
+    "models": [
+      "L22-4e"
+    ],
+    "title": "Lenovo L22-4e Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_L22_4e_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_L22_4e_Monitor/Lenovo_L22_4e_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-L22-4E.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-L27-41",
+    "models": [
+      "L27-41"
+    ],
+    "title": "Lenovo L27-41 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_L27_41_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_L27_41_Monitor/Lenovo_L27_41_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-L27-41.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-S27-4E",
+    "models": [
+      "S27-4e"
+    ],
+    "title": "ThinkVision S27-4e Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_S27_4e_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_S27_4e_Monitor/ThinkVision_S27_4e_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-S27-4E.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-E27Q-40",
+    "models": [
+      "E27Q-40"
+    ],
+    "title": "ThinkVision E27Q-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_E27Q_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_E27Q_40_Monitor/ThinkVision_E27Q_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-E27Q-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-E27-40",
+    "models": [
+      "E27-40"
+    ],
+    "title": "ThinkVision E27-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_E27_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_E27_40_Monitor/ThinkVision_E27_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-E27-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-L27-4E",
+    "models": [
+      "L27-4e"
+    ],
+    "title": "Lenovo L27-4e Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_L27_4e_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_L27_4e_Monitor/Lenovo_L27_4e_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-L27-4E.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-T32UD-40",
+    "models": [
+      "T32UD-40"
+    ],
+    "title": "ThinkVision T32UD-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_T32UD_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_T32UD_40_Monitor/ThinkVision_T32UD_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-T32UD-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-L24-41",
+    "models": [
+      "L24-41"
+    ],
+    "title": "Lenovo L24-41 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_L24_41_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_L24_41_Monitor/Lenovo_L24_41_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-L24-41.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-T24D-40",
+    "models": [
+      "T24D-40"
+    ],
+    "title": "ThinkVision T24D-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_T24D_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_T24D_40_Monitor/ThinkVision_T24D_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-T24D-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-P24QD-40",
+    "models": [
+      "P24QD-40"
+    ],
+    "title": "ThinkVision P24QD-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_P24QD_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_P24QD_40_Monitor/ThinkVision_P24QD_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-P24QD-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-E24-40",
+    "models": [
+      "E24-40"
+    ],
+    "title": "ThinkVision E24-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_E24_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_E24_40_Monitor/ThinkVision_E24_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-E24-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-P24Q-40",
+    "models": [
+      "P24Q-40"
+    ],
+    "title": "ThinkVision P24Q-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_P24Q_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_P24Q_40_Monitor/ThinkVision_P24Q_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-P24Q-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-L27QE",
+    "models": [
+      "L27qe"
+    ],
+    "title": "Lenovo L27qe Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_L27qe_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_L27qe_Monitor/Lenovo_L27qe_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-L27QE.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-T27UD-40",
+    "models": [
+      "T27UD-40"
+    ],
+    "title": "ThinkVision T27UD-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_T27UD_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_T27UD_40_Monitor/ThinkVision_T27UD_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-T27UD-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-P27QD-40",
+    "models": [
+      "P27QD-40"
+    ],
+    "title": "ThinkVision P27QD-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_P27QD_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_P27QD_40_Monitor/ThinkVision_P27QD_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-P27QD-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-P34WD-40",
+    "models": [
+      "P34WD-40"
+    ],
+    "title": "ThinkVision P34WD-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_P34WD_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_P34WD_40_Monitor/ThinkVision_P34WD_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-P34WD-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-T27QD-40",
+    "models": [
+      "T27QD-40"
+    ],
+    "title": "ThinkVision T27QD-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_T27QD_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_T27QD_40_Monitor/ThinkVision_T27QD_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-T27QD-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-T34WD-40",
+    "models": [
+      "T34WD-40"
+    ],
+    "title": "ThinkVision T34WD-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_T34WD_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_T34WD_40_Monitor/ThinkVision_T34WD_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-T34WD-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-C22-39",
+    "models": [
+      "C22-39"
+    ],
+    "title": "Lenovo C22-39 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_C22_39_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_C22_39_Monitor/Lenovo_C22_39_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-C22-39.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-C20-39",
+    "models": [
+      "C20-39"
+    ],
+    "title": "Lenovo C20-39 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_C20_39_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_C20_39_Monitor/Lenovo_C20_39_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-C20-39.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-S24-4E",
+    "models": [
+      "S24-4e"
+    ],
+    "title": "ThinkVision S24-4e Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_S24_4e_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_S24_4e_Monitor/ThinkVision_S24_4e_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-S24-4E.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-P27Q-40",
+    "models": [
+      "P27Q-40"
+    ],
+    "title": "ThinkVision P27Q-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_P27Q_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_P27Q_40_Monitor/ThinkVision_P27Q_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-P27Q-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-T27Q-40",
+    "models": [
+      "T27Q-40"
+    ],
+    "title": "ThinkVision T27Q-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_T27Q_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_T27Q_40_Monitor/ThinkVision_T27Q_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-T27Q-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-L24-4E",
+    "models": [
+      "L24-4e"
+    ],
+    "title": "Lenovo L24-4e Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/Lenovo_L24_4e_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/Lenovo_Monitors/Lenovo_L24_4e_Monitor/Lenovo_L24_4e_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-L24-4E.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-T27-40",
+    "models": [
+      "T27-40"
+    ],
+    "title": "ThinkVision T27-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_T27_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_T27_40_Monitor/ThinkVision_T27_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-T27-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  },
+  {
+    "source_id": "LENOVO-T24-40",
+    "models": [
+      "T24-40"
+    ],
+    "title": "ThinkVision T24-40 Monitor Product Specifications Reference",
+    "page_url": "https://psref.lenovo.com/Product/ThinkVision_T24_40_Monitor",
+    "download_url": "https://psref.lenovo.com/syspool/Sys/PDF/ThinkVision/ThinkVision_T24_40_Monitor/ThinkVision_T24_40_Monitor_Spec.PDF",
+    "local_path": "data/raw/lenovo/LENOVO-T24-40.pdf",
+    "publisher": "Lenovo",
+    "rights": "Copyright Lenovo; public specification download, not an open-data licence. Preserve attribution."
+  }
 ]

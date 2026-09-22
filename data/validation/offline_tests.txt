@@ -15,6 +15,6 @@ test_cli_error_exits_two (test_catalog_tools.CompatibilityAndCliTests.test_cli_e
 test_compatibility_class_delegates_and_raises (test_catalog_tools.CompatibilityAndCliTests.test_compatibility_class_delegates_and_raises) ... ok
 
 ----------------------------------------------------------------------
-Ran 15 tests in 0.061s
+Ran 15 tests in 0.080s
 
 OK

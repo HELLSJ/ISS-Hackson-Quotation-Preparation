@@ -1,8 +1,8 @@
 {
   "rule_version": "demo-v1",
-  "price_version": "demo-v1",
+  "price_version": "demo-v2",
   "currency": "SGD",
-  "effective_date": "2026-09-14",
+  "effective_date": "2026-09-22",
   "discount_limit_bps": 500,
   "default_discount_bps": 0,
   "rounding": "half_up_per_line_discount",

@@ -20,7 +20,10 @@ def main():
             record = dict(record, **source)
             print('Existing:', path.name, flush=True)
         else:
-            req = Request(source['download_url'], headers={'User-Agent': 'QuotationHackathonData/1.0'})
+            headers = {'User-Agent': 'Mozilla/5.0 (compatible; QuotationAgentData/2.0)'}
+            if 'psref.lenovo.com' in source['download_url']:
+                headers['Referer'] = 'https://psref.lenovo.com/'
+            req = Request(source['download_url'], headers=headers)
             with urlopen(req, timeout=60) as response:
                 data = response.read()
                 if not data.startswith(b'%PDF-'):

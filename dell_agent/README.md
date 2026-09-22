@@ -1,7 +1,7 @@
-# Dell Quotation Agent
+# Multi-brand Monitor Quotation Agent
 
 An AI quotation-preparation assistant for a fictional office-equipment
-distributor selling **Dell monitors**. A salesperson enters an incomplete,
+distributor selling **evidence-backed Dell and Lenovo monitors**. A salesperson enters an incomplete,
 natural-language customer enquiry; the agent clarifies missing requirements,
 filters a fixed, evidence-backed monitor catalogue, computes prices with
 deterministic tools, and — after human confirmation — produces a traceable,
@@ -17,7 +17,7 @@ substitutes a product. All monetary math is integer-cent and `Decimal`-verified
 inside `pricing.py`; all product facts come from the frozen catalogue.
 
 > ⚠️ **All prices, discount rules, and enquiries bundled with this package are
-> SYNTHETIC demo data.** They are **not** representative of Dell pricing, stock,
+> SYNTHETIC demo data.** They are **not** representative of manufacturer pricing, stock,
 > or policy. A `calculate_quote` result is an unsaved, unapproved **draft** —
 > it is **not a tax invoice**, and the tools never save, approve, reserve stock,
 > export a PDF, or send a message.
@@ -32,7 +32,7 @@ from the target repository `lwd0110/ISS-Hackson-Quotation-Preparation` into
 `dell_agent/data/`, preserving the repo-relative layout:
 
 ```text
-dell_agent/data/agent/catalog.json                 # 12 Dell monitor SKUs + evidence
+dell_agent/data/agent/catalog.json                 # 50 Dell/Lenovo monitor SKUs + evidence
 dell_agent/data/agent/tool_schemas.json            # OpenAI/Ollama function schemas (3 tools)
 dell_agent/data/agent/instructions.md              # system prompt
 dell_agent/data/agent/knowledge/MON-*.md           # per-SKU spec cards
@@ -73,13 +73,14 @@ agent loop and the tests.
 
 ### CLI / Python examples
 
-`search_products` — the canonical USB-C-video + 90 W host-charging filter
-returns exactly `MON-007, MON-008, MON-009, MON-011`, price-ascending:
+`search_products` — the USB-C-video + 90 W host-charging filter returns every
+matching Dell/Lenovo record, price-ascending (the original four Dell anchors
+remain a subset):
 
 ```bash
 python -c "from dell_agent.agent.tools import dispatch; \
 print([p['sku'] for p in dispatch('search_products', {'usb_c_video': True, 'min_pd_watts': 90})])"
-# ['MON-007', 'MON-008', 'MON-009', 'MON-011']
+# includes MON-007, MON-008, MON-009 and MON-011 plus matching Lenovo SKUs
 ```
 
 `get_product` — specs + synthetic price (cents) + evidence; unknown SKU returns

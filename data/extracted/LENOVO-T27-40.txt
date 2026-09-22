@@ -1,0 +1,452 @@
+=== PDF page 1 ===
+                                                                                                                  PSREF
+                                                                                                                  Product Specifications
+ThinkVision T27-40 Monitor                                                                                        Reference
+
+  OVERVIEW
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        1.  HDMI 1.4                                                 5. USB-B (USB 5Gbps), USB upstream
+
+        2.  DisplayPort 1.2                                          6. USB-A (USB 5Gbps), USB downstream
+        3.  VGA                                                      7. USB-C (USB 5Gbps), 15W, USB downstream
+
+        4.  USB-A (USB 5Gbps), USB downstream                        8. USB-A (USB 5Gbps), USB downstream
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ThinkVision T27-40 Monitor - June 17 2026                                                                                    1 of 6
+
+=== PDF page 2 ===
+                                                                                                                         PSREF
+                                                                                                                         Product Specifications
+ThinkVision T27-40 Monitor                                                                                               Reference
+
+PERFORMANCE
+
+Panel
+Panel
+4-side Ultra Thin, In-Plane Switching
+Backlight
+WLED
+Display Size
+27 inches
+Max View Area
+ •  Active Area: 597.9 x 336.3 mm
+ •  Screen Dimension: 608.8 x 352.4 mm
+Resolution
+1920 x 1080
+Aspect Ratio
+16:9
+Pixel Pitch
+0.3114 x 0.3114 mm
+Dot / Pixel Per Inch
+82 dpi
+Brightness
+300 cd/m²
+Contrast Ratio
+ •  Contrast Ratio (Typical): 1500:1
+ •  Dynamic Contrast Ratio (Typical): 3000000:1
+View Angle (H / V)
+Horizontal: 178°, Vertical: 178°
+Response Time
+ •  Extreme Mode: 4ms GtG
+ •  Normal Mode: 6ms GtG
+Refresh Rate
+48Hz - 120Hz
+Color Gamut
+ •  Coverage Ratio: 99% sRGB (CIE 1931)
+ •  Coverage Ratio: 99% BT.709 (CIE 1931)
+Color Support
+16.7 Million
+Color Depth
+8-bit (6-bit+FRC)
+Screen Surface Treatment
+Anti-glare
+Curvature
+Flat Panel
+Operating System
+Operating System
+ •  Windows® 11 Support
+ •  Windows® 10 Support
+Multi-Media
+Camera
+ •  No bundled webcam (Support ThinkVision® VoIP Stack MC60 Monitor Webcam, sold separately)
+
+
+
+  ThinkVision T27-40 Monitor - June 17 2026                                                                                            2 of 6
+
+=== PDF page 3 ===
+                                                                                                                          PSREF
+                                                                                                                          Product Specifications
+ThinkVision T27-40 Monitor                                                                                                Reference
+
+
+ •  ThinkVision® VoIP Stack MC60 monitor webcam (For models 64A5ZAR6 and 64A5ZAT6)
+Microphone
+ •  Support MC60 with built-in dual microphone
+ •  No built-in microphone
+Speakers
+No speakers (Support MS30 Monitor Soundbar, sold separately)
+Power Supply
+Power Consumption
+ •  Typical / Max: 15W / 75W
+ •  Sleep / Off mode: <0.5W
+ •  Switch-off Mode: <0.3W
+ •  Energy Star Power On: 12.5W
+ •  Energy Star TEC: 39.5kWh
+ •  Internal Power Supply
+Voltage Required
+AC 100 to 240 V (50-60Hz)
+Special Features
+Special Features
+ •  Lenovo® ThinkColour (Lenovo® Accessories and Display Manager) Support
+    Lenovo® ThinkColour supports Windows® 10 & 11, Mac OS (functions vary across systems)
+    Lenovo® Accessories and Display Manager is formerly Lenovo® Display Control Center
+ •  LDFM (Lenovo® Display Fleet Manager)
+ •  Natural Low Blue Light
+
+DESIGN
+
+Mechanical
+ThinkCentre® M Series Support
+To support Tiny devices, an additional ThinkCentre® Tiny Mounting Kit (PN:4XF1R07369) is required (sold separately).
+Bezel Width
+ •  Side: 2.0mm
+ •  Top: 2.0mm
+ •  Bottom: 10.4mm
+Cable Management
+Support
+Case Color
+Eclipse black
+Dimensions (WxDxH)[1]
+
+      Models                                  Dimensions
+ Lowest Position     611.9 x 195.0 x 382.8 mm (24.09 x 7.68 x 15.07 inches)
+ Highest Position    611.9 x 195.0 x 537.8 mm (24.09 x 7.68 x 21.17 inches)
+ Head Only           611.9 x 46.0 x 355.2 mm (24.09 x 1.81 x 13.98 inches)
+Packaging Dimensions (WxDxH)
+693.0 x 150.0 x 420.0 mm (27.28 x 5.91 x 16.54 inches)
+Weight[2]
+        Models                Weight
+ Monitor With Stand      6.5 kg (14.3 lbs)
+ Monitor Head Only       4.4 kg (9.7 lbs)
+Packaging Weight
+ •  Models with ThinkVision® VoIP Stack MC60 Monitor Webcam: 9.3 kg (20.53lbs)
+ •  Models without ThinkVision® VoIP Stack MC60 Monitor Webcam: 9.1 kg (20.1 lbs)
+
+
+
+  ThinkVision T27-40 Monitor - June 17 2026                                                                                             3 of 6
+
+=== PDF page 4 ===
+                                                                                                                          PSREF
+                                                                                                                          Product Specifications
+ThinkVision T27-40 Monitor                                                                                                Reference
+
+
+Mounting
+Supports VESA mount 100 x 100 mm
+Stand
+Supports -5° to +23.5° tilt, left & right 45° swivel, 90° pivot, up to 155mm lift
+In the Box
+ •  Monitor with stand
+ •  1x DP 1.2 cable (1.8m)
+ •  1x USB-B to USB-A Gen 1 cable (1.8m)
+ •  1x Power cable[3]
+ •  (Optional) ThinkVision® VoIP Stack MC60 monitor webcam[4]
+ •  Quick setup guide
+
+Notes:
+[1] The system dimensions may vary depending on configurations.
+[2] The system weight is approximate and based on results in Lenovo® lab, which varies depending on the source of
+component, variance of the distribution of each component, and manufacturing process. It may not be the exact weight
+for each specific model.
+[3] Model with the “WL” suffix is shipped without a power cable.
+[4] For models 64A5ZAR6 and 64A5ZAT6
+
+CONNECTIVITY
+Ports[1]
+Rear Ports
+ •  1x USB-B (USB 5Gbps / USB 3.2 Gen 1), USB upstream
+ •  1x USB-C® (USB 5Gbps / USB 3.2 Gen 1) with 15W PD, data transfer only, USB downstream
+ •  3x USB-A (USB 5Gbps / USB 3.2 Gen 1, 1x BC 1.2), USB downstream
+ •  1x HDMI® 1.4, supports 1920x1080@120Hz
+ •  1x DisplayPort™ 1.2
+ •  1x VGA
+
+Notes:
+[1] The transfer speed of following ports will vary and, depending on many factors, such as the processing speed of the
+host device, file attributes and other factors related to system configuration and your operating environment, will be
+slower than theoretical speed.
+USB 2.0: 480 Mbit/s;
+USB 3.2 Gen 1 (SuperSpeed USB 5Gbps, formerly USB 3.0 / USB 3.1 Gen 1): 5 Gbit/s;
+USB 3.2 Gen 2 (SuperSpeed USB 10Gbps, formerly USB 3.1 Gen 2): 10 Gbit/s;
+USB4® 20Gbps / USB 3.2 Gen 2x2 (SuperSpeed USB 20Gbps): 20 Gbit/s;
+USB4® 40Gbps (USB 40Gbps): 40 Gbit/s;
+Thunderbolt™ 3/4: 40 Gbit/s.
+Thunderbolt™ 5: 80 Gbit/s (bidirectional), up to 120 Gbit/s in bandwidth boost mode for video-intensive applications.
+
+SECURITY & PRIVACY
+
+Security
+Physical Locks
+Kensington® Nano Security Slot™ (2.5 mm x 6 mm)
+
+SERVICE
+
+Warranty
+Base Warranty
+3-year limited warranty
+
+OPERATING REQUIREMENTS
+
+
+
+  ThinkVision T27-40 Monitor - June 17 2026                                                                                             4 of 6
+
+=== PDF page 5 ===
+                                                                                                                           PSREF
+                                                                                                                           Product Specifications
+ThinkVision T27-40 Monitor                                                                                                 Reference
+
+
+Operating Environment
+Temperature
+Operating: 0°C to 40°C (32°F to 104°F)
+Storage: -20°C to 60°C (-4°F to 140°F)
+Transport: -20°C to 60°C (-4°F to 140°F)
+Relative Humidity
+Operating: 8% to 80% non-condensing
+Storage: 5% to 95% non-condensing
+Transport: 5% to 95% non-condensing
+
+CERTIFICATIONS
+Green Certifications[1]
+Green Certifications
+ •  ENERGY STAR® Certified
+ •  EPEAT Gold Registered
+ •  EU Energy Label (D-class)
+ •  RoHS (2011/65/EU)
+ •  TCO Certified Edge 2.1
+ •  TCO Certified, generation 10
+ •  Volatile Organic Compound Certification
+
+Notes:
+[1] The items listed under the "Green Certifications" section may not only refer to certification but also registration or self-
+declaration. For ESG & regulatory compliance documents, please visit https://compliance.lenovo.com.
+Other Certifications
+Other Certifications
+ •  Eyesafe® Certified 2.0
+ •  TÜV Rheinland® Eye Comfort Certification (5-star)
+ •  TÜV Rheinland® Low Blue Light (Hardware Solution)
+
+
+ •  Lenovo reserves the right to change specifications or other product information without notice. Lenovo is not
+    responsible for photographic or typographical errors. LENOVO PROVIDES THIS PUBLICATION "AS IS",
+    WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING THE IMPLIED WARRANTIES
+    OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. Some jurisdictions do not allow
+    disclaimer of express or implied warranties in certain transactions, therefore this disclaimer may not apply to
+    you.
+ •  The specifications on this page may not be available in all regions, and may be changed or updated without
+    notice.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ThinkVision T27-40 Monitor - June 17 2026                                                                                              5 of 6
+
+=== PDF page 6 ===
+                                                                                                                      PSREF
+                                                                                                                      Product Specifications
+ThinkVision T27-40 Monitor                                                                                            Reference
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ThinkVision T27-40 Monitor - June 17 2026                                                                                        6 of 6

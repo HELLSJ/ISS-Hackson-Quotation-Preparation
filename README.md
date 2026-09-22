@@ -4,7 +4,7 @@
 
 > Turn an ambiguous customer enquiry into a source-linked, versioned and human-approved quotation. Language intelligence handles intent; deterministic tools own product facts and every cent.
 
-![Quotation Desk showing an immutable version comparison and confirmed PDF workflow](reports/evaluation/browser_acceptance/20260921T074342Z/browser-final.png)
+![Quotation Desk showing the 50-record catalogue, immutable version comparison and confirmed PDF workflow](reports/evaluation/browser_acceptance/20260922T143627Z/browser-final.png)
 
 ## See it in 60 seconds
 
@@ -17,7 +17,7 @@ Try the deployed workbench at **[http://47.131.151.253/](http://47.131.151.253/)
 
 ## What makes the workflow trustworthy
 
-- **Evidence at the point of decision.** Important product fields link to the exact Dell manual and PDF page.
+- **Evidence at the point of decision.** Important product fields link to the exact manufacturer specification and PDF page.
 - **Deterministic money.** Catalogue prices, integer cents, half-up rounding and the 5% ceiling live in one tool layer.
 - **Explicit human control.** Suggested alternatives are never silently selected; saved drafts are not treated as approved quotes.
 - **Immutable history.** Version 1 remains unchanged when quantity, product or discount changes in Version 2.
@@ -28,17 +28,19 @@ Try the deployed workbench at **[http://47.131.151.253/](http://47.131.151.253/)
 
 | Evidence | Result |
 |---|---|
-| Real organizer Gateway, final sealed run | **20/20**, every scored dimension 100%, **0 fallback** ([report](reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/report.md)) |
+| Real organizer Gateway, v1 12-SKU sealed run | **20/20**, every scored dimension 100%, **0 fallback** ([report](reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/report.md)) |
 | Untouched first pass | **10/20 preserved** before fixes, with separate repair reports |
 | Live Gateway tool execution | 20 cases started, 21 local tool calls, no hidden fallback |
-| Browser acceptance | Save, revise, diff, confirm, PDF, policy blocking and evidence rendering passed ([report](reports/evaluation/browser_acceptance/20260922T075400Z/report.md)) |
+| Browser acceptance | v2 loads all 50 records and Lenovo evidence; save, revise, diff, confirm and PDF export passed ([report](reports/evaluation/browser_acceptance/20260922T143627Z/report.md)) |
 | Pricing and application validation | 61 catalogue/backend/Gateway/evaluation tests passed |
 | Agent regression suite | 64 cases completed: 57 passed, 7 documented OfflineDriver heuristic skips |
-| Source base | 6 Dell manuals, 522 pages and 96 field-level evidence records |
+| Current v2 source base | 44 official Dell/Lenovo documents, 754 pages and 400 field-level evidence records |
 | Real Gateway timing | 5/5 correct; **12.705 s median** ([report](reports/evaluation/timing/20260922T073821Z-gateway-first-pass/report.md)) |
 | Quote PDF QA | 9/9 extraction checks and 8/8 disclosed visual technical checks passed |
 
 The valid first pass and repaired runs are deliberately separate. The final score is a real-model result only when the configured driver is `gateway`, fallback is false and the trace contains Gateway tool turns.
+
+The quoted Gateway score was produced against the original 12-SKU `2026-09-14.v1` catalogue. The current 50-SKU `2026-09-22.v2` catalogue has passed deterministic data, application and Chrome acceptance tests. A fresh v2 Gateway/sealed run is still required before publishing a v2 model score.
 
 ## Product workflow
 
@@ -53,7 +55,7 @@ Customer enquiry → clarify requirements → search the frozen catalogue
 The model and browser cannot provide a unit price, calculate a total, silently substitute a SKU, or turn an unknown specification into a fact.
 
 > [!IMPORTANT]
-> Product specifications come from publicly accessible Dell manuals. Prices, discount rules and customer enquiries are synthetic hackathon data. They do not represent Dell pricing, stock, delivery commitments or commercial policy. A calculated or saved draft is not an approved quotation or tax invoice.
+> Product specifications come from publicly accessible Dell and Lenovo documents. Prices, discount rules and customer enquiries are synthetic hackathon data. They do not represent manufacturer pricing, stock, delivery commitments or commercial policy. A calculated or saved draft is not an approved quotation or tax invoice.
 
 ## What is shipped
 
@@ -62,7 +64,7 @@ The model and browser cannot provide a unit price, calculate a total, silently s
 | Language layer | Organizer LLM Gateway plus explicit OfflineDriver fallback |
 | Trusted tool layer | `search_products`, `get_product` and `calculate_quote` through one dispatcher |
 | Web application | FastAPI, SQLite and responsive three-panel browser workbench |
-| Evidence | 12 monitor SKUs and 96 field-level source records |
+| Evidence | 50 monitor SKUs and 400 field-level source records |
 | Quote lifecycle | Draft → immutable saved draft → append-only confirmation → PDF |
 | Revision control | Stable line IDs, stale-save protection, idempotent save/confirm and structured diff |
 | Auditability | Gateway/fallback badge, tool trace, data/rule versions and source-page links |
@@ -118,7 +120,7 @@ Browser workbench (`app/static/`)
           → conversations
           → messages + AgentResult/trace
           → immutable quote_versions + append-only confirmations
-      → official Dell source links with exact page references
+      → official manufacturer source links with exact page references
       → stored-snapshot diff and confirmed quote-PDF renderer
 ```
 
@@ -191,7 +193,18 @@ Only these two files are intended for manual data maintenance:
 - `data/curated_specs.json` — reviewed facts and evidence page numbers;
 - `data/synthetic_business.json` — synthetic prices and business rules.
 
-The Dell source PDFs are intentionally excluded from the competition submission. The repository retains official download URLs, frozen extracted text, reviewed facts, and exact page references. To reproduce extraction locally, download the sources first and install the separately pinned data dependency:
+The v2 catalogue combines the 12 reviewed Dell records with 38 Lenovo/ThinkVision records extracted from official PSREF PDFs. The expansion import is reproducible:
+
+```bash
+.venv/bin/pip install -r scripts/requirements-data.txt
+.venv/bin/python scripts/import_lenovo_psref.py
+.venv/bin/python scripts/build_data.py
+.venv/bin/python scripts/validate_data.py
+```
+
+The Dell baseline retains its assistant-reviewed evidence. The Lenovo expansion uses deterministic extraction plus schema, page and connectivity checks and has not received an independent human field-by-field audit.
+
+The manufacturer source PDFs are intentionally excluded from the competition submission. The repository retains official download URLs, frozen extracted text, reviewed facts, and exact page references. To reproduce extraction locally, download the sources first and install the separately pinned data dependency:
 
 ```bash
 python scripts/download_sources.py
@@ -216,7 +229,7 @@ The current suites report:
 - 64 Agent tests completed: 57 passed and 7 explicitly documented OfflineDriver heuristic cases were skipped;
 - all three fixed demo scenarios passing in the offline path.
 
-These numbers are not a model accuracy claim. The expected semantic labels for the existing 40 natural-language fixtures have passed independent review. The new sealed holdout has passed a disclosed 20/20 Codex technical audit and its hash gate is finalized; a non-author teammate must countersign before describing it as an independent human review. Holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.
+These numbers are not a v2 model accuracy claim. The v1 expected semantic labels and sealed reports remain historical evidence. Two no-match prompts were revised for the expanded catalogue and the complete v2 suite requires a fresh model run and review. Holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.
 
 ## Organizer LLM Gateway path
 
@@ -243,9 +256,9 @@ A live run is valid only when `configured_driver=gateway`, `used_fallback=false`
 
 ## Remaining critical path
 
-1. Complete five human timing observations; valid Gateway timing is recorded at 12.705 s median (9.025–19.633 s range).
-2. Ask a non-author teammate to countersign the sealed/PDF technical reviews only if the submission will call them independent human reviews.
-3. Rehearse the fixed stories, record the 30-minute video, and submit.
+1. Run and review the Gateway/sealed suite against the 50-SKU v2 catalogue; keep the v1 reports as historical evidence.
+2. Spot-check and countersign the 38-SKU Lenovo expansion if the submission will call it independently reviewed.
+3. Complete five human timing observations, rehearse the fixed stories, record the 30-minute video, and submit.
 
 See [docs/project-plan-zh.md](docs/project-plan-zh.md) for owners, acceptance criteria, evaluation thresholds, exception coverage, and the video plan.
 
@@ -264,4 +277,4 @@ agent.md                concise engineering handoff
 
 ## Source and licensing note
 
-Specifications are derived from Dell manuals linked in `data/processed/sources.csv`. Dell source PDFs are not included in this submission; the application opens the official Dell URL at the recorded page, and `scripts/download_sources.py` can retrieve a local working copy when needed. All prices, rules, and enquiries are explicitly synthetic.
+Specifications are derived from official Dell and Lenovo documents linked in `data/processed/sources.csv`. Manufacturer PDFs are not included in this submission; the application opens the official source URL at the recorded page. All prices, rules and enquiries are explicitly synthetic. The 38-SKU Lenovo expansion can be reproduced with `scripts/import_lenovo_psref.py`.

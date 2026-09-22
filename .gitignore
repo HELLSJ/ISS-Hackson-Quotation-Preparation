@@ -44,10 +44,11 @@ reports/evaluation/timing/*-gate-credential-check/
 reports/evaluation/browser_acceptance/*/*.log
 
 # --- Regenerable build output ---
-# Dell source PDFs are third-party reference material and are intentionally
+# Manufacturer source PDFs are third-party reference material and are intentionally
 # excluded from the competition submission. Official URLs, extracted text,
 # reviewed facts, page references, and the optional downloader remain tracked.
 data/raw/dell/*.pdf
+data/raw/lenovo/*.pdf
 # storage/ 是可重建的目录数据库，由 scripts/build_data.py 生成，不是报价库。
 # 克隆后先跑 build_data.py 再跑 validate_data.py。
 storage/

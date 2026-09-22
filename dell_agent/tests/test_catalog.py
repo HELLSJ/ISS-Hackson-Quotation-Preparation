@@ -1,7 +1,7 @@
 """Tests for catalogue loading and fail-fast validation.
 
 Covers Requirements 1.3, 1.4, and 1.6:
-  * exactly 12 SKUs load from the frozen catalogue (Req 1.1/1.6);
+  * exactly 50 SKUs load from the frozen catalogue (Req 1.1/1.6);
   * ``screen_inches`` stays precise and is never rounded to a marketed size
     class (Req 1.4) - MON-004 has a genuinely non-integer diagonal (23.81);
   * unknown facts (``stock_quantity``/``delivery_lead_days``) stay ``None`` and
@@ -45,10 +45,10 @@ class LoadValidCatalogTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.products, cls.rules = load_catalog()
 
-    def test_twelve_skus_load(self) -> None:
-        """Exactly 12 monitor SKUs load (Req 1.1/1.6)."""
+    def test_fifty_skus_load(self) -> None:
+        """Exactly 50 monitor SKUs load (Req 1.1/1.6)."""
         self.assertEqual(len(self.products), EXPECTED_PRODUCT_COUNT)
-        self.assertEqual(len(self.products), 12)
+        self.assertEqual(len(self.products), 50)
 
     def test_screen_inches_stays_precise(self) -> None:
         """A genuinely non-integer diagonal is preserved verbatim (Req 1.4).
@@ -78,8 +78,8 @@ class LoadValidCatalogTests(unittest.TestCase):
         """The synthetic discount ceiling and snapshot provenance are frozen."""
         self.assertEqual(self.rules.discount_limit_bps, 500)
         self.assertEqual(self.rules.rule_version, "demo-v1")
-        self.assertEqual(self.rules.price_version, "demo-v1")
-        self.assertEqual(self.rules.effective_date, "2026-09-14")
+        self.assertEqual(self.rules.price_version, "demo-v2")
+        self.assertEqual(self.rules.effective_date, "2026-09-22")
         self.assertEqual(self.rules.rounding, "half_up_per_line_discount")
         self.assertEqual(self.rules.tax_mode, "not_modelled")
         self.assertEqual(self.rules.source_type, "synthetic")
@@ -103,9 +103,9 @@ class CorruptedCatalogTests(unittest.TestCase):
         return path
 
     def test_wrong_product_count_raises(self) -> None:
-        """A catalogue with 11 products (not 12) fails fast."""
+        """A catalogue with the wrong product count fails fast."""
         doc = _read_default_doc()
-        doc["products"] = doc["products"][:11]
+        doc["products"] = doc["products"][:-1]
         path = self._write_temp_catalog(doc)
         with self.assertRaises(CatalogError):
             load_catalog(path=path)
@@ -114,7 +114,7 @@ class CorruptedCatalogTests(unittest.TestCase):
         """A catalogue with a duplicate SKU fails fast."""
         doc = _read_default_doc()
         # Replace the last product with a duplicate of the first, keeping the
-        # count at exactly 12 so the duplicate check is what trips.
+        # count at exactly 50 so the duplicate check is what trips.
         doc["products"][-1] = copy.deepcopy(doc["products"][0])
         path = self._write_temp_catalog(doc)
         with self.assertRaises(CatalogError):

@@ -1,0 +1,478 @@
+=== PDF page 1 ===
+                                                                                                                  PSREF
+                                                                                                                  Product Specifications
+Lenovo L27qe Monitor                                                                                              Reference
+
+  OVERVIEW
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        1.  Power connector                                          3. DisplayPort 1.4
+
+        2.  HDMI 2.1 TMDS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Lenovo L27qe Monitor - March 19 2026                                                                                         1 of 6
+
+=== PDF page 2 ===
+                                                                                                                        PSREF
+                                                                                                                        Product Specifications
+Lenovo L27qe Monitor                                                                                                    Reference
+
+PERFORMANCE
+
+Panel
+Panel
+3-side NearEdgeless, In-Plane Switching
+Backlight
+WLED
+Display Size
+27 inches
+Max View Area
+ •  Active Area: 596.7 x 335.7 mm
+ •  Screen Dimension: 608.3 x 350.2 mm
+Resolution
+2560 x 1440
+Aspect Ratio
+16:9
+Pixel Pitch
+0.2331 x 0.2331 mm
+Dot / Pixel Per Inch
+109 dpi
+Brightness
+250 cd/m²
+Contrast Ratio
+ •  Contrast Ratio: 1000:1
+ •  Dynamic Contrast Ratio (Typical): 3000000:1
+View Angle (H / V)
+Horizontal: 178°, Vertical: 178°
+Response Time
+ •  Extreme Mode: 4 ms
+ •  Normal Mode: 6 ms
+ •  Off Mode: 14 ms
+Refresh Rate
+100Hz
+Color Gamut
+ •  Coverage Ratio: 99% sRGB (CIE 1931)
+ •  Color Area Ratio: 120% sRGB
+Color Support
+16.7 Million
+Color Depth
+8-bit (6-bit+FRC)
+Screen Surface Treatment
+Anti-glare
+Curvature
+Flat Panel
+Operating System
+Operating System
+ •  Windows® 11 Support
+ •  Windows® 10 Support
+Power Supply
+Power Consumption
+
+
+
+  Lenovo L27qe Monitor - March 19 2026                                                                                                2 of 6
+
+=== PDF page 3 ===
+                                                                                                                           PSREF
+                                                                                                                           Product Specifications
+Lenovo L27qe Monitor                                                                                                       Reference
+
+
+ •  Typical / Max: 19W / 43W
+ •  Sleep / Off mode: <0.5W
+ •  Switch-off Mode: <0.3W
+ •  Internal Power Supply
+Voltage Required
+AC 100 to 240 V (50-60Hz)
+Special Features
+Special Features
+ •  HDR10 Compliance
+ •  VESA Adaptive Sync
+
+DESIGN
+
+Mechanical
+ThinkCentre® M Series Support
+None
+Bezel Width
+ •  Thickness of Head: 17mm (Minimum)
+ •  Side: 1.9mm
+ •  Top / Bottom: 1.9mm / 19.7mm
+Case Color
+Raven black
+Dimensions (WxDxH)[1]
+
+      Models                                  Dimensions
+ Highest Position    613.1 x 236.9 x 473.9 mm (24.14 x 9.33 x 18.66 inches)
+ Lowest Position     613.1 x 236.9 x 473.9 mm (24.14 x 9.33 x 18.66 inches)
+ Head Only           613.1 x 45.0 x 366.1 mm (24.14 x 1.77 x 14.41 inches)
+Packaging Dimensions (WxDxH)
+685.0 x 140.0 x 436.0 mm (26.97 x 5.51 x 16.96 inches)
+Weight[2]
+        Models                Weight
+ Monitor With Stand      4.5 kg (9.9 lbs)
+ Monitor Head Only       4.0 kg (8.8 lbs)
+
+Packaging Weight
+5.9 kg (13 lbs)
+Mounting
+Supports VESA mount 100mm
+Stand
+Supports -5° to +22° tilt
+In the Box
+ •  Monitor with stand
+ •  1x HDMI® cable (1.8m)
+ •  1x Power cable (1.8m)
+ •  Quick setup guide
+ •  Warranty booklet
+
+Notes:
+[1] The system dimensions may vary depending on configurations.
+[2] The system weight is approximate and based on results in Lenovo® lab, which varies depending on the source of
+component, variance of the distribution of each component, and manufacturing process. It may not be the exact weight
+for each specific model.
+
+
+
+
+  Lenovo L27qe Monitor - March 19 2026                                                                                                   3 of 6
+
+=== PDF page 4 ===
+                                                                                                                           PSREF
+                                                                                                                           Product Specifications
+Lenovo L27qe Monitor                                                                                                       Reference
+
+CONNECTIVITY
+Ports[1]
+Rear Ports
+ •  1x HDMI® 2.1 TMDS[2]
+ •  1x DisplayPort™ 1.4[3]
+
+Notes:
+[1] The transfer speed of following ports will vary and, depending on many factors, such as the processing speed of the
+host device, file attributes and other factors related to system configuration and your operating environment, will be
+slower than theoretical speed.
+USB 2.0: 480 Mbit/s;
+USB 3.2 Gen 1 (SuperSpeed USB 5Gbps, formerly USB 3.0 / USB 3.1 Gen 1): 5 Gbit/s;
+USB 3.2 Gen 2 (SuperSpeed USB 10Gbps, formerly USB 3.1 Gen 2): 10 Gbit/s;
+USB4® 20Gbps / USB 3.2 Gen 2x2 (SuperSpeed USB 20Gbps): 20 Gbit/s;
+USB4® 40Gbps (USB 40Gbps): 40 Gbit/s;
+Thunderbolt™ 3/4: 40 Gbit/s.
+Thunderbolt™ 5: 80 Gbit/s (bidirectional), up to 120 Gbit/s in bandwidth boost mode for video-intensive applications.
+[2] Supports 2560 x 1440@100Hz as specified in HDMI® 2.1.
+[3] Supports max. bandwidth 32.4 Gbps.
+
+SECURITY & PRIVACY
+
+Security
+Physical Locks
+Kensington® Security Slot™ (3 mm x 7 mm)
+
+SERVICE
+
+Warranty
+Base Warranty
+3-year limited warranty
+
+CERTIFICATIONS
+Green Certifications[1]
+Green Certifications
+ •  EU Energy Label (F-class)
+ •  RoHS compliant
+
+Notes:
+[1] The items listed under the "Green Certifications" section may not only refer to certification but also registration or self-
+declaration. For ESG & regulatory compliance documents, please visit https://compliance.lenovo.com.
+Other Certifications
+Other Certifications
+TÜV Rheinland® Eye Comfort Certification (3-star)
+
+
+ •  Lenovo reserves the right to change specifications or other product information without notice. Lenovo is not
+    responsible for photographic or typographical errors. LENOVO PROVIDES THIS PUBLICATION "AS IS",
+    WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING THE IMPLIED WARRANTIES
+    OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. Some jurisdictions do not allow
+    disclaimer of express or implied warranties in certain transactions, therefore this disclaimer may not apply to
+    you.
+ •  The specifications on this page may not be available in all regions, and may be changed or updated without
+
+
+  Lenovo L27qe Monitor - March 19 2026                                                                                                   4 of 6
+
+=== PDF page 5 ===
+                                                                                                                      PSREF
+                                                                                                                      Product Specifications
+Lenovo L27qe Monitor                                                                                                  Reference
+
+
+    notice.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Lenovo L27qe Monitor - March 19 2026                                                                                             5 of 6
+
+=== PDF page 6 ===
+                                                                                                                     PSREF
+                                                                                                                     Product Specifications
+Lenovo L27qe Monitor                                                                                                 Reference
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Lenovo L27qe Monitor - March 19 2026                                                                                            6 of 6

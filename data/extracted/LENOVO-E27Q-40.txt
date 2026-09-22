@@ -1,0 +1,463 @@
+=== PDF page 1 ===
+                                                                                                                  PSREF
+                                                                                                                  Product Specifications
+ThinkVision E27Q-40 Monitor                                                                                       Reference
+
+  OVERVIEW
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        1.  HDMI 2.1 TMDS                                           3.  DisplayPort 1.2
+
+        2.  HDMI 2.1 TMDS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ThinkVision E27Q-40 Monitor - June 17 2026                                                                                  1 of 6
+
+=== PDF page 2 ===
+                                                                                                                        PSREF
+                                                                                                                        Product Specifications
+ThinkVision E27Q-40 Monitor                                                                                             Reference
+
+PERFORMANCE
+
+Panel
+Panel
+3-side NearEdgeless, In-Plane Switching
+Backlight
+WLED
+Display Size
+27 inches
+Max View Area
+ •  Active Area: 596.7 x 335.7 mm
+ •  Screen Dimension: 608.1 x 348.9 mm
+Resolution
+2560 x 1440
+Aspect Ratio
+16:9
+Pixel Pitch
+0.2331 x 0.2331 mm
+Dot / Pixel Per Inch
+109 dpi
+Brightness
+350 cd/m²
+Contrast Ratio
+ •  Contrast Ratio (Typical): 1500:1
+ •  Dynamic Contrast Ratio (Typical): 3000000:1
+View Angle (H / V)
+Horizontal: 178°, Vertical: 178°
+Response Time
+ •  Extreme Mode: 4ms GtG
+ •  Normal Mode: 6ms GtG
+Refresh Rate
+100Hz
+Color Gamut
+Coverage Ratio: 99% sRGB (CIE 1931)
+Color Support
+16.7 Million
+Color Depth
+8-bit (6-bit+FRC)
+Screen Surface Treatment
+Anti-glare
+Curvature
+Flat Panel
+Operating System
+Operating System
+ •  Windows® 11 Support
+ •  Windows® 10 Support
+Multi-Media
+Speakers
+Integrated Speakers, 2W x2
+
+
+
+
+  ThinkVision E27Q-40 Monitor - June 17 2026                                                                                          2 of 6
+
+=== PDF page 3 ===
+                                                                                                                            PSREF
+                                                                                                                            Product Specifications
+ThinkVision E27Q-40 Monitor                                                                                                 Reference
+
+
+Power Supply
+Power Consumption
+ •  Typical / Max: 19.7W / 42W
+ •  Sleep / Off mode: <0.5W
+ •  Switch-off Mode: <0.3W
+ •  Energy Star Power On: 16.2W
+ •  Energy Star TEC: 50.7kWh
+ •  Internal Power Supply
+Voltage Required
+AC 100 to 240 V (50-60Hz)
+Special Features
+Special Features
+Natural Low Blue Light
+
+DESIGN
+
+Mechanical
+ThinkCentre® M Series Support
+To support Tiny devices, an additional ThinkCentre® Tiny VESA Mount II (PN: 4XF0N03161) is required (sold separately).
+Bezel Width
+ •  Side: 1.8mm
+ •  Top: 1.8mm
+ •  Bottom: 20.5mm
+Cable Management
+Support
+Case Color
+Raven black
+Dimensions (WxDxH)[1]
+
+      Models                                 Dimensions
+ Lowest Position     613.1 x 220 x 383.5 mm (24.14 x 8.66 x 15.1 inches)
+ Highest Position    613.1 x 220 x 538.5 mm (24.14 x 8.66 x 21.2 inches)
+ Head Only           613.1 x 40.4 x 366.4 mm (24.14 x 1.59 x 14.43 inches)
+Packaging Dimensions (WxDxH)
+695.0 x 155.0 x 447.0 mm (27.36 x 6.10 x 17.60 inches)
+Weight[2]
+        Models                Weight
+ Monitor With Stand      6.2 kg (13.7 lbs)
+ Monitor Head Only       4.0 kg (8.8 lbs)
+Packaging Weight
+ •  EPS: 7.9 kg (17.4 lbs)
+ •  Pulp: 8.5 kg (18.7 lbs)
+Mounting
+Supports VESA mount 100 x 100 mm
+Stand
+Supports -5° to +22° tilt, left & right 360° swivel, -90° to +90° pivot, up to 155mm lift
+In the Box
+ •  Monitor with stand
+ •  1x HDMI® 2.0 cable (1.8m)
+ •  1x Power cable (1.8m)[3]
+ •  4x Screws
+
+
+
+  ThinkVision E27Q-40 Monitor - June 17 2026                                                                                              3 of 6
+
+=== PDF page 4 ===
+                                                                                                                        PSREF
+                                                                                                                        Product Specifications
+ThinkVision E27Q-40 Monitor                                                                                             Reference
+
+
+ •  Quick setup guide
+
+Notes:
+[1] The system dimensions may vary depending on configurations.
+[2] The system weight is approximate and based on results in Lenovo® lab, which varies depending on the source of
+component, variance of the distribution of each component, and manufacturing process. It may not be the exact weight
+for each specific model.
+[3] Model with the “WL” suffix is shipped without a power cable.
+
+CONNECTIVITY
+Ports[1]
+Rear Ports
+ •  2x HDMI® 2.1 TMDS, supports 2560x1440@100Hz
+ •  1x DisplayPort™ 1.2
+
+Notes:
+[1] The transfer speed of following ports will vary and, depending on many factors, such as the processing speed of the
+host device, file attributes and other factors related to system configuration and your operating environment, will be
+slower than theoretical speed.
+USB 2.0: 480 Mbit/s;
+USB 3.2 Gen 1 (SuperSpeed USB 5Gbps, formerly USB 3.0 / USB 3.1 Gen 1): 5 Gbit/s;
+USB 3.2 Gen 2 (SuperSpeed USB 10Gbps, formerly USB 3.1 Gen 2): 10 Gbit/s;
+USB4® 20Gbps / USB 3.2 Gen 2x2 (SuperSpeed USB 20Gbps): 20 Gbit/s;
+USB4® 40Gbps (USB 40Gbps): 40 Gbit/s;
+Thunderbolt™ 3/4: 40 Gbit/s.
+Thunderbolt™ 5: 80 Gbit/s (bidirectional), up to 120 Gbit/s in bandwidth boost mode for video-intensive applications.
+
+SECURITY & PRIVACY
+
+Security
+Physical Locks
+Kensington® Security Slot™ (2.5 mm x 6 mm and 3 mm x 7 mm)
+
+SERVICE
+
+Warranty
+Base Warranty
+3-year limited warranty
+
+OPERATING REQUIREMENTS
+
+Operating Environment
+Temperature
+Operating: 0°C to 40°C (32°F to 104°F)
+Storage: -20°C to 60°C (-4°F to 140°F)
+Transport: -20°C to 60°C (-4°F to 140°F)
+Relative Humidity
+Operating: 10% to 80% non-condensing
+Storage: 5% to 95% non-condensing
+Transport: 5% to 95% non-condensing
+
+CERTIFICATIONS
+
+Green Certifications[1]
+
+
+
+
+  ThinkVision E27Q-40 Monitor - June 17 2026                                                                                          4 of 6
+
+=== PDF page 5 ===
+                                                                                                                            PSREF
+                                                                                                                            Product Specifications
+ThinkVision E27Q-40 Monitor                                                                                                 Reference
+
+
+Green Certifications
+ •  ENERGY STAR® Certified
+ •  EPEAT Gold Registered
+ •  EU Energy Label (E-class)
+ •  RoHS (2011/65/EU)
+ •  TCO Certified Edge 2.1
+ •  TCO Certified, generation 10
+ •  Volatile Organic Compound Certification
+
+Notes:
+[1] The items listed under the "Green Certifications" section may not only refer to certification but also registration or self-
+declaration. For ESG & regulatory compliance documents, please visit https://compliance.lenovo.com.
+Other Certifications
+Other Certifications
+ •  TÜV Rheinland® Flicker Free
+ •  TÜV Rheinland® Low Blue Light (Hardware Solution)
+
+
+ •  Lenovo reserves the right to change specifications or other product information without notice. Lenovo is not
+    responsible for photographic or typographical errors. LENOVO PROVIDES THIS PUBLICATION "AS IS",
+    WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING THE IMPLIED WARRANTIES
+    OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. Some jurisdictions do not allow
+    disclaimer of express or implied warranties in certain transactions, therefore this disclaimer may not apply to
+    you.
+ •  The specifications on this page may not be available in all regions, and may be changed or updated without
+    notice.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ThinkVision E27Q-40 Monitor - June 17 2026                                                                                              5 of 6
+
+=== PDF page 6 ===
+                                                                                                                    PSREF
+                                                                                                                    Product Specifications
+ThinkVision E27Q-40 Monitor                                                                                         Reference
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ThinkVision E27Q-40 Monitor - June 17 2026                                                                                     6 of 6

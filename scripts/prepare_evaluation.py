@@ -21,7 +21,7 @@ def main():
         ('host_vs_downstream', ['Does the 15W USB-C port on P2425H provide the 65W laptop video connection I need?'], {'status':'explain_limitation','sku':'MON-004','usb_c_video':False,'usb_c_pd_watts':0}),
         ('tb_port', ['Which port on U2724DE should I use for video and 90W laptop charging?'], {'status':'answer_with_evidence','sku':'MON-011','port':'Thunderbolt 4 upstream'}),
         ('model_suffix', ['Is P2425 the same model as P2425E?'], {'status':'answer_with_evidence','different_models':True,'usb_c_video_by_sku':{'MON-005':False,'MON-008':True}}),
-        ('no_match', ['Find a native 3840x2160 USB-C monitor delivering at least 90W.'], {'status':'no_match','acceptable_skus':[]}),
+        ('no_match', ['Find a native 7680x4320 USB-C monitor delivering at least 180W.'], {'status':'no_match','acceptable_skus':[]}),
         ('budget_conflict', ['I need 8 exactly 27-inch monitors with USB-C video and at least 90W. Budget SGD 2500, no discounts.'], {'status':'budget_conflict','cheapest_matching_sku':'MON-009','total_cents':279200,'over_budget_cents':29200}),
         ('unknown_model', ['Quote 2 Dell XYZ999 monitors.'], {'status':'no_match','must_not':['invent_sku_or_price']}),
         ('revision', ['Quote 8 P2425HE.','Change that to 10 units.'], {'status':'ready_to_quote','items':[{'sku':'MON-007','quantity':10}],'total_cents':289000,'previous_total_cents':231200}),
@@ -43,7 +43,7 @@ def main():
         ('host_vs_downstream', ['The P2225H has Type-C. Can I use that one connector for laptop video and 90W charging?'], {'status':'explain_limitation','sku':'MON-003','usb_c_video':False,'usb_c_pd_watts':0}),
         ('cable_vs_port', ['S2725QC includes a 100W USB-C cable, so does the screen deliver 100W to my laptop?'], {'status':'explain_limitation','sku':'MON-012','usb_c_pd_watts':65}),
         ('resolution_variant', ['Compare the native resolutions of P2425H and P2425E.'], {'status':'answer_with_evidence','resolution_by_sku':{'MON-004':'1920x1080','MON-008':'1920x1200'}}),
-        ('no_match', ['Native 2560x1440, exactly 27 inches, at least 140Hz: anything in this catalogue?'], {'status':'no_match','acceptable_skus':[]}),
+        ('no_match', ['Native 7680x4320, exactly 30 inches, at least 200Hz: anything in this catalogue?'], {'status':'no_match','acceptable_skus':[]}),
         ('budget_conflict', ['Eight S2725QC at zero discount, all-in demo budget SGD 3900.'], {'status':'budget_conflict','items':[{'sku':'MON-012','quantity':8}],'total_cents':399200,'over_budget_cents':9200}),
         ('unknown_model', ['Please price three Dell NONEXIST-2026 displays.'], {'status':'no_match','must_not':['invent_sku_or_price']}),
         ('revision', ['I require 3 P2425E.','Make that 6, please.'], {'status':'ready_to_quote','items':[{'sku':'MON-008','quantity':6}],'total_cents':191400,'previous_total_cents':95700}),
@@ -60,7 +60,7 @@ def main():
         for i,(category,messages,expected) in enumerate(records,1):
             cid=f'{split.upper()}-{i:03}'
             rows.append(dict(case_id=cid,category=category,source_type='synthetic',language='en',
-                             dataset_version='2026-09-14.v1',user_turns=messages))
+                             dataset_version='2026-09-22.v2',user_turns=messages))
             answers.append(dict(case_id=cid,expected=expected,answer_author='assistant',
                                 review_note='Amounts cross-checked with separate Decimal arithmetic; semantic criteria require human review before formal scoring.'))
         (out/f'enquiries_{split}.jsonl').write_text(''.join(json.dumps(r,ensure_ascii=False)+'\n' for r in rows))

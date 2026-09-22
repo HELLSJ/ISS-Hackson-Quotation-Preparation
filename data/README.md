@@ -1,6 +1,6 @@
 # 报价 Agent 数据包
 
-已从 **6 份 Dell 官方英文手册整理 12 个显示器型号**。产品规格来自手册；12 个销售价格、折扣和报价政策是本项目的模拟业务数据。下载记录包含冻结时的实际下载时间，数据版本为 `2026-09-14.v1`。
+当前 `2026-09-22.v2` 数据集包含 **50 个显示器型号**：12 条 Dell 基线和 38 条 Lenovo/ThinkVision 扩展记录，来源为 44 份官方英文规格资料。50 个销售价格、折扣和报价政策均为模拟业务数据。
 
 先使用 [Agent 目录 catalog.json](agent/catalog.json)，或直接调用本文的本地查询和计价工具。日常运行无需下载原始手册、注册 Icecat 或购买数据。
 
@@ -9,21 +9,21 @@
 | 文件 | 内容 | 使用方式 |
 |---|---|---|
 | [agent/catalog.json](agent/catalog.json) | 产品规格、模拟价格、规则、字段出处 | 后端直接加载，JSON 保留数字、布尔值和 null |
-| [processed/products.csv](processed/products.csv) | 12 个产品规格 | 人工查看和导入；UTF-8，布尔值为 true/false |
+| [processed/products.csv](processed/products.csv) | 50 个产品规格 | 人工查看和导入；UTF-8，布尔值为 true/false |
 | [processed/prices.csv](processed/prices.csv) | 模拟 SGD 销售价格 | 整数分，例如 28900 表示 SGD 289.00 |
 | [processed/pricing_rules.json](processed/pricing_rules.json) | 模拟计价规则 | 计价程序读取，不靠模型心算 |
-| [processed/field_evidence.csv](processed/field_evidence.csv) | 96 条字段级证据 | 型号、尺寸、分辨率、刷新率、USB-C 功能等对应的官方链接和 PDF 页码 |
+| [processed/field_evidence.csv](processed/field_evidence.csv) | 400 条字段级证据 | 型号、尺寸、分辨率、刷新率、USB-C 功能等对应的官方链接和 PDF 页码 |
 | [processed/sources.csv](processed/sources.csv) | 来源链接和文件信息 | 原件来源、下载日期、页数、使用说明 |
 | [../storage/catalog.sqlite](../storage/catalog.sqlite) | 已导入的目录数据库 | products 表包含完整 JSON，prices 表包含模拟价；无客户数据 |
 | [agent/tool_schemas.json](agent/tool_schemas.json) | 3 个工具定义 | OpenAI/Ollama 兼容的 function schema |
 | [agent/instructions.md](agent/instructions.md) | Agent 数据使用说明 | 用于系统提示词的起点 |
-| [agent/knowledge/](agent/knowledge/) | 12 份规格知识卡片 | 可选检索输入；不包含价格和评估答案 |
+| [agent/knowledge/](agent/knowledge/) | 50 份规格知识卡片 | 可选检索输入；不包含价格和评估答案 |
 | [evaluation/](evaluation/) | 20 个开发案例、20 个验收案例、3 个演示故事及预期结果 | 用于后续测试，不上传到 Agent 知识库 |
 | [validation/report.json](validation/report.json) | 数据校验与离线测试统计 | 区分已测试工具与尚未进行的模型评估 |
 
 ## 目录覆盖
 
-下表单价全部为模拟价。`host PD` 专指用于笔记本视频连接的上行口供电；下行口给外设充电另记，不能混用。
+下表保留 12 条 Dell 基线；38 条 Lenovo 扩展记录见 `processed/products.csv` 或网页目录。所有单价均为模拟价。`host PD` 专指用于笔记本视频连接的上行口供电；下行口给外设充电另记，不能混用。
 
 | SKU | 型号 | 实际对角线（英寸） | 原生分辨率 | USB-C 视频输入 | host PD（W） | 模拟单价（SGD） |
 |---|---|---:|---|---|---:|---:|
@@ -40,7 +40,7 @@
 | MON-011 | U2724DE | 27 | 2560x1440 | 是 | 90 | 629 |
 | MON-012 | S2725QC | 27 | 3840x2160 | 是 | 65 | 499 |
 
-三组 P/S 系列手册覆盖多个型号，已按型号对应的表格和页码分别整理。没有把 WOST（不含支架）版本重复计为新 SKU。当前只有显示器，不含键鼠，也没有为了凑 30 个 SKU 复制相同产品。
+三组 P/S 系列手册覆盖多个型号，已按型号对应的表格和页码分别整理。没有把 WOST（不含支架）版本重复计为新 SKU。当前只有显示器，不含键鼠；50 个 SKU 均对应独立的官方型号，没有复制记录凑数。新增 Lenovo 记录覆盖 19.5–39.7 英寸、1600x900–5120x2160、60–144 Hz，以及 0/75/100/140 W 等不同 USB-C 主机供电能力。
 
 ### 必须保留的字段含义
 
@@ -103,7 +103,7 @@ python scripts/catalog_tools.py calculate_quote '{"items":[{"sku":"MON-007","qua
 
 ### 原始资料不随比赛提交
 
-比赛仓库不提交 `data/raw/dell/` 下的 6 份 Dell 原始 PDF。`data/raw/download_log.json` 保存冻结时的下载记录，`data/source_manifest.json` 和 `processed/sources.csv` 保存官方来源，`data/extracted/` 保存逐页文本，PDF 页码从 1 开始。PDF 字体可能导致提取文本出现 `/.null` 等噪声，因此最终产品事实来自逐字段核对，不是未经审阅的自动抽取结果。
+比赛仓库不提交 `data/raw/dell/` 或 `data/raw/lenovo/` 下的厂商原始 PDF。`data/raw/download_log.json` 保存冻结时的下载记录，`data/source_manifest.json` 和 `processed/sources.csv` 保存官方来源，`data/extracted/` 保存逐页文本，PDF 页码从 1 开始。PDF 字体可能导致提取文本出现 `/.null` 等噪声，因此最终产品事实来自逐字段核对，不是未经审阅的自动抽取结果。
 
 ### 修改价格或规则后
 
@@ -129,14 +129,24 @@ python scripts/validate_data.py
 
 下载脚本会按 manifest 获取工作副本；若本地已存在并与冻结日志一致则复用。若源文件更新，应另存新快照后重新核对 `curated_specs.json`。此文件是已检查事实及页码的维护入口，构建脚本不会自动从新手册猜出新字段。`prepare_evaluation.py` 会重建本包的固定测试案例，不要用它覆盖已经手工扩充的评估集。
 
+38 条 Lenovo 扩展记录来自官方 PSREF PDF，并可用下列命令重新导入：
+
+```bash
+.venv/bin/python scripts/import_lenovo_psref.py
+.venv/bin/python scripts/build_data.py
+.venv/bin/python scripts/validate_data.py
+```
+
+导入器使用冻结的产品 allow-list，不会因为 PSREF 搜索排序变化而偷偷替换目录。它只接受能够解析尺寸、原生分辨率、刷新率和端口表的 PDF，并通过连接方向判断 USB-C 视频与主机 PD。Dell 基线为助手逐字段核对；Lenovo 扩展当前为自动抽取加机器不变量检查，尚未完成非作者逐字段复签。
+
 ## 测试与可信范围
 
 已执行 14 项离线工具测试，覆盖精确型号、USB-C 视频与供电、尺寸条件、无匹配、未知值、预算、非法数量、折扣上限、缺价、重复行、自定义单价拒绝和舍入。案例中的已指定报价金额使用独立 Decimal 计算核对。
 
-20 个开发场景和 20 个留出场景由开发 Agent 编写，其自然语言预期行为尚未经独立人工审核，也未用真实模型测评。它们是可用的测试素材，不是“模型准确率 100%”的证据。不得将答案、测试集和校验结果放进运行时知识库。
+20 个开发场景和 20 个留出场景已经更新为 v2；其中两条旧 no-match 请求因新增产品成为可满足条件，已换成新的不可能组合。旧 v1 Gateway/sealed 报告不能作为 v2 成绩，必须重新运行真实模型评测。不得将答案、测试集和校验结果放进运行时知识库。
 
 ## 来源和使用
 
-规格源自 `sources.csv` 中链接的 Dell 官方英文手册。原 PDF 保留 Dell 版权；公开下载不等于开放数据许可，因此本提交只保留事实字段、逐页提取文本、官方来源链接和获取说明，不分发原件。生成的价格、规则和询价均明确标记为模拟，不代表 Dell 报价、库存或商业政策。
+规格源自 `sources.csv` 中链接的 Dell 与 Lenovo 官方英文资料。原 PDF 保留各厂商版权；公开下载不等于开放数据许可，因此本提交只保留事实字段、逐页提取文本、官方来源链接和获取说明，不分发原件。生成的价格、规则和询价均明确标记为模拟，不代表任何厂商报价、库存或商业政策。
 
 完整项目范围、当前进展和后续 Gate 见 [项目总规划](../docs/project-plan-zh.md)。数据部分已经落地；后续按总规划完成组织者 Gateway 真实评测和最终验收。

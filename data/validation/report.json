@@ -1,14 +1,14 @@
 {
-  "checked_at": "2026-09-22T10:02:22.778776+00:00",
-  "dataset_version": "2026-09-14.v1",
-  "source_document_count": 6,
-  "source_page_count": 522,
+  "checked_at": "2026-09-22T14:38:55.666356+00:00",
+  "dataset_version": "2026-09-22.v2",
+  "source_document_count": 44,
+  "source_page_count": 754,
   "source_pdfs_in_submission": 0,
-  "local_source_pdf_count": 0,
-  "source_bytes_at_freeze": 43929093,
-  "products": 12,
-  "synthetic_prices": 12,
-  "field_evidence_rows": 96,
+  "local_source_pdf_count": 38,
+  "source_bytes_at_freeze": 92795216,
+  "products": 50,
+  "synthetic_prices": 50,
+  "field_evidence_rows": 400,
   "evaluation_cases": {
     "dev": 20,
     "holdout": 20
@@ -19,5 +19,5 @@
   "offline_test_errors": 0,
   "data_integrity": "passed",
   "model_evaluation": "NOT RUN: no model API invoked; natural-language cases are fixtures, not measured accuracy.",
-  "human_review": "PASSED: 24/24 independent evidence checks signed by LAI WENDI on 2026-09-20; see reports/evaluation/data-freeze-review-signed.csv."
+  "human_review": "NOT PASSED: independent data-freeze review is incomplete or inconsistent."
 }

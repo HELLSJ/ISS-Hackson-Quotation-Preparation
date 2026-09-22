@@ -129,6 +129,24 @@ def main() -> int:
             )
             cdp.wait(f"!state.busy && state.conversation.messages.length > {before} && state.conversation.latest_result?.quote_draft?.total_cents === {expected_total}")
 
+        catalogue_size = cdp.wait("state.catalog.length")
+        record("v2 catalogue loads 50 records", catalogue_size == 50, catalogue_size)
+
+        cdp.evaluate("openEvidence('MON-L013')")
+        cdp.wait("document.querySelector('#evidenceDialog').open && document.querySelector('#evidenceContent').innerText.includes('5120x2160')")
+        lenovo_evidence = cdp.evaluate(
+            "({sku: document.querySelector('#dialogSku').innerText, title: document.querySelector('#dialogTitle').innerText, links: [...document.querySelectorAll('#evidenceContent a')].map(a => a.innerText), rows: document.querySelectorAll('#evidenceContent .evidence-row').length})"
+        )
+        record(
+            "Lenovo official evidence renders",
+            "MON-L013" in lenovo_evidence["sku"]
+            and "Lenovo" in lenovo_evidence["sku"]
+            and lenovo_evidence["rows"] == 8
+            and all("Lenovo source" in link for link in lenovo_evidence["links"]),
+            lenovo_evidence,
+        )
+        cdp.evaluate("document.querySelector('#evidenceDialog').close()")
+
         send("Quote 8 P2425HE. Budget SGD 2500.", 231200)
         record("v1 draft displayed", cdp.evaluate("state.conversation.latest_result.quote_draft.total_cents") == 231200, 231200)
         cdp.evaluate("document.querySelector('#saveQuote').click()")
@@ -174,7 +192,7 @@ def main() -> int:
             "tested_at": datetime.now(timezone.utc).isoformat(),
             "browser": version.get("product"),
             "driver": "offline",
-            "dataset_version": "2026-09-14.v1",
+            "dataset_version": "2026-09-22.v2",
             "steps": steps,
             "passed": all(step["passed"] for step in steps),
             "artifacts": {"screenshot": "browser-final.png", "pdf": str(pdf_path.relative_to(out))},

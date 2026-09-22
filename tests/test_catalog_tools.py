@@ -23,7 +23,10 @@ from scripts.catalog_tools import CatalogTools, ToolError
 class CanonicalContractTests(unittest.TestCase):
     def test_usb_video_and_host_power(self) -> None:
         rows = dispatch("search_products", {"usb_c_video": True, "min_pd_watts": 90})
-        self.assertEqual([p["sku"] for p in rows], ["MON-007", "MON-008", "MON-009", "MON-011"])
+        skus = {p["sku"] for p in rows}
+        self.assertTrue({"MON-007", "MON-008", "MON-009", "MON-011"}.issubset(skus))
+        self.assertGreater(len(rows), 4)
+        self.assertTrue(all(p["usb_c_video"] and p["usb_c_pd_watts"] >= 90 for p in rows))
 
     def test_data_only_port_is_not_video(self) -> None:
         self.assertEqual(dispatch("search_products", {"query": "U2724D", "usb_c_video": True}), [])

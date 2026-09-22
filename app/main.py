@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from dell_agent.agent.tools import dispatch
+from dell_agent.data.catalog import dataset_version
 
 from .config import load_settings
 from .quote_diff import compare_quotes
@@ -23,7 +24,7 @@ repository = Repository(settings.app_db_path)
 service = QuotationService(repository, settings)
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 app = FastAPI(
-    title="Dell Quotation Workbench",
+    title="Monitor Quotation Workbench",
     version="0.1.0",
     description="Evidence-backed product selection and deterministic demo pricing.",
 )
@@ -82,7 +83,7 @@ def index() -> FileResponse:
 def health() -> dict[str, Any]:
     return {
         "status": "ok",
-        "dataset_version": "2026-09-14.v1",
+        "dataset_version": dataset_version(),
         "configured_driver": settings.agent_driver,
         "gateway_configured": bool(
             settings.gateway_url and settings.gateway_api_key and settings.llm_model

@@ -85,7 +85,7 @@ draft → saved_draft → confirmed/exportable
 |---|---|
 | 健康状态 | `GET /api/health` |
 | 产品列表 | `GET /api/products` |
-| 产品与证据 | `GET /api/products/{sku}`；`evidence[].source_url` 打开 Dell 官方来源和页码 |
+| 产品与证据 | `GET /api/products/{sku}`；`evidence[].source_url` 打开厂商官方来源和页码 |
 | 创建会话 | `POST /api/conversations` |
 | 恢复会话 | `GET /api/conversations/{id}` |
 | 发送询价 | `POST /api/conversations/{id}/messages` |
@@ -284,7 +284,7 @@ git push -u origin feat/frontend-polish
 cd /home/ubuntu/ISS-Hackson-Quotation-Preparation
 git status --short
 git branch --show-current
-git pull --ff-only origin chore/readme-and-data-pipeline
+git pull --ff-only origin main
 sudo systemctl restart quotation-agent
 sudo systemctl status quotation-agent --no-pager
 ```

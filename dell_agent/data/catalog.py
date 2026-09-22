@@ -150,7 +150,7 @@ def _build_rules(raw: dict) -> Rules:
 # --------------------------------------------------------------------------- #
 
 # Number of SKUs the frozen catalogue must contain (Req 1.1, 1.6).
-EXPECTED_PRODUCT_COUNT = 12
+EXPECTED_PRODUCT_COUNT = 50
 
 # The synthetic discount ceiling the rules block must declare (Req 1.5, 1.6).
 EXPECTED_DISCOUNT_LIMIT_BPS = 500

@@ -36,11 +36,11 @@ KNOWLEDGE_DIR = _PKG_DIR / "data" / "agent" / "knowledge"
 _ALLOWED_GLOB = "MON-*.md"
 _ALLOWED_NAME_RE = re.compile(r"^MON-.+\.md$")
 
-# Number of spec cards the frozen data package ships (MON-001 .. MON-012).
-EXPECTED_CARD_COUNT = 12
+# Number of spec cards the frozen data package ships.
+EXPECTED_CARD_COUNT = 50
 
-# Match a SKU id embedded in a card, e.g. "MON-007".
-_SKU_RE = re.compile(r"\bMON-\d+\b")
+# Match a SKU id embedded in a card, e.g. "MON-007" or "MON-L013".
+_SKU_RE = re.compile(r"\bMON-(?:L)?\d+\b")
 
 # Tokeniser for keyword scoring: alphanumeric runs, keeping hyphenated tokens
 # (e.g. "usb-c", "23.81") mostly intact by splitting on whitespace/punctuation

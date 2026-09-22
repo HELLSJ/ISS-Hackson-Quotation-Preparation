@@ -36,11 +36,12 @@ def main():
     prices=rows('data/processed/prices.csv')
     evidence=rows('data/processed/field_evidence.csv')
     skus={r['sku'] for r in products}
-    assert len(skus)==len(products)==len(catalog['products'])==12
+    expected_count=50
+    assert len(skus)==len(products)==len(catalog['products'])==expected_count
     assert skus=={r['sku'] for r in prices}
     assert len({(r['sku'],r['price_version']) for r in prices})==len(prices)
     assert all(r['currency']=='SGD' and int(r['unit_price_cents'])>=0 and r['price_source_type']=='synthetic' for r in prices)
-    assert len(evidence)==12*8
+    assert len(evidence)==expected_count*8
     page_counts={}
     local_source_pdf_count=0
     for s in sources:
@@ -52,7 +53,7 @@ def main():
         extracted=read('data/extracted/'+s['source_id']+'.json')
         page_counts[s['source_id']]=extracted['page_count']
         assert len(extracted['pages'])==extracted['page_count']
-        assert s['download_url'].startswith('https://dl.dell.com/')
+        assert s['download_url'].startswith(('https://dl.dell.com/','https://psref.lenovo.com/'))
     for e in evidence:
         assert e['sku'] in skus and e['source_id'] in page_counts
         assert 1<=int(e['pdf_page'])<=page_counts[e['source_id']]
@@ -67,7 +68,7 @@ def main():
     with sqlite3.connect(ROOT/'storage/catalog.sqlite') as db:
         actual={sku:json.loads(payload) for sku,payload in db.execute('SELECT sku,payload FROM products')}
         assert actual=={p['sku']:p for p in catalog['products']}
-        assert db.execute('SELECT count(*) FROM prices').fetchone()[0]==12
+        assert db.execute('SELECT count(*) FROM prices').fetchone()[0]==expected_count
     counts={}
     ids=[]
     for split in ('dev','holdout'):
@@ -77,7 +78,8 @@ def main():
         ids.extend(r['case_id'] for r in cases)
     answers=[json.loads(l) for l in (ROOT/'data/evaluation/expected_results.jsonl').read_text().splitlines()]
     assert len(ids)==len(set(ids))==40 and set(ids)=={r['case_id'] for r in answers}
-    assert len(list((ROOT/'data/agent/knowledge').glob('MON-*.md')))==12
+    assert len(list((ROOT/'data/agent/knowledge').glob('MON-*.md')))==expected_count
+    assert len(list((ROOT/'dell_agent/data/agent/knowledge').glob('MON-*.md')))==expected_count
     schemas=read('data/agent/tool_schemas.json')['tools']
     assert {r['function']['name'] for r in schemas}=={'get_product','search_products','calculate_quote'}
     for t in schemas:

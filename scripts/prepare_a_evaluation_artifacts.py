@@ -20,12 +20,15 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 REPORTS = ROOT / "reports" / "evaluation"
 
-# Every SKU receives the two highest-risk selection fields: whether USB-C
-# supports video input and how much power the upstream video connection gives
-# the host. This yields 12 SKUs x 2 fields = 24 independent review points.
+# Twelve Lenovo expansion SKUs span the size, resolution, refresh and USB-C/PD
+# boundaries. Each receives the two highest-risk port-direction fields, for 24
+# independent review points. The original Dell v1 review remains preserved.
 FREEZE_SAMPLE = {
-    f"MON-{number:03d}": ("usb_c_video", "usb_c_pd_watts")
-    for number in range(1, 13)
+    sku: ("usb_c_video", "usb_c_pd_watts")
+    for sku in (
+        "MON-L013", "MON-L014", "MON-L018", "MON-L019", "MON-L020", "MON-L023",
+        "MON-L031", "MON-L034", "MON-L040", "MON-L042", "MON-L043", "MON-L044",
+    )
 }
 
 KNOWN_OFFLINE_LIMITATIONS = {
@@ -33,7 +36,7 @@ KNOWN_OFFLINE_LIMITATIONS = {
     "HOLDOUT-008": "Strict 24.0-inch diagonal limitation is not detected.",
     "HOLDOUT-009": "Host-vs-downstream 90 W nuance is not detected.",
     "HOLDOUT-011": "Cable-vs-port 100 W nuance is not detected.",
-    "HOLDOUT-013": "140 Hz constraint is not modelled by the offline search heuristic.",
+    "HOLDOUT-013": "The composite 8K/exact-size/200 Hz constraint is not fully classified by the offline heuristic.",
     "HOLDOUT-014": "Named-SKU over-budget request is quoted rather than classified as budget_conflict.",
     "HOLDOUT-015": "Unknown model token is classified as needs_clarification instead of no_match.",
 }
@@ -62,7 +65,7 @@ def sha256(path: Path) -> str:
 
 def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, Any]]) -> None:
     with path.open("w", newline="", encoding="utf-8") as stream:
-        writer = csv.DictWriter(stream, fieldnames=fieldnames)
+        writer = csv.DictWriter(stream, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -152,7 +155,7 @@ def main() -> None:
         "price_version": rules["price_version"],
         "rule_version": rules["rule_version"],
         "sample_size": len(freeze_rows),
-        "sample_design": "12 SKUs x 2 fields = 24 review points; every SKU is reviewed for USB-C video input and host charging watts.",
+        "sample_design": "12 Lenovo expansion SKUs x 2 fields = 24 review points, spanning resolution/size/PD boundaries; Dell v1 review remains preserved.",
         "input_sha256": hashes,
         "required_next_action": "An independent human reviewer must complete data-freeze-review.csv before calling this dataset frozen.",
     }

@@ -208,7 +208,7 @@ model ID、Gateway URL 哈希、dataset/price/rule 版本均已记录；未记�
 若声称独立人工审核，由非作者队员复签 sealed/PDF 技术审核
 ```
 
-浏览器 confirmation/diff/PDF 页面已接通；Chrome 完成 Story A 的 v1/v2、diff、确认、下载和 PDF 金额一致性验收。2026-09-22 又完成真实 Gateway 政策边界、交付未知、工具审计和 Markdown 证据表格的 Codex 浏览器技术审核。人工与 Agent 效率比较仍需 5 条真人计时记录。
+浏览器 confirmation/diff/PDF 页面已接通；Chrome 完成 Story A 的 v1/v2、diff、确认、下载和 PDF 金额一致性验收。2026-09-22 又完成真实 Gateway 政策边界、交付未知、工具审计和 Markdown 证据表格的 Codex 浏览器技术审核，并完成 50-SKU v2 目录加载与 Lenovo 官方证据显示验收。人工与 Agent 效率比较仍需 5 条真人计时记录。
 
 ## 8. A 侧当前完成情况
 
@@ -242,6 +242,7 @@ model ID、Gateway URL 哈希、dataset/price/rule 版本均已记录；未记�
 - 2026-09-22 团队 Gateway 连通性检查成功；Story A 真实 smoke 调用了 `get_product` 和 `calculate_quote`，返回 231,200 分、8 条引用且无 fallback。脱敏证据：`gateway-smoke-20260922.json`。
 - Story B/C 修复过程保留 `first-attempt`、`fixed-01` 和最终通过的 `fixed-02` 报告；最终两条均无 fallback、调用本地工具且未生成违规报价。
 - Chrome 真实 Gateway 页面完成政策阻断、交付未知、可展开工具审计和安全 Markdown 表格/链接复验；记录在 `browser_acceptance/20260922T075400Z/`。
+- Chrome 153 完成 50-SKU v2 目录、Lenovo 8 字段证据、保存、diff、确认和 PDF 导出验收；记录在 `browser_acceptance/20260922T143627Z/`。
 
 完成 A 的最终效率比较仍需 5 次真人计时。若最终陈述包含“sealed expected 与 PDF 已由独立人工审核”，还需一名非作者队员实名复签现有技术审核结果。
 

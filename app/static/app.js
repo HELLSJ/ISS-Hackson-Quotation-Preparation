@@ -307,7 +307,7 @@ function renderCandidates() {
     ? `${suggestions.length} compatible alternative${suggestions.length === 1 ? "" : "s"}`
     : result?.candidates?.length
       ? `${result.candidates.length} catalogue match${result.candidates.length === 1 ? "" : "es"}`
-      : `${state.catalog.length} verified Dell monitor records`;
+      : `${state.catalog.length} evidence-backed monitor records`;
   $("#candidateList").innerHTML = rows.map((product) => candidateCard(product, {
     suggested: suggestions.some((row) => row.sku === product.sku),
     incompatible: result?.status === "explain_limitation" && result?.candidates?.some((row) => row.sku === product.sku),
@@ -373,7 +373,7 @@ function renderQuote() {
       <div class="line-top"><div><strong>${escapeHtml(line.name)}</strong><br><span>${escapeHtml(line.sku)}</span></div><strong>${money(line.net_cents)}</strong></div>
       <div class="line-math">
         <span>${money(line.unit_price_cents)} each · ${(line.discount_bps / 100).toFixed(2)}% discount</span>
-        <div class="quantity-control"><label for="qty-${index}">Qty</label><input id="qty-${index}" type="number" min="1" step="1" value="${line.quantity}" aria-label="Quantity for ${escapeHtml(line.name)}"><button type="button" data-quantity-index="${index}" data-model="${escapeHtml(line.name.replace(/^Dell\s+|\s+Monitor$/g, ""))}">Update</button></div>
+        <div class="quantity-control"><label for="qty-${index}">Qty</label><input id="qty-${index}" type="number" min="1" step="1" value="${line.quantity}" aria-label="Quantity for ${escapeHtml(line.name)}"><button type="button" data-quantity-index="${index}" data-model="${escapeHtml(line.sku)}">Update</button></div>
       </div>
     </div>`).join("")}
     <div class="total-block">
@@ -484,14 +484,14 @@ async function openDiff(fromId, toId) {
 async function openEvidence(sku) {
   try {
     const product = await api(`/api/products/${encodeURIComponent(sku)}`);
-    $("#dialogSku").textContent = `${product.sku} · Official Dell manual`;
+    $("#dialogSku").textContent = `${product.sku} · Official ${product.brand} specification`;
     $("#dialogTitle").textContent = `${product.model} specification evidence`;
     $("#evidenceContent").innerHTML = `
       <p class="availability-warning">Stock and delivery timing are not available in this dataset. Every value below links to its source page.</p>
       ${product.evidence.map((item) => `<div class="evidence-row">
         <span class="field">${escapeHtml(item.field.replaceAll("_", " "))}</span>
         <span class="value">${escapeHtml(typeof item.value === "object" ? JSON.stringify(item.value) : item.value)}</span>
-        <a href="${escapeHtml(item.source_url)}" target="_blank" rel="noopener noreferrer">Dell source · page ${escapeHtml(item.pdf_page)}</a>
+        <a href="${escapeHtml(item.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(product.brand)} source · page ${escapeHtml(item.pdf_page)}</a>
       </div>`).join("")}`;
     showDialog($("#evidenceDialog"));
   } catch (error) {

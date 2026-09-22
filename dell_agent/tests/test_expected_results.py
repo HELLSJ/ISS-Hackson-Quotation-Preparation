@@ -102,7 +102,7 @@ KNOWN_HEURISTIC_LIMITATIONS: Dict[str, str] = {
     # Cable-vs-port 100W nuance not detected as a limitation.
     "HOLDOUT-011": "Cable-vs-port 100W nuance -> answer_with_evidence, not explain_limitation.",
     # 140Hz refresh constraint not modelled; search does not return empty.
-    "HOLDOUT-013": "140Hz constraint not modelled -> answer_with_evidence, not no_match.",
+    "HOLDOUT-013": "Composite 8K/exact-size/200Hz constraint -> answer_with_evidence, not no_match.",
     # Named-SKU budget request is quoted (with over_budget flag) rather than
     # routed to budget_conflict; totals still match (asserted below).
     "HOLDOUT-014": "Named-SKU over-budget -> ready_to_quote (over_budget_cents set), not budget_conflict.",

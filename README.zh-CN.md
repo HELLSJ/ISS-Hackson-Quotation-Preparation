@@ -4,7 +4,7 @@
 
 > 把含糊的客户询价变成有原文证据、有版本记录、经人工确认的正式报价快照。模型理解语言，确定性工具掌握产品事实和每一分钱。
 
-![Quotation Desk 展示不可变版本比较和确认后 PDF 流程](reports/evaluation/browser_acceptance/20260921T074342Z/browser-final.png)
+![Quotation Desk 展示 50 条目录、不可变版本比较和确认后 PDF 流程](reports/evaluation/browser_acceptance/20260922T143627Z/browser-final.png)
 
 ## 60 秒看懂
 
@@ -17,7 +17,7 @@
 
 ## 为什么这个工作流可信
 
-- **证据就在决策旁边。**关键产品字段可打开对应 Dell 手册和 PDF 页码。
+- **证据就在决策旁边。**关键产品字段可打开对应厂商规格文件和 PDF 页码。
 - **金额由工具确定。**目录价、整数分、half-up 舍入和 5% 上限集中在唯一工具层。
 - **人工控制明确。**推荐替代项不会自动选择，保存草稿不会被当成批准报价。
 - **历史不可变。**修改数量、产品或折扣时，旧版本保持原样。
@@ -28,17 +28,19 @@
 
 | 证据 | 结果 |
 |---|---|
-| 组织者真实 Gateway 最终 sealed 评测 | **20/20**，全部计分维度 100%，**0 fallback**（[报告](reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/report.md)） |
+| 组织者真实 Gateway v1（12 SKU）sealed 评测 | **20/20**，全部计分维度 100%，**0 fallback**（[报告](reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/report.md)） |
 | 未修改的有效首轮 | 修复前 **10/20** 原样保留，修复报告单独保存 |
 | Gateway 工具执行 | 20 条案例启动，21 次本地工具调用，无隐藏 fallback |
-| 浏览器验收 | 保存、修订、diff、确认、PDF、政策阻断和证据渲染通过（[报告](reports/evaluation/browser_acceptance/20260922T075400Z/report.md)） |
+| 浏览器验收 | v2 的 50 条目录及 Lenovo 证据加载通过；保存、修订、diff、确认和 PDF 导出通过（[报告](reports/evaluation/browser_acceptance/20260922T143627Z/report.md)） |
 | 计价与应用校验 | 61 项目录/后端/Gateway/评测门禁测试通过 |
 | Agent 回归 | 64 项完成：57 项通过，7 项为已记录的 OfflineDriver 启发式 skip |
-| 证据基础 | 6 份 Dell 手册、522 页、96 条字段级证据 |
+| 当前 v2 证据基础 | 44 份 Dell/Lenovo 官方资料、754 页、400 条字段级证据 |
 | 真实 Gateway 计时 | 5/5 正确，**中位数 12.705 秒**（[报告](reports/evaluation/timing/20260922T073821Z-gateway-first-pass/report.md)） |
 | 报价 PDF QA | 9/9 机器提取检查和 8/8 已披露视觉技术审核通过 |
 
 有效首轮与修复后运行严格分开。只有 `configured_driver=gateway`、`used_fallback=false` 且 trace 包含 Gateway 工具调用时，结果才计入真实模型评测。
+
+上述 Gateway 成绩基于原 12-SKU 的 `2026-09-14.v1` 目录。当前 50-SKU 的 `2026-09-22.v2` 已通过确定性数据、应用测试和 Chrome 验收，但仍需重新执行 v2 Gateway/sealed 评测后才能公布 v2 模型成绩。
 
 ## 产品流程
 
@@ -53,7 +55,7 @@
 模型和前端不能提供单价、计算总额、静默替换 SKU，或把未知规格变成事实。
 
 > [!IMPORTANT]
-> 产品规格来自公开可访问的 Dell 手册。价格、折扣规则和客户询价均为比赛模拟数据，不代表 Dell 的报价、库存、交期或商业政策。计算或保存的草稿不是已批准报价，也不是税务发票。
+> 产品规格来自公开可访问的 Dell 与 Lenovo 官方资料。价格、折扣规则和客户询价均为比赛模拟数据，不代表厂商报价、库存、交期或商业政策。计算或保存的草稿不是已批准报价，也不是税务发票。
 
 ## 已交付能力
 
@@ -62,7 +64,7 @@
 | 语言层 | 组织者 LLM Gateway，以及明确可见的 OfflineDriver fallback |
 | 可信工具层 | `search_products`、`get_product`、`calculate_quote` 共用唯一 dispatcher |
 | Web 应用 | FastAPI、SQLite 和响应式三栏工作台 |
-| 规格证据 | 12 个显示器 SKU、96 条字段级来源记录 |
+| 规格证据 | 50 个显示器 SKU、400 条字段级来源记录 |
 | 报价生命周期 | 草稿 → 不可变保存版本 → append-only 人工确认 → PDF |
 | 修订控制 | 稳定 line ID、stale 防护、保存/确认幂等和结构化 diff |
 | 审计能力 | Gateway/fallback 徽章、工具 trace、数据/规则版本和原文页码 |
@@ -118,7 +120,7 @@ Browser workbench (`app/static/`)
           → conversations
           → messages + AgentResult/trace
           → immutable quote_versions + append-only confirmations
-      → Dell 官方来源链接和精确页码
+      → 厂商官方来源链接和精确页码
       → stored-snapshot diff 和 confirmed quote PDF renderer
 ```
 
@@ -186,7 +188,18 @@ python scripts/validate_data.py
 - `data/curated_specs.json`：已核对事实和证据页码；
 - `data/synthetic_business.json`：模拟价格和规则。
 
-比赛提交物不包含 Dell 原始 PDF。仓库保留官方链接、冻结的逐页提取文本、已核对事实和精确页码。需要在本地复现提取时，先下载来源再安装独立固定的数据依赖：
+v2 目录由原 12 条 Dell 核对记录和 38 条 Lenovo/ThinkVision 官方 PSREF 记录组成。扩展数据可复现：
+
+```bash
+.venv/bin/pip install -r scripts/requirements-data.txt
+.venv/bin/python scripts/import_lenovo_psref.py
+.venv/bin/python scripts/build_data.py
+.venv/bin/python scripts/validate_data.py
+```
+
+Dell 基线保留逐字段助手核对记录；Lenovo 扩展使用确定性抽取，并通过 schema、页码、端口方向和来源校验，目前尚未完成独立人工逐字段复核。
+
+比赛提交物不包含厂商原始 PDF。仓库保留官方链接、冻结的逐页提取文本、已核对事实和精确页码。需要在本地复现提取时，先下载来源再安装独立固定的数据依赖：
 
 ```bash
 python scripts/download_sources.py
@@ -211,7 +224,7 @@ python scripts/validate_data.py                            # 15 项数据/工具
 - 64 项 Agent 测试完成：57 项通过，7 项为明确记录的 OfflineDriver 启发式 skip；
 - 三条固定演示均在离线路径通过。
 
-这不是模型准确率。现有 40 条自然语言案例的 expected label 已独立审核；新建 sealed holdout 已完成 20/20 Codex 技术审核并冻结哈希门禁。若对外声称“独立人工审核”，仍需一名非作者队员实名复签。其答案和校验报告不得进入系统提示词或运行时知识库。
+这不是 v2 模型准确率。v1 的 expected label 和 sealed 报告继续作为历史证据；目录扩充后，两条 no-match 题目已经调整，完整 v2 评测仍需重新运行和复核。答案和校验报告不得进入系统提示词或运行时知识库。
 
 ## 组织者 LLM Gateway 路径
 
@@ -238,9 +251,9 @@ export AGENT_DRIVER=gateway
 
 ## 后续关键路径
 
-1. 完成 5 条真人计时；有效 Gateway 计时中位数为 12.705 秒，范围 9.025–19.633 秒；
-2. 仅当提交材料声称“独立人工审核”时，请非作者队员复签 sealed/PDF 技术审核；
-3. 彩排固定故事、录制 30 分钟视频并提交。
+1. 针对 50-SKU v2 重新运行并复核 Gateway/sealed 评测，v1 报告保留为历史记录；
+2. 若要声称独立审核，请非作者队员抽查并复签 38 条 Lenovo 扩展记录；
+3. 完成 5 条真人计时、彩排固定故事、录制 30 分钟视频并提交。
 
 详细负责人、验收标准、指标、异常矩阵和视频结构见 [docs/project-plan-zh.md](docs/project-plan-zh.md)。
 
@@ -260,4 +273,4 @@ agent.md                工程交接摘要
 
 ## 来源和许可
 
-产品规格来自 `data/processed/sources.csv` 中链接的 Dell 手册。本提交不包含 Dell 原始 PDF；应用会打开记录页码的 Dell 官方链接，需要本地工作副本时可运行 `scripts/download_sources.py`。所有价格、规则和询价均明确为模拟数据。
+产品规格来自 `data/processed/sources.csv` 中链接的 Dell 与 Lenovo 官方资料。本提交不包含厂商原始 PDF；应用会打开记录页码的官方链接。38 条 Lenovo 扩展记录可通过 `scripts/import_lenovo_psref.py` 复现，所有价格、规则和询价均明确为模拟数据。

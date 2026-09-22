@@ -4,7 +4,7 @@
       "type": "function",
       "function": {
         "name": "search_products",
-        "description": "Search this fixed Dell monitor catalogue using explicit structured constraints. query is a model/name keyword, not a natural language request. Size is actual viewable diagonal; 23.81-inch products are marketed as 24-inch but do not meet a strict 24.0-inch minimum. Prices are synthetic SGD demo prices. Unknown fields do not satisfy filters.",
+        "description": "Search this fixed multi-brand monitor catalogue using explicit structured constraints. query is a brand/model/name keyword, not a natural language request. Size is actual viewable diagonal; 23.8/23.81-inch products may be marketed as 24-inch but do not meet a strict 24.0-inch minimum. Prices are synthetic SGD demo prices. Unknown fields do not satisfy filters.",
         "parameters": {
           "type": "object",
           "properties": {
