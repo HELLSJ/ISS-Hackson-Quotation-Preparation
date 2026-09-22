@@ -29,9 +29,9 @@ NUS-ISS Hackathon 报价编制 Agent：把不完整的英文客户询价经过�
 
 ## 后续工作（按顺序）
 
-1. 非作者签核 sealed holdout expected 和最终 PDF 模板；
-2. 在同一终端配置组织者 Gateway URL、团队 API key 和 model；
-3. 用三条 Story 验证 `configured_driver=gateway`、`used_fallback=false` 和真实工具 trace；
+1. Codex 技术审核已完成 20/20 并冻结 sealed holdout 门禁；若对外声称独立人工审核，由非作者队员复签；
+2. PDF 模板 8/8 Codex 技术审核已完成；若对外声称独立人工审核，由非作者队员复签；
+3. 用 Story B/C 验证 `configured_driver=gateway`、`used_fallback=false` 和真实工具 trace；
 4. 运行 sealed holdout，保留首轮和修复后结果；
 5. 完成 5 个案例的真人效率计时；
 6. 彩排、录制 30 分钟视频并完成提交检查。

@@ -1244,21 +1244,41 @@ class GatewayDriver:
         result.notes.append(_SYNTHETIC_NOTE)
         if final_text:
             result.notes.append(final_text)
-        if final_envelope and final_envelope["status"] == state_mod.NEEDS_CLARIFICATION:
+        requested_status = final_envelope["status"] if final_envelope else None
+        if requested_status == state_mod.NEEDS_CLARIFICATION:
             result.ask_for = list(final_envelope["ask_for"])
+
+        saw_empty_search = False
+        saw_missing_product = False
+        tool_error_codes: set[str] = set()
 
         for name, payload in tool_results:
             if name == "search_products" and isinstance(payload, list):
                 result.candidates = payload
                 if not payload:
+                    saw_empty_search = True
                     result.status = state_mod.NO_MATCH
             elif name == "get_product" and isinstance(payload, dict) and payload.get("found"):
-                result.candidates = [{key: value for key, value in payload.items() if key != "evidence"}]
-                result.citations = list(payload.get("evidence") or [])
+                candidate = {key: value for key, value in payload.items() if key != "evidence"}
+                if not any(row.get("sku") == candidate.get("sku") for row in result.candidates):
+                    result.candidates.append(candidate)
+                existing_citations = {
+                    (row.get("sku"), row.get("field"), row.get("pdf_page"))
+                    for row in result.citations
+                }
+                for citation in payload.get("evidence") or []:
+                    key = (citation.get("sku"), citation.get("field"), citation.get("pdf_page"))
+                    if key not in existing_citations:
+                        result.citations.append(citation)
+                        existing_citations.add(key)
                 result.status = state_mod.ANSWER_WITH_EVIDENCE
+            elif name == "get_product" and isinstance(payload, dict) and payload.get("found") is False:
+                saw_missing_product = True
+                result.status = state_mod.NO_MATCH
             elif name == "calculate_quote" and isinstance(payload, dict):
                 if "error" in payload:
                     code = payload.get("error")
+                    tool_error_codes.add(str(code))
                     if code == "discount_limit_exceeded":
                         result.status = state_mod.RULE_VIOLATION
                     elif code == "invalid_quantity":
@@ -1275,5 +1295,31 @@ class GatewayDriver:
                             result.candidates.append({key: value for key, value in product.items() if key != "evidence"})
                             result.citations.extend(product.get("evidence") or [])
             elif isinstance(payload, dict) and "error" in payload:
+                tool_error_codes.add(str(payload["error"]))
+                if name == "get_product" and payload.get("error") in {"not_found", "missing_price"}:
+                    saw_missing_product = True
                 result.notes.append(f"Tool error ({payload['error']}): {payload.get('message', '')}".strip())
+
+        # The model may select the business status, but only when local tool
+        # evidence makes that status possible. Facts and money remain tool-owned.
+        if requested_status == state_mod.NEEDS_CLARIFICATION and not tool_results:
+            result.status = state_mod.NEEDS_CLARIFICATION
+        elif requested_status == state_mod.EXPLAIN_LIMITATION and result.citations and not result.quote_draft:
+            result.status = state_mod.EXPLAIN_LIMITATION
+        elif requested_status == state_mod.ANSWER_WITH_EVIDENCE and result.citations and not result.quote_draft:
+            result.status = state_mod.ANSWER_WITH_EVIDENCE
+        elif requested_status == state_mod.NO_MATCH and (saw_empty_search or saw_missing_product):
+            result.status = state_mod.NO_MATCH
+        elif (
+            requested_status == state_mod.BUDGET_CONFLICT
+            and result.quote_draft
+            and result.quote_draft.get("within_budget") is False
+        ):
+            result.status = state_mod.BUDGET_CONFLICT
+        elif requested_status == state_mod.RULE_VIOLATION and "discount_limit_exceeded" in tool_error_codes:
+            result.status = state_mod.RULE_VIOLATION
+        elif requested_status == state_mod.INVALID_QUANTITY and "invalid_quantity" in tool_error_codes:
+            result.status = state_mod.INVALID_QUANTITY
+        elif requested_status == state_mod.READY_TO_QUOTE and result.quote_draft:
+            result.status = state_mod.READY_TO_QUOTE
         return result

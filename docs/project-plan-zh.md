@@ -134,8 +134,8 @@ from dell_agent.agent.tools import dispatch
 | 能力 | 已有部分 | 仍缺部分 |
 |---|---|---|
 | 组织者 LLM Gateway | client、原生/JSON tool loop、有限重试和结构化结果完成；Story A 真实 smoke 通过 | Story B/C 真实验证和正式评估 |
-| 报价版本与页面 | schema-v2 保存、确认、diff、PDF、故障注入、页面操作和自动化验收 | A 独立复核最终 PDF 模板 |
-| Agent 评估 | dev/holdout fixtures 的 expected 已独立审核；新建 sealed holdout 与隔离运行器已就绪 | sealed expected 非作者审核、真实模型首轮结果和失败分类 |
+| 报价版本与页面 | schema-v2 保存、确认、diff、PDF、故障注入、页面操作、自动化验收和 8/8 Codex PDF 技术审核 | 若声称独立人工审核则由非作者复签 |
+| Agent 评估 | dev/holdout fixtures 的 expected 已独立审核；sealed holdout 完成 20/20 Codex 技术审核、哈希冻结和隔离运行器 | 若声称独立人工审核则由非作者复签；真实模型首轮结果和失败分类 |
 | 审计 | 每轮 `AgentResult.trace` 随消息保存 | 可读工具审计页、CloudWatch/部署日志验证 |
 | 证据展示 | 本地官方 PDF 与页码链接 | 发布前确认 PDF 再分发条件或改为来源下载链接 |
 
@@ -382,11 +382,11 @@ rule_violation       invalid_quantity
 - [x] expected 审核：40 条全部 PASS，并记录机器断言范围与 7 个 Offline 限制。
 - [x] 金额复核：15 条独立 Decimal/人工复算全部 PASS。
 - [x] B 后端金额一致性：计算、保存、确认、diff 与 PDF 的 3 条锚点全部 PASS。
-- [ ] sealed blind holdout 已建立并与运行时隔离；仍需非作者完成独立 expected 审核。
+- [x] sealed blind holdout 已建立并与运行时隔离；20/20 Codex 技术审核和哈希门禁已完成。若对外声称独立人工审核，仍需非作者队员实名复签。
 - [ ] 使用组织者 LLM Gateway 运行真实首轮评测，保存原始结果、trace 和脱敏运行元数据。
 - [ ] 输出正式指标、失败分类及修复后独立报告。
 - [x] Chrome 完成页面保存 v1/v2、diff、确认、下载及页面/快照/PDF 金额一致性验收；证据在 `reports/evaluation/browser_acceptance/`。
-- [ ] A 人工复核最终 PDF 模板和分页。
+- [x] 最终 PDF 模板完成 8/8 Codex 技术审核：标准页和五页长表全部渲染检查通过；若声称独立人工审核则由非作者复签。
 - [ ] 完成 5 个案例的人工/Agent 计时，报告样本数、中位数和范围。
 
 A 收口时运行 `.venv/bin/python scripts/check_a_completion.py`；只有生成的 `reports/evaluation/a-completion-status.json` 中全部门禁为 `passed=true`，才能把 A 标为完成。

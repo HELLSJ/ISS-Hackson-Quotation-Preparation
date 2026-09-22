@@ -127,6 +127,70 @@ class AgentFailurePathTests(unittest.TestCase):
         self.assertEqual(result.ask_for, ["quantity"])
         self.assertIn("How many monitors", result.notes[-1])
 
+    def test_evidence_tool_can_resolve_to_limitation_status(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": "", "tool_calls": [{
+                "id": "call-1", "type": "function", "function": {
+                    "name": "get_product", "arguments": {"sku": "MON-010"},
+                },
+            }]}},
+            {"message": {"content": json.dumps({
+                "status": "explain_limitation", "ask_for": [],
+                "message": "U2724D USB-C is data-only.",
+            }), "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret",
+            model="test-model", client=client,
+        ).run("Can U2724D carry laptop video and power?")
+        self.assertEqual(result.status, "explain_limitation")
+        self.assertTrue(result.citations)
+
+    def test_budget_conflict_keeps_tool_quote_and_status(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": "", "tool_calls": [{
+                "id": "call-1", "type": "function", "function": {
+                    "name": "calculate_quote", "arguments": {
+                        "items": [{"sku": "MON-009", "quantity": 9}],
+                        "budget_cents": 300000,
+                    },
+                },
+            }]}},
+            {"message": {"content": json.dumps({
+                "status": "budget_conflict", "ask_for": [],
+                "message": "The requested quote exceeds budget.",
+            }), "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret",
+            model="test-model", client=client,
+        ).run("Quote nine P2725HE against SGD 3000.")
+        self.assertEqual(result.status, "budget_conflict")
+        self.assertEqual(result.quote_draft["over_budget_cents"], 14100)
+
+    def test_multiple_product_evidence_is_accumulated(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": "", "tool_calls": [
+                {"id": "call-1", "type": "function", "function": {
+                    "name": "get_product", "arguments": {"sku": "MON-005"},
+                }},
+                {"id": "call-2", "type": "function", "function": {
+                    "name": "get_product", "arguments": {"sku": "MON-008"},
+                }},
+            ]}},
+            {"message": {"content": json.dumps({
+                "status": "answer_with_evidence", "ask_for": [],
+                "message": "The models have different USB-C video capability.",
+            }), "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret",
+            model="test-model", client=client,
+        ).run("Compare P2425 and P2425E USB-C video.")
+        self.assertEqual(result.status, "answer_with_evidence")
+        self.assertEqual({row["sku"] for row in result.candidates}, {"MON-005", "MON-008"})
+        self.assertEqual({row["sku"] for row in result.citations}, {"MON-005", "MON-008"})
+
     def test_ollama_client_uses_gateway_header_and_endpoint(self) -> None:
         captured = {}
 

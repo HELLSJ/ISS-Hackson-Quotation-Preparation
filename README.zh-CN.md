@@ -187,7 +187,7 @@ python scripts/validate_data.py                            # 15 项数据/工具
 - 63 项 Agent 测试通过，7 项是明确记录的 OfflineDriver 启发式 skip；
 - 三条固定演示均在离线路径通过。
 
-这不是模型准确率。现有 40 条自然语言案例的 expected label 已独立审核；新建 sealed holdout 仍需非作者审核，其答案和校验报告不得进入系统提示词或运行时知识库。
+这不是模型准确率。现有 40 条自然语言案例的 expected label 已独立审核；新建 sealed holdout 已完成 20/20 Codex 技术审核并冻结哈希门禁。若对外声称“独立人工审核”，仍需一名非作者队员实名复签。其答案和校验报告不得进入系统提示词或运行时知识库。
 
 ## 组织者 LLM Gateway 路径
 

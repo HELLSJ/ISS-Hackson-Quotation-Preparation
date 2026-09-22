@@ -192,7 +192,7 @@ The current suites report:
 - 63 Agent tests passing, with 7 explicitly documented OfflineDriver heuristic skips;
 - all three fixed demo scenarios passing in the offline path.
 
-These numbers are not a model accuracy claim. The expected semantic labels for the existing 40 natural-language fixtures have passed independent review; the new sealed holdout still requires a non-author review. Holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.
+These numbers are not a model accuracy claim. The expected semantic labels for the existing 40 natural-language fixtures have passed independent review. The new sealed holdout has passed a disclosed 20/20 Codex technical audit and its hash gate is finalized; a non-author teammate must countersign before describing it as an independent human review. Holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.
 
 ## Organizer LLM Gateway path
 

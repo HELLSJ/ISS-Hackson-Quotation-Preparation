@@ -92,6 +92,35 @@ class EvaluationGateTests(unittest.TestCase):
         rows[-1]["result_check"] = "FAIL"
         self.assertFalse(timing.manual_is_complete(rows))
 
+    def test_formal_score_checks_budget_conflict_amount_and_selection(self):
+        case = {"case_id": "SEALED-X", "category": "budget_conflict"}
+        expected = {
+            "status": "budget_conflict",
+            "items": [{"sku": "MON-009", "quantity": 9}],
+            "total_cents": 314100,
+            "over_budget_cents": 14100,
+        }
+        result = {
+            "status": "budget_conflict",
+            "quote_draft": {
+                "lines": [{"sku": "MON-009", "quantity": 9, "discount_bps": 0}],
+                "total_cents": 314100,
+                "over_budget_cents": 14100,
+            },
+        }
+        scored = formal.score(case, result, expected)
+        self.assertTrue(scored["passed"])
+        result["quote_draft"]["total_cents"] = 1
+        self.assertIn("amount", formal.score(case, result, expected)["failed_checks"])
+
+    def test_model_suffix_evidence_requires_two_skus(self):
+        case = {"case_id": "SEALED-X", "category": "model_suffix"}
+        expected = {"status": "answer_with_evidence", "evidence_required": True}
+        one = {"status": "answer_with_evidence", "citations": [{"sku": "MON-005"}]}
+        two = {"status": "answer_with_evidence", "citations": [{"sku": "MON-005"}, {"sku": "MON-008"}]}
+        self.assertFalse(formal.score(case, one, expected)["checks"]["evidence"])
+        self.assertTrue(formal.score(case, two, expected)["checks"]["evidence"])
+
 
 if __name__ == "__main__":
     unittest.main()

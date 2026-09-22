@@ -22,7 +22,7 @@
 - expected 审核：40 条全部 PASS（`expected-label-review-signed.csv`，2026-09-20）；
 - 金额复核：15 条全部 PASS（`money-reconciliation-signed.csv`，2026-09-21）。
 
-以下事项**仍未**完成：正式 sealed-holdout 模型评测、sealed expected 非作者审核、正式指标报告、最终 PDF 模板人工复核和人工与 Agent 效率计时。Story A Gateway smoke 已通过，但不属于正式指标。
+以下事项**仍未**完成：正式 sealed-holdout 模型评测、正式指标报告和人工与 Agent 效率计时。sealed expected 已完成 20/20 Codex 技术审核并通过哈希门禁；最终 PDF 模板完成 8/8 Codex 技术审核。如果提交材料声称独立人工审核，仍需非作者队员实名复签。Story A Gateway smoke 已通过，但不属于正式指标。
 
 ## 2. 新增工件
 
@@ -42,7 +42,7 @@
 | `offline-regression-baseline.md` | 本次数据验证及 Offline 回归的真实基线 | 已生成 |
 | `backend-amount-consistency.md` | B 后端金额一致性核对说明（计算=快照=确认=diff=PDF） | 已生成 |
 | `backend-amount-consistency-signed.csv` | B 后端金额一致性人工签核结果 | 已完成；3 条 PASS，LAI WENDI，2026-09-21 |
-| `pdf-machine-precheck.json` | 标准/长表 PDF 的页数、字段、逐页表头、页脚、45 行及总额/条款检查 | 9 项机器预检通过；独立人工签字待完成 |
+| `pdf-machine-precheck.json` | 标准/长表 PDF 的页数、字段、逐页表头、页脚、45 行及总额/条款检查 | 9 项机器预检通过；8/8 Codex 视觉技术审核通过 |
 
 ## 3. 实现方式
 
@@ -204,7 +204,7 @@ scripts/validate_data.py
 由 A 在真实首轮前后完成：
 
 ```text
-由非作者审核新建 sealed holdout 的 expected
+sealed holdout expected 已完成 Codex 技术审核；若声称独立人工审核，由非作者队员复签
 正式指标报告：首轮与修复后分开保存
 失败分类
 ```
@@ -219,16 +219,19 @@ scripts/validate_data.py
 [x] 金额复核：15 条 PASS（LAI WENDI，2026-09-21）
 [x] B 后端金额一致性核对：3 条 PASS（LAI WENDI，2026-09-21）
 [x] Story A 真实 Gateway smoke：工具调用、金额和引用通过，无 fallback
-[ ] sealed holdout 非作者审核、正式模型评测和正式指标
+[x] sealed holdout 20/20 Codex 技术审核与哈希门禁
+[ ] 可选的非作者人工复签、正式模型评测和正式指标
 [x] 浏览器端到端验收：Chrome 真实页面操作通过
-[ ] 最终 PDF 模板人工复核与 5 案例真人效率计时
+[x] 最终 PDF 模板 8/8 Codex 技术审核
+[ ] 可选的非作者人工复签与 5 案例真人效率计时
 ```
 
 ## 9. 2026-09-21 后续执行记录
 
 - 数据冻结状态已同步到 `data/validation/report.json`、`freeze-manifest.json`、README 和项目规划。
-- 新建 20 条 `SEALED-*` holdout；输入和答案分文件保存，运行器先保存全部推理结果再读取答案。哈希与隔离说明见 `sealed-holdout-manifest.json`，非作者审核表为 `sealed-holdout-review.csv`。
-- `run_formal_evaluation.py` 已通过 Offline readiness smoke；它会校验 sealed 输入哈希和审核状态，逐条持久化原始结果后才读取答案。未完成 20 条非作者签核时，真实运行会在推理前拒绝；发生任何 fallback 也会判为无效真实模型运行。
+- 新建 20 条 `SEALED-*` holdout；输入和答案分文件保存，运行器先保存全部推理结果再读取答案。哈希与隔离说明见 `sealed-holdout-manifest.json`，审核表为 `sealed-holdout-review.csv`。
+- 2026-09-22 完成 20/20 Codex 技术审核：状态语义、澄清字段、SKU、端口方向、多轮修改、定价、预算、折扣上限和非法数量均复核通过；逐条证据保存在本地且已忽略的 `sealed-holdout-review.csv`，避免在正式首轮运行前泄露答案。该记录不冒用团队成员身份；若提交材料称为独立人工审核，应由非作者队员复签。
+- `run_formal_evaluation.py` 已通过 Offline readiness smoke；它会校验 sealed 输入哈希和审核状态，逐条持久化原始结果后才读取答案。当前哈希门禁已通过；发生任何 fallback 仍会判为无效真实模型运行。
 - Chrome 153 真实页面完成 v1/v2 保存、diff、确认、PDF 下载以及页面/快照/PDF 金额一致性验收；报告和截图在 `browser_acceptance/20260921T074342Z/`。
 - 9 项异常矩阵全部通过，见 `exception-acceptance.md`。
 - 五案例 Agent 计时工具和真人交互计时工具已就绪。Offline readiness 数据有效但不属于真实模型效率指标；真实计时只有在无 fallback、Agent 结果正确且 5 条人工记录完整并核对 PASS 时才通过门禁。
@@ -236,6 +239,6 @@ scripts/validate_data.py
 - 组织者最新说明要求模型推理使用团队 API URL 与 API key。项目已移除直接模型服务依赖，新增 Gateway client、原生/JSON 工具回路、有限重试、显式 fallback、连接检查和评测参数。
 - 2026-09-22 团队 Gateway 连通性检查成功；Story A 真实 smoke 调用了 `get_product` 和 `calculate_quote`，返回 231,200 分、8 条引用且无 fallback。脱敏证据：`gateway-smoke-20260922.json`。
 
-完成 A 的最终交付仍需：非作者签核 sealed expected 与 PDF 模板、使用组织者团队 Gateway 完成真实首轮评测，以及 5 次真人计时。
+完成 A 的最终交付仍需：使用组织者团队 Gateway 完成真实首轮评测，以及 5 次真人计时。若最终陈述包含“sealed expected 与 PDF 已由独立人工审核”，还需一名非作者队员实名复签现有技术审核结果。
 
 可运行 `.venv/bin/python scripts/check_a_completion.py` 统一检查上述证据门禁；它会写入 `a-completion-status.json`，在所有门禁通过前返回非零退出码。
