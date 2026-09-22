@@ -1,6 +1,6 @@
 # 可追溯报价编制 Agent
 
-[English README](README.md) · [项目总规划](docs/project-plan-zh.md) · [API 与工具契约](docs/api-contract.md)
+[English README](README.md) · [项目总规划](docs/project-plan-zh.md) · [API 与工具契约](docs/api-contract.md) · [前端开发与部署指南](docs/frontend-development-deployment-zh.md)
 
 这是一个面向虚构办公设备分销商的报价工作台：把不完整的英文客户询价转成有证据的产品候选和确定性 SGD 报价草稿，同时把产品选择和最终确认留给销售人员。
 
@@ -227,6 +227,7 @@ app/                    FastAPI、SQLite 生命周期、快照校验、diff/PDF�
 data/                   原始、核对、生成、评估和校验数据
 dell_agent/             类型目录、计价、状态机、工具和 driver
 docs/api-contract.md    冻结的工具与 HTTP 契约
+docs/frontend-development-deployment-zh.md 前端优化、验收、协作与 Lightsail 发布
 docs/project-plan-zh.md 唯一项目总规划
 scripts/                下载、提取、构建、校验和 CLI
 tests/                  目录/CLI 契约与报价后端集成测试

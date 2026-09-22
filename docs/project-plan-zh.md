@@ -370,6 +370,8 @@ rule_violation       invalid_quantity
 | C：Gateway Agent | 组织者 API 真实调用、结果组装、重试、fallback、trace | 三条 Story 的真实 trace 和模型评估元数据 |
 | D：前端与演示 | 确认/diff/PDF 页面、异常入口、恢复、视频 | 完整工作台、演示模式、30 分钟视频 |
 
+D 的前端优化、API 边界、浏览器验收和 Lightsail 更新流程见[前端开发、验收与部署指南](frontend-development-deployment-zh.md)。
+
 ### A：数据与评估执行清单（2026-09-21）
 
 - [x] 数据独立冻结：24 条证据核对全部 PASS，冻结记录见 `reports/evaluation/data-freeze-review-signed.csv`。
