@@ -133,7 +133,7 @@ from dell_agent.agent.tools import dispatch
 
 | 能力 | 已有部分 | 仍缺部分 |
 |---|---|---|
-| 组织者 LLM Gateway | client、原生/JSON tool loop、通用 schema、一次有限重试、显式 fallback 和结构化结果已完成 | 团队 API key 真实调用和正式评估 |
+| 组织者 LLM Gateway | client、原生/JSON tool loop、有限重试和结构化结果完成；Story A 真实 smoke 通过 | Story B/C 真实验证和正式评估 |
 | 报价版本与页面 | schema-v2 保存、确认、diff、PDF、故障注入、页面操作和自动化验收 | A 独立复核最终 PDF 模板 |
 | Agent 评估 | dev/holdout fixtures 的 expected 已独立审核；新建 sealed holdout 与隔离运行器已就绪 | sealed expected 非作者审核、真实模型首轮结果和失败分类 |
 | 审计 | 每轮 `AgentResult.trace` 随消息保存 | 可读工具审计页、CloudWatch/部署日志验证 |
@@ -141,7 +141,7 @@ from dell_agent.agent.tools import dispatch
 
 ### 4.3 未完成
 
-- 使用团队 API key 的组织者 Gateway 真实 tool-use；
+- 组织者 Gateway 的 Story B/C 真实 tool-use 与正式评测；
 - 正式 holdout 首轮结果和修复后结果；
 - 5 个案例的人工流程与 Agent 流程计时；
 - 一键恢复固定演示数据；
@@ -264,9 +264,9 @@ rule_violation       invalid_quantity
 
 ### Gate B（P0）：组织者 LLM Gateway 迁移与真实调用
 
-**主责：C Gateway Agent；B 配合。代码迁移已完成，团队 API 真实运行待执行。**
+**主责：C Gateway Agent；B 配合。代码迁移和 Story A 真实 smoke 已完成；Story B/C 与正式评测待执行。**
 
-**2026-09-22 状态：**组织者澄清模型推理必须使用邮件提供的 API URL 与团队 API key，AWS 账户用于托管。项目已移除直接模型服务依赖和云 SDK，改为 `GatewayDriver`。旧 SQLite `converse` 会迁移为 `gateway`。
+**2026-09-22 状态：**项目已切换为 `GatewayDriver`。团队 Gateway 连通性验证通过；Story A 真实调用返回 `ready_to_quote`，执行 `get_product → calculate_quote`，总额 231,200 分、8 条引用、无 fallback。脱敏证据见 [`gateway-smoke-20260922.json`](../reports/evaluation/gateway-smoke-20260922.json)。旧 SQLite `converse` 会迁移为 `gateway`。
 
 已完成：
 
@@ -279,12 +279,11 @@ rule_violation       invalid_quantity
 7. 应用、评测、效率计时、UI 标签、tool schema 和配置文档统一切换；
 8. 自动化覆盖原生调用、JSON fallback、超时 fallback、请求头和旧数据库迁移。
 
-待团队 API 执行：
+真实 API 后续：
 
-1. 按 [LLM Gateway 配置指南](llm-gateway-setup-zh.md) 运行连通性检查；
-2. 用 Story A/B/C 确认 `configured_driver=gateway`、`used_fallback=false`；
-3. 保存真实 `gateway_start → gateway_turn_* tool → final_text` trace；
-4. 完成 sealed holdout 首轮评测和真实效率计时。
+1. 用 Story B/C 确认 `configured_driver=gateway`、`used_fallback=false`；
+2. 保存 Story B/C 的真实 `gateway_start → gateway_turn_* tool → final_text` trace；
+3. 完成 sealed holdout 首轮评测和真实效率计时。
 
 **验收：**三条 Story 的真实 Gateway 路径均调用本地工具；事实和金额来自工具；金额与离线路径逐分一致；无隐式 fallback；失败时回退可见且状态保留。
 
@@ -485,7 +484,8 @@ B 的后端交付已完成。D 的浏览器按钮和 A 的独立模板验收仍�
 - [x] 19 项后端 migration/concurrency/lifecycle/diff/PDF/fault-injection/HTTP 测试；
 - [x] 三栏浏览器工作台和本地规格 PDF 证据；
 - [x] 团队独立数据冻结记录；
-- [ ] 组织者 Gateway 真实 tool-use trace；
+- [x] Story A 组织者 Gateway 真实 tool-use smoke 与脱敏证据；
+- [ ] Story B/C 真实 tool-use trace；
 - [x] Gateway AgentResult、原生/JSON 工具回路和有限重试；
 - [x] confirmation/diff/报价 PDF 的浏览器操作；
 - [x] 数据库保存与 PDF 渲染故障注入结果；

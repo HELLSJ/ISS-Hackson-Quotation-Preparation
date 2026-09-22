@@ -40,7 +40,7 @@
 | 人工确认 | append-only confirmed snapshot，精确 token 重试幂等 |
 | 版本 diff 和报价 PDF | 后端 API 已完成；PDF 只读取 confirmed snapshot，不重新计价 |
 | 自动化校验 | 47 项目录/后端/Gateway/评测门禁测试；63 项 Agent 测试，7 项明确 skip |
-| 组织者 LLM Gateway | client、原生/JSON 工具回路、有限重试、显式 fallback 和测试已完成；待团队密钥真实运行 |
+| 组织者 LLM Gateway | Story A 真实 smoke 已通过本地工具调用且无 fallback；Story B/C 和正式评测待完成 |
 | 独立数据复核 | 已完成：24/24 条证据核对已签核，`2026-09-14.v1` 已冻结 |
 | 浏览器 confirmation/diff/PDF 操作 | 已实现，并通过 Chrome 端到端验收 |
 | 正式模型/holdout 评估 | **未完成** |
@@ -214,7 +214,7 @@ export AGENT_DRIVER=gateway
 
 ## 后续关键路径
 
-1. 使用组织者 LLM Gateway 跑通三条演示故事并保存首次真实 trace；
+1. 使用组织者 LLM Gateway 完成 Story B/C；Story A 真实 smoke 已通过并保存脱敏证据；
 2. 保留正式 sealed holdout 首轮结果，并将修复后结果分开；
 3. 实测 5 个案例，彩排、录制 30 分钟视频并提交。
 

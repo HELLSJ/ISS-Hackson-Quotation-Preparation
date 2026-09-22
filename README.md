@@ -40,7 +40,7 @@ The usable vertical slice and backend quote lifecycle are complete: deterministi
 | Confirmation | Append-only immutable confirmed snapshot with exact-token idempotency |
 | Version diff and quote PDF | Backend APIs complete; PDF is confirmed-snapshot-only and never re-prices |
 | Automated validation | 47 catalogue/backend/gateway/evaluation-gate tests; 63 Agent tests with 7 documented heuristic skips |
-| Organizer LLM Gateway | Client, native/manual tool loop, bounded retry, visible fallback, and tests complete; live team-key run pending |
+| Organizer LLM Gateway | Live Story A smoke passed with local tool calls and no fallback; Story B/C and formal evaluation pending |
 | Independent data review | Complete: 24/24 evidence checks signed and dataset `2026-09-14.v1` frozen |
 | Browser confirmation/diff/PDF controls | Implemented and exercised end to end in headless Chrome |
 | Formal model/holdout evaluation | **Not completed** |
@@ -219,7 +219,7 @@ A live run is valid only when `configured_driver=gateway`, `used_fallback=false`
 
 ## Remaining critical path
 
-1. Run the three demo stories against the organizer LLM Gateway and preserve the first live traces.
+1. Run Story B/C against the organizer LLM Gateway; Story A live smoke already passed and is recorded.
 2. Run and preserve the first formal sealed-holdout evaluation, then separate fixes from the original result.
 3. Measure five manual-versus-Agent cases, rehearse, record the 30-minute video, and submit.
 

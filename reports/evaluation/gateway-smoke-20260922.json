@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-09-22T05:23:09.031182+00:00",
+  "git_commit": "feaa5310672a0a028f8fa8ea2114b1741e72eca8",
+  "driver": "gateway",
+  "model_id": "global.anthropic.claude-sonnet-4-5-20250929-v1:0",
+  "gateway_url_sha256": "b50ee91b3053409998df08473e69e684a6469fdb4b5ca696bb620d07f606bfc9",
+  "scenario": "Story A exact quote smoke",
+  "status": "ready_to_quote",
+  "total_cents": 231200,
+  "expected_total_cents": 231200,
+  "used_fallback": false,
+  "gateway_started": true,
+  "tools": [
+    "get_product",
+    "calculate_quote"
+  ],
+  "citation_count": 8,
+  "passed": true,
+  "formal_evaluation": false,
+  "note": "Connectivity and one-story smoke evidence only; not a sealed-holdout metric."
+}
