@@ -1,0 +1,290 @@
+{
+  "run_id": "20260922T073451Z-gateway-fixed-02",
+  "label": "fixed-02",
+  "started_at": "2026-09-22T07:34:51.489281+00:00",
+  "finished_at": "2026-09-22T07:37:51.123897+00:00",
+  "driver": "gateway",
+  "model_id": "global.anthropic.claude-sonnet-4-5-20250929-v1:0",
+  "gateway_url_sha256": "b50ee91b3053409998df08473e69e684a6469fdb4b5ca696bb620d07f606bfc9",
+  "git_commit": "009a4935a7121e384cce9ffdaffb4df56ac9f356",
+  "dataset_version": "2026-09-14.v1",
+  "price_version": "demo-v1",
+  "rule_version": "demo-v1",
+  "sealed_inputs_sha256": "d33b00170410bc41b331647e8927c8e70ebaa4d7b3e8b4fe1e4b11f21c8ec526",
+  "sealed_expected_sha256": "b65fb74ab9822458be2d5fd813c5449306fbb994623f5d5dd4e3783f97f947c6",
+  "answer_key_loaded_after_inference": true,
+  "case_count": 20,
+  "fallback_count": 0,
+  "gateway_started_count": 20,
+  "gateway_tool_call_count": 21,
+  "valid_real_model_run": true,
+  "metrics": {
+    "status": {
+      "passed": 20,
+      "total": 20,
+      "rate": 1.0
+    },
+    "clarification": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1.0
+    },
+    "selection": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1.0
+    },
+    "amount": {
+      "passed": 8,
+      "total": 8,
+      "rate": 1.0
+    },
+    "budget": {
+      "passed": 1,
+      "total": 1,
+      "rate": 1.0
+    },
+    "over_budget": {
+      "passed": 1,
+      "total": 1,
+      "rate": 1.0
+    },
+    "policy_block": {
+      "passed": 2,
+      "total": 2,
+      "rate": 1.0
+    },
+    "evidence": {
+      "passed": 4,
+      "total": 4,
+      "rate": 1.0
+    },
+    "target_sku": {
+      "passed": 3,
+      "total": 3,
+      "rate": 1.0
+    }
+  },
+  "all_machine_checks": {
+    "passed": 20,
+    "total": 20,
+    "rate": 1.0
+  },
+  "failure_categories": {},
+  "cases": [
+    {
+      "case_id": "SEALED-001",
+      "checks": {
+        "status": true,
+        "selection": true,
+        "amount": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-002",
+      "checks": {
+        "status": true,
+        "selection": true,
+        "amount": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-003",
+      "checks": {
+        "status": true,
+        "selection": true,
+        "amount": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-004",
+      "checks": {
+        "status": true,
+        "selection": true,
+        "amount": true,
+        "budget": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-005",
+      "checks": {
+        "status": true,
+        "clarification": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-006",
+      "checks": {
+        "status": true,
+        "clarification": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-007",
+      "checks": {
+        "status": true,
+        "clarification": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-008",
+      "checks": {
+        "status": true,
+        "clarification": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-009",
+      "checks": {
+        "status": true,
+        "evidence": true,
+        "target_sku": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-010",
+      "checks": {
+        "status": true,
+        "evidence": true,
+        "target_sku": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-011",
+      "checks": {
+        "status": true,
+        "evidence": true,
+        "target_sku": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-012",
+      "checks": {
+        "status": true,
+        "evidence": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-013",
+      "checks": {
+        "status": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-014",
+      "checks": {
+        "status": true,
+        "selection": true,
+        "amount": true,
+        "over_budget": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-015",
+      "checks": {
+        "status": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-016",
+      "checks": {
+        "status": true,
+        "selection": true,
+        "amount": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-017",
+      "checks": {
+        "status": true,
+        "selection": true,
+        "amount": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-018",
+      "checks": {
+        "status": true,
+        "selection": true,
+        "amount": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-019",
+      "checks": {
+        "status": true,
+        "policy_block": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    },
+    {
+      "case_id": "SEALED-020",
+      "checks": {
+        "status": true,
+        "policy_block": true
+      },
+      "passed": true,
+      "failed_checks": [],
+      "failure_category": ""
+    }
+  ],
+  "git_dirty": true,
+  "git_status_sha256": "772f3a038cd8f8864138679022d126e0e9822d3f4c256173ccbf9a163e96d098",
+  "git_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

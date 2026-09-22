@@ -1,0 +1,6 @@
+case_id,scenario,driver,model_id,started_at,duration_seconds,status,total_cents,used_fallback,gateway_started,gateway_tool_calls,result_check
+TIME-001,Exact quote: 8 P2425HE with SGD 2500 budget,gateway,global.anthropic.claude-sonnet-4-5-20250929-v1:0,2026-09-22T07:38:21.767415+00:00,13.491039,ready_to_quote,231200,False,True,2,True
+TIME-002,Multi-line quote: 2 S2425H and 1 U2724DE,gateway,global.anthropic.claude-sonnet-4-5-20250929-v1:0,2026-09-22T07:38:35.258597+00:00,12.590491,ready_to_quote,92700,False,True,3,True
+TIME-003,Discount quote: 2 P2725HE at 5 percent,gateway,global.anthropic.claude-sonnet-4-5-20250929-v1:0,2026-09-22T07:38:47.849193+00:00,12.705385,ready_to_quote,66310,False,True,2,True
+TIME-004,Revision: 8 P2425HE changed to 10,gateway,global.anthropic.claude-sonnet-4-5-20250929-v1:0,2026-09-22T07:39:00.554659+00:00,9.025274,ready_to_quote,289000,False,True,1,True
+TIME-005,Policy boundary: 5 S2725QC at 6 percent with delivery request,gateway,global.anthropic.claude-sonnet-4-5-20250929-v1:0,2026-09-22T07:39:09.580011+00:00,19.632585,rule_violation,,False,True,2,True

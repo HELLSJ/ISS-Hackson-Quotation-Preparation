@@ -22,19 +22,16 @@ NUS-ISS Hackathon 报价编制 Agent：把不完整的英文客户询价经过�
 - append-only 人工确认、confirmed version、结构化 diff 和 confirmed-only 报价 PDF；
 - 19 项临时数据库后端集成测试，覆盖迁移、并发、确认、diff、PDF、故障注入和 HTTP；
 - 三条固定演示可离线运行；
-- 47 项目录/后端/Gateway/评测门禁测试和 63 项 Agent 测试通过，另有 7 项明确记录的离线语言边界；
+- 60 项目录/后端/Gateway/评测门禁测试通过；64 项 Agent 测试完成（57 通过、7 项为明确记录的离线语言边界）；
 - 英文/中文 README、API 契约和统一项目规划。
 
-当前后端可以生成**不可变 confirmed version 和报价 PDF**；浏览器已接通保存、确认、diff 和 PDF 下载并通过 Chrome 端到端验收。组织者 LLM Gateway 的代码迁移已完成，真实团队 API 评估尚未运行。
+当前后端可以生成**不可变 confirmed version 和报价 PDF**；浏览器已接通保存、确认、diff 和 PDF 下载并通过 Chrome 端到端验收。组织者 LLM Gateway 已完成 Story A/B/C 实测；sealed 首轮 10/20 与修复后 20/20 报告均已保留，最终运行 0 fallback。
 
 ## 后续工作（按顺序）
 
-1. Codex 技术审核已完成 20/20 并冻结 sealed holdout 门禁；若对外声称独立人工审核，由非作者队员复签；
-2. PDF 模板 8/8 Codex 技术审核已完成；若对外声称独立人工审核，由非作者队员复签；
-3. 用 Story B/C 验证 `configured_driver=gateway`、`used_fallback=false` 和真实工具 trace；
-4. 运行 sealed holdout，保留首轮和修复后结果；
-5. 完成 5 个案例的真人效率计时；
-6. 彩排、录制 30 分钟视频并完成提交检查。
+1. 完成 5 个案例的真人效率计时；Agent 五案例均正确，中位数 12.705 秒；
+2. 仅在声称独立人工审核时，由非作者队员复签 sealed/PDF 技术审核；
+3. 彩排、录制 30 分钟视频并完成提交检查。
 
 不要继续增加产品、真实价格、库存、税费、登录、复杂多 Agent 或向量数据库。
 

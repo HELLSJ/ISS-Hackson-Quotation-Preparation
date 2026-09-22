@@ -182,6 +182,11 @@ button:focus-visible, textarea:focus-visible, input:focus-visible, a:focus-visib
 .message-body li { margin: 3px 0; }
 .message-body hr { margin: 11px 0; border: 0; border-top: 1px solid var(--line); }
 .message-body code, .trace-step pre { font-family: "SFMono-Regular", Consolas, monospace; }
+.message-body a { color: var(--blue-dark); overflow-wrap: anywhere; }
+.markdown-table-wrap { margin: 9px 0; overflow-x: auto; }
+.markdown-table { width: 100%; border-collapse: collapse; font-size: 11px; line-height: 1.45; }
+.markdown-table th, .markdown-table td { padding: 7px 8px; border: 1px solid var(--line-strong); text-align: left; vertical-align: top; }
+.markdown-table th { background: #f2f4f6; color: var(--ink); }
 .reset-button { color: var(--muted); }
 .message.assistant { color: #354553; }
 .composer { padding: 14px 18px 17px; border-top: 1px solid var(--line-strong); background: #fafbfc; }

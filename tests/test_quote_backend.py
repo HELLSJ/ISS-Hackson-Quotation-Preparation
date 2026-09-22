@@ -319,6 +319,40 @@ class LegacyMigrationTests(unittest.TestCase):
             self.assertEqual(missing, ["schema_version"])
 
 
+class AssistantMessageTests(unittest.TestCase):
+    def test_gateway_policy_boundary_uses_deterministic_complete_message(self) -> None:
+        result = {
+            "status": "rule_violation",
+            "configured_driver": "gateway",
+            "used_fallback": False,
+            "notes": [
+                "Prices and rules are synthetic/demo data; this is not a tax invoice.",
+                "Would you like me to apply the maximum discount?",
+                "Stock and delivery timing are unknown; a human must confirm availability.",
+                "Requested discount exceeds the 5% (500 bps) limit; it cannot be applied or approved.",
+            ],
+        }
+        message = QuotationService._assistant_message(result)
+        self.assertIn("exceeds the 5% policy limit", message)
+        self.assertIn("delivery remain unconfirmed", message)
+        self.assertNotIn("maximum discount", message)
+
+    def test_gateway_evidence_message_preserves_model_markdown(self) -> None:
+        result = {
+            "status": "answer_with_evidence",
+            "configured_driver": "gateway",
+            "used_fallback": False,
+            "notes": [
+                "Prices and rules are synthetic/demo data; this is not a tax invoice.",
+                "**Verified:** USB-C video is supported.",
+            ],
+        }
+        self.assertEqual(
+            QuotationService._assistant_message(result),
+            "**Verified:** USB-C video is supported.",
+        )
+
+
 class QuoteApiTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory()

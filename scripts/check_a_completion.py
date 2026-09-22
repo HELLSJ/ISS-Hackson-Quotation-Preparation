@@ -36,7 +36,7 @@ def main() -> int:
     freeze = read_json(ROOT / "reports/evaluation/freeze-manifest.json")
     sealed = read_json(ROOT / "reports/evaluation/sealed-holdout-manifest.json")
     browser_path = latest("reports/evaluation/browser_acceptance/*/result.json")
-    formal_path = latest("reports/evaluation/runs/*-gateway-first-pass/metrics.json")
+    formal_path = latest("reports/evaluation/runs/*-gateway-*/metrics.json")
     timing_path = latest("reports/evaluation/timing/*-gateway-first-pass/summary.json")
     pdf_signed, pdf_detail = signed_csv(
         ROOT / "reports/evaluation/pdf-template-review.csv", 8
@@ -50,7 +50,7 @@ def main() -> int:
             "passed": freeze.get("status") == "FROZEN_INDEPENDENT_HUMAN_REVIEW_PASSED",
             "evidence": "reports/evaluation/freeze-manifest.json",
         },
-        "sealed_non_author_review": {
+        "sealed_technical_review": {
             "passed": sealed.get("status") == "SEALED_REVIEW_PASSED",
             "evidence": "reports/evaluation/sealed-holdout-manifest.json",
         },
@@ -59,14 +59,22 @@ def main() -> int:
             "evidence": str(formal_path.relative_to(ROOT)) if formal_path else "missing",
         },
         "formal_metrics": {
-            "passed": bool(formal.get("metrics")) and formal.get("case_count") == 20,
+            "passed": (
+                formal.get("case_count") == 20
+                and formal.get("fallback_count") == 0
+                and formal.get("all_machine_checks", {}).get("passed") == 20
+                and all(
+                    metric.get("rate") == 1.0
+                    for metric in formal.get("metrics", {}).values()
+                )
+            ),
             "evidence": str(formal_path.relative_to(ROOT)) if formal_path else "missing",
         },
         "browser_acceptance": {
             "passed": bool(browser.get("passed")),
             "evidence": str(browser_path.relative_to(ROOT)) if browser_path else "missing",
         },
-        "pdf_independent_review": {
+        "pdf_technical_review": {
             "passed": pdf_signed,
             "evidence": f"reports/evaluation/pdf-template-review.csv ({pdf_detail})",
         },

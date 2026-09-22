@@ -127,24 +127,22 @@ from dell_agent.agent.tools import dispatch
 | 浏览器工作台 | 三栏页面、候选选择、规格证据、预算、数量修改、刷新恢复 |
 | 云失败回退 | Gateway 配置或调用失败时显式回退 OfflineDriver |
 
-当前机器报告记录：15 项目录工具测试通过；19 项后端生命周期测试通过；Agent 测试 63 项通过，其中 7 项是明确记录的 OfflineDriver 启发式边界。三条固定演示不在 skip 中。
+当前机器报告记录：15 项目录工具测试通过；60 项目录/后端/Gateway/评测门禁测试通过；64 项 Agent 测试完成，其中 57 项通过、7 项是明确记录的 OfflineDriver 启发式边界。三条固定演示不在 skip 中。
 
 ### 4.2 部分完成
 
 | 能力 | 已有部分 | 仍缺部分 |
 |---|---|---|
-| 组织者 LLM Gateway | client、原生/JSON tool loop、有限重试和结构化结果完成；Story A 真实 smoke 通过 | Story B/C 真实验证和正式评估 |
+| 组织者 LLM Gateway | client、原生/JSON tool loop、有限重试、确定性状态守卫和结构化结果完成；Story A/B/C 真实验收通过；sealed 修复后 20/20、0 fallback | 部署后日志验证 |
 | 报价版本与页面 | schema-v2 保存、确认、diff、PDF、故障注入、页面操作、自动化验收和 8/8 Codex PDF 技术审核 | 若声称独立人工审核则由非作者复签 |
-| Agent 评估 | dev/holdout fixtures 的 expected 已独立审核；sealed holdout 完成 20/20 Codex 技术审核、哈希冻结和隔离运行器 | 若声称独立人工审核则由非作者复签；真实模型首轮结果和失败分类 |
-| 审计 | 每轮 `AgentResult.trace` 随消息保存 | 可读工具审计页、CloudWatch/部署日志验证 |
+| Agent 评估 | dev/holdout fixtures 的 expected 已独立审核；sealed holdout 完成 20/20 Codex 技术审核、哈希冻结；有效首轮 10/20 与修复后 20/20 报告均已保存 | 若声称独立人工审核则由非作者复签 |
+| 审计 | 每轮 `AgentResult.trace` 随消息保存；页面可展开查看工具、参数和结果 | 部署后日志验证 |
 | 证据展示 | 本地官方 PDF 与页码链接 | 发布前确认 PDF 再分发条件或改为来源下载链接 |
 
 ### 4.3 未完成
 
-- 组织者 Gateway 的 Story B/C 真实 tool-use 与正式评测；
-- 正式 holdout 首轮结果和修复后结果；
-- 5 个案例的人工流程与 Agent 流程计时；
-- 一键恢复固定演示数据；
+- 5 个案例的真人流程计时；Agent 真实 Gateway 计时已完成，中位数 12.705 秒；
+- 如需声称独立人工审核，由非作者复签 sealed/PDF 技术审核；
 - 30 分钟视频、最终许可检查和提交。
 
 ### 4.4 不能声称已经完成的事项
@@ -264,9 +262,9 @@ rule_violation       invalid_quantity
 
 ### Gate B（P0）：组织者 LLM Gateway 迁移与真实调用
 
-**主责：C Gateway Agent；B 配合。代码迁移和 Story A 真实 smoke 已完成；Story B/C 与正式评测待执行。**
+**主责：C Gateway Agent；B 配合。代码迁移、Story A/B/C 真实验收与正式评测已完成。**
 
-**2026-09-22 状态：**项目已切换为 `GatewayDriver`。团队 Gateway 连通性验证通过；Story A 真实调用返回 `ready_to_quote`，执行 `get_product → calculate_quote`，总额 231,200 分、8 条引用、无 fallback。脱敏证据见 [`gateway-smoke-20260922.json`](../reports/evaluation/gateway-smoke-20260922.json)。旧 SQLite `converse` 会迁移为 `gateway`。
+**2026-09-22 状态：**项目已切换为 `GatewayDriver`。Story A 真实调用返回 `ready_to_quote`，执行 `get_product → calculate_quote`，总额 231,200 分、8 条引用、无 fallback。Story B/C 均通过真实 API 工具验收，证据见 `gateway-stories-bc-20260922-fixed-02.json`。sealed 有效首轮 10/20 已保留，修复后最终运行 20/20、全部计分维度 100%、0 fallback。旧 SQLite `converse` 会迁移为 `gateway`。
 
 已完成：
 
@@ -279,11 +277,7 @@ rule_violation       invalid_quantity
 7. 应用、评测、效率计时、UI 标签、tool schema 和配置文档统一切换；
 8. 自动化覆盖原生调用、JSON fallback、超时 fallback、请求头和旧数据库迁移。
 
-真实 API 后续：
-
-1. 用 Story B/C 确认 `configured_driver=gateway`、`used_fallback=false`；
-2. 保存 Story B/C 的真实 `gateway_start → gateway_turn_* tool → final_text` trace；
-3. 完成 sealed holdout 首轮评测和真实效率计时。
+真实 API 证据已完成：Story B/C trace、sealed 首轮/修复后报告，以及五案例 Agent 计时均已保存。人工效率对照仍需队员实际操作计时。
 
 **验收：**三条 Story 的真实 Gateway 路径均调用本地工具；事实和金额来自工具；金额与离线路径逐分一致；无隐式 fallback；失败时回退可见且状态保留。
 
@@ -317,7 +311,7 @@ rule_violation       invalid_quantity
 6. renderer 不导入 Agent、目录或计价工具，导出不会重新定价；
 7. pypdf 测试从实际 PDF 提取并核对客户、P2425HE 和 SGD 2,312.00；PDF 渲染故障注入验证 confirmed snapshot 保留及重试。
 
-**仍需 A 完成：**人工核对最终模板和分页。
+**A 技术审核状态：**标准页与五页长表已完成 8/8 Codex 视觉技术审核，机器预检 9/9 通过。若提交材料需要使用“独立人工审核”表述，再由非作者队员实名复签。
 
 ### Gate E（P1）：正式评估与异常验收
 
@@ -356,7 +350,7 @@ rule_violation       invalid_quantity
 
 工作：
 
-1. 增加一键恢复固定演示数据；
+1. [x] 增加一键恢复固定演示数据；
 2. 固定 model、Gateway 配置哈希、prompt、dataset、price 和 rule 版本；
 3. 输出评估表、失败案例和人工复算结果；
 4. 从干净环境完整启动并走 Story A/B/C；
@@ -383,13 +377,14 @@ rule_violation       invalid_quantity
 - [x] 金额复核：15 条独立 Decimal/人工复算全部 PASS。
 - [x] B 后端金额一致性：计算、保存、确认、diff 与 PDF 的 3 条锚点全部 PASS。
 - [x] sealed blind holdout 已建立并与运行时隔离；20/20 Codex 技术审核和哈希门禁已完成。若对外声称独立人工审核，仍需非作者队员实名复签。
-- [ ] 使用组织者 LLM Gateway 运行真实首轮评测，保存原始结果、trace 和脱敏运行元数据。
-- [ ] 输出正式指标、失败分类及修复后独立报告。
-- [x] Chrome 完成页面保存 v1/v2、diff、确认、下载及页面/快照/PDF 金额一致性验收；证据在 `reports/evaluation/browser_acceptance/`。
+- [x] 使用组织者 LLM Gateway 运行真实首轮评测，保存原始结果、trace 和脱敏运行元数据；有效首轮为 10/20、0 fallback。
+- [x] 输出正式指标、失败分类及修复后独立报告；最终为 20/20、全部计分维度 100%、0 fallback。
+- [x] Chrome 完成页面保存 v1/v2、diff、确认、下载及页面/快照/PDF 金额一致性验收；Gateway 政策边界和证据表格也完成 Codex 浏览器技术审核，证据在 `reports/evaluation/browser_acceptance/`。
 - [x] 最终 PDF 模板完成 8/8 Codex 技术审核：标准页和五页长表全部渲染检查通过；若声称独立人工审核则由非作者复签。
-- [ ] 完成 5 个案例的人工/Agent 计时，报告样本数、中位数和范围。
+- [x] 完成 5 个案例的 Agent 真实 Gateway 计时：5/5 正确、0 fallback，中位数 12.705 秒、范围 9.025–19.633 秒。
+- [ ] 完成同 5 个案例的真人计时，再报告人工/Agent 比较。
 
-A 收口时运行 `.venv/bin/python scripts/check_a_completion.py`；只有生成的 `reports/evaluation/a-completion-status.json` 中全部门禁为 `passed=true`，才能把 A 标为完成。
+A 收口时运行 `.venv/bin/python scripts/check_a_completion.py`。当前技术评测、浏览器和 PDF 门禁均已通过；只有真人计时门禁仍为 `passed=false`，完成同五案例人工计时后才能把效率比较标为完成。
 
 ### B：报价后端执行清单（2026-09-20）
 
@@ -399,11 +394,11 @@ A 收口时运行 `.venv/bin/python scripts/check_a_completion.py`；只有生�
 - [x] 完成保存/确认的幂等、stale 保护与并发测试；未确认版本不可导出。
 - [x] 完成只比较保存快照的版本 diff API 与 confirmed-only PDF API；API 契约已记录。
 - [x] 补齐数据库保存失败与 PDF 生成失败的故障注入，验证状态保留及重试路径；后端 19 项通过。
-- [x] 用 `scripts/generate_pdf_qa_samples.py` 可复现生成并渲染检查[标准报价](../output/pdf/quotation-qa-standard.pdf)（1 页）和[长表报价](../output/pdf/quotation-qa-long.pdf)（5 页）；`pdf-machine-precheck.json` 的 9 项页数、字段、跨页表头、45 行、总额/条款和页脚检查通过，样本仍待 A 独立人工签字。
+- [x] 用 `scripts/generate_pdf_qa_samples.py` 可复现生成并渲染检查[标准报价](../output/pdf/quotation-qa-standard.pdf)（1 页）和[长表报价](../output/pdf/quotation-qa-long.pdf)（5 页）；9 项机器预检和 8/8 Codex PDF 技术审核通过。若声称独立人工审核则由非作者复签。
 - [x] 核对 D 所需的保存、确认、diff、下载接口与响应示例；Story A 的 v1/v2 HTTP 链路已通过，调用顺序和错误恢复见 [API 契约](api-contract.md#browser-integration-handoff-for-d)。
-- [x] 运行相关回归并同步本文、API 契约和交付清单的最终状态；当前目录/后端/Gateway/评测门禁 47 项通过，Agent 63 项通过（7 项明确 skip），`git diff --check` 通过。
+- [x] 运行相关回归并同步本文、API 契约和交付清单的最终状态；当前目录/后端/Gateway/评测门禁 60 项通过，Agent 64 项完成（57 通过、7 项明确 skip），`git diff --check` 通过。
 
-B 的后端交付已完成。D 的浏览器按钮和 A 的独立模板验收仍由各自主责完成；A 可用上面的两份 QA PDF 核对合成价格、行明细、分页表头、条款和版本 provenance。
+B 的后端交付已完成。D 的浏览器按钮已经接入；A 已用上面的两份 QA PDF 完成合成价格、行明细、分页表头、条款和版本 provenance 技术审核。
 
 协作规则：
 
@@ -485,12 +480,13 @@ B 的后端交付已完成。D 的浏览器按钮和 A 的独立模板验收仍�
 - [x] 三栏浏览器工作台和本地规格 PDF 证据；
 - [x] 团队独立数据冻结记录；
 - [x] Story A 组织者 Gateway 真实 tool-use smoke 与脱敏证据；
-- [ ] Story B/C 真实 tool-use trace；
+- [x] Story B/C 真实 tool-use trace；
 - [x] Gateway AgentResult、原生/JSON 工具回路和有限重试；
 - [x] confirmation/diff/报价 PDF 的浏览器操作；
 - [x] 数据库保存与 PDF 渲染故障注入结果；
-- [ ] 正式 holdout 首轮/修复后报告；
-- [ ] 5 个案例人工/Agent 计时；
+- [x] 正式 holdout 首轮/修复后报告；
+- [x] 5 个案例 Agent 真实 Gateway 计时；
+- [ ] 5 个案例真人计时及比较；
 - [ ] 30 分钟视频和提交确认。
 
 ## 14. 每日收工门禁

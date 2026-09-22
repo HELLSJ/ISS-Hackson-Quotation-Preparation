@@ -1,34 +1,34 @@
 {
-  "checked_at": "2026-09-22T07:29:31.754817+00:00",
+  "checked_at": "2026-09-22T08:01:58.292199+00:00",
   "complete": false,
   "gates": {
     "data_freeze": {
       "passed": true,
       "evidence": "reports/evaluation/freeze-manifest.json"
     },
-    "sealed_non_author_review": {
+    "sealed_technical_review": {
       "passed": true,
       "evidence": "reports/evaluation/sealed-holdout-manifest.json"
     },
     "real_model_first_pass": {
       "passed": true,
-      "evidence": "reports/evaluation/runs/20260922T072117Z-gateway-first-pass/metrics.json"
+      "evidence": "reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/metrics.json"
     },
     "formal_metrics": {
       "passed": true,
-      "evidence": "reports/evaluation/runs/20260922T072117Z-gateway-first-pass/metrics.json"
+      "evidence": "reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/metrics.json"
     },
     "browser_acceptance": {
       "passed": true,
-      "evidence": "reports/evaluation/browser_acceptance/20260921T074342Z/result.json"
+      "evidence": "reports/evaluation/browser_acceptance/20260922T075400Z/result.json"
     },
-    "pdf_independent_review": {
+    "pdf_technical_review": {
       "passed": true,
       "evidence": "reports/evaluation/pdf-template-review.csv (8/8 signed PASS)"
     },
     "five_case_efficiency": {
       "passed": false,
-      "evidence": "missing"
+      "evidence": "reports/evaluation/timing/20260922T073821Z-gateway-first-pass/summary.json"
     }
   }
 }
