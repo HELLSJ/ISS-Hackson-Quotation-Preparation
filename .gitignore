@@ -33,6 +33,9 @@ dist-web/
 credentials
 .aws/
 
+# --- Local hackathon briefing and submission working files ---
+hackathon_submission_materials/
+
 # --- Sealed evaluation material ---
 # Keep prompts/answers private until the untouched first-pass model run is saved.
 data/evaluation/sealed_holdout_enquiries.jsonl
