@@ -124,7 +124,7 @@ from dell_agent.agent.tools import dispatch
 | 版本 diff | 只比较存储快照，支持 added/removed/changed、金额及元数据差异 |
 | 报价 PDF | ReportLab 从 confirmed snapshot 生成，不调用 Agent、目录或计价工具 |
 | 应用测试 | 20 项临时数据库测试覆盖迁移、并发、确认、diff、PDF、证据链接、故障注入和 HTTP |
-| 浏览器工作台 | 三栏页面、候选选择、规格证据、预算、数量修改、刷新恢复 |
+| 浏览器工作台 | 三栏页面、候选选择、规格证据、预算、数量修改；每次页面加载创建空白询价，服务端保留审计历史 |
 | 云失败回退 | Gateway 配置或调用失败时显式回退 OfflineDriver |
 
 当前机器报告记录：15 项目录工具测试通过；63 项目录/后端/Gateway/评测门禁测试通过；64 项 Agent 测试完成，其中 57 项通过、7 项是明确记录的 OfflineDriver 启发式边界。三条固定演示不在 skip 中。
@@ -388,7 +388,7 @@ D 的前端优化、API 边界、浏览器验收和 Lightsail 更新流程见[�
 - [x] 完成 5 个案例的 Agent 真实 Gateway 计时：5/5 正确、0 fallback，中位数 12.705 秒、范围 9.025–19.633 秒。
 - [x] 目录扩充到 50 个 SKU、400 条字段证据；v2 数据关系和 125 项代码测试通过。
 - [ ] 对 38 条 Lenovo 扩展做非作者抽查复签，并更新 v2 freeze record。
-- [x] 针对 v2 重新运行浏览器验收：50 条目录加载、Lenovo 8 字段官方证据、保存、diff、确认与 PDF 全部通过，报告在 `reports/evaluation/browser_acceptance/20260922T143627Z/`。
+- [x] 针对 v2 重新运行浏览器验收：刷新后创建空白询价，50 条目录加载、Lenovo 8 字段官方证据、保存、diff、确认与 PDF 全部通过，报告在 `reports/evaluation/browser_acceptance/20260923T151456Z/`。
 - [ ] 针对 v2 重新运行 Gateway/sealed，保存独立报告。
 - [ ] 完成同 5 个案例的真人计时，再报告人工/Agent 比较。
 

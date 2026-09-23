@@ -17,7 +17,7 @@ NUS-ISS Hackathon 报价编制 Agent：把不完整的英文客户询价经过�
 - `search_products`、`get_product`、`calculate_quote` 三个统一工具；
 - OfflineDriver：支持澄清、限制说明、规则阻断、计价和多轮修改；
 - FastAPI、`storage/app.sqlite` 和三栏浏览器工作台；
-- 产品选择、厂商官方来源页码证据、预算提示、刷新恢复；
+- 产品选择、厂商官方来源页码证据、预算提示；页面每次加载创建空白询价，服务端保留审计历史；
 - schema-v2 `saved_draft` v1/v2、完整版本元数据、重复保存幂等和 stale 保存保护；
 - append-only 人工确认、confirmed version、结构化 diff 和 confirmed-only 报价 PDF；
 - 20 项临时数据库后端集成测试，覆盖迁移、并发、确认、diff、PDF、官方证据链接、故障注入和 HTTP；

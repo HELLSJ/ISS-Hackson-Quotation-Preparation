@@ -147,6 +147,25 @@ def main() -> int:
         )
         cdp.evaluate("document.querySelector('#evidenceDialog').close()")
 
+        previous_conversation = cdp.evaluate("state.conversation.id")
+        send("Quote 1 S2425H.", 14900)
+        cdp.call("Page.reload", {"ignoreCache": True})
+        cdp.wait(
+            f"document.readyState === 'complete' && state.conversation?.id && "
+            f"state.conversation.id !== {json.dumps(previous_conversation)} && "
+            "state.conversation.messages.length === 0"
+        )
+        clean_load = cdp.evaluate(
+            "({id: state.conversation.id, messages: state.conversation.messages.length, versions: state.conversation.quote_versions.length})"
+        )
+        record(
+            "page reload starts a clean enquiry",
+            clean_load["id"] != previous_conversation
+            and clean_load["messages"] == 0
+            and clean_load["versions"] == 0,
+            clean_load,
+        )
+
         send("Quote 8 P2425HE. Budget SGD 2500.", 231200)
         record("v1 draft displayed", cdp.evaluate("state.conversation.latest_result.quote_draft.total_cents") == 231200, 231200)
         cdp.evaluate("document.querySelector('#saveQuote').click()")

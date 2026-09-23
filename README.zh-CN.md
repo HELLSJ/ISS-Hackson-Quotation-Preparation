@@ -4,7 +4,7 @@
 
 > 把含糊的客户询价变成有原文证据、有版本记录、经人工确认的正式报价快照。模型理解语言，确定性工具掌握产品事实和每一分钱。
 
-![Quotation Desk 展示 50 条目录、不可变版本比较和确认后 PDF 流程](reports/evaluation/browser_acceptance/20260922T143627Z/browser-final.png)
+![Quotation Desk 展示 50 条目录、不可变版本比较和确认后 PDF 流程](reports/evaluation/browser_acceptance/20260923T151456Z/browser-final.png)
 
 ## 60 秒看懂
 
@@ -31,7 +31,7 @@
 | 组织者真实 Gateway v1（12 SKU）sealed 评测 | **20/20**，全部计分维度 100%，**0 fallback**（[报告](reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/report.md)） |
 | 未修改的有效首轮 | 修复前 **10/20** 原样保留，修复报告单独保存 |
 | Gateway 工具执行 | 20 条案例启动，21 次本地工具调用，无隐藏 fallback |
-| 浏览器验收 | v2 的 50 条目录及 Lenovo 证据加载通过；保存、修订、diff、确认和 PDF 导出通过（[报告](reports/evaluation/browser_acceptance/20260922T143627Z/report.md)） |
+| 浏览器验收 | 刷新后创建空白询价；v2 的 50 条目录及 Lenovo 证据加载通过；保存、修订、diff、确认和 PDF 导出通过（[报告](reports/evaluation/browser_acceptance/20260923T151456Z/report.md)） |
 | 计价与应用校验 | 63 项目录/后端/Gateway/评测门禁测试通过，包含模型误识别数量的防护 |
 | Agent 回归 | 64 项完成：57 项通过，7 项为已记录的 OfflineDriver 启发式 skip |
 | 当前 v2 证据基础 | 44 份 Dell/Lenovo 官方资料、754 页、400 条字段级证据 |
@@ -84,7 +84,7 @@ python3 -m venv .venv
 .venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-浏览器打开 <http://127.0.0.1:8000>。默认 `OfflineDriver` 不需要云凭据。浏览器保存当前 conversation ID，`storage/app.sqlite` 是消息和报价草稿版本的真实数据源。
+浏览器打开 <http://127.0.0.1:8000>。默认 `OfflineDriver` 不需要云凭据。页面每次加载都会为访客创建空白询价；`storage/app.sqlite` 继续保存消息和报价草稿版本的权威审计历史。
 
 服务运行时可在 <http://127.0.0.1:8000/docs> 查看 FastAPI 文档。
 

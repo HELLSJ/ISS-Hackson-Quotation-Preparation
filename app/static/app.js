@@ -171,20 +171,8 @@ async function createConversation() {
     body: JSON.stringify({ driver: state.health?.configured_driver || "offline" }),
   });
   state.conversation = conversation;
-  localStorage.setItem("quotationConversationId", conversation.id);
   render();
   $("#messageInput").focus();
-}
-
-async function restoreConversation() {
-  const saved = localStorage.getItem("quotationConversationId");
-  if (!saved) return createConversation();
-  try {
-    state.conversation = await api(`/api/conversations/${encodeURIComponent(saved)}`);
-  } catch (_) {
-    localStorage.removeItem("quotationConversationId");
-    await createConversation();
-  }
 }
 
 async function boot() {
@@ -192,7 +180,10 @@ async function boot() {
     [state.health, state.catalog] = await Promise.all([api("/api/health"), api("/api/products")]);
     $("#datasetBadge").textContent = `Catalogue ${state.health.dataset_version}`;
     $("#driverBadge").textContent = state.health.configured_driver === "gateway" ? "Organizer LLM Gateway" : "Deterministic offline";
-    await restoreConversation();
+    // A browser session never inherits the previous visitor's enquiry. The
+    // server keeps its audit history, while every page load gets a fresh ID.
+    localStorage.removeItem("quotationConversationId");
+    await createConversation();
     render();
   } catch (error) {
     showToast(error.message);
@@ -520,7 +511,6 @@ $("#newConversation").addEventListener("click", async () => {
 });
 $("#resetDemo").addEventListener("click", async () => {
   if (state.busy) return;
-  localStorage.removeItem("quotationConversationId");
   await createConversation();
   showToast("Demo reset with a clean enquiry.");
 });
@@ -541,3 +531,11 @@ $("#diffDialog").addEventListener("click", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", boot);
+window.addEventListener("pageshow", async (event) => {
+  if (!event.persisted) return;
+  try {
+    await createConversation();
+  } catch (error) {
+    showToast(error.message);
+  }
+});

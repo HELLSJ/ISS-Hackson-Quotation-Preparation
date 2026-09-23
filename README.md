@@ -4,7 +4,7 @@
 
 > Turn an ambiguous customer enquiry into a source-linked, versioned and human-approved quotation. Language intelligence handles intent; deterministic tools own product facts and every cent.
 
-![Quotation Desk showing the 50-record catalogue, immutable version comparison and confirmed PDF workflow](reports/evaluation/browser_acceptance/20260922T143627Z/browser-final.png)
+![Quotation Desk showing the 50-record catalogue, immutable version comparison and confirmed PDF workflow](reports/evaluation/browser_acceptance/20260923T151456Z/browser-final.png)
 
 ## See it in 60 seconds
 
@@ -31,7 +31,7 @@ Try the deployed workbench at **[http://47.131.151.253/](http://47.131.151.253/)
 | Real organizer Gateway, v1 12-SKU sealed run | **20/20**, every scored dimension 100%, **0 fallback** ([report](reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/report.md)) |
 | Untouched first pass | **10/20 preserved** before fixes, with separate repair reports |
 | Live Gateway tool execution | 20 cases started, 21 local tool calls, no hidden fallback |
-| Browser acceptance | v2 loads all 50 records and Lenovo evidence; save, revise, diff, confirm and PDF export passed ([report](reports/evaluation/browser_acceptance/20260922T143627Z/report.md)) |
+| Browser acceptance | A reload starts a clean enquiry; v2 loads all 50 records and Lenovo evidence; save, revise, diff, confirm and PDF export passed ([report](reports/evaluation/browser_acceptance/20260923T151456Z/report.md)) |
 | Pricing and application validation | 63 catalogue/backend/Gateway/evaluation tests passed, including model-invented quantity guards |
 | Agent regression suite | 64 cases completed: 57 passed, 7 documented OfflineDriver heuristic skips |
 | Current v2 source base | 44 official Dell/Lenovo documents, 754 pages and 400 field-level evidence records |
@@ -84,7 +84,7 @@ python3 -m venv .venv
 .venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-Open <http://127.0.0.1:8000>. The default `OfflineDriver` needs no cloud credentials. The browser stores the current conversation ID, while `storage/app.sqlite` remains the authoritative store for messages and saved draft versions.
+Open <http://127.0.0.1:8000>. The default `OfflineDriver` needs no cloud credentials. Every page load starts a clean enquiry for the visitor; `storage/app.sqlite` retains the authoritative audit history of messages and saved draft versions.
 
 FastAPI documentation is available at <http://127.0.0.1:8000/docs> while the server is running.
 
