@@ -82,31 +82,12 @@ def _load_expected_index() -> Dict[str, Dict[str, Any]]:
 # Known offline-heuristic limitations
 # --------------------------------------------------------------------------- #
 #
-# The OfflineDriver is a pragmatic, cloud-free natural-language heuristic. It
-# reproduces every dev-set reference answer, but a subset of the holdout enquiries
-# exercise phrasings/semantics its heuristics do not resolve to the reference
-# label. These are documented (not silently skipped) so a reviewer can see
-# exactly which cases need the LLM path or a heuristic improvement; the clear,
-# machine-checkable cases are still asserted for every other case_id.
+# The OfflineDriver is a pragmatic, cloud-free natural-language heuristic. Any
+# accepted limitation must be listed here so it is visible as a skipped case
+# rather than a silent pass. Keep the mapping empty when all frozen cases run.
 #
 # Each entry maps a case_id to a plain-language reason.
-KNOWN_HEURISTIC_LIMITATIONS: Dict[str, str] = {
-    # Unknown/invented model tokens are treated as "no product resolved" and
-    # routed to needs_clarification rather than no_match.
-    "DEV-015": "Unknown model 'XYZ999' -> needs_clarification instead of no_match.",
-    "HOLDOUT-015": "Unknown model 'NONEXIST-2026' -> needs_clarification instead of no_match.",
-    # Strict-diagonal / marketed-size limitation not detected.
-    "HOLDOUT-008": "Strict 24.0-inch diagonal limitation -> answer_with_evidence, not explain_limitation.",
-    # Downstream-charge vs host-charge nuance across two SKUs not detected.
-    "HOLDOUT-009": "Host-vs-downstream 90W nuance -> answer_with_evidence, not explain_limitation.",
-    # Cable-vs-port 100W nuance not detected as a limitation.
-    "HOLDOUT-011": "Cable-vs-port 100W nuance -> answer_with_evidence, not explain_limitation.",
-    # 140Hz refresh constraint not modelled; search does not return empty.
-    "HOLDOUT-013": "Composite 8K/exact-size/200Hz constraint -> answer_with_evidence, not no_match.",
-    # Named-SKU budget request is quoted (with over_budget flag) rather than
-    # routed to budget_conflict; totals still match (asserted below).
-    "HOLDOUT-014": "Named-SKU over-budget -> ready_to_quote (over_budget_cents set), not budget_conflict.",
-}
+KNOWN_HEURISTIC_LIMITATIONS: Dict[str, str] = {}
 
 
 # --------------------------------------------------------------------------- #

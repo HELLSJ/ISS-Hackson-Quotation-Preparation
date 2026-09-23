@@ -46,6 +46,14 @@ class CanonicalContractTests(unittest.TestCase):
     def test_unknown_product_is_explicit(self) -> None:
         self.assertEqual(dispatch("get_product", {"sku": "MON-999"}), {"found": False, "sku": "MON-999"})
 
+    def test_product_lookup_enforces_its_schema(self) -> None:
+        self.assertEqual(dispatch("get_product", {})["error"], "bad_argument")
+        self.assertEqual(dispatch("get_product", {"sku": 7})["error"], "bad_argument")
+        self.assertEqual(
+            dispatch("get_product", {"sku": "MON-001", "price": True})["error"],
+            "bad_argument",
+        )
+
     def test_quote_budget_and_revision_anchors(self) -> None:
         initial = dispatch("calculate_quote", {"items": [{"sku": "MON-007", "quantity": 8}], "budget_cents": 250000})
         revised = dispatch("calculate_quote", {"items": [{"sku": "MON-007", "quantity": 10}], "budget_cents": 250000})
@@ -72,6 +80,21 @@ class CanonicalContractTests(unittest.TestCase):
         self.assertEqual(dispatch("delete_all", {})["error"], "unknown_tool")
         self.assertEqual(dispatch("search_products", {"stock": True})["error"], "bad_argument")
         self.assertEqual(dispatch("search_products", [])["error"], "bad_argument")
+        self.assertEqual(
+            dispatch("calculate_quote", {"items": [{"sku": "MON-001", "quantity": 1}], "currency": "USD"})["error"],
+            "bad_argument",
+        )
+        self.assertEqual(
+            dispatch("calculate_quote", {"items": [{"sku": "MON-001", "quantity": 1, "note": "override"}]})["error"],
+            "bad_argument",
+        )
+
+    def test_negative_budget_is_rejected(self) -> None:
+        result = dispatch(
+            "calculate_quote",
+            {"items": [{"sku": "MON-001", "quantity": 1}], "budget_cents": -1},
+        )
+        self.assertEqual(result["error"], "bad_argument")
 
     def test_duplicate_skus_remain_separate_lines(self) -> None:
         result = dispatch("calculate_quote", {"items": [{"sku": "MON-001", "quantity": 1}, {"sku": "MON-001", "quantity": 2}]})

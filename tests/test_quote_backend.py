@@ -81,6 +81,23 @@ class RepositoryLifecycleTests(unittest.TestCase):
         self.assertIsNone(conflict)
         self.assertEqual(error, "save_conflict")
 
+    def test_idempotent_save_rejects_adding_customer_metadata_after_the_fact(self) -> None:
+        self.turns.append("Quote 8 P2425HE.")
+        self.repo.append_exchange(
+            self.conversation["id"], self.turns[-1], "draft", _agent_result(self.turns)
+        )
+        state = self.repo.get_conversation(self.conversation["id"])
+        quote, error = self.repo.save_latest_quote(
+            self.conversation["id"], state["latest_result_message_id"], None
+        )
+        self.assertIsNone(error)
+        conflict, error = self.repo.save_latest_quote(
+            self.conversation["id"], state["latest_result_message_id"], "Late Customer"
+        )
+        self.assertIsNone(conflict)
+        self.assertEqual(error, "save_conflict")
+        self.assertIsNone(quote["payload"]["customer"]["display_name"])
+
     def test_parallel_saves_return_one_version(self) -> None:
         self.turns.append("Quote 8 P2425HE.")
         self.repo.append_exchange(self.conversation["id"], self.turns[-1], "draft", _agent_result(self.turns))
@@ -385,6 +402,11 @@ class QuoteApiTests(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 201)
         return response.json()
+
+    def test_health_does_not_expose_server_database_path(self) -> None:
+        response = self.client.get("/api/health")
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn("database", response.json())
 
     def test_product_evidence_uses_official_source_without_local_pdf_route(self) -> None:
         response = self.client.get("/api/products/MON-007")

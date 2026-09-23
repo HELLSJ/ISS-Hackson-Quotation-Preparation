@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from typing import Any, Dict, List, Optional, Sequence, Union
 
 from dell_agent.agent import state as state_mod
@@ -187,7 +188,7 @@ def _match_sku_in(text: str, alias_index: List[_AliasEntry]) -> List[str]:
     return ordered
 
 
-def _quantity_before(text: str, sku_span_text: str) -> Optional[int]:
+def _quantity_before(text: str, sku_span_text: str) -> Optional[Any]:
     """Best-effort: quantity that appears just before a product mention."""
     # Look for "<n> <model>" where n is digits or a number word.
     lowered = text.lower()
@@ -203,8 +204,13 @@ def _quantity_before(text: str, sku_span_text: str) -> Optional[int]:
     m = re.search(r"\b(?:minus|negative)\s+([a-z]+)\s+(?:dell\s+)?$", prefix)
     if m and m.group(1) in _QTY_WORD:
         return -_QTY_WORD[m.group(1)]
+    # A decimal quantity is explicitly invalid; preserve it for the classifier
+    # instead of accidentally reading only its fractional part (2.5 -> 5).
+    m = re.search(r"(?<![\w.])(\d+\.\d+)\s+(?:dell\s+)?$", prefix)
+    if m:
+        return float(m.group(1))
     # Numeric quantity right before the token.
-    m = re.search(r"(\d+)\s+(?:dell\s+)?$", prefix)
+    m = re.search(r"(?<![\w.])(\d+)\s+(?:dell\s+)?$", prefix)
     if m:
         return _digits_to_int(m.group(1))
     # Number-word quantity.
@@ -222,7 +228,7 @@ _NON_QTY_NUM_RE = re.compile(
 )
 
 
-def _first_quantity(text: str) -> Optional[int]:
+def _first_quantity(text: str) -> Optional[Any]:
     """First bare quantity in the text (numeric or number word).
 
     Numbers that are clearly a marketed size or a power/refresh rating (e.g.
@@ -239,6 +245,13 @@ def _first_quantity(text: str) -> Optional[int]:
         if value is None:
             value = _digits_to_int(raw)
         return -value if value is not None else None
+    decimal = re.search(
+        r"(?<![\w.])(\d+\.\d+)(?![\w.])\s+(?:monitors?|displays?|units?)\b",
+        text,
+        re.IGNORECASE,
+    )
+    if decimal:
+        return float(decimal.group(1))
     num = None
     m = None
     for cand in _NUM_RE.finditer(text):
@@ -275,10 +288,10 @@ def _parse_discount_bps(text: str) -> Optional[int]:
     m = _PERCENT_RE.search(text)
     if m:
         try:
-            pct = float(m.group(1))
-        except ValueError:
+            pct = Decimal(m.group(1))
+        except InvalidOperation:
             return None
-        return int(round(pct * 100))
+        return int((pct * 100).quantize(Decimal("1"), rounding=ROUND_HALF_UP))
     m = re.search(
         r"\b(" + "|".join(_QTY_WORD) + r")\s+percent\b",
         text,
@@ -320,27 +333,67 @@ def _looks_like_question(text: str) -> bool:
         return False
     # Explicit quote/order intent wins even when a sentence contains a polite
     # question mark ("How much ...? Please prepare a quote.").
-    return _QUOTE_INTENT_RE.search(text) is None
+    catalogue_search = re.search(
+        r"\b(?:anything|any)\b.*\b(?:catalogue|catalog)\b",
+        text,
+        re.IGNORECASE,
+    )
+    return _QUOTE_INTENT_RE.search(text) is None and catalogue_search is None
 
 
 # --------------------------------------------------------------------------- #
 # Revision detectors (multi-turn carry-forward)
 # --------------------------------------------------------------------------- #
 
+_QTY_TOKEN = (
+    r"(?:minus|negative)\s+(?:\d+(?:\.\d+)?|" + "|".join(_QTY_WORD) + r")"
+    r"|[+-]?\d+(?:\.\d+)?"
+    r"|" + "|".join(_QTY_WORD)
+)
 _CHANGE_QTY_RE = re.compile(
-    r"\b(?:change|make|set|update)\b.*?\b(?:to|=)\b\s*(\d+)\b"
-    r"|\bmake\s+that\s+(\d+)\b"
-    r"|\bchange that to\s*(\d+)\b"
-    r"|\b(\d+)\s*units?\b",
+    r"\b(?:change|make|set|update)\b.*?\b(?:to|=)\s*(" + _QTY_TOKEN + r")\b"
+    r"|\bmake\s+that\s+(" + _QTY_TOKEN + r")\b"
+    r"|\bchange that to\s*(" + _QTY_TOKEN + r")\b"
+    r"|(?<![\w.])(" + _QTY_TOKEN + r")\s*units?\b",
     re.IGNORECASE,
 )
 _REMOVE_RE = re.compile(r"\b(remove|drop|delete|take out|cancel)\b", re.IGNORECASE)
 _REPLACE_RE = re.compile(r"\b(replace|swap|change)\b.*\bwith\b", re.IGNORECASE)
+_ADD_RE = re.compile(r"\b(add|include|also)\b", re.IGNORECASE)
 _FUNCTIONAL_ONE_CABLE_RE = re.compile(
     r"\b(?:one|single)[\s-]+cable\b", re.IGNORECASE
 )
 _DELIVERY_REQUEST_RE = re.compile(
     r"\b(deliver\w*|delivery|lead\s*time|in\s+stock|availability)\b", re.IGNORECASE
+)
+
+
+def _quantity_token_value(raw: str) -> Any:
+    """Parse a revision quantity while preserving invalid numeric values."""
+    token = raw.strip().lower()
+    sign = 1
+    if token.startswith(("minus ", "negative ")):
+        sign = -1
+        token = token.split(maxsplit=1)[1]
+    if token in _QTY_WORD:
+        return sign * _QTY_WORD[token]
+    try:
+        value = Decimal(token)
+    except InvalidOperation:
+        return None
+    if value == value.to_integral_value():
+        return sign * int(value)
+    return sign * float(value)
+
+
+_STRICT_MIN_SIZE_RE = re.compile(
+    r"(?:at\s+least|minimum(?:\s+of)?|no\s+less\s+than)\s*"
+    r"(\d{2}(?:\.\d+)?)\s*(?:-\s*)?(?:inch|inches|in\b|\")",
+    re.IGNORECASE,
+)
+_PRODUCT_LIKE_TOKEN_RE = re.compile(r"\b[A-Z][A-Z0-9-]{2,}\d[A-Z0-9-]*\b")
+_UNKNOWN_PRODUCT_INTENT_RE = re.compile(
+    r"\b(?:quote|price|order|buy|purchase)\b", re.IGNORECASE
 )
 
 
@@ -375,6 +428,8 @@ class OfflineDriver:
             turns: List[str] = [enquiry_or_turns]
         else:
             turns = [str(t) for t in enquiry_or_turns]
+        if not turns:
+            turns = [""]
 
         trace: List[Dict[str, Any]] = []
         # Carried-forward resolved lines: list of RequestedItem.
@@ -383,10 +438,12 @@ class OfflineDriver:
         discount_bps: Optional[int] = None
         injection_seen = False
         last_result: Optional[AgentResult] = None
+        sanitized_turns: List[str] = []
 
         for turn_no, raw_turn in enumerate(turns):
             guarded = state_mod.injection_guard(raw_turn)
             text = guarded.text
+            sanitized_turns.append(text)
             if guarded.injection_detected:
                 injection_seen = True
             trace.append(
@@ -404,6 +461,7 @@ class OfflineDriver:
 
             last_result = self._classify_and_build(
                 text=text,
+                requirement_text="\n".join(sanitized_turns),
                 items=items,
                 budget_cents=budget_cents,
                 discount_bps=discount_bps,
@@ -411,7 +469,7 @@ class OfflineDriver:
                 trace=trace,
             )
 
-        assert last_result is not None  # at least one turn always runs
+        assert last_result is not None
         return last_result
 
     # ------------------------------------------------------------------ #
@@ -434,12 +492,15 @@ class OfflineDriver:
             budget_cents = new_budget
 
         # Discount (explicit only). "no discount"/"zero discount" pins 0.
-        if re.search(r"\b(no|zero)\s+discount", text, re.IGNORECASE):
+        zero_discount = re.search(r"\b(no|zero)\s+discount", text, re.IGNORECASE)
+        parsed_disc = None
+        if zero_discount:
             discount_bps = 0
         else:
             parsed_disc = _parse_discount_bps(text)
             if parsed_disc is not None:
                 discount_bps = parsed_disc
+        discount_stated = bool(zero_discount or parsed_disc is not None)
 
         matched_skus = _match_sku_in(text, self._alias_index)
 
@@ -453,8 +514,13 @@ class OfflineDriver:
             for it in items:
                 if it.sku in old_candidates or (not old_candidates and it.sku):
                     it.sku = new_sku
+                    replacement = catalog.get(new_sku)
+                    it.model = replacement.model if replacement else new_sku
                     replaced = True
             if replaced:
+                if discount_stated:
+                    for it in items:
+                        it.discount_bps = discount_bps
                 trace.append({"step": "revise_replace", "result": {"to": new_sku}})
                 return items, budget_cents, discount_bps
 
@@ -462,6 +528,9 @@ class OfflineDriver:
         if _REMOVE_RE.search(text) and matched_skus:
             before = len(items)
             items = [it for it in items if it.sku not in matched_skus]
+            if discount_stated:
+                for it in items:
+                    it.discount_bps = discount_bps
             trace.append(
                 {"step": "revise_remove", "result": {"removed_skus": matched_skus,
                                                       "lines_before": before,
@@ -474,7 +543,7 @@ class OfflineDriver:
             qm = _CHANGE_QTY_RE.search(text)
             if qm:
                 qty = next((group for group in qm.groups() if group is not None), None)
-                new_qty = _digits_to_int(qty) if qty is not None else None
+                new_qty = _quantity_token_value(qty) if qty is not None else None
                 if new_qty is not None:
                     changed = []
                     for item in items:
@@ -482,6 +551,9 @@ class OfflineDriver:
                             item.quantity = new_qty
                             changed.append(item.sku)
                     if changed:
+                        if discount_stated:
+                            for item in items:
+                                item.discount_bps = discount_bps
                         trace.append(
                             {"step": "revise_quantity", "result": {"quantity": new_qty, "skus": changed}}
                         )
@@ -492,15 +564,47 @@ class OfflineDriver:
             qm = _CHANGE_QTY_RE.search(text)
             if qm:
                 qty = next((g for g in qm.groups() if g is not None), None)
-                new_qty = _digits_to_int(qty) if qty is not None else None
+                new_qty = _quantity_token_value(qty) if qty is not None else None
                 if new_qty is not None:
                     # Apply to the single existing line (or all lines).
                     for it in items:
                         it.quantity = new_qty
+                        if discount_stated:
+                            it.discount_bps = discount_bps
                     trace.append(
                         {"step": "revise_quantity", "result": {"quantity": new_qty}}
                     )
                     return items, budget_cents, discount_bps
+
+        # --- Revision: add explicitly named lines ------------------------- #
+        if _ADD_RE.search(text) and matched_skus and items:
+            added: List[state_mod.RequestedItem] = []
+            for sku in matched_skus:
+                product = catalog.get(sku)
+                model_token = product.model if product else sku
+                qty = _quantity_before(text, model_token)
+                if qty is None:
+                    qty = _quantity_before(text, sku)
+                if qty is None and len(matched_skus) == 1:
+                    qty = _first_quantity(text)
+                added.append(
+                    state_mod.RequestedItem(
+                        sku=sku,
+                        model=model_token,
+                        quantity=qty,
+                        discount_bps=discount_bps,
+                    )
+                )
+            items.extend(added)
+            trace.append(
+                {
+                    "step": "revise_add",
+                    "result": [
+                        {"sku": item.sku, "quantity": item.quantity} for item in added
+                    ],
+                }
+            )
+            return items, budget_cents, discount_bps
 
         # --- New products named this turn -------------------------------- #
         if matched_skus:
@@ -549,11 +653,10 @@ class OfflineDriver:
                     {"step": "resolve_products", "result": {"quantity_only": qty}}
                 )
 
-        # Re-apply a freshly stated discount to all carried lines.
-        if discount_bps is not None:
+        # A discount stated in this turn replaces the previous line discount.
+        if discount_stated and discount_bps is not None:
             for it in items:
-                if it.discount_bps is None:
-                    it.discount_bps = discount_bps
+                it.discount_bps = discount_bps
 
         return items, budget_cents, discount_bps
 
@@ -580,6 +683,7 @@ class OfflineDriver:
     def _classify_and_build(
         self,
         text: str,
+        requirement_text: str,
         items: List[state_mod.RequestedItem],
         budget_cents: Optional[int],
         discount_bps: Optional[int],
@@ -589,7 +693,7 @@ class OfflineDriver:
         """Classify the resolved turn and assemble the AgentResult."""
         # Detect an explain_limitation: a named SKU that cannot meet a stated
         # USB-C video / host-charging requirement expressed in this turn.
-        named_limitation = self._detect_named_limitation(text, items)
+        named_limitation = self._detect_named_limitation(requirement_text, items)
 
         # Factual question detection (only when not a quote/limitation turn).
         is_question = _looks_like_question(text) and not named_limitation
@@ -622,6 +726,25 @@ class OfflineDriver:
                         cheapest = search_res[0]
                         cheapest_sku = cheapest["sku"]
                         cheapest_total = cheapest["unit_price_cents"] * qty
+
+        unknown_model = next(
+            (
+                match
+                for match in _PRODUCT_LIKE_TOKEN_RE.finditer(text)
+                if not match.group(0).startswith(("SGD", "USB", "TB", "HDMI"))
+            ),
+            None,
+        )
+        if (
+            not named_present
+            and _UNKNOWN_PRODUCT_INTENT_RE.search(text)
+            and unknown_model
+        ):
+            # A concrete model-like token in a pricing request that resolves to
+            # no catalogue alias is a genuine no-match, not a selection gap.
+            search_empty = True
+            has_constraints = True
+            trace.append({"step": "unknown_model", "result": unknown_model.group(0)})
 
         est = state_mod.EnquiryState(
             text=text,
@@ -673,8 +796,8 @@ class OfflineDriver:
         elif status == state_mod.EXPLAIN_LIMITATION:
             self._attach_candidates(items, result)
             result.notes.append(
-                "The named product cannot meet the stated USB-C video/host-charging "
-                "requirement; see cited evidence."
+                "The named product cannot meet the stated specification requirement; "
+                "see cited evidence."
             )
 
         elif status == state_mod.ANSWER_WITH_EVIDENCE:
@@ -703,6 +826,8 @@ class OfflineDriver:
 
         elif status == state_mod.READY_TO_QUOTE:
             self._build_quote(items, budget_cents, result, trace)
+            if result.quote_draft and result.quote_draft.get("within_budget") is False:
+                result.status = state_mod.BUDGET_CONFLICT
 
         return result
 
@@ -728,8 +853,11 @@ class OfflineDriver:
         # Functional language is accepted only when the same named-product turn
         # also states video or charging intent; "one cable" alone is not enough.
         functional_connection = bool(_FUNCTIONAL_ONE_CABLE_RE.search(text))
-        if not ((mentions_usb_c or functional_connection) and (wants_video or wants_charging)):
-            return False
+        watts_matches = re.findall(r"(\d{2,3})\s*w(?:atts?)?\b", text, re.IGNORECASE)
+        requested_watts = _digits_to_int(watts_matches[-1]) if watts_matches else None
+        size_matches = list(_STRICT_MIN_SIZE_RE.finditer(text))
+        size_match = size_matches[-1] if size_matches else None
+        minimum_size = float(size_match.group(1)) if size_match else None
         for it in items:
             if not it.sku:
                 continue
@@ -737,8 +865,18 @@ class OfflineDriver:
             if product is None:
                 continue
             fails_video = wants_video and not product.usb_c_video
-            fails_charging = wants_charging and (product.usb_c_pd_watts or 0) == 0
-            if fails_video or fails_charging:
+            fails_charging = (
+                wants_charging
+                and (
+                    (requested_watts is not None and product.usb_c_pd_watts < requested_watts)
+                    or (requested_watts is None and product.usb_c_pd_watts == 0)
+                )
+            )
+            fails_size = minimum_size is not None and product.screen_inches < minimum_size
+            usb_requirement = (
+                mentions_usb_c or functional_connection or requested_watts is not None
+            ) and (wants_video or wants_charging)
+            if (usb_requirement and (fails_video or fails_charging)) or fails_size:
                 return True
         return False
 
@@ -781,6 +919,14 @@ class OfflineDriver:
             size = float(sm.group(1))
             filters["min_screen_inches"] = size
             filters["max_screen_inches"] = size
+
+        refresh = re.search(
+            r"(?:at\s+least|minimum(?:\s+of)?)?\s*(\d{2,3})\s*hz\b",
+            text,
+            re.IGNORECASE,
+        )
+        if refresh:
+            filters["min_refresh_hz"] = _digits_to_int(refresh.group(1))
 
         has_constraints = bool(filters)
         return filters, has_constraints

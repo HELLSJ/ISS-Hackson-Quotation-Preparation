@@ -100,12 +100,16 @@ async function api(path, options = {}) {
   return response.json();
 }
 
-function money(cents) {
-  return new Intl.NumberFormat("en-SG", {
-    style: "currency",
-    currency: "SGD",
-    currencyDisplay: "code",
-  }).format((cents || 0) / 100);
+function money(cents, currency = "SGD") {
+  try {
+    return new Intl.NumberFormat("en-SG", {
+      style: "currency",
+      currency,
+      currencyDisplay: "code",
+    }).format((cents || 0) / 100);
+  } catch (_) {
+    return `${escapeHtml(currency)} ${((cents || 0) / 100).toFixed(2)}`;
+  }
 }
 
 function latestResult() {
@@ -126,7 +130,7 @@ function setBusy(busy, label = "Checking enquiry…") {
   $("#messageInput").disabled = busy;
   $("#newConversation").disabled = busy;
   $("#resetDemo").disabled = busy;
-  $$("[data-prompt], .select-button, [data-quantity-index]").forEach((button) => {
+  $$("[data-prompt], .select-button, [data-quantity-index], #saveQuote, .confirm-version").forEach((button) => {
     button.disabled = busy;
   });
   $("#messageList").setAttribute("aria-busy", String(busy));
@@ -309,7 +313,12 @@ function renderCandidates() {
 }
 
 function candidateCard(product, flags) {
-  const pd = product.usb_c_video ? `${product.usb_c_pd_watts}W host PD` : "No USB-C video";
+  const pd = product.usb_c_video === true
+    ? product.usb_c_pd_watts == null ? "Host PD unknown" : `${product.usb_c_pd_watts}W host PD`
+    : product.usb_c_video === false ? "No USB-C video" : "USB-C video unknown";
+  const refresh = product.max_refresh_hz == null ? "Unknown" : `${product.max_refresh_hz} Hz`;
+  const screen = product.screen_inches == null ? "Unknown" : `${product.screen_inches} in`;
+  const resolution = product.resolution == null ? "Unknown" : product.resolution;
   const marker = flags.suggested
     ? `<span class="candidate-label suggestion">Compatible alternative</span>`
     : flags.incompatible
@@ -322,10 +331,10 @@ function candidateCard(product, flags) {
       <span class="price">${money(product.unit_price_cents)}</span>
     </div>
     <div class="spec-grid">
-      <div class="spec-cell"><span>Viewable diagonal</span><strong>${escapeHtml(product.screen_inches)} in</strong></div>
-      <div class="spec-cell"><span>Native resolution</span><strong>${escapeHtml(product.resolution)}</strong></div>
+      <div class="spec-cell"><span>Viewable diagonal</span><strong>${escapeHtml(screen)}</strong></div>
+      <div class="spec-cell"><span>Native resolution</span><strong>${escapeHtml(resolution)}</strong></div>
       <div class="spec-cell"><span>USB-C host link</span><strong>${escapeHtml(pd)}</strong></div>
-      <div class="spec-cell"><span>Max preset refresh</span><strong>${escapeHtml(product.max_refresh_hz)} Hz</strong></div>
+      <div class="spec-cell"><span>Max preset refresh</span><strong>${escapeHtml(refresh)}</strong></div>
     </div>
     <div class="candidate-actions">
       <button class="evidence-button" data-sku="${escapeHtml(product.sku)}" type="button" aria-label="Inspect source evidence for ${escapeHtml(product.model)}">Inspect source evidence</button>
@@ -461,10 +470,18 @@ async function openDiff(fromId, toId) {
   try {
     const diff = await api(`/api/quotes/${encodeURIComponent(fromId)}/diff/${encodeURIComponent(toId)}`);
     const changes = diff.lines.changed || [];
+    const added = diff.lines.added || [];
+    const removed = diff.lines.removed || [];
+    const currencyChange = diff.metadata_changes?.currency;
+    const beforeCurrency = diff.comparable ? diff.currency : (currencyChange?.from || "SGD");
+    const afterCurrency = diff.comparable ? diff.currency : (currencyChange?.to || "SGD");
+    const changedHtml = changes.map((line) => `<div class="diff-line"><strong>Changed · ${escapeHtml(line.after?.model || line.before?.model || line.line_id)}</strong>${Object.entries(line.changes).map(([field, value]) => `<span>${escapeHtml(field.replaceAll("_", " "))}: ${escapeHtml(value.from)} → ${escapeHtml(value.to)}${value.delta === undefined ? "" : ` (Δ ${escapeHtml(value.delta)})`}</span>`).join("")}</div>`).join("");
+    const addedHtml = added.map((line) => `<div class="diff-line"><strong>Added · ${escapeHtml(line.after?.model || line.line_id)}</strong><span>Quantity: ${escapeHtml(line.after?.quantity)}</span><span>Net: ${money(line.after?.net_cents, afterCurrency)}</span></div>`).join("");
+    const removedHtml = removed.map((line) => `<div class="diff-line"><strong>Removed · ${escapeHtml(line.before?.model || line.line_id)}</strong><span>Quantity: ${escapeHtml(line.before?.quantity)}</span><span>Net: ${money(line.before?.net_cents, beforeCurrency)}</span></div>`).join("");
     $("#diffTitle").textContent = `Version ${diff.from.version} → Version ${diff.to.version}`;
     $("#diffContent").innerHTML = `
-      <div class="diff-summary"><span>Total before</span><strong>${money(diff.totals.total_cents.from)}</strong><span>Total after</span><strong>${money(diff.totals.total_cents.to)}</strong><span>Net change</span><strong>${money(diff.totals.total_cents.delta)}</strong></div>
-      ${changes.length ? changes.map((line) => `<div class="diff-line"><strong>${escapeHtml(line.after?.model || line.before?.model || line.line_id)}</strong>${Object.entries(line.changes).map(([field, value]) => `<span>${escapeHtml(field.replaceAll("_", " "))}: ${escapeHtml(value.from)} → ${escapeHtml(value.to)}${value.delta === undefined ? "" : ` (Δ ${escapeHtml(value.delta)})`}</span>`).join("")}</div>`).join("") : "<p class=\"availability-warning\">No line changes.</p>"}
+      <div class="diff-summary"><span>Total before</span><strong>${money(diff.totals.total_cents.from, beforeCurrency)}</strong><span>Total after</span><strong>${money(diff.totals.total_cents.to, afterCurrency)}</strong><span>Net change</span><strong>${diff.comparable ? money(diff.totals.total_cents.delta, diff.currency) : "Different currencies"}</strong></div>
+      ${changedHtml || addedHtml || removedHtml ? changedHtml + addedHtml + removedHtml : "<p class=\"availability-warning\">No line changes.</p>"}
     `;
     showDialog($("#diffDialog"));
   } catch (error) {

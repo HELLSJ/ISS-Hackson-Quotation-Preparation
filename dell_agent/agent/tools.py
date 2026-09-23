@@ -16,6 +16,7 @@ Uses only the Python standard library.
 
 from __future__ import annotations
 
+import math
 from typing import Any, Dict, List, Optional
 
 from dell_agent.data import catalog
@@ -175,7 +176,10 @@ def search_products(args: Optional[Dict[str, Any]] = None) -> Any:
         ("max_screen_inches", max_screen_inches),
     ):
         if value is not None and (
-            isinstance(value, bool) or not isinstance(value, (int, float)) or value <= 0
+            isinstance(value, bool)
+            or not isinstance(value, (int, float))
+            or not math.isfinite(value)
+            or value <= 0
         ):
             return _error("bad_argument", f"{key} must be a positive number.")
     if resolution is not None and not isinstance(resolution, str):
@@ -263,6 +267,9 @@ def _evidence_entry(ev: Evidence) -> Dict[str, Any]:
     }
 
 
+_GET_PRODUCT_ALLOWED_KEYS = frozenset({"sku"})
+
+
 def get_product(args: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Retrieve one SKU with its public specs, price, and field evidence (Req 3).
 
@@ -283,9 +290,19 @@ def get_product(args: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         an unknown SKU: ``{"found": False, "sku": sku}``.
     """
     args = args or {}
+    unknown = set(args) - _GET_PRODUCT_ALLOWED_KEYS
+    if unknown:
+        return _error(
+            "bad_argument",
+            "Unknown get_product parameter(s): " + ", ".join(sorted(unknown)) + ".",
+        )
     sku = args.get("sku")
 
-    product = catalog.get(str(sku)) if sku is not None else None
+    if not isinstance(sku, str) or not sku.strip():
+        return _error("bad_argument", "sku must be non-blank text.")
+
+    sku = sku.strip()
+    product = catalog.get(sku)
     if product is None:
         # Not found: do not fabricate a product (Req 3.4).
         return {"found": False, "sku": sku}
@@ -318,6 +335,8 @@ from dell_agent.models import QuoteDraft, QuoteLine
 # the only source of unit prices (Req 4.1, Property 7); any item carrying one of
 # these keys is rejected with custom_price_forbidden.
 _CUSTOM_PRICE_KEYS = frozenset({"unit_price", "unit_price_cents"})
+_QUOTE_ALLOWED_KEYS = frozenset({"items", "budget_cents"})
+_QUOTE_ITEM_ALLOWED_KEYS = frozenset({"sku", "quantity", "discount_bps"})
 
 
 def _quote_line_dict(line: QuoteLine) -> Dict[str, Any]:
@@ -392,6 +411,15 @@ def calculate_quote(args: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """
     args = args or {}
 
+    unknown_args = set(args) - _QUOTE_ALLOWED_KEYS
+    if unknown_args:
+        return _error(
+            "bad_argument",
+            "Unknown calculate_quote parameter(s): "
+            + ", ".join(sorted(unknown_args))
+            + ".",
+        )
+
     items = args.get("items")
     if not isinstance(items, list) or not items:
         return _error(
@@ -401,10 +429,10 @@ def calculate_quote(args: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
 
     budget_cents = args.get("budget_cents")
     budget_given = budget_cents is not None
-    if budget_given and not _is_int(budget_cents):
+    if budget_given and (not _is_int(budget_cents) or budget_cents < 0):
         return _error(
             "bad_argument",
-            "budget_cents must be an integer number of cents.",
+            "budget_cents must be a non-negative integer number of cents.",
         )
 
     lines: List[QuoteLine] = []
@@ -413,6 +441,24 @@ def calculate_quote(args: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
             return _error(
                 "bad_argument",
                 f"Item at index {index} must be an object.",
+            )
+
+        unknown_item_keys = set(item) - _QUOTE_ITEM_ALLOWED_KEYS
+        if unknown_item_keys:
+            offending_price_keys = unknown_item_keys & _CUSTOM_PRICE_KEYS
+            if offending_price_keys:
+                return _error(
+                    "custom_price_forbidden",
+                    "Custom unit prices are not allowed; prices come from the "
+                    "catalogue only. Offending key(s): "
+                    + ", ".join(sorted(offending_price_keys))
+                    + ".",
+                )
+            return _error(
+                "bad_argument",
+                f"Unknown key(s) for item at index {index}: "
+                + ", ".join(sorted(unknown_item_keys))
+                + ".",
             )
 
         # Reject any attempt to supply a custom unit price (Req 4.1, Property 7).
@@ -427,12 +473,12 @@ def calculate_quote(args: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
             )
 
         sku = item.get("sku")
-        if sku is None or not str(sku).strip():
+        if not isinstance(sku, str) or not sku.strip():
             return _error(
                 "bad_argument",
-                f"Item at index {index} is missing a 'sku'.",
+                f"Item at index {index} requires a non-blank text 'sku'.",
             )
-        sku = str(sku)
+        sku = sku.strip()
 
         # Integer quantity >= 1; reject non-int, <= 0, or missing (Req 4.7).
         quantity = item.get("quantity")

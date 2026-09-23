@@ -370,6 +370,9 @@ def missing_slots(state: EnquiryState) -> List[str]:
 
     any_product_named = any(_item_names_product(it) for it in state.items)
     any_quantity_stated = any(it.quantity is not None for it in state.items)
+    named_item_missing_quantity = any(
+        _item_names_product(it) and it.quantity is None for it in state.items
+    )
 
     # (2) Marketed size + USB-C charging, still under-specified (DEV-008:
     # "Find 24-inch USB-C displays with charging."). The precise diagonal, the
@@ -393,7 +396,7 @@ def missing_slots(state: EnquiryState) -> List[str]:
     if not any_product_named:
         # No concrete product identified (DEV-006: "We need 10 monitors.").
         slots.append(SLOT_PRODUCT_OR_MODEL)
-    elif not any_quantity_stated:
+    elif named_item_missing_quantity or not any_quantity_stated:
         # A product is named but the quantity is missing (DEV-005:
         # "Please quote P2425HE.").
         slots.append(SLOT_QUANTITY)

@@ -136,7 +136,7 @@ class Demo01ClarifyQuoteReviseTest(DemoScenarioTestBase):
 
         # --- Turn 4: "Change quantity to 10." -> revised quote breaches. ---- #
         revised = step_results[3]
-        self.assertEqual(revised.status, state_mod.READY_TO_QUOTE)
+        self.assertEqual(revised.status, state_mod.BUDGET_CONFLICT)
         self.assertIsNotNone(revised.quote_draft)
         self.assertEqual(
             revised.quote_draft["total_cents"], expected["revised_total_cents"]

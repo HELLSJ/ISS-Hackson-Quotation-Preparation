@@ -32,8 +32,8 @@ Try the deployed workbench at **[http://47.131.151.253/](http://47.131.151.253/)
 | Untouched first pass | **10/20 preserved** before fixes, with separate repair reports |
 | Live Gateway tool execution | 20 cases started, 21 local tool calls, no hidden fallback |
 | Browser acceptance | A reload starts a clean enquiry; v2 loads all 50 records and Lenovo evidence; save, revise, diff, confirm and PDF export passed ([report](reports/evaluation/browser_acceptance/20260923T151456Z/report.md)) |
-| Pricing and application validation | 63 catalogue/backend/Gateway/evaluation tests passed, including model-invented quantity guards |
-| Agent regression suite | 64 cases completed: 57 passed, 7 documented OfflineDriver heuristic skips |
+| Pricing and application validation | 73 catalogue/backend/Gateway/evaluation tests passed, including quantity-revision and metadata-conflict guards |
+| Agent regression suite | 64/64 cases passed with no OfflineDriver heuristic skips |
 | Current v2 source base | 44 official Dell/Lenovo documents, 754 pages and 400 field-level evidence records |
 | Real Gateway timing | 5/5 correct; **12.705 s median** ([report](reports/evaluation/timing/20260922T073821Z-gateway-first-pass/report.md)) |
 | Quote PDF QA | 9/9 extraction checks and 8/8 disclosed visual technical checks passed |
@@ -218,15 +218,15 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 data/tool checks
-.venv/bin/python -m unittest discover -s tests            # 63 catalogue/backend/gateway/evaluation-gate tests
+.venv/bin/python -m unittest discover -s tests            # 73 catalogue/backend/gateway/evaluation-gate tests
 .venv/bin/python -m unittest discover -s dell_agent/tests # 64 Agent tests
 ```
 
 The current suites report:
 
 - 15 catalogue/CLI contract tests passing;
-- 20 temporary-database backend tests passing (migration, snapshots, concurrency, confirmation, diff, PDF, official evidence links, fault injection and HTTP);
-- 64 Agent tests completed: 57 passed and 7 explicitly documented OfflineDriver heuristic cases were skipped;
+- 22 temporary-database backend tests passing (migration, snapshots, concurrency, confirmation, diff, PDF, official evidence links, fault injection and HTTP);
+- 64 Agent tests passed with no skipped OfflineDriver heuristic cases;
 - all three fixed demo scenarios passing in the offline path.
 
 These numbers are not a v2 model accuracy claim. The v1 expected semantic labels and sealed reports remain historical evidence. Two no-match prompts were revised for the expanded catalogue and the complete v2 suite requires a fresh model run and review. Holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.

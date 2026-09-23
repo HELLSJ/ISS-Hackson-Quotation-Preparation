@@ -32,8 +32,8 @@
 | 未修改的有效首轮 | 修复前 **10/20** 原样保留，修复报告单独保存 |
 | Gateway 工具执行 | 20 条案例启动，21 次本地工具调用，无隐藏 fallback |
 | 浏览器验收 | 刷新后创建空白询价；v2 的 50 条目录及 Lenovo 证据加载通过；保存、修订、diff、确认和 PDF 导出通过（[报告](reports/evaluation/browser_acceptance/20260923T151456Z/report.md)） |
-| 计价与应用校验 | 63 项目录/后端/Gateway/评测门禁测试通过，包含模型误识别数量的防护 |
-| Agent 回归 | 64 项完成：57 项通过，7 项为已记录的 OfflineDriver 启发式 skip |
+| 计价与应用校验 | 73 项目录/后端/Gateway/评测门禁测试通过，包含数量修订与元数据冲突防护 |
+| Agent 回归 | 64/64 项通过，无 OfflineDriver 启发式 skip |
 | 当前 v2 证据基础 | 44 份 Dell/Lenovo 官方资料、754 页、400 条字段级证据 |
 | 真实 Gateway 计时 | 5/5 正确，**中位数 12.705 秒**（[报告](reports/evaluation/timing/20260922T073821Z-gateway-first-pass/report.md)） |
 | 报价 PDF QA | 9/9 机器提取检查和 8/8 已披露视觉技术审核通过 |
@@ -213,7 +213,7 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 项数据/工具检查
-.venv/bin/python -m unittest discover -s tests            # 63 项目录/后端/Gateway/评测门禁测试
+.venv/bin/python -m unittest discover -s tests            # 73 项目录/后端/Gateway/评测门禁测试
 .venv/bin/python -m unittest discover -s dell_agent/tests # 64 项 Agent 测试
 ```
 
@@ -221,7 +221,7 @@ python scripts/validate_data.py                            # 15 项数据/工具
 
 - 15 项目录/CLI 契约测试通过；
 - 20 项临时数据库后端测试通过，覆盖迁移、快照、并发、确认、diff、PDF、官方证据链接、故障注入和 HTTP；
-- 64 项 Agent 测试完成：57 项通过，7 项为明确记录的 OfflineDriver 启发式 skip；
+- 64 项 Agent 测试全部通过，无 OfflineDriver 启发式 skip；
 - 三条固定演示均在离线路径通过。
 
 这不是 v2 模型准确率。v1 的 expected label 和 sealed 报告继续作为历史证据；目录扩充后，两条 no-match 题目已经调整，完整 v2 评测仍需重新运行和复核。答案和校验报告不得进入系统提示词或运行时知识库。

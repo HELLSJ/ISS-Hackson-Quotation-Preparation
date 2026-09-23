@@ -88,7 +88,6 @@ def health() -> dict[str, Any]:
         "gateway_configured": bool(
             settings.gateway_url and settings.gateway_api_key and settings.llm_model
         ),
-        "database": str(settings.app_db_path),
     }
 
 

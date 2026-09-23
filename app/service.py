@@ -51,8 +51,9 @@ class QuotationService:
                 isinstance(row, dict) and row.get("step") == "gateway_fallback"
                 for row in result.get("trace", [])
             )
-            result["conflicts"] = self._identify_conflicts(content, result)
-            result["suggestions"] = self._suggest_alternatives(content, result)
+            requirement_text = "\n".join(turns)
+            result["conflicts"] = self._identify_conflicts(requirement_text, result)
+            result["suggestions"] = self._suggest_alternatives(requirement_text, result)
             assistant = self._assistant_message(result)
             self.repository.append_exchange(conversation_id, content, assistant, result)
             return self.repository.get_conversation(conversation_id)
@@ -162,6 +163,14 @@ class QuotationService:
         if status == "no_match":
             return "No catalogue model satisfies all stated constraints. Change a requirement or select a model manually."
         if status == "budget_conflict":
+            draft = result.get("quote_draft") or {}
+            if draft:
+                total = draft.get("total_cents", 0) / 100
+                over = draft.get("over_budget_cents", 0) / 100
+                return (
+                    f"Draft calculated by the pricing tool: SGD {total:,.2f}. "
+                    f"It is SGD {over:,.2f} over budget. Review it before saving."
+                )
             return "The cheapest matching model exceeds the budget. Review the budget gap before changing any requirement."
         if status == "answer_with_evidence":
             return "The catalogue evidence for the named model is ready. Open a specification row to inspect the source PDF page."

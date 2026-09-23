@@ -335,7 +335,7 @@ class Repository:
             if existing:
                 quote = self._quote_row(existing)
                 existing_customer = (quote["payload"].get("customer") or {}).get("display_name")
-                if customer and existing_customer and customer != existing_customer:
+                if customer != existing_customer:
                     return None, "save_conflict"
                 return quote, None
 

@@ -5,7 +5,7 @@ import json
 import unittest
 from unittest.mock import patch
 
-from dell_agent.agent.loop import GatewayClient, GatewayDriver
+from dell_agent.agent.loop import GatewayClient, GatewayDriver, OfflineDriver
 
 
 class _SequenceClient:
@@ -46,6 +46,58 @@ class _Response:
 
 
 class AgentFailurePathTests(unittest.TestCase):
+    def test_empty_turn_sequence_requests_missing_details_instead_of_crashing(self) -> None:
+        result = OfflineDriver().run([])
+        self.assertEqual(result.status, "needs_clarification")
+        self.assertEqual(result.ask_for, ["product_specification_or_model"])
+
+    def test_quantity_revisions_preserve_invalid_values_for_rejection(self) -> None:
+        for revision in (
+            "Change that to -3 units.",
+            "Change that to negative three units.",
+            "Change that to 2.5 units.",
+        ):
+            with self.subTest(revision=revision):
+                result = OfflineDriver().run(["Quote 2 P2425HE.", revision])
+                self.assertEqual(result.status, "invalid_quantity")
+                self.assertIsNone(result.quote_draft)
+
+    def test_discount_can_be_revised_in_both_directions(self) -> None:
+        driver = OfflineDriver()
+        discounted = driver.run(["Quote 2 P2425HE at zero discount.", "Apply a 5% discount."])
+        cleared = driver.run(["Quote 2 P2425HE at 5% discount.", "Apply zero discount."])
+        self.assertEqual(discounted.quote_draft["lines"][0]["discount_bps"], 500)
+        self.assertEqual(cleared.quote_draft["lines"][0]["discount_bps"], 0)
+
+    def test_prior_turn_requirements_block_an_incompatible_later_selection(self) -> None:
+        result = OfflineDriver().run([
+            "We need 4 monitors for one-cable laptop video and 90W charging.",
+            "Choose U2724D at zero discount.",
+        ])
+        self.assertEqual(result.status, "explain_limitation")
+        self.assertIsNone(result.quote_draft)
+        self.assertEqual([row["sku"] for row in result.candidates], ["MON-010"])
+
+    def test_add_revision_preserves_existing_lines(self) -> None:
+        result = OfflineDriver().run([
+            "Quote one S2425H and two U2724DE monitors.",
+            "Also add 3 P2425HE monitors.",
+        ])
+        self.assertEqual(result.status, "ready_to_quote")
+        self.assertEqual(
+            [(line["sku"], line["quantity"]) for line in result.quote_draft["lines"]],
+            [("MON-001", 1), ("MON-011", 2), ("MON-007", 3)],
+        )
+
+    def test_added_line_without_quantity_requires_clarification(self) -> None:
+        result = OfflineDriver().run([
+            "Quote one S2425H monitor.",
+            "Also add P2425HE.",
+        ])
+        self.assertEqual(result.status, "needs_clarification")
+        self.assertEqual(result.ask_for, ["quantity"])
+        self.assertIsNone(result.quote_draft)
+
     def test_gateway_timeout_is_visible_and_falls_back_without_losing_quote(self) -> None:
         result = GatewayDriver(
             base_url="https://gateway.example", api_key="secret", model="test-model",
