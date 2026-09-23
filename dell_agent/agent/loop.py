@@ -117,10 +117,11 @@ _BUDGET_DOLLARS_RE = re.compile(
     re.IGNORECASE,
 )
 
-# A standalone numeric quantity token: a run of digits not glued to any letter
-# or dot. This deliberately excludes digits embedded in a model token such as
-# "P2425HE" or a resolution like "3840x2160".
-_NUM_RE = re.compile(r"(?<![\w.])(\d+)(?![\w.])")
+# A standalone numeric quantity token: a run of digits not glued to any letter,
+# dot, or hyphen. The hyphen guard is essential for Lenovo model names such as
+# C20-39 and P40WD-40: their suffix is a product generation, never a quantity.
+# This also excludes digits embedded in P2425HE and resolutions like 3840x2160.
+_NUM_RE = re.compile(r"(?<![\w.\-])(\d+)(?![\w.\-])")
 
 
 def _digits_to_int(raw: str) -> Optional[int]:
@@ -204,6 +205,10 @@ def _quantity_before(text: str, sku_span_text: str) -> Optional[Any]:
     m = re.search(r"\b(?:minus|negative)\s+([a-z]+)\s+(?:dell\s+)?$", prefix)
     if m and m.group(1) in _QTY_WORD:
         return -_QTY_WORD[m.group(1)]
+    m = re.search(r"(?<![\w.])-\s*(\d+(?:\.\d+)?)\s+(?:dell\s+)?$", prefix)
+    if m:
+        value = Decimal(m.group(1))
+        return -int(value) if value == value.to_integral_value() else -float(value)
     # A decimal quantity is explicitly invalid; preserve it for the classifier
     # instead of accidentally reading only its fractional part (2.5 -> 5).
     m = re.search(r"(?<![\w.])(\d+\.\d+)\s+(?:dell\s+)?$", prefix)
@@ -245,6 +250,15 @@ def _first_quantity(text: str) -> Optional[Any]:
         if value is None:
             value = _digits_to_int(raw)
         return -value if value is not None else None
+    signed_negative = re.search(
+        r"(?<![\w.])-\s*(\d+(?:\.\d+)?)(?![\w.])\s+"
+        r"(?:monitors?|displays?|units?)\b",
+        text,
+        re.IGNORECASE,
+    )
+    if signed_negative:
+        value = Decimal(signed_negative.group(1))
+        return -int(value) if value == value.to_integral_value() else -float(value)
     decimal = re.search(
         r"(?<![\w.])(\d+\.\d+)(?![\w.])\s+(?:monitors?|displays?|units?)\b",
         text,
@@ -1659,4 +1673,9 @@ class GatewayDriver:
                     "step": "local_policy_guard",
                     "result": policy_guard.status,
                 })
+        if result.status != state_mod.NEEDS_CLARIFICATION:
+            # Keep the result envelope internally consistent. A model may ask a
+            # stale clarification immediately before deterministic local repair
+            # produces a complete quote or policy outcome.
+            result.ask_for = []
         return result

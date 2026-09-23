@@ -127,7 +127,7 @@ from dell_agent.agent.tools import dispatch
 | 浏览器工作台 | 三栏页面、候选选择、规格证据、预算、数量修改；每次页面加载创建空白询价，服务端保留审计历史 |
 | 云失败回退 | Gateway 配置或调用失败时显式回退 OfflineDriver |
 
-当前机器报告记录：15 项目录工具测试通过；73 项目录/后端/Gateway/评测门禁测试通过；64 项 Agent 测试全部通过，无 OfflineDriver 启发式 skip。三条固定演示均通过。
+当前机器报告记录：15 项目录工具测试通过；77 项目录/后端/Gateway/评测门禁测试通过；64 项 Agent 测试全部通过，无 OfflineDriver 启发式 skip。三条固定演示均通过。
 
 ### 4.2 部分完成
 
@@ -404,7 +404,7 @@ A 收口时运行 `.venv/bin/python scripts/check_a_completion.py`。当前技�
 - [x] 补齐数据库保存失败与 PDF 生成失败的故障注入，验证状态保留及重试路径；后端 20 项通过。
 - [x] 用 `scripts/generate_pdf_qa_samples.py` 可复现生成并渲染检查[标准报价](../output/pdf/quotation-qa-standard.pdf)（1 页）和[长表报价](../output/pdf/quotation-qa-long.pdf)（5 页）；9 项机器预检和 8/8 Codex PDF 技术审核通过。若声称独立人工审核则由非作者复签。
 - [x] 核对 D 所需的保存、确认、diff、下载接口与响应示例；Story A 的 v1/v2 HTTP 链路已通过，调用顺序和错误恢复见 [API 契约](api-contract.md#browser-integration-handoff-for-d)。
-- [x] 运行相关回归并同步本文、API 契约和交付清单的最终状态；当前目录/后端/Gateway/评测门禁 73 项通过，Agent 64/64 项通过且无 skip，`git diff --check` 通过。
+- [x] 运行相关回归并同步本文、API 契约和交付清单的最终状态；当前目录/后端/Gateway/评测门禁 77 项通过，Agent 64/64 项通过且无 skip，`git diff --check` 通过。
 - [x] Gateway 计价参数由本地状态机二次约束：分辨率等规格数字不能被当作数量；缺少数量必须追问，错误模型参数会被用户已声明数量覆盖。
 
 B 的后端交付已完成。D 的浏览器按钮已经接入；A 已用上面的两份 QA PDF 完成合成价格、行明细、分页表头、条款和版本 provenance 技术审核。

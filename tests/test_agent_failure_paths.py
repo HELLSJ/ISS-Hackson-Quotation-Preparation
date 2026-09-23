@@ -6,6 +6,7 @@ import unittest
 from unittest.mock import patch
 
 from dell_agent.agent.loop import GatewayClient, GatewayDriver, OfflineDriver
+from dell_agent.data.catalog import all_products
 
 
 class _SequenceClient:
@@ -46,6 +47,33 @@ class _Response:
 
 
 class AgentFailurePathTests(unittest.TestCase):
+    def test_model_generation_suffix_is_never_used_as_quantity(self) -> None:
+        driver = OfflineDriver()
+        for product in all_products():
+            with self.subTest(model=product.model):
+                result = driver.run(f"Choose {product.model} at zero discount.")
+                self.assertEqual(result.status, "needs_clarification")
+                self.assertEqual(result.ask_for, ["quantity"])
+                self.assertIsNone(result.quote_draft)
+
+    def test_explicit_single_sku_selection_quotes_exactly_one(self) -> None:
+        driver = OfflineDriver()
+        for product in all_products():
+            with self.subTest(sku=product.sku):
+                # A prior quantity must not leak into a later product-card
+                # selection: every click emits an explicit quantity of one.
+                result = driver.run([
+                    "Quote 8 P2425HE at zero discount.",
+                    f"Quote 1 {product.sku} at zero discount.",
+                ])
+                self.assertEqual(result.status, "ready_to_quote")
+                self.assertEqual(result.quote_draft["lines"][0]["sku"], product.sku)
+                self.assertEqual(result.quote_draft["lines"][0]["quantity"], 1)
+                self.assertEqual(
+                    result.quote_draft["total_cents"],
+                    product.unit_price_cents,
+                )
+
     def test_empty_turn_sequence_requests_missing_details_instead_of_crashing(self) -> None:
         result = OfflineDriver().run([])
         self.assertEqual(result.status, "needs_clarification")
@@ -59,6 +87,13 @@ class AgentFailurePathTests(unittest.TestCase):
         ):
             with self.subTest(revision=revision):
                 result = OfflineDriver().run(["Quote 2 P2425HE.", revision])
+                self.assertEqual(result.status, "invalid_quantity")
+                self.assertIsNone(result.quote_draft)
+
+    def test_symbolic_negative_initial_quantity_is_not_made_positive(self) -> None:
+        for prompt in ("Quote -3 P2425HE.", "We need -3 monitors."):
+            with self.subTest(prompt=prompt):
+                result = OfflineDriver().run(prompt)
                 self.assertEqual(result.status, "invalid_quantity")
                 self.assertIsNone(result.quote_draft)
 
@@ -231,6 +266,27 @@ class AgentFailurePathTests(unittest.TestCase):
         self.assertEqual(result.status, "needs_clarification")
         self.assertEqual(result.ask_for, ["quantity"])
         self.assertIn("How many monitors", result.notes[-1])
+
+    def test_local_quote_repair_clears_stale_model_clarification(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": "", "tool_calls": [{
+                "id": "call-1", "type": "function", "function": {
+                    "name": "get_product", "arguments": {"sku": "MON-L044"},
+                },
+            }]}},
+            {"message": {"content": json.dumps({
+                "status": "needs_clarification",
+                "ask_for": ["quantity"],
+                "message": "Please provide quantity.",
+            }), "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret",
+            model="test-model", client=client,
+        ).run("Quote 1 MON-L044 at zero discount.")
+        self.assertEqual(result.status, "ready_to_quote")
+        self.assertEqual(result.ask_for, [])
+        self.assertEqual(result.quote_draft["lines"][0]["quantity"], 1)
 
     def test_evidence_tool_can_resolve_to_limitation_status(self) -> None:
         client = _SequenceClient([

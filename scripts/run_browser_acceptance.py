@@ -132,6 +132,25 @@ def main() -> int:
         catalogue_size = cdp.wait("state.catalog.length")
         record("v2 catalogue loads 50 records", catalogue_size == 50, catalogue_size)
 
+        cdp.evaluate("document.querySelector('.select-button[data-sku=\"MON-L044\"]').click()")
+        cdp.wait(
+            "!state.busy && "
+            "state.conversation.latest_result?.quote_draft?.lines?.[0]?.sku === 'MON-L044' && "
+            "state.conversation.latest_result.quote_draft.lines[0].quantity === 1"
+        )
+        selected_line = cdp.evaluate(
+            "state.conversation.latest_result.quote_draft.lines[0]"
+        )
+        record(
+            "product-card selection forces quantity one",
+            selected_line["sku"] == "MON-L044"
+            and selected_line["quantity"] == 1
+            and selected_line["net_cents"] == 11900,
+            selected_line,
+        )
+        cdp.evaluate("createConversation()", await_promise=True)
+        cdp.wait("state.conversation.messages.length === 0")
+
         cdp.evaluate("openEvidence('MON-L013')")
         cdp.wait("document.querySelector('#evidenceDialog').open && document.querySelector('#evidenceContent').innerText.includes('5120x2160')")
         lenovo_evidence = cdp.evaluate(

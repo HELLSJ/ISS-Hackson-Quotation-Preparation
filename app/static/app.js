@@ -309,7 +309,9 @@ function renderCandidates() {
     browse: isBrowse,
   })).join("");
   $$(".evidence-button").forEach((button) => button.addEventListener("click", () => openEvidence(button.dataset.sku)));
-  $$(".select-button").forEach((button) => button.addEventListener("click", () => sendMessage(`Choose ${button.dataset.model} at zero discount.`)));
+  $$(".select-button").forEach((button) => button.addEventListener("click", () => {
+    sendMessage(`Quote 1 ${button.dataset.sku} at zero discount.`);
+  }));
 }
 
 function candidateCard(product, flags) {
@@ -338,7 +340,7 @@ function candidateCard(product, flags) {
     </div>
     <div class="candidate-actions">
       <button class="evidence-button" data-sku="${escapeHtml(product.sku)}" type="button" aria-label="Inspect source evidence for ${escapeHtml(product.model)}">Inspect source evidence</button>
-      ${canSelect ? `<button class="select-button" data-model="${escapeHtml(product.model)}" type="button" aria-label="Select ${escapeHtml(product.model)} for quote">Select for quote</button>` : ""}
+      ${canSelect ? `<button class="select-button" data-sku="${escapeHtml(product.sku)}" type="button" aria-label="Select ${escapeHtml(product.model)} for quote with quantity 1">Select for quote</button>` : ""}
     </div>
   </article>`;
 }
