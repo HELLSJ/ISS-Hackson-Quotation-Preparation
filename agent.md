@@ -22,7 +22,7 @@ NUS-ISS Hackathon 报价编制 Agent：把不完整的英文客户询价经过�
 - append-only 人工确认、confirmed version、结构化 diff 和 confirmed-only 报价 PDF；
 - 20 项临时数据库后端集成测试，覆盖迁移、并发、确认、diff、PDF、官方证据链接、故障注入和 HTTP；
 - 三条固定演示可离线运行；
-- 61 项目录/后端/Gateway/评测门禁测试通过；64 项 Agent 测试完成（57 通过、7 项为明确记录的离线语言边界）；
+- 63 项目录/后端/Gateway/评测门禁测试通过，包含分辨率不得被模型误用为数量的回归；64 项 Agent 测试完成（57 通过、7 项为明确记录的离线语言边界）；
 - 英文/中文 README、API 契约和统一项目规划。
 
 当前后端可以生成**不可变 confirmed version 和报价 PDF**。Gateway Story A/B/C、sealed 首轮 10/20 与修复后 20/20 报告基于 12-SKU v1，继续作为历史证据保留；50-SKU v2 已通过确定性测试和 Chrome 端到端验收，真实 Gateway/sealed 仍待复评。

@@ -1122,6 +1122,39 @@ class GatewayDriver:
         result.trace.append({"step": "gateway_fallback", "result": reason})
         return result
 
+    @staticmethod
+    def _authoritative_quote_args(policy_guard: AgentResult | None) -> dict[str, Any] | None:
+        """Build quote arguments only from the deterministic enquiry state.
+
+        Gateway models can confuse specification numbers (for example the
+        ``1920`` in ``1920x1080``) with a requested quantity.  Pricing must
+        therefore use the SKU, quantity, discount and budget already resolved
+        by the local state machine.  ``None`` means a required quotation slot
+        is still missing, so the model is not allowed to price yet.
+        """
+        if not policy_guard or not policy_guard.quote_draft:
+            return None
+        lines = policy_guard.quote_draft.get("lines") or []
+        if not lines:
+            return None
+        args: dict[str, Any] = {
+            "items": [
+                {
+                    "sku": line["sku"],
+                    "quantity": line["quantity"],
+                    **(
+                        {"discount_bps": line["discount_bps"]}
+                        if line.get("discount_bps")
+                        else {}
+                    ),
+                }
+                for line in lines
+            ]
+        }
+        if policy_guard.quote_draft.get("budget_cents") is not None:
+            args["budget_cents"] = policy_guard.quote_draft["budget_cents"]
+        return args
+
     def _build_messages(self, enquiry_or_turns: Union[str, Sequence[str]]) -> list[dict[str, Any]]:
         turns = [enquiry_or_turns] if isinstance(enquiry_or_turns, str) else [str(turn) for turn in enquiry_or_turns]
         instructions = _read_instructions()
@@ -1259,16 +1292,38 @@ class GatewayDriver:
                 args = function.get("arguments") or {}
                 if not isinstance(args, dict):
                     raise GatewayRequestError("Gateway tool arguments were invalid")
-                result_payload = tools_mod.dispatch(name, args)
+                requested_args = args
+                if name == "calculate_quote":
+                    authoritative_args = self._authoritative_quote_args(policy_guard)
+                    if authoritative_args is None:
+                        result_payload = {
+                            "error": "quote_not_ready",
+                            "message": (
+                                "The deterministic enquiry state is missing a required "
+                                "quotation field; ask for clarification before pricing."
+                            ),
+                            "ask_for": list(policy_guard.ask_for) if policy_guard else [],
+                        }
+                    else:
+                        args = authoritative_args
+                        result_payload = tools_mod.dispatch(name, args)
+                else:
+                    result_payload = tools_mod.dispatch(name, args)
                 tool_results.append((name, result_payload))
-                trace.append(
-                    {
-                        "step": f"gateway_turn_{iteration}",
-                        "tool": name,
-                        "args": args,
-                        "result": result_payload.get("error") if isinstance(result_payload, dict) and "error" in result_payload else "ok",
-                    }
-                )
+                trace_row = {
+                    "step": f"gateway_turn_{iteration}",
+                    "tool": name,
+                    "args": args,
+                    "result": (
+                        result_payload.get("error")
+                        if isinstance(result_payload, dict) and "error" in result_payload
+                        else "ok"
+                    ),
+                }
+                if requested_args != args:
+                    trace_row["requested_args"] = requested_args
+                    trace_row["result"] = "arguments_corrected_by_local_state"
+                trace.append(trace_row)
                 tool_message: dict[str, Any] = {
                     "role": "tool" if native_calls else "user",
                     "content": _json.dumps(result_payload, ensure_ascii=False),
@@ -1295,22 +1350,8 @@ class GatewayDriver:
             and policy_guard.quote_draft
             and not any(name == "calculate_quote" for name, _ in tool_results)
         ):
-            quote_args: dict[str, Any] = {
-                "items": [
-                    {
-                        "sku": line["sku"],
-                        "quantity": line["quantity"],
-                        **(
-                            {"discount_bps": line["discount_bps"]}
-                            if line.get("discount_bps")
-                            else {}
-                        ),
-                    }
-                    for line in policy_guard.quote_draft.get("lines", [])
-                ]
-            }
-            if policy_guard.quote_draft.get("budget_cents") is not None:
-                quote_args["budget_cents"] = policy_guard.quote_draft["budget_cents"]
+            quote_args = self._authoritative_quote_args(policy_guard)
+            assert quote_args is not None
             repaired_quote = tools_mod.dispatch("calculate_quote", quote_args)
             tool_results.append(("calculate_quote", repaired_quote))
             trace.append({
@@ -1428,10 +1469,21 @@ class GatewayDriver:
         if (
             policy_guard
             and policy_guard.status == state_mod.NEEDS_CLARIFICATION
-            and result.status == state_mod.NEEDS_CLARIFICATION
             and policy_guard.ask_for
         ):
+            # Missing required slots are authoritative.  Never keep a quote
+            # produced from a model-invented quantity or product selection.
+            result.status = state_mod.NEEDS_CLARIFICATION
+            result.quote_draft = None
             result.ask_for = list(policy_guard.ask_for)
+            if policy_guard.candidates:
+                result.candidates = list(policy_guard.candidates)
+            if policy_guard.citations:
+                result.citations = list(policy_guard.citations)
+            result.trace.append({
+                "step": "local_clarification_guard",
+                "result": {"ask_for": list(policy_guard.ask_for)},
+            })
 
         # Hard business boundaries are deterministic. The Gateway still has to
         # invoke local tools for evidence/facts, while the local state machine

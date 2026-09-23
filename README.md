@@ -32,7 +32,7 @@ Try the deployed workbench at **[http://47.131.151.253/](http://47.131.151.253/)
 | Untouched first pass | **10/20 preserved** before fixes, with separate repair reports |
 | Live Gateway tool execution | 20 cases started, 21 local tool calls, no hidden fallback |
 | Browser acceptance | v2 loads all 50 records and Lenovo evidence; save, revise, diff, confirm and PDF export passed ([report](reports/evaluation/browser_acceptance/20260922T143627Z/report.md)) |
-| Pricing and application validation | 61 catalogue/backend/Gateway/evaluation tests passed |
+| Pricing and application validation | 63 catalogue/backend/Gateway/evaluation tests passed, including model-invented quantity guards |
 | Agent regression suite | 64 cases completed: 57 passed, 7 documented OfflineDriver heuristic skips |
 | Current v2 source base | 44 official Dell/Lenovo documents, 754 pages and 400 field-level evidence records |
 | Real Gateway timing | 5/5 correct; **12.705 s median** ([report](reports/evaluation/timing/20260922T073821Z-gateway-first-pass/report.md)) |
@@ -218,7 +218,7 @@ python scripts/extract_sources.py
 .venv/bin/pip install -r requirements-dev.txt
 python scripts/build_data.py
 python scripts/validate_data.py                            # 15 data/tool checks
-.venv/bin/python -m unittest discover -s tests            # 61 catalogue/backend/gateway/evaluation-gate tests
+.venv/bin/python -m unittest discover -s tests            # 63 catalogue/backend/gateway/evaluation-gate tests
 .venv/bin/python -m unittest discover -s dell_agent/tests # 64 Agent tests
 ```
 

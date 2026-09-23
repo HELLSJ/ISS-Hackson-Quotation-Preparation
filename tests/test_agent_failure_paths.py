@@ -79,6 +79,59 @@ class AgentFailurePathTests(unittest.TestCase):
         self.assertEqual(result.quote_draft["total_cents"], 231200)
         self.assertTrue(any(row.get("role") == "tool" for row in client.messages[-1]))
 
+    def test_gateway_cannot_invent_quantity_from_resolution(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": "", "tool_calls": [{
+                "id": "call-1", "type": "function", "function": {
+                    "name": "calculate_quote",
+                    "arguments": {"items": [{"sku": "MON-001", "quantity": 1920}]},
+                },
+            }]}},
+            {"message": {"content": json.dumps({
+                "status": "ready_to_quote", "ask_for": [],
+                "message": "The draft is ready.",
+            }), "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret", model="test-model", client=client
+        ).run(["I need a 1920x1080 monitor.", "Choose S2425H at zero discount."])
+
+        self.assertEqual(result.status, "needs_clarification")
+        self.assertEqual(result.ask_for, ["quantity"])
+        self.assertIsNone(result.quote_draft)
+        self.assertTrue(any(
+            row.get("tool") == "calculate_quote" and row.get("result") == "quote_not_ready"
+            for row in result.trace
+        ))
+
+    def test_gateway_wrong_quantity_is_corrected_from_customer_turns(self) -> None:
+        client = _SequenceClient([
+            {"message": {"content": "", "tool_calls": [{
+                "id": "call-1", "type": "function", "function": {
+                    "name": "calculate_quote",
+                    "arguments": {"items": [{"sku": "MON-001", "quantity": 1920}]},
+                },
+            }]}},
+            {"message": {"content": json.dumps({
+                "status": "ready_to_quote", "ask_for": [],
+                "message": "The draft is ready.",
+            }), "tool_calls": []}},
+        ])
+        result = GatewayDriver(
+            base_url="https://gateway.example", api_key="secret", model="test-model", client=client
+        ).run(["We need 8 monitors at 1920x1080.", "Choose S2425H at zero discount."])
+
+        self.assertEqual(result.status, "ready_to_quote")
+        self.assertEqual(result.quote_draft["lines"][0]["quantity"], 8)
+        self.assertEqual(result.quote_draft["total_cents"], 119200)
+        corrected = next(
+            row for row in result.trace
+            if row.get("tool") == "calculate_quote"
+            and row.get("result") == "arguments_corrected_by_local_state"
+        )
+        self.assertEqual(corrected["requested_args"]["items"][0]["quantity"], 1920)
+        self.assertEqual(corrected["args"]["items"][0]["quantity"], 8)
+
     def test_openai_transcript_serializes_tool_arguments(self) -> None:
         client = _OpenAISequenceClient([
             {"message": {"content": "", "tool_calls": [{
