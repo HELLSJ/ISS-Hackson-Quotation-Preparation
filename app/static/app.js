@@ -5,6 +5,8 @@ const state = {
   conversation: null,
   catalog: [],
   busy: false,
+  workspaceView: "catalogue",
+  renderedResultId: null,
 };
 
 let toastTimer = null;
@@ -175,6 +177,11 @@ async function createConversation() {
     body: JSON.stringify({ driver: state.health?.configured_driver || "offline" }),
   });
   state.conversation = conversation;
+  state.workspaceView = "catalogue";
+  state.renderedResultId = null;
+  $("#catalogueBrowser").open = false;
+  $("#versionHistory").open = false;
+  $("#scenarioDetails").open = true;
   render();
   $("#messageInput").focus();
 }
@@ -217,6 +224,13 @@ async function sendMessage(content) {
 }
 
 function render() {
+  const resultId = state.conversation?.latest_result_message_id;
+  if (resultId && resultId !== state.renderedResultId) {
+    state.workspaceView = latestResult()?.quote_draft ? "quote" : "catalogue";
+    state.renderedResultId = resultId;
+    $("#scenarioDetails").open = false;
+    $(".workspace-content").scrollTop = 0;
+  }
   renderStatus();
   renderMessages();
   renderRequirements();
@@ -224,6 +238,51 @@ function render() {
   renderTrace();
   renderQuote();
   renderVersions();
+  renderWorkspace();
+}
+
+function switchWorkspace(view, focus = false) {
+  state.workspaceView = view;
+  renderWorkspace();
+  $(".workspace-content").scrollTop = 0;
+  if (focus) $(`#${view}Tab`).focus();
+}
+
+function renderWorkspace() {
+  const result = latestResult();
+  const draft = result?.quote_draft;
+  const versions = state.conversation?.quote_versions || [];
+  const latestVersion = versions[versions.length - 1];
+  const view = state.workspaceView;
+  $$("[data-view]").forEach((tab) => {
+    const selected = tab.dataset.view === view;
+    tab.setAttribute("aria-selected", String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+  });
+  $("#catalogueView").hidden = view !== "catalogue";
+  $("#quoteView").hidden = view !== "quote";
+  $("#workspaceTitle").textContent = draft ? "Your quote, ready for review." : result ? "Find the right fit. Verify the details." : "A clear path to a confident quote.";
+  const needsDetails = result?.ask_for?.some((slot) => slot !== "product_specification_or_model");
+  $("#workspaceStep").textContent = draft ? "Step 3 of 3 · Review" : result && !needsDetails ? "Step 2 of 3 · Verify" : "Step 1 of 3 · Understand";
+  $("#quoteTabStatus").textContent = latestVersion?.exportable ? `v${latestVersion.version} confirmed` : draft ? "Draft ready" : versions.length ? `${versions.length} saved` : "Not started";
+  const alert = $("#workspaceAlert");
+  const warnings = {
+    explain_limitation: ["Compatibility conflict", "The requested model does not meet the requirements. Review the highlighted product and its source evidence below."],
+    rule_violation: ["Policy blocked", "No quote was calculated. Review the policy explanation in the conversation before continuing."],
+    invalid_quantity: ["Quantity needs attention", "Enter a positive whole number in the conversation to continue."],
+    no_match: ["No matching product", "No catalogue model meets all stated requirements. Adjust a requirement before selecting a product."],
+    budget_conflict: ["Budget needs attention", "Review the budget explanation in the conversation before continuing."],
+  };
+  const warning = draft?.within_budget === false
+    ? ["Over budget", `This draft exceeds the stated budget by ${money(draft.over_budget_cents)}. Adjust the quantity or product if a lower total is required.`]
+    : warnings[result?.status];
+  alert.hidden = !warning;
+  alert.innerHTML = warning ? `<strong>${escapeHtml(warning[0])}</strong>${escapeHtml(warning[1])}` : "";
+  const dock = $("#quoteDock");
+  dock.hidden = !draft;
+  dock.classList.toggle("over", draft?.within_budget === false);
+  dock.innerHTML = draft ? `<div><span>Draft total · ${draft.lines.reduce((count, line) => count + line.quantity, 0)} units</span><strong>${money(draft.total_cents)}</strong></div>${view === "catalogue" ? '<button id="returnToQuote" type="button">Review quote →</button>' : '<span class="dock-note">Calculated by the pricing tool</span>'}` : "";
+  $("#returnToQuote")?.addEventListener("click", () => switchWorkspace("quote", true));
 }
 
 function renderStatus() {
@@ -244,8 +303,21 @@ function renderStatus() {
     rule_violation: "Policy blocked",
     invalid_quantity: "Invalid quantity",
   };
-  chip.textContent = result ? (labels[result.status] || "In review") : "Waiting";
-  chip.className = "status-chip " + (!result ? "status-idle" : result.status === "ready_to_quote" ? "status-ready" : ["rule_violation", "invalid_quantity", "no_match"].includes(result.status) ? "status-warning" : "status-review");
+  const status = result?.status === "ready_to_quote" && result.quote_draft?.within_budget === false
+    ? "budget_conflict"
+    : result?.status;
+  const colors = {
+    needs_clarification: "status-pending",
+    ready_to_quote: "status-ready",
+    answer_with_evidence: "status-review",
+    explain_limitation: "status-warning",
+    no_match: "status-warning",
+    budget_conflict: "status-warning",
+    rule_violation: "status-warning",
+    invalid_quantity: "status-warning",
+  };
+  chip.textContent = result ? (labels[status] || "In review") : "Waiting";
+  chip.className = `status-chip ${result ? (colors[status] || "status-review") : "status-idle"}`;
 }
 
 function renderMessages() {
@@ -294,24 +366,25 @@ function renderCandidates() {
   let rows = suggestions.length
     ? [...(result?.candidates || []), ...suggestions]
     : (result?.candidates || []);
-  const isBrowse = !rows.length;
-  if (isBrowse) rows = state.catalog;
   rows = uniqueProducts(rows);
   $("#candidateList").setAttribute("aria-busy", "false");
   $("#candidateSummary").textContent = suggestions.length
     ? `${suggestions.length} compatible alternative${suggestions.length === 1 ? "" : "s"}`
     : result?.candidates?.length
       ? `${result.candidates.length} catalogue match${result.candidates.length === 1 ? "" : "es"}`
-      : `${state.catalog.length} evidence-backed monitor records`;
-  $("#candidateList").innerHTML = rows.map((product) => candidateCard(product, {
+      : result ? "Resolve the enquiry to find matching products" : "Start with the enquiry. We’ll bring the evidence here.";
+  $("#catalogueTabCount").textContent = rows.length ? `${rows.length} product${rows.length === 1 ? "" : "s"}` : "Catalogue";
+  $("#catalogueCount").textContent = `${state.catalog.length} monitors`;
+  const welcome = `<div class="workspace-welcome"><span class="welcome-kicker">From enquiry to approved quote</span><h3>The right product.<br>The evidence to back it up.</h3><p>Describe what the customer needs. Review the fit, check the source, then approve an exact quotation.</p><div class="welcome-steps"><div class="welcome-step"><span>1</span><div><strong>Clarify the requirements</strong><p>Start in the conversation or try a demo scenario.</p></div></div><div class="welcome-step"><span>2</span><div><strong>Choose with evidence</strong><p>Compare relevant products and inspect official specifications.</p></div></div><div class="welcome-step"><span>3</span><div><strong>Review, confirm and export</strong><p>Save versions, see what changed and download the confirmed PDF.</p></div></div></div></div>`;
+  const empty = `<div class="workspace-empty"><strong>${result?.status === "no_match" ? "No products meet these requirements" : "Let’s resolve the details first"}</strong><p>${result?.status === "no_match" ? "Change a requirement in the conversation. The full catalogue is available below for reference." : "Continue the conversation on the left. Relevant products will appear here when available."}</p></div>`;
+  $("#candidateList").innerHTML = rows.length ? rows.map((product) => candidateCard(product, {
     suggested: suggestions.some((row) => row.sku === product.sku),
     incompatible: result?.status === "explain_limitation" && result?.candidates?.some((row) => row.sku === product.sku),
-    browse: isBrowse,
+  })).join("") : result ? empty : welcome;
+  // Keep the full catalogue separate from the Agent's filtered results.
+  $("#browseList").innerHTML = state.catalog.map((product) => candidateCard(product, {
+    incompatible: result?.conflicts?.some((conflict) => conflict.sku === product.sku),
   })).join("");
-  $$(".evidence-button").forEach((button) => button.addEventListener("click", () => openEvidence(button.dataset.sku)));
-  $$(".select-button").forEach((button) => button.addEventListener("click", () => {
-    sendMessage(`Quote 1 ${button.dataset.sku} at zero discount.`);
-  }));
 }
 
 function candidateCard(product, flags) {
@@ -338,9 +411,10 @@ function candidateCard(product, flags) {
       <div class="spec-cell"><span>USB-C host link</span><strong>${escapeHtml(pd)}</strong></div>
       <div class="spec-cell"><span>Max preset refresh</span><strong>${escapeHtml(refresh)}</strong></div>
     </div>
+    ${flags.incompatible ? '<p class="candidate-conflict">Does not meet the requested connection or charging requirements. Inspect the source before choosing an alternative.</p>' : ""}
     <div class="candidate-actions">
       <button class="evidence-button" data-sku="${escapeHtml(product.sku)}" type="button" aria-label="Inspect source evidence for ${escapeHtml(product.model)}">Inspect source evidence</button>
-      ${canSelect ? `<button class="select-button" data-sku="${escapeHtml(product.sku)}" type="button" aria-label="Select ${escapeHtml(product.model)} for quote with quantity 1">Select for quote</button>` : ""}
+      ${canSelect ? `<button class="select-button" data-sku="${escapeHtml(product.sku)}" type="button" aria-label="Quote one ${escapeHtml(product.model)} at zero discount">Quote 1 unit</button>` : ""}
     </div>
   </article>`;
 }
@@ -349,9 +423,8 @@ function renderTrace() {
   const trace = latestResult()?.trace || [];
   const tools = trace.filter((step) => step.tool);
   $("#toolTrace").innerHTML = tools.length
-    ? `<div class="trace-summary"><strong>Verified actions</strong><span>${tools.map((step) => escapeHtml(step.tool)).join(" → ")}</span></div>
-      <details class="trace-audit">
-        <summary>Inspect tool audit (${tools.length})</summary>
+    ? `<details class="trace-audit">
+        <summary><span>Tool activity & audit</span><small>${tools.length} verified action${tools.length === 1 ? "" : "s"}</small></summary>
         <div class="trace-steps">${tools.map((step, index) => `<div class="trace-step">
           <strong>${index + 1}. ${escapeHtml(step.tool)}</strong>
           <span>${escapeHtml(step.result || "completed")}</span>
@@ -365,6 +438,9 @@ function renderQuote() {
   const body = $("#quoteBody");
   const actions = $("#quoteActions");
   const draft = latestResult()?.quote_draft;
+  $("#selectedProduct").hidden = !draft;
+  $("#selectedProduct").innerHTML = draft ? `<span><strong>Selected:</strong> ${draft.lines.map((line) => `${escapeHtml(line.name)} × ${line.quantity}`).join(" · ")}</span><button id="changeProduct" type="button">View products →</button>` : "";
+  $("#changeProduct")?.addEventListener("click", () => switchWorkspace("catalogue", true));
   if (!draft) {
     body.innerHTML = `<div class="empty-quote"><span class="quote-glyph" aria-hidden="true">SGD</span><div><strong>No calculated lines</strong><p>Confirm the requirements and select a product to create a draft.</p></div></div>`;
     actions.hidden = true;
@@ -379,7 +455,6 @@ function renderQuote() {
       </div>
     </div>`).join("")}
     <div class="total-block">
-      <div class="total-row"><span>Draft total</span><strong>${money(draft.total_cents)}</strong></div>
       ${draft.within_budget === undefined ? "" : `<div class="budget-row ${draft.within_budget ? "" : "over"}"><span>${draft.within_budget ? "Within stated budget" : `Over budget by ${money(draft.over_budget_cents)}`}</span><span>Validity ${draft.validity_days} days</span></div>`}
     </div>`;
   $$('[data-quantity-index]').forEach((button) => button.addEventListener("click", () => {
@@ -396,19 +471,22 @@ function renderVersions() {
   const versions = state.conversation?.quote_versions || [];
   $("#versionCount").textContent = versions.length;
   $("#versionCount").setAttribute("aria-label", `${versions.length} saved version${versions.length === 1 ? "" : "s"}`);
-  $("#versionList").innerHTML = versions.length
-    ? versions.map((version, index) => `<div class="version-item">
+  const versionCards = versions.map((version, index) => `<div class="version-item ${version.exportable ? "is-confirmed" : ""}">
         <div><span>Version ${version.version} · ${version.line_count} line${version.line_count === 1 ? "" : "s"}</span><small>${escapeHtml(version.status.replaceAll("_", " "))}</small></div>
         <strong>${money(version.total_cents)}</strong>
         <div class="version-actions">
           ${index ? `<button class="compare-version" data-from="${escapeHtml(versions[index - 1].id)}" data-to="${escapeHtml(version.id)}" type="button">Compare v${versions[index - 1].version} → v${version.version}</button>` : ""}
           ${version.confirmable ? `<button class="confirm-version" data-id="${escapeHtml(version.id)}" type="button">Confirm</button>` : ""}
-          ${version.exportable ? `<a href="/api/quotes/${encodeURIComponent(version.id)}/pdf" download>Download PDF</a>` : ""}
+          ${version.exportable ? `<a class="download-pdf" href="/api/quotes/${encodeURIComponent(version.id)}/pdf" download>Download confirmed PDF</a>` : ""}
         </div>
-      </div>`).join("")
-    : "<p>No versions saved yet.</p>";
+      </div>`);
+  $("#versionList").innerHTML = versionCards.length ? versionCards[versionCards.length - 1] : "<p>Save a draft to begin the version history.</p>";
+  $("#versionHistory").hidden = versions.length < 2;
+  $("#versionHistoryLabel").textContent = `Earlier versions (${Math.max(0, versions.length - 1)})`;
+  $("#historyList").innerHTML = versionCards.slice(0, -1).reverse().join("");
   $$(".compare-version").forEach((button) => button.addEventListener("click", () => openDiff(button.dataset.from, button.dataset.to)));
   $$(".confirm-version").forEach((button) => button.addEventListener("click", () => confirmVersion(button.dataset.id, button)));
+  renderWorkspace();
 }
 
 async function saveQuote() {
@@ -477,7 +555,9 @@ async function openDiff(fromId, toId) {
     const currencyChange = diff.metadata_changes?.currency;
     const beforeCurrency = diff.comparable ? diff.currency : (currencyChange?.from || "SGD");
     const afterCurrency = diff.comparable ? diff.currency : (currencyChange?.to || "SGD");
-    const changedHtml = changes.map((line) => `<div class="diff-line"><strong>Changed · ${escapeHtml(line.after?.model || line.before?.model || line.line_id)}</strong>${Object.entries(line.changes).map(([field, value]) => `<span>${escapeHtml(field.replaceAll("_", " "))}: ${escapeHtml(value.from)} → ${escapeHtml(value.to)}${value.delta === undefined ? "" : ` (Δ ${escapeHtml(value.delta)})`}</span>`).join("")}</div>`).join("");
+    const fieldLabels = { quantity: "Quantity", gross_cents: "Subtotal", net_cents: "Line total", unit_price_cents: "Unit price", discount_cents: "Discount amount", discount_bps: "Discount" };
+    const formatChange = (field, value, currency) => field.endsWith("_cents") ? money(value, currency) : field === "discount_bps" ? `${(value / 100).toFixed(2)}%` : escapeHtml(value);
+    const changedHtml = changes.map((line) => `<div class="diff-line"><strong>Changed · ${escapeHtml(line.after?.model || line.before?.model || line.line_id)}</strong>${Object.entries(line.changes).map(([field, value]) => `<span>${escapeHtml(fieldLabels[field] || field.replaceAll("_", " "))}: ${formatChange(field, value.from, beforeCurrency)} → ${formatChange(field, value.to, afterCurrency)}</span>`).join("")}</div>`).join("");
     const addedHtml = added.map((line) => `<div class="diff-line"><strong>Added · ${escapeHtml(line.after?.model || line.line_id)}</strong><span>Quantity: ${escapeHtml(line.after?.quantity)}</span><span>Net: ${money(line.after?.net_cents, afterCurrency)}</span></div>`).join("");
     const removedHtml = removed.map((line) => `<div class="diff-line"><strong>Removed · ${escapeHtml(line.before?.model || line.line_id)}</strong><span>Quantity: ${escapeHtml(line.before?.quantity)}</span><span>Net: ${money(line.before?.net_cents, beforeCurrency)}</span></div>`).join("");
     $("#diffTitle").textContent = `Version ${diff.from.version} → Version ${diff.to.version}`;
@@ -550,6 +630,22 @@ $("#diffDialog").addEventListener("click", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", boot);
+// Delegate product actions so catalogue entries stay interactive after rendering.
+$("#catalogueView").addEventListener("click", (event) => {
+  const evidence = event.target.closest(".evidence-button");
+  const select = event.target.closest(".select-button");
+  if (evidence) openEvidence(evidence.dataset.sku);
+  if (select && !state.busy) sendMessage(`Quote 1 ${select.dataset.sku} at zero discount.`);
+});
+$$("[data-view]").forEach((tab) => {
+  tab.addEventListener("click", () => switchWorkspace(tab.dataset.view));
+  tab.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const view = event.key === "Home" ? "catalogue" : event.key === "End" ? "quote" : state.workspaceView === "quote" ? "catalogue" : "quote";
+    switchWorkspace(view, true);
+  });
+});
 window.addEventListener("pageshow", async (event) => {
   if (!event.persisted) return;
   try {
