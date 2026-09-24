@@ -2,16 +2,16 @@
 
 **[Open the live AWS demo](http://47.131.151.253/)** · [中文说明](README.zh-CN.md) · [60-second walkthrough](#see-it-in-60-seconds) · [Architecture](#architecture) · [API contract](docs/api-contract.md) · [Project plan](docs/project-plan-zh.md)
 
-> Turn an ambiguous customer enquiry into a source-linked, versioned and human-approved quotation. Language intelligence handles intent; deterministic tools own product facts and every cent.
+> Turn an ambiguous customer enquiry into a source-linked, reviewable and human-approved quotation. Language intelligence handles intent; deterministic tools own product facts and every cent.
 
-![Quotation Desk showing the 50-record catalogue, immutable version comparison and confirmed PDF workflow](reports/evaluation/browser_acceptance/20260923T151456Z/browser-final.png)
+![Quotation Desk showing a saved-draft comparison before confirmation and PDF export](reports/evaluation/browser_acceptance/20260924T074557Z/browser-final.png)
 
 ## See it in 60 seconds
 
 1. Ask for **eight USB-C monitors under SGD 2,500**. The Agent clarifies whether USB-C must carry video and charge the host laptop.
 2. Confirm **P2425HE at zero discount**. The pricing tool returns **SGD 2,312.00** with source-linked specifications.
 3. Change the quantity to ten. The new draft becomes **SGD 2,890.00** and exposes the **SGD 390.00** budget gap.
-4. Save both immutable versions, inspect the structured diff, confirm the chosen snapshot and export its PDF.
+4. Save both immutable drafts, inspect the structured diff, confirm the chosen snapshot and export its PDF.
 
 Try the deployed workbench at **[http://47.131.151.253/](http://47.131.151.253/)**. The three demo buttons also exercise the USB-C port trap and the discount policy boundary.
 
@@ -20,7 +20,7 @@ Try the deployed workbench at **[http://47.131.151.253/](http://47.131.151.253/)
 - **Evidence at the point of decision.** Important product fields link to the exact manufacturer specification and PDF page.
 - **Deterministic money.** Catalogue prices, integer cents, half-up rounding and the 5% ceiling live in one tool layer.
 - **Explicit human control.** Suggested alternatives are never silently selected; saved drafts are not treated as approved quotes.
-- **Immutable history.** Version 1 remains unchanged when quantity, product or discount changes in Version 2.
+- **Immutable history.** The first saved draft remains unchanged when quantity, product or discount changes in a later draft.
 - **Export from the approved snapshot.** Diff and PDF read stored snapshots and never ask the model to recreate facts or totals.
 - **Visible failure modes.** Unknown stock and delivery stay unknown; policy violations and Gateway fallback remain visible.
 
@@ -47,7 +47,7 @@ The quoted Gateway score was produced against the original 12-SKU `2026-09-14` c
 ```text
 Customer enquiry → clarify requirements → search the frozen catalogue
 → inspect source evidence → human selects a product → deterministic pricing
-→ save immutable draft versions → compare versions → confirm → export PDF
+→ save immutable drafts → compare drafts → confirm → export PDF
 ```
 
 > **The model understands language and asks questions; deterministic tools own every fact and every cent.**
@@ -98,13 +98,13 @@ Video plus at least 65W charging; 23.8-inch FHD is acceptable.
 Choose P2425HE at zero discount.
 ```
 
-The pricing tool returns SGD 2,312.00. Save that as version 1, then enter:
+The pricing tool returns SGD 2,312.00. Save that as the first draft, then enter:
 
 ```text
 Change quantity to 10 units.
 ```
 
-The revised draft is SGD 2,890.00, which is SGD 390.00 over budget. Saving it creates version 2 without changing version 1.
+The revised draft is SGD 2,890.00, which is SGD 390.00 over budget. Saving it creates a second snapshot without changing the first.
 
 ## Architecture
 
