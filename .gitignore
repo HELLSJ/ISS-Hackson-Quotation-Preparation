@@ -36,6 +36,13 @@ credentials
 # --- Local hackathon briefing and submission working files ---
 hackathon_submission_materials/
 
+# --- Local AI/editor workbench files ---
+.kiro/
+skills-lock.json
+output/frontend-review/
+output/business-proposal/assets/quote-version-comparison.png
+reports/evaluation/A_CURRENT_WORK.md
+
 # --- Sealed evaluation material ---
 # Keep prompts/answers private until the untouched first-pass model run is saved.
 data/evaluation/sealed_holdout_enquiries.jsonl
@@ -71,4 +78,4 @@ desktop.ini
 *~
 
 # --- 不要忽略：data/、docs/、scripts/、tests/、dell_agent/、
-#     .kiro/skills/、skills-lock.json、data/validation/ 都是交付物。 ---
+#     data/validation/ 都是交付物。 ---

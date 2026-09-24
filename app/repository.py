@@ -51,7 +51,7 @@ class Repository:
         """Create a fresh schema or migrate the original quote_versions table.
 
         Existing payload_json and fingerprints are never rewritten. They remain
-        schema-v1 legacy saved drafts and are readable/diffable but not confirmable.
+        legacy-schema saved drafts and are readable/diffable but not confirmable.
         """
         self._migrate_conversation_drivers()
         with self.connect() as db:
@@ -351,7 +351,7 @@ class Repository:
             )
             quote_id = str(uuid.uuid4())
             now = utc_now()
-            quote_number = f"Q-{now[:10].replace('-', '')}-{conversation_id[:8].upper()}-V{version}"
+            quote_number = f"Q-{now[:10].replace('-', '')}-{conversation_id[:8].upper()}-R{version}"
             try:
                 payload = build_saved_snapshot(
                     draft, quote_id=quote_id, quote_number=quote_number,

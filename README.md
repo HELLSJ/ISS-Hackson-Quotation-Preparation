@@ -28,19 +28,19 @@ Try the deployed workbench at **[http://47.131.151.253/](http://47.131.151.253/)
 
 | Evidence | Result |
 |---|---|
-| Real organizer Gateway, v1 12-SKU sealed run | **20/20**, every scored dimension 100%, **0 fallback** ([report](reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/report.md)) |
+| Real organizer Gateway, 12-SKU sealed run | **20/20**, every scored dimension 100%, **0 fallback** ([report](reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/report.md)) |
 | Untouched first pass | **10/20 preserved** before fixes, with separate repair reports |
 | Live Gateway tool execution | 20 cases started, 21 local tool calls, no hidden fallback |
-| Browser acceptance | A reload starts a clean enquiry; v2 loads all 50 records and Lenovo evidence; save, revise, diff, confirm and PDF export passed ([report](reports/evaluation/browser_acceptance/20260923T151456Z/report.md)) |
+| Browser acceptance | A reload starts a clean enquiry; the final catalogue loads all 50 records and Lenovo evidence; save, revise, diff, confirm and PDF export passed ([report](reports/evaluation/browser_acceptance/20260923T151456Z/report.md)) |
 | Pricing and application validation | 77 catalogue/backend/Gateway/evaluation tests passed, including quantity-revision, model-suffix and metadata-conflict guards |
 | Agent regression suite | 64/64 cases passed with no OfflineDriver heuristic skips |
-| Current v2 source base | 44 official Dell/Lenovo documents, 754 pages and 400 field-level evidence records |
+| Final catalogue source base | 44 official Dell/Lenovo documents, 754 pages and 400 field-level evidence records |
 | Real Gateway timing | 5/5 correct; **12.705 s median** ([report](reports/evaluation/timing/20260922T073821Z-gateway-first-pass/report.md)) |
 | Quote PDF QA | 9/9 extraction checks and 8/8 disclosed visual technical checks passed |
 
 The valid first pass and repaired runs are deliberately separate. The final score is a real-model result only when the configured driver is `gateway`, fallback is false and the trace contains Gateway tool turns.
 
-The quoted Gateway score was produced against the original 12-SKU `2026-09-14.v1` catalogue. The current 50-SKU `2026-09-22.v2` catalogue has passed deterministic data, application and Chrome acceptance tests. A fresh v2 Gateway/sealed run is still required before publishing a v2 model score.
+The quoted Gateway score was produced against the original 12-SKU `2026-09-14` catalogue. The final 50-SKU `2026-09-22` catalogue has passed deterministic data, application and Chrome acceptance tests. A fresh 50-SKU Gateway/sealed run is still required before publishing a model score for the final catalogue.
 
 ## Product workflow
 
@@ -193,7 +193,7 @@ Only these two files are intended for manual data maintenance:
 - `data/curated_specs.json` — reviewed facts and evidence page numbers;
 - `data/synthetic_business.json` — synthetic prices and business rules.
 
-The v2 catalogue combines the 12 reviewed Dell records with 38 Lenovo/ThinkVision records extracted from official PSREF PDFs. The expansion import is reproducible:
+The final catalogue combines the 12 reviewed Dell records with 38 Lenovo/ThinkVision records extracted from official PSREF PDFs. The expansion import is reproducible:
 
 ```bash
 .venv/bin/pip install -r scripts/requirements-data.txt
@@ -229,7 +229,7 @@ The current suites report:
 - 64 Agent tests passed with no skipped OfflineDriver heuristic cases;
 - all three fixed demo scenarios passing in the offline path.
 
-These numbers are not a v2 model accuracy claim. The v1 expected semantic labels and sealed reports remain historical evidence. Two no-match prompts were revised for the expanded catalogue and the complete v2 suite requires a fresh model run and review. Holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.
+These numbers are not a model accuracy claim for the final catalogue. The 12-SKU expected semantic labels and sealed reports remain historical evidence. Two no-match prompts were revised for the expanded catalogue, and the complete 50-SKU suite requires a fresh model run and review. Holdout answers and validation reports must never be placed in the system prompt or runtime knowledge store.
 
 ## Organizer LLM Gateway path
 
@@ -256,7 +256,7 @@ A live run is valid only when `configured_driver=gateway`, `used_fallback=false`
 
 ## Remaining critical path
 
-1. Run and review the Gateway/sealed suite against the 50-SKU v2 catalogue; keep the v1 reports as historical evidence.
+1. Run and review the Gateway/sealed suite against the final 50-SKU catalogue; keep the 12-SKU reports as historical evidence.
 2. Spot-check and countersign the 38-SKU Lenovo expansion if the submission will call it independently reviewed.
 3. Complete five human timing observations, rehearse the fixed stories, record the 30-minute video, and submit.
 

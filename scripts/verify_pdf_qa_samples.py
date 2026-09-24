@@ -25,7 +25,7 @@ def main() -> int:
         "standard_is_one_page": len(standard) == 1,
         "standard_metadata": all(
             value in standard[0]
-            for value in ("Q-20260920-QA-V1", "Café Example", "Sales Admin", "2026-09-27")
+            for value in ("Q-20260920-QA-R1", "Café Example", "Sales Admin", "2026-09-27")
         ),
         "standard_line_and_amounts": all(
             value in standard[0]
@@ -33,7 +33,7 @@ def main() -> int:
         ),
         "standard_terms_and_provenance": all(
             value in standard[0]
-            for value in ("not a tax invoice", "Stock and delivery timing", "2026-09-14.v1", "demo-v1")
+            for value in ("not a tax invoice", "Stock and delivery timing", "2026-09-14", "demo-policy-2026-09-14")
         ),
         "long_is_five_pages": len(long) == 5,
         "long_header_on_every_page": all("Product" in text and "Unit price" in text for text in long),

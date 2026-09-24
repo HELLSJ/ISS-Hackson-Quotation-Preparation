@@ -14,7 +14,7 @@
 本次 `main` 合并的 B 后端文件：
 
 ```text
-app/snapshots.py     schema-v2 快照校验（逐行 half-up、subtotal/total 强校验）
+app/snapshots.py     current snapshot schema 快照校验（逐行 half-up、subtotal/total 强校验）
 app/quote_diff.py    版本 diff（只比对已存快照，从不重算）
 app/quote_pdf.py     confirmed snapshot 导出 PDF（只渲染冻结 JSON）
 app/repository.py    append-only 人工确认
@@ -30,13 +30,13 @@ output/pdf/*.pdf      示例 PDF
 
 ## 4. 端到端验证结果
 
-脚本：`iss-main-verify/scripts/verify_quote_amount_consistency.py`（Story A：v1=8 台、v2=10 台 P2425HE）。
+脚本：`iss-main-verify/scripts/verify_quote_amount_consistency.py`（Story A：first draft=8 台、second draft=10 台 P2425HE）。
 
 | 检查 | tool | saved | confirmed | PDF 显示 | diff 差额 | 超预算 | 结果 |
 |---|---|---|---|---|---|---|---|
-| v1（8 台） | 231200 | 231200 | 231200 | 是 | — | — | 一致 |
-| v2（10 台） | 289000 | 289000 | 289000 | 是 | — | 39000 | 一致 |
-| diff v1→v2 | — | — | — | — | 57800 | — | 与 289000−231200 一致 |
+| 第一份草稿（8 台） | 231200 | 231200 | 231200 | 是 | — | — | 一致 |
+| 第二份草稿（10 台） | 289000 | 289000 | 289000 | 是 | — | 39000 | 一致 |
+| first-to-second draft diff | — | — | — | — | 57800 | — | 与 289000−231200 一致 |
 
 金额均以分（cents）表示；`SGD 2,312.00` 对应 231200 分。
 

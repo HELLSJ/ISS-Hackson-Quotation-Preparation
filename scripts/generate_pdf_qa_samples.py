@@ -30,7 +30,7 @@ def standard_snapshot() -> dict:
     return {
         "status": "confirmed",
         "is_confirmed": True,
-        "quote_number": "Q-20260920-QA-V1",
+        "quote_number": "Q-20260920-QA-R1",
         "quote_version": 1,
         "currency": "SGD",
         "customer": {"display_name": "Café Example"},
@@ -45,9 +45,9 @@ def standard_snapshot() -> dict:
         "shipping_fee_cents": 0,
         "total_cents": 231200,
         "pricing_context": {
-            "dataset_version": "2026-09-14.v1",
-            "price_version": "demo-v1",
-            "rule_version": "demo-v1",
+            "dataset_version": "2026-09-14",
+            "price_version": "demo-policy-2026-09-14",
+            "rule_version": "demo-policy-2026-09-14",
         },
         "terms": {
             "tax_note": "Demo quotation: tax is not modelled; this is not a tax invoice.",
@@ -58,7 +58,7 @@ def standard_snapshot() -> dict:
 
 def long_snapshot() -> dict:
     snapshot = standard_snapshot()
-    snapshot["quote_number"] = "Q-20260920-QA-LONG-V1"
+    snapshot["quote_number"] = "Q-20260920-QA-LONG-R1"
     original = snapshot["lines"][0]
     snapshot["lines"] = []
     for index in range(45):

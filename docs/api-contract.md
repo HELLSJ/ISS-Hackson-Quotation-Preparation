@@ -11,7 +11,7 @@ This document freezes the boundary between the language layer, deterministic too
 - Unknown facts stay `null`.
 - A calculated `draft` is not saved or approved.
 - A `saved_draft` is immutable but not approved.
-- Only an immutable `confirmed` schema-v2 snapshot is exportable.
+- Only an immutable `confirmed` current-schema snapshot is exportable.
 - Diff and PDF read stored snapshot JSON only; they never re-price or call an Agent.
 
 ## Tool errors
@@ -89,9 +89,9 @@ Success is an unconfirmed calculation:
   "over_budget_cents":0,
   "validity_days":7,
   "pricing_context":{
-    "dataset_version":"2026-09-22.v2",
-    "price_version":"demo-v2",
-    "rule_version":"demo-v1",
+    "dataset_version":"2026-09-22",
+    "price_version":"demo-2026-09-22",
+    "rule_version":"demo-policy-2026-09-14",
     "price_effective_date":"2026-09-14",
     "rounding":"half_up_per_line_discount",
     "tax_mode":"not_modelled",
@@ -165,7 +165,7 @@ Content-Type: application/json
 
 The server validates all line arithmetic, discount limits, totals, budget outcome, dates, and pricing provenance before persistence. Server-owned metadata cannot be supplied by the browser.
 
-A schema-v2 `payload` contains:
+A current-schema `payload` contains:
 
 - immutable line facts and money;
 - `schema_version`, `quote_id`, `quote_number`, and `quote_version`;
@@ -225,9 +225,9 @@ Rules:
 
 Successful quote detail has `status="confirmed"`, `is_confirmed=true`, `exportable=true`, an immutable `confirmation.snapshot`, and `pdf_url`.
 
-### Legacy schema-v1 policy
+### Legacy snapshot policy
 
-Startup performs an additive, restart-safe SQLite migration. Existing `payload_json` and fingerprints are never rewritten. Such rows return `status="legacy_saved_draft"`, remain readable/diffable, and have `confirmable=false`/`exportable=false`. Recalculate and save a schema-v2 version before confirmation.
+Startup performs an additive, restart-safe SQLite migration. Existing `payload_json` and fingerprints are never rewritten. Such rows return `status="legacy_saved_draft"`, remain readable/diffable, and have `confirmable=false`/`exportable=false`. Recalculate and save a current-schema draft before confirmation.
 
 ## Structured version diff
 
@@ -262,7 +262,7 @@ Both versions must belong to one conversation; otherwise 409 `cross_conversation
 }
 ```
 
-Schema-v2 lines match by stable `line_id`; legacy lines use a documented SKU-occurrence fallback. Unlike currencies are not subtracted (`comparable=false`). Diff never consults current catalogue or pricing tools.
+Current-schema lines match by stable `line_id`; legacy lines use a documented SKU-occurrence fallback. Unlike currencies are not subtracted (`comparable=false`). Diff never consults current catalogue or pricing tools.
 
 ## Confirmed quote PDF
 
@@ -285,9 +285,9 @@ The backend HTTP path was exercised end to end with Story A in `tests/test_quote
 | Refresh | `GET /api/conversations/{id}` | Read `latest_result_message_id`, `latest_result.quote_draft`, and `quote_versions`. Keep the displayed result ID with its draft. |
 | Save | `POST /api/conversations/{id}/quotes` | Send that `result_message_id` and optional `customer_display_name`. Display returned `version`, `status`, `payload` and `confirmable`. Repeating the same request returns the same version. |
 | Confirm | `POST /api/quotes/{id}/confirm` | Send the saved response's `snapshot_token`, `customer_display_name`, and `confirmed_by`. Enable only when `confirmable=true`. Refresh quote detail after a conflict. |
-| Compare | `GET /api/quotes/{v1}/diff/{v2}` | Render the server's `lines`, `totals`, and `metadata_changes`; keep integer cents as the source of truth. |
+| Compare | `GET /api/quotes/{first_id}/diff/{second_id}` | Render the server's `lines`, `totals`, and `metadata_changes`; keep integer cents as the source of truth. |
 | Download | `GET /api/quotes/{id}/pdf` | Offer the returned `pdf_url` only when `exportable=true`; the response is an attachment, not JSON. |
 
-For Story A, saving 8 P2425HE units gives v1 `total_cents=231200`; changing the quantity to 10 and saving gives v2 `total_cents=289000`. The diff reports `total_cents.delta=57800` and quantity `delta=2`. After v2 is saved, confirming unconfirmed v1 returns 409 `stale_confirmation`; confirming v2 enables its `pdf_url`.
+For Story A, the first saved draft for 8 P2425HE units has `total_cents=231200`; changing the quantity to 10 and saving again creates a second draft with `total_cents=289000`. The diff reports `total_cents.delta=57800` and quantity `delta=2`. After the second draft is saved, confirming the first returns 409 `stale_confirmation`; confirming the second enables its `pdf_url`.
 
 For UI recovery, a 409 `stale_draft` or `stale_confirmation` means refresh the conversation/quote and require a new user decision. `no_draft` and `not_confirmable` mean keep save/confirm disabled until there is a valid calculated/saved quote. `save_conflict` and `already_confirmed` mean show the existing version/confirmation rather than silently changing it. A database save failure returns 500 while preserving the displayed draft; retry the same save after recovery. A 500 `pdf_generation_failed` leaves the confirmed version exportable; retry its PDF URL. All quote money and version deltas come from the server.

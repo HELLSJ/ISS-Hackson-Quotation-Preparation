@@ -25,7 +25,7 @@ from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parents[1]
 PSREF = "https://psref.lenovo.com"
-DATASET_VERSION = "2026-09-22.v2"
+DATASET_VERSION = "2026-09-22"
 
 # A frozen, reproducible selection of active business/general-purpose monitors.
 # These were chosen from the official PSREF monitor search results.  Keeping an
@@ -414,7 +414,7 @@ def main() -> None:
         "retail/wholesale prices or tax advice. Lenovo expansion prices use the documented "
         "deterministic demo formula in scripts/import_lenovo_psref.py."
     )
-    business["rules"]["price_version"] = "demo-v2"
+    business["rules"]["price_version"] = "demo-2026-09-22"
     business["rules"]["effective_date"] = "2026-09-22"
 
     if len(curated["products"]) != 50:

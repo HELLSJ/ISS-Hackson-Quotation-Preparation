@@ -1,5 +1,5 @@
 {
-  "dataset_version": "2026-09-22.v2",
+  "dataset_version": "2026-09-22",
   "source_type": "synthetic",
   "description": "Fictional SGD selling prices and policies for the hackathon, not manufacturer retail/wholesale prices or tax advice. Lenovo expansion prices use the documented deterministic demo formula in scripts/import_lenovo_psref.py.",
   "prices_cents": {
@@ -55,8 +55,8 @@
     "MON-L050": 19900
   },
   "rules": {
-    "rule_version": "demo-v1",
-    "price_version": "demo-v2",
+    "rule_version": "demo-policy-2026-09-14",
+    "price_version": "demo-2026-09-22",
     "currency": "SGD",
     "effective_date": "2026-09-22",
     "discount_limit_bps": 500,

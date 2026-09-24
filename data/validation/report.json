@@ -1,6 +1,6 @@
 {
-  "checked_at": "2026-09-22T14:38:55.666356+00:00",
-  "dataset_version": "2026-09-22.v2",
+  "checked_at": "2026-09-24T13:23:54.904910+00:00",
+  "dataset_version": "2026-09-22",
   "source_document_count": 44,
   "source_page_count": 754,
   "source_pdfs_in_submission": 0,
@@ -14,7 +14,7 @@
     "holdout": 20
   },
   "demo_cases": 3,
-  "offline_tests_run": 15,
+  "offline_tests_run": 17,
   "offline_test_failures": 0,
   "offline_test_errors": 0,
   "data_integrity": "passed",

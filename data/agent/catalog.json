@@ -1,5 +1,5 @@
 {
-  "dataset_version": "2026-09-22.v2",
+  "dataset_version": "2026-09-22",
   "product_count": 50,
   "field_definitions": {
     "usb_c_video": "Video input through USB-C/Thunderbolt upstream connector using DP Alt Mode. A data-only USB-C or downstream charging port does not qualify.",
@@ -8,8 +8,8 @@
     "screen_inches": "Viewable diagonal as stated in the manual; not rounded to the marketed size class."
   },
   "rules": {
-    "rule_version": "demo-v1",
-    "price_version": "demo-v2",
+    "rule_version": "demo-policy-2026-09-14",
+    "price_version": "demo-2026-09-22",
     "currency": "SGD",
     "effective_date": "2026-09-22",
     "discount_limit_bps": 500,
@@ -51,12 +51,12 @@
       "retrieved_at": "2026-09-14T06:01:05.725765+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "HDMI-only video; no USB-C connector in the connectivity list.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-001",
         "currency": "SGD",
         "unit_price_cents": 14900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -189,12 +189,12 @@
       "retrieved_at": "2026-09-14T06:01:05.725765+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Use the S2725H column of the shared specifications table.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-002",
         "currency": "SGD",
         "unit_price_cents": 18900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -329,12 +329,12 @@
       "retrieved_at": "2026-09-14T06:00:47.144491+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "USB-C is downstream charging only, not a video input. The 100 Hz maximum applies to HDMI/DP; VGA maximum is 60 Hz.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-003",
         "currency": "SGD",
         "unit_price_cents": 17900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -471,12 +471,12 @@
       "retrieved_at": "2026-09-14T06:00:47.144491+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "USB-C is downstream charging only, not a video input. The 100 Hz maximum applies to HDMI/DP; VGA maximum is 60 Hz.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-004",
         "currency": "SGD",
         "unit_price_cents": 20900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -613,12 +613,12 @@
       "retrieved_at": "2026-09-14T06:00:47.144491+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "16:10 model P2425 is different from P2425H and P2425E. USB-C downstream only. VGA maximum is 60 Hz.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-005",
         "currency": "SGD",
         "unit_price_cents": 22900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -755,12 +755,12 @@
       "retrieved_at": "2026-09-14T06:00:47.144491+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "USB-C downstream charging is not laptop video/charging upstream. VGA maximum is 60 Hz.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-006",
         "currency": "SGD",
         "unit_price_cents": 24900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -897,12 +897,12 @@
       "retrieved_at": "2026-09-14T06:00:54.825893+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "USB-C upstream supports video and up to 90 W PD. Host and cable must support the required mode.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-007",
         "currency": "SGD",
         "unit_price_cents": 28900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -1039,12 +1039,12 @@
       "retrieved_at": "2026-09-14T06:00:54.825893+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "16:10 USB-C model, distinct from the FHD P2425HE. Up to 90 W host power.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-008",
         "currency": "SGD",
         "unit_price_cents": 31900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -1181,12 +1181,12 @@
       "retrieved_at": "2026-09-14T06:00:54.825893+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "27-inch FHD USB-C hub model; up to 90 W host power.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-009",
         "currency": "SGD",
         "unit_price_cents": 34900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -1322,12 +1322,12 @@
       "retrieved_at": "2026-09-14T06:01:14.043358+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "USB-C upstream is explicitly data only. The 15 W USB-C downstream port is not video input. Do not confuse with U2724DE.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-010",
         "currency": "SGD",
         "unit_price_cents": 45900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -1463,12 +1463,12 @@
       "retrieved_at": "2026-09-14T06:01:21.064538+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Use the Thunderbolt 4 upstream connector for video and up to 90 W PD. A separate USB-C upstream connector is data only.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-011",
         "currency": "SGD",
         "unit_price_cents": 62900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -1604,12 +1604,12 @@
       "retrieved_at": "2026-09-14T06:01:28.522457+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "4K USB-C model with up to 65 W host PD. A 100 W rated cable does not mean the monitor provides 100 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-012",
         "currency": "SGD",
         "unit_price_cents": 49900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -1745,12 +1745,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 39.7-inch 5120x2160 at up to 120 Hz. USB-C video input; host power delivery up to 140 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L013",
         "currency": "SGD",
         "unit_price_cents": 109900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -1886,12 +1886,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 1920x1080 at up to 144 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L014",
         "currency": "SGD",
         "unit_price_cents": 23900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -2026,12 +2026,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 1920x1080 at up to 144 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L015",
         "currency": "SGD",
         "unit_price_cents": 27900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -2166,12 +2166,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 1920x1080 at up to 144 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L016",
         "currency": "SGD",
         "unit_price_cents": 27900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -2306,12 +2306,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 1920x1080 at up to 144 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L017",
         "currency": "SGD",
         "unit_price_cents": 23900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -2447,12 +2447,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 1920x1080 at up to 144 Hz. USB-C video input; host power delivery up to 75 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L018",
         "currency": "SGD",
         "unit_price_cents": 38900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -2589,12 +2589,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 31.5-inch 3840x2160 at up to 120 Hz. USB-C video input; host power delivery up to 140 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L019",
         "currency": "SGD",
         "unit_price_cents": 75900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -2731,12 +2731,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 2560x1440 at up to 120 Hz. USB-C video input; host power delivery up to 100 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L020",
         "currency": "SGD",
         "unit_price_cents": 50900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -2873,12 +2873,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 1920x1080 at up to 120 Hz. USB-C video input; host power delivery up to 100 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L021",
         "currency": "SGD",
         "unit_price_cents": 35900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -3015,12 +3015,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 1920x1080 at up to 120 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L022",
         "currency": "SGD",
         "unit_price_cents": 19900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -3157,12 +3157,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 21.5-inch 1920x1080 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L023",
         "currency": "SGD",
         "unit_price_cents": 16900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -3298,12 +3298,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 21.5-inch 1920x1080 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L024",
         "currency": "SGD",
         "unit_price_cents": 16900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -3437,12 +3437,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 21.5-inch 1920x1080 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L025",
         "currency": "SGD",
         "unit_price_cents": 16900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -3575,12 +3575,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 1920x1080 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L026",
         "currency": "SGD",
         "unit_price_cents": 22900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -3714,12 +3714,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 1920x1080 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L027",
         "currency": "SGD",
         "unit_price_cents": 22900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -3854,12 +3854,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 2560x1440 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L028",
         "currency": "SGD",
         "unit_price_cents": 33900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -3995,12 +3995,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 1920x1080 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L029",
         "currency": "SGD",
         "unit_price_cents": 22900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -4135,12 +4135,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 1920x1080 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L030",
         "currency": "SGD",
         "unit_price_cents": 22900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -4275,12 +4275,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 31.5-inch 3840x2160 at up to 60 Hz. USB-C video input; host power delivery up to 100 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L031",
         "currency": "SGD",
         "unit_price_cents": 68900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -4415,12 +4415,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 1920x1080 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L032",
         "currency": "SGD",
         "unit_price_cents": 19900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -4555,12 +4555,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 1920x1080 at up to 120 Hz. USB-C video input; host power delivery up to 100 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L033",
         "currency": "SGD",
         "unit_price_cents": 35900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -4697,12 +4697,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 2560x1440 at up to 120 Hz. USB-C video input; host power delivery up to 140 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L034",
         "currency": "SGD",
         "unit_price_cents": 51900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -4839,12 +4839,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 1920x1080 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L035",
         "currency": "SGD",
         "unit_price_cents": 19900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -4980,12 +4980,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 2560x1440 at up to 120 Hz. USB-C is downstream/data only (15 W maximum recorded); it is not a host video input.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L036",
         "currency": "SGD",
         "unit_price_cents": 29900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -5120,12 +5120,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 2560x1440 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L037",
         "currency": "SGD",
         "unit_price_cents": 33900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -5261,12 +5261,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 3840x2160 at up to 60 Hz. USB-C video input; host power delivery up to 100 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L038",
         "currency": "SGD",
         "unit_price_cents": 62900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -5403,12 +5403,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 2560x1440 at up to 120 Hz. USB-C video input; host power delivery up to 140 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L039",
         "currency": "SGD",
         "unit_price_cents": 54900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -5545,12 +5545,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 34-inch 3440x1440 at up to 120 Hz. USB-C video input; host power delivery up to 140 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L040",
         "currency": "SGD",
         "unit_price_cents": 74900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -5687,12 +5687,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 2560x1440 at up to 120 Hz. USB-C video input; host power delivery up to 100 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L041",
         "currency": "SGD",
         "unit_price_cents": 50900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -5829,12 +5829,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 34-inch 3440x1440 at up to 120 Hz. USB-C video input; host power delivery up to 100 W.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L042",
         "currency": "SGD",
         "unit_price_cents": 70900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -5970,12 +5970,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 21.5-inch 1920x1080 at up to 75 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L043",
         "currency": "SGD",
         "unit_price_cents": 13900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -6110,12 +6110,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 19.5-inch 1600x900 at up to 60 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L044",
         "currency": "SGD",
         "unit_price_cents": 11900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -6250,12 +6250,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 1920x1080 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L045",
         "currency": "SGD",
         "unit_price_cents": 19900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -6390,12 +6390,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 2560x1440 at up to 120 Hz. USB-C is downstream/data only (15 W maximum recorded); it is not a host video input.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L046",
         "currency": "SGD",
         "unit_price_cents": 33900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -6530,12 +6530,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 2560x1440 at up to 120 Hz. USB-C is downstream/data only (15 W maximum recorded); it is not a host video input.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L047",
         "currency": "SGD",
         "unit_price_cents": 33900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -6669,12 +6669,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 1920x1080 at up to 100 Hz. No USB-C video input is listed.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L048",
         "currency": "SGD",
         "unit_price_cents": 19900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -6809,12 +6809,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 27-inch 1920x1080 at up to 120 Hz. USB-C is downstream/data only (15 W maximum recorded); it is not a host video input.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L049",
         "currency": "SGD",
         "unit_price_cents": 22900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },
@@ -6951,12 +6951,12 @@
       "retrieved_at": "2026-09-22T14:16:14.019964+00:00",
       "source_type": "public_manufacturer_specification",
       "notes": "Official Lenovo PSREF: 23.8-inch 1920x1080 at up to 120 Hz. USB-C is downstream/data only (15 W maximum recorded); it is not a host video input.",
-      "dataset_version": "2026-09-22.v2",
+      "dataset_version": "2026-09-22",
       "price": {
         "sku": "MON-L050",
         "currency": "SGD",
         "unit_price_cents": 19900,
-        "price_version": "demo-v2",
+        "price_version": "demo-2026-09-22",
         "effective_date": "2026-09-22",
         "price_source_type": "synthetic"
       },

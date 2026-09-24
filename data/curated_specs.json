@@ -1,5 +1,5 @@
 {
-  "dataset_version": "2026-09-22.v2",
+  "dataset_version": "2026-09-22",
   "review_method": "The 12 Dell baseline SKUs retain their assistant-reviewed PDF evidence. The 38 Lenovo expansion SKUs were deterministically extracted from official PSREF PDFs and passed schema, page, connectivity and source invariants; the expansion is not an independent human audit.",
   "fields": {
     "usb_c_video": "Video input through USB-C/Thunderbolt upstream connector using DP Alt Mode. A data-only USB-C or downstream charging port does not qualify.",

@@ -212,7 +212,7 @@ async function createConversation() {
 async function boot() {
   try {
     [state.health, state.catalog] = await Promise.all([api("/api/health"), api("/api/products")]);
-    $("#datasetBadge").textContent = `Catalogue ${state.health.dataset_version}`;
+    $("#datasetBadge").textContent = `${state.catalog.length || 50}-product catalogue`;
     $("#driverBadge").textContent = state.health.configured_driver === "gateway" ? "Organizer LLM Gateway" : "Deterministic offline";
     // A browser session never inherits the previous visitor's enquiry. The
     // server keeps its audit history, while every page load gets a fresh ID.
@@ -287,7 +287,7 @@ function renderWorkspace() {
   $("#workspaceTitle").textContent = draft ? "Your quote, ready for review." : result ? "Find the right fit. Verify the details." : "A clear path to a confident quote.";
   const needsDetails = result?.ask_for?.some((slot) => slot !== "product_specification_or_model");
   $("#workspaceStep").textContent = draft ? "Step 3 of 3 · Review" : result && !needsDetails ? "Step 2 of 3 · Verify" : "Step 1 of 3 · Understand";
-  $("#quoteTabStatus").textContent = latestVersion?.exportable ? `v${latestVersion.version} confirmed` : draft ? "Draft ready" : versions.length ? `${versions.length} saved` : "Not started";
+  $("#quoteTabStatus").textContent = latestVersion?.exportable ? `Draft ${latestVersion.version} confirmed` : draft ? "Draft ready" : versions.length ? `${versions.length} saved` : "Not started";
   const alert = $("#workspaceAlert");
   const warnings = {
     explain_limitation: ["Compatibility conflict", "The requested model does not meet the requirements. Review the highlighted product and its source evidence below."],
@@ -603,7 +603,7 @@ function renderVersions() {
         <div><span>Version ${version.version} · ${version.line_count} line${version.line_count === 1 ? "" : "s"}</span><small>${escapeHtml(version.status.replaceAll("_", " "))}</small></div>
         <strong>${money(version.total_cents)}</strong>
         <div class="version-actions">
-          ${index ? `<button class="compare-version" data-from="${escapeHtml(versions[index - 1].id)}" data-to="${escapeHtml(version.id)}" type="button">Compare v${versions[index - 1].version} → v${version.version}</button>` : ""}
+          ${index ? `<button class="compare-version" data-from="${escapeHtml(versions[index - 1].id)}" data-to="${escapeHtml(version.id)}" type="button">Compare draft ${versions[index - 1].version} → ${version.version}</button>` : ""}
           ${version.confirmable ? `<button class="confirm-version" data-id="${escapeHtml(version.id)}" type="button">Confirm</button>` : ""}
           ${version.exportable ? `<a class="download-pdf" href="/api/quotes/${encodeURIComponent(version.id)}/pdf" download>Download confirmed PDF</a>` : ""}
         </div>
@@ -703,7 +703,7 @@ async function openDiff(fromId, toId) {
     const changedHtml = changes.map((line) => `<div class="diff-line"><strong>Changed · ${escapeHtml(line.after?.model || line.before?.model || line.line_id)}</strong>${Object.entries(line.changes).map(([field, value]) => `<span>${escapeHtml(fieldLabels[field] || field.replaceAll("_", " "))}: ${formatChange(field, value.from, beforeCurrency)} → ${formatChange(field, value.to, afterCurrency)}</span>`).join("")}</div>`).join("");
     const addedHtml = added.map((line) => `<div class="diff-line"><strong>Added · ${escapeHtml(line.after?.model || line.line_id)}</strong><span>Quantity: ${escapeHtml(line.after?.quantity)}</span><span>Net: ${money(line.after?.net_cents, afterCurrency)}</span></div>`).join("");
     const removedHtml = removed.map((line) => `<div class="diff-line"><strong>Removed · ${escapeHtml(line.before?.model || line.line_id)}</strong><span>Quantity: ${escapeHtml(line.before?.quantity)}</span><span>Net: ${money(line.before?.net_cents, beforeCurrency)}</span></div>`).join("");
-    $("#diffTitle").textContent = `Version ${diff.from.version} → Version ${diff.to.version}`;
+    $("#diffTitle").textContent = `Draft ${diff.from.version} → Draft ${diff.to.version}`;
     $("#diffContent").innerHTML = `
       <div class="diff-summary"><span>Total before</span><strong>${money(diff.totals.total_cents.from, beforeCurrency)}</strong><span>Total after</span><strong>${money(diff.totals.total_cents.to, afterCurrency)}</strong><span>Net change</span><strong>${diff.comparable ? money(diff.totals.total_cents.delta, diff.currency) : "Different currencies"}</strong></div>
       ${changedHtml || addedHtml || removedHtml ? changedHtml + addedHtml + removedHtml : "<p class=\"availability-warning\">No line changes.</p>"}

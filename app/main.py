@@ -227,7 +227,7 @@ def quote_pdf(quote_id: str) -> StreamingResponse:
     if quote is None:
         fail(404, "not_found", "Quote version was not found.")
     if not quote["exportable"] or not quote["confirmation"]:
-        fail(409, "not_exportable", "Only a confirmed schema-v2 quote can be exported.")
+        fail(409, "not_exportable", "Only a confirmed current-schema quote can be exported.")
     snapshot = quote["confirmation"]["snapshot"]
     try:
         pdf = render_confirmed_quote(snapshot)

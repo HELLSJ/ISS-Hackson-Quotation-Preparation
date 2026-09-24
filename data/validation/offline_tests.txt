@@ -4,8 +4,10 @@ test_duplicate_skus_remain_separate_lines (test_catalog_tools.CanonicalContractT
 test_exact_model_does_not_silently_substitute (test_catalog_tools.CanonicalContractTests.test_exact_model_does_not_silently_substitute) ... ok
 test_independent_expected_amounts (test_catalog_tools.CanonicalContractTests.test_independent_expected_amounts) ... ok
 test_invalid_quantity_is_structured_error (test_catalog_tools.CanonicalContractTests.test_invalid_quantity_is_structured_error) ... ok
+test_negative_budget_is_rejected (test_catalog_tools.CanonicalContractTests.test_negative_budget_is_rejected) ... ok
 test_precise_diagonal_is_used (test_catalog_tools.CanonicalContractTests.test_precise_diagonal_is_used) ... ok
 test_price_override_is_forbidden (test_catalog_tools.CanonicalContractTests.test_price_override_is_forbidden) ... ok
+test_product_lookup_enforces_its_schema (test_catalog_tools.CanonicalContractTests.test_product_lookup_enforces_its_schema) ... ok
 test_quote_budget_and_revision_anchors (test_catalog_tools.CanonicalContractTests.test_quote_budget_and_revision_anchors) ... ok
 test_unknown_product_is_explicit (test_catalog_tools.CanonicalContractTests.test_unknown_product_is_explicit) ... ok
 test_unknown_tool_and_argument_are_rejected (test_catalog_tools.CanonicalContractTests.test_unknown_tool_and_argument_are_rejected) ... ok
@@ -15,6 +17,6 @@ test_cli_error_exits_two (test_catalog_tools.CompatibilityAndCliTests.test_cli_e
 test_compatibility_class_delegates_and_raises (test_catalog_tools.CompatibilityAndCliTests.test_compatibility_class_delegates_and_raises) ... ok
 
 ----------------------------------------------------------------------
-Ran 15 tests in 0.080s
+Ran 17 tests in 0.083s
 
 OK

@@ -113,7 +113,7 @@ def main() -> int:
         cdp.call("Page.enable")
         cdp.call("Emulation.setDeviceMetricsOverride", {"width": 1600, "height": 1050, "deviceScaleFactor": 1, "mobile": False})
         cdp.call("Browser.setDownloadBehavior", {"behavior": "allow", "downloadPath": str(downloads)})
-        cdp.wait("document.readyState === 'complete' && document.querySelector('#datasetBadge').textContent.includes('2026')")
+        cdp.wait("document.readyState === 'complete' && document.querySelector('#datasetBadge').textContent.includes('50-product')")
 
         steps: list[dict[str, Any]] = []
 
@@ -130,7 +130,7 @@ def main() -> int:
             cdp.wait(f"!state.busy && state.conversation.messages.length > {before} && state.conversation.latest_result?.quote_draft?.total_cents === {expected_total}")
 
         catalogue_size = cdp.wait("state.catalog.length")
-        record("v2 catalogue loads 50 records", catalogue_size == 50, catalogue_size)
+        record("final catalogue loads 50 records", catalogue_size == 50, catalogue_size)
 
         cdp.evaluate("document.querySelector('.select-button[data-sku=\"MON-L044\"]').click()")
         cdp.wait(
@@ -266,29 +266,33 @@ def main() -> int:
 
         send("Quote 8 P2425HE. Budget SGD 2500.", 231200)
         cdp.evaluate("document.querySelector('#customerName').value='Example Customer'; document.querySelector('#confirmedBy').value='Browser Reviewer';")
-        record("v1 draft displayed", cdp.evaluate("state.conversation.latest_result.quote_draft.total_cents") == 231200, 231200)
+        record("first draft displayed", cdp.evaluate("state.conversation.latest_result.quote_draft.total_cents") == 231200, 231200)
         cdp.evaluate("document.querySelector('#saveQuote').click()")
         cdp.wait("state.conversation.quote_versions.length === 1")
-        v1 = cdp.evaluate("state.conversation.quote_versions[0]")
-        record("v1 saved", v1["total_cents"] == 231200 and v1["status"] == "saved_draft", v1)
+        first_saved = cdp.evaluate("state.conversation.quote_versions[0]")
+        record(
+            "first draft saved",
+            first_saved["total_cents"] == 231200 and first_saved["status"] == "saved_draft",
+            first_saved,
+        )
 
         send("Change quantity to 10 units.", 289000)
         cdp.evaluate("document.querySelector('#saveQuote').click()")
         cdp.wait("state.conversation.quote_versions.length === 2")
         versions = cdp.evaluate("state.conversation.quote_versions")
-        record("v2 saved", versions[1]["total_cents"] == 289000, versions[1])
+        record("second draft saved", versions[1]["total_cents"] == 289000, versions[1])
 
         cdp.evaluate("document.querySelector('.compare-version').click()")
         cdp.wait("document.querySelector('#diffDialog').open")
         diff_text = cdp.evaluate("document.querySelector('#diffContent').innerText")
-        record("v1/v2 diff rendered", "578.00" in diff_text and "8 → 10" in diff_text, diff_text)
+        record("draft comparison rendered", "578.00" in diff_text and "8 → 10" in diff_text, diff_text)
 
         cdp.evaluate("[...document.querySelectorAll('.confirm-version')].at(-1).click()")
         cdp.wait("document.querySelector('#approvalDialog').open")
         cdp.evaluate("document.querySelector('#completeApproval').click()")
         cdp.wait("state.conversation.quote_versions[1].exportable === true")
         confirmed = cdp.evaluate("state.conversation.quote_versions[1]")
-        record("v2 confirmed", confirmed["status"] == "confirmed" and confirmed["exportable"], confirmed)
+        record("second draft confirmed", confirmed["status"] == "confirmed" and confirmed["exportable"], confirmed)
 
         cdp.evaluate("document.querySelector('.version-actions a[download]').click()")
         deadline = time.monotonic() + 15
@@ -312,7 +316,7 @@ def main() -> int:
             "tested_at": datetime.now(timezone.utc).isoformat(),
             "browser": version.get("product"),
             "driver": "offline",
-            "dataset_version": "2026-09-22.v2",
+            "dataset_version": "2026-09-22",
             "steps": steps,
             "passed": all(step["passed"] for step in steps),
             "artifacts": {

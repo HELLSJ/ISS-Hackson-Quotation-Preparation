@@ -22,7 +22,7 @@ REPORTS = ROOT / "reports" / "evaluation"
 
 # Twelve Lenovo expansion SKUs span the size, resolution, refresh and USB-C/PD
 # boundaries. Each receives the two highest-risk port-direction fields, for 24
-# independent review points. The original Dell v1 review remains preserved.
+# independent review points. The original Dell baseline review remains preserved.
 FREEZE_SAMPLE = {
     sku: ("usb_c_video", "usb_c_pd_watts")
     for sku in (
@@ -155,7 +155,7 @@ def main() -> None:
         "price_version": rules["price_version"],
         "rule_version": rules["rule_version"],
         "sample_size": len(freeze_rows),
-        "sample_design": "12 Lenovo expansion SKUs x 2 fields = 24 review points, spanning resolution/size/PD boundaries; Dell v1 review remains preserved.",
+        "sample_design": "12 Lenovo expansion SKUs x 2 fields = 24 review points, spanning resolution/size/PD boundaries; Dell baseline review remains preserved.",
         "input_sha256": hashes,
         "required_next_action": "An independent human reviewer must complete data-freeze-review.csv before calling this dataset frozen.",
     }

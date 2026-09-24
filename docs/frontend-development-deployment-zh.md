@@ -60,7 +60,7 @@ draft → saved_draft → confirmed/exportable
 
 - `draft` 只是当前计算结果；
 - `saved_draft` 是不可变版本，但尚未批准；
-- 只有 `confirmed` schema-v2 快照可以下载 PDF；
+- 只有 `confirmed` current snapshot schema 快照可以下载 PDF；
 - 前端必须使用后端提供的 `result_message_id` 和 `snapshot_token`；
 - 收到 409 时显示错误并刷新数据，不能绕过 stale 检查。
 
@@ -194,10 +194,10 @@ Choose P2425HE at zero discount.
 验收：
 
 - 草稿为 SGD 2,312.00；
-- 保存 v1；
+- 保存第一份草稿；
 - 把数量改为 10 后草稿为 SGD 2,890.00；
 - 显示超预算 SGD 390.00；
-- 保存 v2 并显示 v1 → v2 diff；
+- 保存第二份草稿并显示第一份与第二份草稿的 diff；
 - 确认后才出现 PDF 下载。
 
 ### Story B：端口能力边界

@@ -3,10 +3,10 @@
   "tested_at": "2026-09-23T15:14:58.600458+00:00",
   "browser": "Chrome/153.0.8010.53",
   "driver": "offline",
-  "dataset_version": "2026-09-22.v2",
+  "dataset_version": "2026-09-22",
   "steps": [
     {
-      "step": "v2 catalogue loads 50 records",
+      "step": "final catalogue loads 50 records",
       "passed": true,
       "evidence": 50
     },
@@ -39,12 +39,12 @@
       }
     },
     {
-      "step": "v1 draft displayed",
+      "step": "first draft displayed",
       "passed": true,
       "evidence": 231200
     },
     {
-      "step": "v1 saved",
+      "step": "first draft saved",
       "passed": true,
       "evidence": {
         "id": "cbc1e94e-8a92-4175-8adf-661488981ef8",
@@ -60,7 +60,7 @@
       }
     },
     {
-      "step": "v2 saved",
+      "step": "second draft saved",
       "passed": true,
       "evidence": {
         "id": "39efcb3b-b8cc-4596-9954-0499990470a1",
@@ -76,12 +76,12 @@
       }
     },
     {
-      "step": "v1/v2 diff rendered",
+      "step": "draft comparison rendered",
       "passed": true,
       "evidence": "Total before\nSGD 2,312.00\nTotal after\nSGD 2,890.00\nNet change\nSGD 578.00\nP2425HE\nquantity: 8 → 10 (Δ 2)\ngross cents: 231200 → 289000 (Δ 57800)\nnet cents: 231200 → 289000 (Δ 57800)"
     },
     {
-      "step": "v2 confirmed",
+      "step": "second draft confirmed",
       "passed": true,
       "evidence": {
         "id": "39efcb3b-b8cc-4596-9954-0499990470a1",
@@ -100,18 +100,18 @@
       "step": "confirmed PDF downloaded",
       "passed": true,
       "evidence": [
-        "Q-20260923-B00287CD-V2.pdf"
+        "Q-20260923-B00287CD-R2.pdf"
       ]
     },
     {
       "step": "page/snapshot/PDF amount consistent",
       "passed": true,
-      "evidence": "Synthetic demo quotation · Not a tax invoice\nPage 1\n QUOTATION\nQuotation\nQ-20260923-B00287CD-V2\nVersion\n2\nCustomer\nExample Customer\nCurrency\nSGD\nQuote date\n2026-09-23\nValid until\n2026-09-30\nConfirmed by\nSales Admin\nConfirmed at\n2026-09-23T15:14:58.274239+00:00\nProduct\nQty\nUnit price\nDiscount\nNet\nP2425HE\nDell P2425HE Monitor\nMON-007\n 10\n SGD 289.00\n 0.00%\n SGD 2,890.00\nSubtotal\nSGD 2,890.00\nShipping\nSGD 0.00\nTOTAL\nSGD 2,890.00\nTerms and provenance\nDemo quotation: tax is not modelled; this is not "
+      "evidence": "Synthetic demo quotation · Not a tax invoice\nPage 1\n QUOTATION\nQuotation\nQ-20260923-B00287CD-R2\nVersion\n2\nCustomer\nExample Customer\nCurrency\nSGD\nQuote date\n2026-09-23\nValid until\n2026-09-30\nConfirmed by\nSales Admin\nConfirmed at\n2026-09-23T15:14:58.274239+00:00\nProduct\nQty\nUnit price\nDiscount\nNet\nP2425HE\nDell P2425HE Monitor\nMON-007\n 10\n SGD 289.00\n 0.00%\n SGD 2,890.00\nSubtotal\nSGD 2,890.00\nShipping\nSGD 0.00\nTOTAL\nSGD 2,890.00\nTerms and provenance\nDemo quotation: tax is not modelled; this is not "
     }
   ],
   "passed": true,
   "artifacts": {
     "screenshot": "browser-final.png",
-    "pdf": "downloads/Q-20260923-B00287CD-V2.pdf"
+    "pdf": "downloads/Q-20260923-B00287CD-R2.pdf"
   }
 }

@@ -51,16 +51,16 @@ class RepositoryLifecycleTests(unittest.TestCase):
         self.assertIsNone(error)
         return quote
 
-    def test_schema_v2_snapshot_has_complete_server_metadata(self) -> None:
+    def test_current_schema_snapshot_has_complete_server_metadata(self) -> None:
         quote = self.add_quote_turn("Quote 8 P2425HE. Budget SGD 2500.")
         snapshot = quote["payload"]
         self.assertEqual(quote["snapshot_schema_version"], 2)
         self.assertEqual(quote["status"], "saved_draft")
         self.assertFalse(quote["exportable"])
         self.assertEqual(snapshot["customer"]["display_name"], "Example Customer")
-        self.assertEqual(snapshot["pricing_context"]["dataset_version"], "2026-09-22.v2")
-        self.assertEqual(snapshot["pricing_context"]["price_version"], "demo-v2")
-        self.assertEqual(snapshot["pricing_context"]["rule_version"], "demo-v1")
+        self.assertEqual(snapshot["pricing_context"]["dataset_version"], "2026-09-22")
+        self.assertEqual(snapshot["pricing_context"]["price_version"], "demo-2026-09-22")
+        self.assertEqual(snapshot["pricing_context"]["rule_version"], "demo-policy-2026-09-14")
         self.assertEqual(snapshot["source"]["result_message_id"], self.repo.get_conversation(self.conversation["id"])["latest_result_message_id"])
         self.assertEqual(snapshot["validity_days"], 7)
         self.assertNotEqual(snapshot["quote_date"], snapshot["valid_until"])
@@ -145,23 +145,23 @@ class RepositoryLifecycleTests(unittest.TestCase):
         self.assertEqual(error, "already_confirmed")
 
     def test_old_unconfirmed_version_and_wrong_token_are_rejected(self) -> None:
-        v1 = self.add_quote_turn("Quote 8 P2425HE. Budget SGD 2500.")
-        v2 = self.add_quote_turn("Change quantity to 10 units.")
+        first_quote = self.add_quote_turn("Quote 8 P2425HE. Budget SGD 2500.")
+        second_quote = self.add_quote_turn("Change quantity to 10 units.")
         result, error, _ = self.repo.confirm_quote(
-            v1["id"], v1["snapshot_token"], "Example Customer", "Sales Admin"
+            first_quote["id"], first_quote["snapshot_token"], "Example Customer", "Sales Admin"
         )
         self.assertIsNone(result)
         self.assertEqual(error, "stale_confirmation")
         result, error, _ = self.repo.confirm_quote(
-            v2["id"], "0" * 64, "Example Customer", "Sales Admin"
+            second_quote["id"], "0" * 64, "Example Customer", "Sales Admin"
         )
         self.assertIsNone(result)
         self.assertEqual(error, "stale_confirmation")
 
     def test_story_a_diff_uses_only_stored_snapshots(self) -> None:
-        v1 = self.add_quote_turn("Quote 8 P2425HE. Budget SGD 2500.")
-        v2 = self.add_quote_turn("Change quantity to 10 units.")
-        diff = compare_quotes(v1, v2)
+        first_quote = self.add_quote_turn("Quote 8 P2425HE. Budget SGD 2500.")
+        second_quote = self.add_quote_turn("Change quantity to 10 units.")
+        diff = compare_quotes(first_quote, second_quote)
         self.assertEqual(diff["identity_quality"], "stable_line_id")
         self.assertEqual(diff["lines"]["added"], [])
         self.assertEqual(diff["lines"]["removed"], [])
@@ -306,7 +306,7 @@ class LegacyMigrationTests(unittest.TestCase):
                 self.assertEqual(db.execute("SELECT content FROM messages WHERE id='m'").fetchone()[0], "hello")
                 self.assertEqual(db.execute("PRAGMA foreign_key_check").fetchall(), [])
 
-    def test_v1_row_is_byte_preserved_and_not_confirmable(self) -> None:
+    def test_legacy_row_is_byte_preserved_and_not_confirmable(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "legacy.sqlite"
             payload = '{"status":"saved_draft","currency":"SGD","lines":[],"total_cents":100}'
@@ -476,47 +476,47 @@ class QuoteApiTests(unittest.TestCase):
             f"{conversation_url}/messages",
             json={"content": "Quote 8 P2425HE. Budget SGD 2500."},
         ).json()
-        v1_response = self.client.post(
+        first_response = self.client.post(
             f"{conversation_url}/quotes",
             json={"result_message_id": first_turn["latest_result_message_id"], "customer_display_name": "Example Customer"},
         )
-        self.assertEqual(v1_response.status_code, 201)
-        v1 = v1_response.json()
-        self.assertEqual(v1["payload"]["total_cents"], 231200)
+        self.assertEqual(first_response.status_code, 201)
+        first_quote = first_response.json()
+        self.assertEqual(first_quote["payload"]["total_cents"], 231200)
 
         second_turn = self.client.post(
             f"{conversation_url}/messages",
             json={"content": "Change quantity to 10 units."},
         ).json()
-        v2_response = self.client.post(
+        second_response = self.client.post(
             f"{conversation_url}/quotes",
             json={"result_message_id": second_turn["latest_result_message_id"], "customer_display_name": "Example Customer"},
         )
-        self.assertEqual(v2_response.status_code, 201)
-        v2 = v2_response.json()
-        self.assertEqual(v2["version"], 2)
-        self.assertEqual(v2["payload"]["total_cents"], 289000)
+        self.assertEqual(second_response.status_code, 201)
+        second_quote = second_response.json()
+        self.assertEqual(second_quote["version"], 2)
+        self.assertEqual(second_quote["payload"]["total_cents"], 289000)
 
         versions = self.client.get(conversation_url).json()["quote_versions"]
-        self.assertEqual({item["id"] for item in versions}, {v1["id"], v2["id"]})
-        diff = self.client.get(f"/api/quotes/{v1['id']}/diff/{v2['id']}")
+        self.assertEqual({item["id"] for item in versions}, {first_quote["id"], second_quote["id"]})
+        diff = self.client.get(f"/api/quotes/{first_quote['id']}/diff/{second_quote['id']}")
         self.assertEqual(diff.status_code, 200)
         self.assertEqual(diff.json()["totals"]["total_cents"]["delta"], 57800)
         self.assertEqual(diff.json()["lines"]["changed"][0]["changes"]["quantity"]["delta"], 2)
 
         stale = self.client.post(
-            f"/api/quotes/{v1['id']}/confirm",
-            json={"snapshot_token": v1["snapshot_token"], "customer_display_name": "Example Customer", "confirmed_by": "Sales Admin"},
+            f"/api/quotes/{first_quote['id']}/confirm",
+            json={"snapshot_token": first_quote["snapshot_token"], "customer_display_name": "Example Customer", "confirmed_by": "Sales Admin"},
         )
         self.assertEqual(stale.status_code, 409)
         self.assertEqual(stale.json()["detail"]["error"], "stale_confirmation")
         confirmed = self.client.post(
-            f"/api/quotes/{v2['id']}/confirm",
-            json={"snapshot_token": v2["snapshot_token"], "customer_display_name": "Example Customer", "confirmed_by": "Sales Admin"},
+            f"/api/quotes/{second_quote['id']}/confirm",
+            json={"snapshot_token": second_quote["snapshot_token"], "customer_display_name": "Example Customer", "confirmed_by": "Sales Admin"},
         )
         self.assertEqual(confirmed.status_code, 200)
         self.assertTrue(confirmed.json()["exportable"])
-        self.assertEqual(confirmed.json()["pdf_url"], f"/api/quotes/{v2['id']}/pdf")
+        self.assertEqual(confirmed.json()["pdf_url"], f"/api/quotes/{second_quote['id']}/pdf")
         pdf = self.client.get(confirmed.json()["pdf_url"])
         self.assertEqual(pdf.status_code, 200)
         self.assertTrue(pdf.content.startswith(b"%PDF-"))

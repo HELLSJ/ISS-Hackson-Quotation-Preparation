@@ -2,7 +2,7 @@
   "generated_at": "2026-09-22T06:37:28.099162+00:00",
   "status": "SEALED_REVIEW_PASSED",
   "case_count": 20,
-  "dataset_version": "2026-09-14.v1",
+  "dataset_version": "2026-09-14",
   "inputs": "data/evaluation/sealed_holdout_enquiries.jsonl",
   "inputs_sha256": "d33b00170410bc41b331647e8927c8e70ebaa4d7b3e8b4fe1e4b11f21c8ec526",
   "answer_key": "reports/evaluation/sealed_holdout_expected.jsonl",

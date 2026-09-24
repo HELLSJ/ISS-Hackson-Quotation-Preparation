@@ -60,7 +60,7 @@ def main():
         for i,(category,messages,expected) in enumerate(records,1):
             cid=f'{split.upper()}-{i:03}'
             rows.append(dict(case_id=cid,category=category,source_type='synthetic',language='en',
-                             dataset_version='2026-09-22.v2',user_turns=messages))
+                             dataset_version='2026-09-22',user_turns=messages))
             answers.append(dict(case_id=cid,expected=expected,answer_author='assistant',
                                 review_note='Amounts cross-checked with separate Decimal arithmetic; semantic criteria require human review before formal scoring.'))
         (out/f'enquiries_{split}.jsonl').write_text(''.join(json.dumps(r,ensure_ascii=False)+'\n' for r in rows))

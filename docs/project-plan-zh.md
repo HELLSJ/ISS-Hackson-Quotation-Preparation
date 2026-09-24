@@ -101,7 +101,7 @@ from dell_agent.agent.tools import dispatch
 2. `saved_draft`：已保存的不可变版本，但仍未批准；
 3. `confirmed/exportable`：用户明确确认、通过完整性检查、可以导出 PDF 的版本。
 
-当前后端已完成三个状态及其强制边界：`draft` 只存在于计算结果，schema-v2 `saved_draft` 是不可变未批准版本，`confirmed/exportable` 通过独立 append-only confirmation 记录产生。浏览器已接入确认、diff 和 PDF 按钮并通过端到端验收。
+当前后端已完成三个状态及其强制边界：`draft` 只存在于计算结果，current snapshot schema `saved_draft` 是不可变未批准版本，`confirmed/exportable` 通过独立 append-only confirmation 记录产生。浏览器已接入确认、diff 和 PDF 按钮并通过端到端验收。
 
 ## 4. 当前基线
 
@@ -110,7 +110,7 @@ from dell_agent.agent.tools import dispatch
 | 能力 | 当前实现 |
 |---|---|
 | 来源基线 | 44 份 Dell/Lenovo 官方英文资料，共 754 页；原 PDF 不进入比赛提交 |
-| 产品目录 | 50 个型号、50 条模拟 SGD 价格；数据版本 `2026-09-22.v2` |
+| 产品目录 | 50 个型号、50 条模拟 SGD 价格；数据版本 `2026-09-22` |
 | 字段证据 | 400 条，包含来源 ID、PDF 页码和推导方式 |
 | 评估素材 | 20 条 dev、20 条 holdout、3 条固定演示故事 |
 | 数据构建 | 可重建 CSV、Agent JSON、知识卡和 `storage/catalog.sqlite` |
@@ -119,7 +119,7 @@ from dell_agent.agent.tools import dispatch
 | 演示回归 | Story A/B/C 均可在 OfflineDriver 运行 |
 | FastAPI | 产品、官方证据链接、会话、消息、计价、保存和读取版本接口 |
 | 业务存储 | `storage/app.sqlite` 保存 conversations、messages、quote_versions |
-| 版本安全 | schema-v2 完整快照、内容指纹幂等、stale result ID 阻断 |
+| 版本安全 | current snapshot schema 完整快照、内容指纹幂等、stale result ID 阻断 |
 | 人工确认 | 独立 append-only confirmation，精确 token 重试幂等，旧 schema 不可确认 |
 | 版本 diff | 只比较存储快照，支持 added/removed/changed、金额及元数据差异 |
 | 报价 PDF | ReportLab 从 confirmed snapshot 生成，不调用 Agent、目录或计价工具 |
@@ -133,15 +133,15 @@ from dell_agent.agent.tools import dispatch
 
 | 能力 | 已有部分 | 仍缺部分 |
 |---|---|---|
-| 组织者 LLM Gateway | client、原生/JSON tool loop、有限重试、确定性状态守卫和结构化结果完成；v1 Story A/B/C 与 sealed 修复后 20/20、0 fallback | 针对 50-SKU v2 重新运行 Gateway/sealed 评测；部署后日志验证 |
-| 报价版本与页面 | schema-v2 保存、确认、diff、PDF、故障注入、页面操作、自动化验收和 8/8 Codex PDF 技术审核 | 若声称独立人工审核则由非作者复签 |
-| Agent 评估 | v1 dev/holdout 与 sealed 报告均保留；有效首轮 10/20 与修复后 20/20 分开保存 | v2 两条 no-match 已调整，需重新运行与复核；若声称独立人工审核则由非作者复签 |
+| 组织者 LLM Gateway | client、原生/JSON tool loop、有限重试、确定性状态守卫和结构化结果完成；12-SKU Story A/B/C 与 sealed 修复后 20/20、0 fallback | 针对 final 50-SKU 重新运行 Gateway/sealed 评测；部署后日志验证 |
+| 报价版本与页面 | current snapshot schema 保存、确认、diff、PDF、故障注入、页面操作、自动化验收和 8/8 Codex PDF 技术审核 | 若声称独立人工审核则由非作者复签 |
+| Agent 评估 | 12-SKU dev/holdout 与 sealed 报告均保留；有效首轮 10/20 与修复后 20/20 分开保存 | 最终目录两条 no-match 已调整，需重新运行与复核；若声称独立人工审核则由非作者复签 |
 | 审计 | 每轮 `AgentResult.trace` 随消息保存；页面可展开查看工具、参数和结果 | 部署后日志验证 |
 | 证据展示 | 已改为厂商官方 URL 与精确页码；原 PDF 已从比赛提交移除 | 完成 |
 
 ### 4.3 未完成
 
-- 50-SKU v2 的真实 Gateway/sealed 复评；v2 Chrome 浏览器验收已通过；
+- final 50-SKU 的真实 Gateway/sealed 复评；final-catalogue Chrome 浏览器验收已通过；
 - Lenovo 扩展记录的非作者抽查复签；
 - 5 个案例的真人流程计时；Agent 真实 Gateway 计时已完成，中位数 12.705 秒；
 - 如需声称独立人工审核，由非作者复签 sealed/PDF 技术审核；
@@ -177,7 +177,7 @@ Browser workbench
 数据库职责必须分开：
 
 - `storage/catalog.sqlite`：从数据包生成的目录缓存，可删除重建，不存客户或报价历史；
-- `storage/app.sqlite`：应用运行数据，保存对话、不可变 schema-v2 草稿和 append-only confirmed snapshots；
+- `storage/app.sqlite`：应用运行数据，保存对话、不可变 current snapshot schema 草稿和 append-only confirmed snapshots；
 - 报价 diff 和 PDF：只读取 `app.sqlite` 的存储快照，不重新查询目录或计价。
 
 ## 6. 数据准备与可信链
@@ -210,7 +210,7 @@ source_manifest.json
 
 ### 6.2 数据独立冻结（P0）
 
-原 12-SKU Dell v1 已完成 24 个独立证据核对点并保留签名记录。50-SKU v2 的机器构建和 400 条字段关系校验已通过；38 条 Lenovo 扩展仍需由一名未参与导入的队员完成：
+原 12-SKU Dell baseline 已完成 24 个独立证据核对点并保留签名记录。final 50-SKU 的机器构建和 400 条字段关系校验已通过；38 条 Lenovo 扩展仍需由一名未参与导入的队员完成：
 
 1. 从 38 个 Lenovo 产品至少抽 12 个；
 2. 覆盖 FHD、QHD、4K、5K2K、无 USB-C 视频、75W、100W 和 140W；
@@ -219,9 +219,9 @@ source_manifest.json
 5. 核对数值、型号区段和端口方向；
 6. 记录 reviewer、结果和问题；
 7. 重新运行 `python scripts/validate_data.py`；
-8. 将 `2026-09-22.v2` 标记为团队冻结基线。
+8. 将 `2026-09-22` 标记为团队冻结基线。
 
-**验收：**至少 24 个 v2 抽查点全部正确且可打开；机器校验 0 错误；之后只能修事实错误，不能随意改 SKU、价格或演示金额。完成前只能称为“官方来源 + 自动抽取和机器校验”，不能称为完整独立人工审核。
+**验收：**至少 24 个最终目录抽查点全部正确且可打开；机器校验 0 错误；之后只能修事实错误，不能随意改 SKU、价格或演示金额。完成前只能称为“官方来源 + 自动抽取和机器校验”，不能称为完整独立人工审核。
 
 ### 6.3 来源和许可
 
@@ -256,17 +256,17 @@ rule_violation       invalid_quantity
 
 后续不再按已经过去的 Day 1–Day 6 重复排期，而按以下 Gate 顺序推进。P0 是提交关键路径，P1 是正式验收关键路径，P2 是视频和交付。
 
-### Gate A（P0）：数据人工冻结——v1 已完成，v2 待复签
+### Gate A（P0）：数据人工冻结——Dell 基线已完成，Lenovo 扩展待复签
 
-**主责：A 数据与评估。状态：Dell v1 的 24 条证据核对全部 PASS；50-SKU `2026-09-22.v2` 已通过机器校验，Lenovo 扩展抽查复签待完成。**
+**主责：A 数据与评估。状态：Dell baseline 的 24 条证据核对全部 PASS；50-SKU `2026-09-22` 已通过机器校验，Lenovo 扩展抽查复签待完成。**
 
 工作和验收见第 6.2 节。完成后更新校验报告中的 human review 状态，并固定演示数据库种子。
 
 ### Gate B（P0）：组织者 LLM Gateway 迁移与真实调用
 
-**主责：C Gateway Agent；B 配合。代码迁移完成；v1 Story A/B/C 与正式评测已完成，v2 复评待完成。**
+**主责：C Gateway Agent；B 配合。代码迁移完成；12-SKU Story A/B/C 与正式评测已完成，50-SKU 复评待完成。**
 
-**2026-09-22 状态：**项目已切换为 `GatewayDriver`。v1 Story A 真实调用返回 `ready_to_quote`，执行 `get_product → calculate_quote`，总额 231,200 分、8 条引用、无 fallback。v1 Story B/C 均通过真实 API 工具验收，证据见 `gateway-stories-bc-20260922-fixed-02.json`。v1 sealed 有效首轮 10/20 已保留，修复后最终运行 20/20、全部计分维度 100%、0 fallback。目录扩展后的 v2 必须生成新的运行报告，不能沿用 v1 分数。旧 SQLite `converse` 会迁移为 `gateway`。
+**2026-09-22 状态：**项目已切换为 `GatewayDriver`。12-SKU Story A 真实调用返回 `ready_to_quote`，执行 `get_product → calculate_quote`，总额 231,200 分、8 条引用、无 fallback。12-SKU Story B/C 均通过真实 API 工具验收，证据见 `gateway-stories-bc-20260922-fixed-02.json`。12-SKU sealed 有效首轮 10/20 已保留，修复后最终运行 20/20、全部计分维度 100%、0 fallback。目录扩展后的 50-SKU 版本必须生成新的运行报告，不能沿用 12-SKU 分数。旧 SQLite `converse` 会迁移为 `gateway`。
 
 已完成：
 
@@ -290,7 +290,7 @@ rule_violation       invalid_quantity
 已交付：
 
 1. `draft → saved_draft → confirmed/exportable` 明确分离；
-2. schema-v2 快照包含 line ID、型号、金额、budget、dataset/price/rule version、报价日期、有效期和条款；
+2. current snapshot schema 快照包含 line ID、型号、金额、budget、dataset/price/rule version、报价日期、有效期和条款；
 3. 启动时将旧行原样迁移为不可确认的 `legacy_saved_draft`，不伪造历史 provenance；
 4. result message ID 阻止 stale 保存，source result 和内容指纹保证幂等；
 5. `POST /api/quotes/{id}/confirm` 通过精确 snapshot token 创建 append-only confirmed snapshot；
@@ -306,9 +306,9 @@ rule_violation       invalid_quantity
 已交付：
 
 1. `GET /api/quotes/{from}/diff/{to}` 返回 added/removed/changed、数量/折扣/金额 delta 和元数据变化；
-2. schema-v2 使用稳定 line ID，legacy 使用明确标记的 SKU occurrence fallback；
+2. current snapshot schema 使用稳定 line ID，legacy 使用明确标记的 SKU occurrence fallback；
 3. ReportLab 5.0.1 固定依赖和分页表格模板；
-4. `GET /api/quotes/{id}/pdf` 只允许 confirmed schema-v2 snapshot；
+4. `GET /api/quotes/{id}/pdf` 只允许 confirmed current snapshot schema snapshot；
 5. PDF 包含报价号、版本、客户、日期、有效期、确认人、产品明细、总额、模拟条款和版本 provenance；
 6. renderer 不导入 Agent、目录或计价工具，导出不会重新定价；
 7. pypdf 测试从实际 PDF 提取并核对客户、P2425HE 和 SGD 2,312.00；PDF 渲染故障注入验证 confirmed snapshot 保留及重试。
@@ -383,13 +383,13 @@ D 的前端优化、API 边界、浏览器验收和 Lightsail 更新流程见[�
 - [x] sealed blind holdout 已建立并与运行时隔离；20/20 Codex 技术审核和哈希门禁已完成。若对外声称独立人工审核，仍需非作者队员实名复签。
 - [x] 使用组织者 LLM Gateway 运行真实首轮评测，保存原始结果、trace 和脱敏运行元数据；有效首轮为 10/20、0 fallback。
 - [x] 输出正式指标、失败分类及修复后独立报告；最终为 20/20、全部计分维度 100%、0 fallback。
-- [x] Chrome 完成页面保存 v1/v2、diff、确认、下载及页面/快照/PDF 金额一致性验收；Gateway 政策边界和证据表格也完成 Codex 浏览器技术审核，证据在 `reports/evaluation/browser_acceptance/`。
+- [x] Chrome 完成页面保存 first and second drafts、diff、确认、下载及页面/快照/PDF 金额一致性验收；Gateway 政策边界和证据表格也完成 Codex 浏览器技术审核，证据在 `reports/evaluation/browser_acceptance/`。
 - [x] 最终 PDF 模板完成 8/8 Codex 技术审核：标准页和五页长表全部渲染检查通过；若声称独立人工审核则由非作者复签。
 - [x] 完成 5 个案例的 Agent 真实 Gateway 计时：5/5 正确、0 fallback，中位数 12.705 秒、范围 9.025–19.633 秒。
-- [x] 目录扩充到 50 个 SKU、400 条字段证据；v2 数据关系和 125 项代码测试通过。
-- [ ] 对 38 条 Lenovo 扩展做非作者抽查复签，并更新 v2 freeze record。
-- [x] 针对 v2 重新运行浏览器验收：刷新后创建空白询价，50 条目录加载、Lenovo 8 字段官方证据、保存、diff、确认与 PDF 全部通过，报告在 `reports/evaluation/browser_acceptance/20260923T151456Z/`。
-- [ ] 针对 v2 重新运行 Gateway/sealed，保存独立报告。
+- [x] 目录扩充到 50 个 SKU、400 条字段证据；最终数据关系和 125 项代码测试通过。
+- [ ] 对 38 条 Lenovo 扩展做非作者抽查复签，并更新最终 freeze record。
+- [x] 针对最终目录重新运行浏览器验收：刷新后创建空白询价，50 条目录加载、Lenovo 8 字段官方证据、保存、diff、确认与 PDF 全部通过，报告在 `reports/evaluation/browser_acceptance/20260923T151456Z/`。
+- [ ] 针对最终目录重新运行 Gateway/sealed，保存独立报告。
 - [ ] 完成同 5 个案例的真人计时，再报告人工/Agent 比较。
 
 A 收口时运行 `.venv/bin/python scripts/check_a_completion.py`。当前技术评测、浏览器和 PDF 门禁均已通过；只有真人计时门禁仍为 `passed=false`，完成同五案例人工计时后才能把效率比较标为完成。
@@ -398,12 +398,12 @@ A 收口时运行 `.venv/bin/python scripts/check_a_completion.py`。当前技�
 
 此清单只跟踪 B 可交付的后端工作；D 的页面实现和 A 的独立模板复核由各自主责验收。
 
-- [x] 确认 `draft → saved_draft → confirmed`、schema-v2 快照和旧版本迁移；临时 SQLite 测试已覆盖。
+- [x] 确认 `draft → saved_draft → confirmed`、current snapshot schema 快照和旧版本迁移；临时 SQLite 测试已覆盖。
 - [x] 完成保存/确认的幂等、stale 保护与并发测试；未确认版本不可导出。
 - [x] 完成只比较保存快照的版本 diff API 与 confirmed-only PDF API；API 契约已记录。
 - [x] 补齐数据库保存失败与 PDF 生成失败的故障注入，验证状态保留及重试路径；后端 20 项通过。
 - [x] 用 `scripts/generate_pdf_qa_samples.py` 可复现生成并渲染检查[标准报价](../output/pdf/quotation-qa-standard.pdf)（1 页）和[长表报价](../output/pdf/quotation-qa-long.pdf)（5 页）；9 项机器预检和 8/8 Codex PDF 技术审核通过。若声称独立人工审核则由非作者复签。
-- [x] 核对 D 所需的保存、确认、diff、下载接口与响应示例；Story A 的 v1/v2 HTTP 链路已通过，调用顺序和错误恢复见 [API 契约](api-contract.md#browser-integration-handoff-for-d)。
+- [x] 核对 D 所需的保存、确认、diff、下载接口与响应示例；Story A 的 first and second drafts HTTP 链路已通过，调用顺序和错误恢复见 [API 契约](api-contract.md#browser-integration-handoff-for-d)。
 - [x] 运行相关回归并同步本文、API 契约和交付清单的最终状态；当前目录/后端/Gateway/评测门禁 77 项通过，Agent 64/64 项通过且无 skip，`git diff --check` 通过。
 - [x] Gateway 计价参数由本地状态机二次约束：分辨率等规格数字不能被当作数量；缺少数量必须追问，错误模型参数会被用户已声明数量覆盖。
 
@@ -427,10 +427,10 @@ B 的后端交付已完成。D 的浏览器按钮已经接入；A 已用上面�
 3. 客户确认视频、至少 65W，23.8 英寸 FHD 可接受；
 4. 用户选择 P2425HE；
 5. 工具计算 8 台 SGD 2,312；
-6. 保存 v1；
+6. 保存第一份草稿；
 7. 客户改为 10 台；
 8. 工具计算 SGD 2,890，超预算 SGD 390；
-9. 保存 v2，展示差异并导出对应 PDF。
+9. 保存第二份草稿，展示差异并导出对应 PDF。
 
 ### Story B：USB-C data-only 规格陷阱
 
@@ -446,7 +446,7 @@ B 的后端交付已完成。D 的浏览器按钮已经接入；A 已用上面�
 |---|---|---|
 | 00:00–03:00 | 人工报价痛点与目标 | 原始询价和手工流程 |
 | 03:00–06:00 | 数据来源、公开规格与模拟价格边界 | PDF、CSV、来源记录 |
-| 06:00–14:00 | Story A 完整流程 | 追问、候选、证据、v1/v2、diff、PDF |
+| 06:00–14:00 | Story A 完整流程 | 追问、候选、证据、first and second drafts、diff、PDF |
 | 14:00–18:00 | Story B 规格陷阱 | U2724D/U2724DE PDF 页码 |
 | 18:00–21:00 | Story C 政策边界 | 5% 阻断和交期未知 |
 | 21:00–25:00 | 组织者 Gateway 与确定性工具架构 | 真实 tool-use trace、fallback |
@@ -481,9 +481,9 @@ B 的后端交付已完成。D 的浏览器按钮已经接入；A 已用上面�
 - [x] 50 个产品、模拟价格、规则和 400 条字段证据；
 - [x] 唯一确定性工具层；
 - [x] OfflineDriver 和三条固定演示回归；
-- [x] FastAPI、SQLite 会话和 schema-v2 saved draft versions；
+- [x] FastAPI、SQLite 会话和 schema-second draft saved draft versions；
 - [x] append-only 人工确认与不可变 confirmed snapshots；
-- [x] v1/v2 结构化 diff API；
+- [x] first and second drafts 结构化 diff API；
 - [x] confirmed-only 报价 PDF renderer 和下载 API；
 - [x] 20 项后端 migration/concurrency/lifecycle/diff/PDF/evidence-link/fault-injection/HTTP 测试；
 - [x] 三栏浏览器工作台和厂商官方来源页码证据；
@@ -493,11 +493,11 @@ B 的后端交付已完成。D 的浏览器按钮已经接入；A 已用上面�
 - [x] Gateway AgentResult、原生/JSON 工具回路和有限重试；
 - [x] confirmation/diff/报价 PDF 的浏览器操作；
 - [x] 数据库保存与 PDF 渲染故障注入结果；
-- [x] v1 正式 holdout 首轮/修复后报告；
-- [x] v1 的 5 个案例 Agent 真实 Gateway 计时；
-- [ ] v2 Lenovo 扩展的非作者证据抽查复签；
-- [x] v2 Chrome 浏览器验收报告；
-- [ ] v2 正式 Gateway/sealed 报告；
+- [x] 12-SKU 正式 holdout 首轮/修复后报告；
+- [x] 12-SKU 的 5 个案例 Agent 真实 Gateway 计时；
+- [ ] 最终目录 Lenovo 扩展的非作者证据抽查复签；
+- [x] final-catalogue Chrome 浏览器验收报告；
+- [ ] 最终目录正式 Gateway/sealed 报告；
 - [ ] 5 个案例真人计时及比较；
 - [ ] 30 分钟视频和提交确认。
 

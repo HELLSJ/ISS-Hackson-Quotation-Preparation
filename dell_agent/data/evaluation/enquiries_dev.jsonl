@@ -1,20 +1,20 @@
-{"case_id": "DEV-001", "category": "exact_model", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Please quote 3 Dell P2425HE monitors."]}
-{"case_id": "DEV-002", "category": "multi_product", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Quote 2 S2425H and 1 U2724DE."]}
-{"case_id": "DEV-003", "category": "explicit_discount", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Quote 2 P2725HE at a 5% discount."]}
-{"case_id": "DEV-004", "category": "budget_quote", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Quote 8 P2425HE. Budget SGD 2500."]}
-{"case_id": "DEV-005", "category": "missing_quantity", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Please quote P2425HE."]}
-{"case_id": "DEV-006", "category": "missing_selection", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["We need 10 monitors."]}
-{"case_id": "DEV-007", "category": "usb_ambiguity", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["We need 8 monitors with USB-C."]}
-{"case_id": "DEV-008", "category": "size_ambiguity", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Find 24-inch USB-C displays with charging."]}
-{"case_id": "DEV-009", "category": "data_only_port", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Can U2724D carry video and charge my laptop over its USB-C upstream port?"]}
-{"case_id": "DEV-010", "category": "host_vs_downstream", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Does the 15W USB-C port on P2425H provide the 65W laptop video connection I need?"]}
-{"case_id": "DEV-011", "category": "tb_port", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Which port on U2724DE should I use for video and 90W laptop charging?"]}
-{"case_id": "DEV-012", "category": "model_suffix", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Is P2425 the same model as P2425E?"]}
-{"case_id": "DEV-013", "category": "no_match", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Find a native 7680x4320 USB-C monitor delivering at least 180W."]}
-{"case_id": "DEV-014", "category": "budget_conflict", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["I need 8 exactly 27-inch monitors with USB-C video and at least 90W. Budget SGD 2500, no discounts."]}
-{"case_id": "DEV-015", "category": "unknown_model", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Quote 2 Dell XYZ999 monitors."]}
-{"case_id": "DEV-016", "category": "revision", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Quote 8 P2425HE.", "Change that to 10 units."]}
-{"case_id": "DEV-017", "category": "remove_line", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Quote 2 S2425H and 3 P2725HE.", "Remove the S2425H monitors."]}
-{"case_id": "DEV-018", "category": "change_model", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Quote 2 U2724D.", "Replace both with U2724DE."]}
-{"case_id": "DEV-019", "category": "discount_limit", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Quote 8 P2425HE with 6% discount."]}
-{"case_id": "DEV-020", "category": "invalid_quantity", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22.v2", "user_turns": ["Quote zero P2725HE monitors."]}
+{"case_id": "DEV-001", "category": "exact_model", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Please quote 3 Dell P2425HE monitors."]}
+{"case_id": "DEV-002", "category": "multi_product", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Quote 2 S2425H and 1 U2724DE."]}
+{"case_id": "DEV-003", "category": "explicit_discount", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Quote 2 P2725HE at a 5% discount."]}
+{"case_id": "DEV-004", "category": "budget_quote", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Quote 8 P2425HE. Budget SGD 2500."]}
+{"case_id": "DEV-005", "category": "missing_quantity", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Please quote P2425HE."]}
+{"case_id": "DEV-006", "category": "missing_selection", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["We need 10 monitors."]}
+{"case_id": "DEV-007", "category": "usb_ambiguity", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["We need 8 monitors with USB-C."]}
+{"case_id": "DEV-008", "category": "size_ambiguity", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Find 24-inch USB-C displays with charging."]}
+{"case_id": "DEV-009", "category": "data_only_port", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Can U2724D carry video and charge my laptop over its USB-C upstream port?"]}
+{"case_id": "DEV-010", "category": "host_vs_downstream", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Does the 15W USB-C port on P2425H provide the 65W laptop video connection I need?"]}
+{"case_id": "DEV-011", "category": "tb_port", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Which port on U2724DE should I use for video and 90W laptop charging?"]}
+{"case_id": "DEV-012", "category": "model_suffix", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Is P2425 the same model as P2425E?"]}
+{"case_id": "DEV-013", "category": "no_match", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Find a native 7680x4320 USB-C monitor delivering at least 180W."]}
+{"case_id": "DEV-014", "category": "budget_conflict", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["I need 8 exactly 27-inch monitors with USB-C video and at least 90W. Budget SGD 2500, no discounts."]}
+{"case_id": "DEV-015", "category": "unknown_model", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Quote 2 Dell XYZ999 monitors."]}
+{"case_id": "DEV-016", "category": "revision", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Quote 8 P2425HE.", "Change that to 10 units."]}
+{"case_id": "DEV-017", "category": "remove_line", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Quote 2 S2425H and 3 P2725HE.", "Remove the S2425H monitors."]}
+{"case_id": "DEV-018", "category": "change_model", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Quote 2 U2724D.", "Replace both with U2724DE."]}
+{"case_id": "DEV-019", "category": "discount_limit", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Quote 8 P2425HE with 6% discount."]}
+{"case_id": "DEV-020", "category": "invalid_quantity", "source_type": "synthetic", "language": "en", "dataset_version": "2026-09-22", "user_turns": ["Quote zero P2725HE monitors."]}

@@ -525,7 +525,7 @@ class AgentFailurePathTests(unittest.TestCase):
         self.assertEqual(request.call_count, 2)
         self.assertEqual(response["message"]["content"], "ok")
 
-    def test_openai_client_uses_v1_endpoint_and_normalizes_arguments(self) -> None:
+    def test_openai_client_uses_compatible_endpoint_and_normalizes_arguments(self) -> None:
         captured = {}
 
         def fake_urlopen(request, timeout):

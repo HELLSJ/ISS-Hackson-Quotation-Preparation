@@ -3,10 +3,10 @@
   "tested_at": "2026-09-24T05:05:45.046974+00:00",
   "browser": "Chrome/153.0.8010.53",
   "driver": "offline",
-  "dataset_version": "2026-09-22.v2",
+  "dataset_version": "2026-09-22",
   "steps": [
     {
-      "step": "v2 catalogue loads 50 records",
+      "step": "final catalogue loads 50 records",
       "passed": true,
       "evidence": 50
     },
@@ -116,13 +116,13 @@
         ],
         "over_budget_cents": 0,
         "pricing_context": {
-          "dataset_version": "2026-09-22.v2",
+          "dataset_version": "2026-09-22",
           "delivery": "not_available",
           "inventory": "not_available",
           "price_effective_date": "2026-09-22",
-          "price_version": "demo-v2",
+          "price_version": "demo-2026-09-22",
           "rounding": "half_up_per_line_discount",
-          "rule_version": "demo-v1",
+          "rule_version": "demo-policy-2026-09-14",
           "source_type": "synthetic",
           "tax_mode": "not_modelled"
         },
@@ -136,12 +136,12 @@
       }
     },
     {
-      "step": "v1 draft displayed",
+      "step": "first draft displayed",
       "passed": true,
       "evidence": 231200
     },
     {
-      "step": "v1 saved",
+      "step": "first draft saved",
       "passed": true,
       "evidence": {
         "id": "c62e64b5-4583-4367-8388-252e78065790",
@@ -157,7 +157,7 @@
       }
     },
     {
-      "step": "v2 saved",
+      "step": "second draft saved",
       "passed": true,
       "evidence": {
         "id": "e95831cc-9b15-45a4-a2f8-40e178bfb542",
@@ -173,12 +173,12 @@
       }
     },
     {
-      "step": "v1/v2 diff rendered",
+      "step": "draft comparison rendered",
       "passed": true,
       "evidence": "Total before\nSGD 2,312.00\nTotal after\nSGD 2,890.00\nNet change\nSGD 578.00\nChanged · P2425HE\nQuantity: 8 → 10\nSubtotal: SGD 2,312.00 → SGD 2,890.00\nLine total: SGD 2,312.00 → SGD 2,890.00"
     },
     {
-      "step": "v2 confirmed",
+      "step": "second draft confirmed",
       "passed": true,
       "evidence": {
         "id": "e95831cc-9b15-45a4-a2f8-40e178bfb542",
@@ -197,13 +197,13 @@
       "step": "confirmed PDF downloaded",
       "passed": true,
       "evidence": [
-        "Q-20260924-221E71B3-V2.pdf"
+        "Q-20260924-221E71B3-R2.pdf"
       ]
     },
     {
       "step": "page/snapshot/PDF amount consistent",
       "passed": true,
-      "evidence": "Synthetic demo quotation · Not a tax invoice\nPage 1\n QUOTATION\nQuotation\nQ-20260924-221E71B3-V2\nVersion\n2\nCustomer\nExample Customer\nCurrency\nSGD\nQuote date\n2026-09-24\nValid until\n2026-10-01\nConfirmed by\nBrowser Reviewer\nConfirmed at\n2026-09-24T05:05:44.735958+00:00\nProduct\nQty\nUnit price\nDiscount\nNet\nP2425HE\nDell P2425HE Monitor\nMON-007\n 10\n SGD 289.00\n 0.00%\n SGD 2,890.00\nSubtotal\nSGD 2,890.00\nShipping\nSGD 0.00\nTOTAL\nSGD 2,890.00\nTerms and provenance\nDemo quotation: tax is not modelled; this is"
+      "evidence": "Synthetic demo quotation · Not a tax invoice\nPage 1\n QUOTATION\nQuotation\nQ-20260924-221E71B3-R2\nVersion\n2\nCustomer\nExample Customer\nCurrency\nSGD\nQuote date\n2026-09-24\nValid until\n2026-10-01\nConfirmed by\nBrowser Reviewer\nConfirmed at\n2026-09-24T05:05:44.735958+00:00\nProduct\nQty\nUnit price\nDiscount\nNet\nP2425HE\nDell P2425HE Monitor\nMON-007\n 10\n SGD 289.00\n 0.00%\n SGD 2,890.00\nSubtotal\nSGD 2,890.00\nShipping\nSGD 0.00\nTOTAL\nSGD 2,890.00\nTerms and provenance\nDemo quotation: tax is not modelled; this is"
     }
   ],
   "passed": true,
@@ -211,6 +211,6 @@
     "shortlist_screenshot": "broad-brief-shortlist.png",
     "refined_shortlist_screenshot": "refined-shortlist.png",
     "screenshot": "browser-final.png",
-    "pdf": "downloads/Q-20260924-221E71B3-V2.pdf"
+    "pdf": "downloads/Q-20260924-221E71B3-R2.pdf"
   }
 }

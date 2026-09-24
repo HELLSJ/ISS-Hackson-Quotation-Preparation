@@ -1,10 +1,10 @@
 # Browser acceptance
 
-- [x] v1 draft displayed
-- [x] v1 saved
-- [x] v2 saved
-- [x] v1/v2 diff rendered
-- [x] v2 confirmed
+- [x] first draft displayed
+- [x] first draft saved
+- [x] second draft saved
+- [x] draft comparison rendered
+- [x] second draft confirmed
 - [x] confirmed PDF downloaded
 - [x] page/snapshot/PDF amount consistent
 

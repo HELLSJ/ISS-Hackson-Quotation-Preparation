@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-22T14:38:41.931491+00:00",
+  "generated_at": "2026-09-24T10:49:37.043227+00:00",
   "total_expected_cases": 40,
   "known_offline_limitations": {
     "DEV-015": "Unknown model token is classified as needs_clarification instead of no_match.",
