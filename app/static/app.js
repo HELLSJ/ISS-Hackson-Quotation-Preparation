@@ -11,6 +11,10 @@ const state = {
 
 let toastTimer = null;
 let dialogReturnFocus = null;
+let busyTimer = null;
+let busyStartedAt = null;
+let pendingApproval = null;
+let pendingSelection = null;
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -126,21 +130,40 @@ function showToast(message) {
   toastTimer = window.setTimeout(() => toast.classList.remove("visible"), 3200);
 }
 
-function setBusy(busy, label = "Checking enquiry…") {
+function busyProgressLabel() {
+  const elapsed = Math.max(0, Math.floor((Date.now() - busyStartedAt) / 1000));
+  if (elapsed < 5) return `Understanding the request · ${elapsed}s`;
+  if (elapsed < 12) return `Checking catalogue evidence · ${elapsed}s`;
+  return `Waiting for the Agent response · ${elapsed}s`;
+}
+
+function updateBusyProgress() {
+  if (!state.busy || !busyStartedAt) return;
+  const label = busyProgressLabel();
+  $("#composerHint").textContent = label;
+  const copy = $("#processingState .progress-copy");
+  if (copy) copy.textContent = label;
+}
+
+function setBusy(busy) {
   state.busy = busy;
   $("#sendButton").disabled = busy;
   $("#messageInput").disabled = busy;
   $("#newConversation").disabled = busy;
   $("#resetDemo").disabled = busy;
   $$("[data-prompt], .select-button, [data-quantity-index], #saveQuote, .confirm-version").forEach((button) => {
-    button.disabled = busy;
+    button.disabled = busy || button.dataset.locked === "true";
   });
   $("#messageList").setAttribute("aria-busy", String(busy));
-  $("#composerHint").textContent = busy ? label : "Enter sends · Shift+Enter adds a line";
+  window.clearInterval(busyTimer);
+  busyTimer = null;
+  busyStartedAt = busy ? Date.now() : null;
+  $("#composerHint").textContent = busy ? busyProgressLabel() : "Enter sends · Shift+Enter adds a line";
   const existing = $("#processingState");
   if (busy && !existing) {
-    $("#messageList").insertAdjacentHTML("beforeend", `<div id="processingState" class="message assistant processing-message" role="status"><span class="role">Quotation agent</span><div class="message-body"><span class="spinner" aria-hidden="true"></span><span>${escapeHtml(label)}</span></div></div>`);
+    $("#messageList").insertAdjacentHTML("beforeend", `<div id="processingState" class="message assistant processing-message" role="status"><span class="role">Quotation agent</span><div class="message-body"><span class="spinner" aria-hidden="true"></span><span class="progress-copy">${escapeHtml(busyProgressLabel())}</span></div></div>`);
     $("#messageList").scrollTop = $("#messageList").scrollHeight;
+    busyTimer = window.setInterval(updateBusyProgress, 1000);
   } else if (!busy && existing) {
     existing.remove();
   }
@@ -273,11 +296,27 @@ function renderWorkspace() {
     no_match: ["No matching product", "No catalogue model meets all stated requirements. Adjust a requirement before selecting a product."],
     budget_conflict: ["Budget needs attention", "Review the budget explanation in the conversation before continuing."],
   };
-  const warning = draft?.within_budget === false
-    ? ["Over budget", `This draft exceeds the stated budget by ${money(draft.over_budget_cents)}. Adjust the quantity or product if a lower total is required.`]
-    : warnings[result?.status];
+  const quantityMismatch = isSingleUnitSelection(draft);
+  const warning = quantityMismatch
+    ? ["Single-unit draft", `The original enquiry mentions ${originalRequestedQuantity()} units. Product-card selection intentionally starts at 1; update the quantity before saving if this draft should answer the original request.`]
+    : draft?.within_budget === false
+      ? ["Over budget", `This draft exceeds the stated budget by ${money(draft.over_budget_cents)}. Adjust the quantity or product if a lower total is required.`]
+      : warnings[result?.status];
   alert.hidden = !warning;
-  alert.innerHTML = warning ? `<strong>${escapeHtml(warning[0])}</strong>${escapeHtml(warning[1])}` : "";
+  alert.classList.toggle("attention", quantityMismatch);
+  const recoveryAction = quantityMismatch
+    ? `<button id="restoreRequestedQuantity" type="button">Use ${originalRequestedQuantity()} units</button>`
+    : result?.status === "rule_violation"
+      ? '<button id="applyPolicyLimit" type="button">Apply 5% and remove delivery promise</button>'
+      : "";
+  alert.innerHTML = warning ? `<div><strong>${escapeHtml(warning[0])}</strong>${escapeHtml(warning[1])}</div>${recoveryAction}` : "";
+  $("#restoreRequestedQuantity")?.addEventListener("click", () => {
+    const line = draft?.lines?.[0];
+    if (line) sendMessage(`Change ${line.sku} quantity to ${originalRequestedQuantity()} units.`);
+  });
+  $("#applyPolicyLimit")?.addEventListener("click", () => {
+    sendMessage("Use the maximum allowed 5% discount and do not promise delivery.");
+  });
   const dock = $("#quoteDock");
   dock.hidden = !draft;
   dock.classList.toggle("over", draft?.within_budget === false);
@@ -289,10 +328,11 @@ function renderStatus() {
   const result = latestResult();
   const chip = $("#conversationStatus");
   const driver = result?.configured_driver || state.health?.configured_driver || "offline";
+  const duration = result?.duration_ms ? ` · ${(result.duration_ms / 1000).toFixed(1)}s` : "";
   $("#driverBadge").classList.toggle("is-fallback", Boolean(result?.used_fallback));
   $("#driverBadge").textContent = result?.used_fallback
-    ? "Offline fallback"
-    : driver === "gateway" ? "Organizer LLM Gateway" : "Deterministic offline";
+    ? `Offline fallback${duration}`
+    : driver === "gateway" ? `Organizer LLM Gateway${duration}` : `Deterministic offline${duration}`;
   const labels = {
     needs_clarification: "Needs details",
     ready_to_quote: "Draft ready",
@@ -338,7 +378,8 @@ function renderMessages() {
 function renderRequirements() {
   const ledger = $("#requirementLedger");
   const result = latestResult();
-  if (!result?.ask_for?.length) {
+  const displayRequirements = result?.display_requirements || [];
+  if (!result?.ask_for?.length && !displayRequirements.length) {
     ledger.hidden = true;
     ledger.innerHTML = "";
     return;
@@ -350,14 +391,60 @@ function renderRequirements() {
     host_charging_requirement: "host charging",
     actual_vs_marketed_diagonal: "exact diagonal",
     minimum_host_pd_watts: "minimum PD",
+    "the minimum laptop charging wattage": "minimum laptop charging wattage",
+    "the preferred screen size or resolution": "preferred screen size or resolution",
+    "whether the quantity is exact": "exact quantity confirmation",
   };
-  ledger.innerHTML = `<strong>Still needed:</strong> ${result.ask_for.map((slot) => escapeHtml(names[slot] || slot)).join(" · ")}`;
+  const requirements = displayRequirements.length ? displayRequirements : result.ask_for;
+  ledger.innerHTML = `<strong>Still needed:</strong> ${requirements.map((slot) => escapeHtml(names[slot] || slot)).join(" · ")}`;
   ledger.hidden = false;
 }
 
 function uniqueProducts(rows) {
   const seen = new Set();
   return rows.filter((row) => row && !seen.has(row.sku) && seen.add(row.sku));
+}
+
+function originalRequestedQuantity() {
+  const numberWords = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12 };
+  const customerTurns = (state.conversation?.messages || [])
+    .filter((message) => message.role === "user")
+    .map((message) => message.content)
+    .filter((content) => !/^Quote 1 MON-[A-Z0-9-]+ at zero discount\.$/i.test(content));
+  for (const content of customerTurns) {
+    const numeric = content.match(/\b(\d+)\s+(?:monitors?|displays?|units?)\b/i);
+    if (numeric) return Number(numeric[1]);
+    const word = content.match(/\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+(?:monitors?|displays?|units?)\b/i);
+    if (word) return numberWords[word[1].toLowerCase()];
+  }
+  return null;
+}
+
+function originalBudgetCents() {
+  const customerTurns = (state.conversation?.messages || [])
+    .filter((message) => message.role === "user")
+    .map((message) => message.content)
+    .filter((content) => !/^Quote 1 MON-[A-Z0-9-]+ at zero discount\.$/i.test(content));
+  for (const content of customerTurns) {
+    const match = content.match(/(?:SGD|S\$|\bbudget(?:\s+(?:is|of|about))?)\s*([\d,]+(?:\.\d{1,2})?)/i);
+    if (match) return Math.round(Number(match[1].replaceAll(",", "")) * 100);
+  }
+  return null;
+}
+
+function isSingleUnitSelection(draft) {
+  const requested = originalRequestedQuantity();
+  const hasSelectionTurn = (state.conversation?.messages || []).some((message) =>
+    message.role === "user" && /^Quote 1 MON-[A-Z0-9-]+ at zero discount\.$/i.test(message.content));
+  return Boolean(requested > 1 && hasSelectionTurn && draft?.lines?.length === 1 && draft.lines[0].quantity === 1);
+}
+
+function recommendationLabel(product, index, baseline, total) {
+  if (total <= 1) return "Verified catalogue match";
+  if (index === 0) return "Lowest-price match";
+  if ((product.usb_c_pd_watts || 0) > (baseline.usb_c_pd_watts || 0)) return "More charging headroom";
+  if (product.resolution !== baseline.resolution) return "Different resolution option";
+  return "Verified alternative";
 }
 
 function renderCandidates() {
@@ -371,16 +458,33 @@ function renderCandidates() {
   $("#candidateSummary").textContent = suggestions.length
     ? `${suggestions.length} compatible alternative${suggestions.length === 1 ? "" : "s"}`
     : result?.candidates?.length
-      ? `${result.candidates.length} catalogue match${result.candidates.length === 1 ? "" : "es"}`
+      ? result.candidates.length > 3
+        ? `${result.display_requirements?.length ? "Provisional top" : "Top"} 3 of ${result.candidates.length} verified matches`
+        : `${result.candidates.length} catalogue match${result.candidates.length === 1 ? "" : "es"}`
       : result ? "Resolve the enquiry to find matching products" : "Start with the enquiry. We’ll bring the evidence here.";
   $("#catalogueTabCount").textContent = rows.length ? `${rows.length} product${rows.length === 1 ? "" : "s"}` : "Catalogue";
   $("#catalogueCount").textContent = `${state.catalog.length} monitors`;
   const welcome = `<div class="workspace-welcome"><span class="welcome-kicker">From enquiry to approved quote</span><h3>The right product.<br>The evidence to back it up.</h3><p>Describe what the customer needs. Review the fit, check the source, then approve an exact quotation.</p><div class="welcome-steps"><div class="welcome-step"><span>1</span><div><strong>Clarify the requirements</strong><p>Start in the conversation or try a demo scenario.</p></div></div><div class="welcome-step"><span>2</span><div><strong>Choose with evidence</strong><p>Compare relevant products and inspect official specifications.</p></div></div><div class="welcome-step"><span>3</span><div><strong>Review, confirm and export</strong><p>Save versions, see what changed and download the confirmed PDF.</p></div></div></div></div>`;
   const empty = `<div class="workspace-empty"><strong>${result?.status === "no_match" ? "No products meet these requirements" : "Let’s resolve the details first"}</strong><p>${result?.status === "no_match" ? "Change a requirement in the conversation. The full catalogue is available below for reference." : "Continue the conversation on the left. Relevant products will appear here when available."}</p></div>`;
-  $("#candidateList").innerHTML = rows.length ? rows.map((product) => candidateCard(product, {
+  const shortlistCount = suggestions.length ? rows.length : Math.min(3, rows.length);
+  const shortlist = rows.slice(0, shortlistCount);
+  const remaining = rows.slice(shortlistCount);
+  const requestedQuantity = originalRequestedQuantity();
+  const selectionBlocked = result?.status === "needs_clarification" && Boolean(result?.display_requirements?.length);
+  const card = (product, index, compact = false) => candidateCard(product, {
     suggested: suggestions.some((row) => row.sku === product.sku),
     incompatible: result?.status === "explain_limitation" && result?.candidates?.some((row) => row.sku === product.sku),
-  })).join("") : result ? empty : welcome;
+    recommendation: suggestions.length || !rows.length ? null : `${selectionBlocked ? "Provisional · " : ""}${recommendationLabel(product, index, rows[0], rows.length)}`,
+    requestedQuantity,
+    budgetCents: originalBudgetCents(),
+    selectionBlocked,
+    compact,
+  });
+  const shortlistHtml = shortlist.map((product, index) => card(product, index)).join("");
+  const remainingHtml = remaining.length
+    ? `<details class="match-browser"><summary>View ${remaining.length} more verified matches</summary><div>${remaining.map((product, index) => card(product, shortlistCount + index, true)).join("")}</div></details>`
+    : "";
+  $("#candidateList").innerHTML = rows.length ? shortlistHtml + remainingHtml : result ? empty : welcome;
   // Keep the full catalogue separate from the Agent's filtered results.
   $("#browseList").innerHTML = state.catalog.map((product) => candidateCard(product, {
     incompatible: result?.conflicts?.some((conflict) => conflict.sku === product.sku),
@@ -398,9 +502,22 @@ function candidateCard(product, flags) {
     ? `<span class="candidate-label suggestion">Compatible alternative</span>`
     : flags.incompatible
       ? `<span class="candidate-label">Requested model · conflict</span>`
-      : `<span class="candidate-sku">${escapeHtml(product.sku)}</span>`;
-  const canSelect = !flags.incompatible;
-  return `<article class="candidate-card ${flags.suggested ? "suggested" : ""} ${flags.incompatible ? "incompatible" : ""}">
+      : flags.recommendation
+        ? `<span class="candidate-label recommendation">${escapeHtml(flags.recommendation)}</span>`
+        : `<span class="candidate-sku">${escapeHtml(product.sku)}</span>`;
+  const canSelect = !flags.incompatible && !flags.selectionBlocked;
+  const estimatedTotalCents = flags.requestedQuantity > 1 ? product.unit_price_cents * flags.requestedQuantity : null;
+  const overBudgetCents = estimatedTotalCents != null && flags.budgetCents != null
+    ? Math.max(0, estimatedTotalCents - flags.budgetCents)
+    : 0;
+  const fitLabel = overBudgetCents
+    ? `Exceeds stated budget by ${money(overBudgetCents)}`
+    : flags.selectionBlocked ? "Provisional budget fit — confirm the missing details"
+      : flags.budgetCents ? "Fits the stated budget" : "Verified against the current request";
+  const estimatedTotal = estimatedTotalCents != null
+    ? `<strong>${flags.requestedQuantity}-unit estimate: ${money(estimatedTotalCents)}</strong>`
+    : "";
+  return `<article class="candidate-card ${flags.compact ? "compact" : ""} ${flags.suggested ? "suggested" : ""} ${flags.incompatible ? "incompatible" : ""}">
     <div class="candidate-top">
       <div>${marker}<h3 class="candidate-name">${escapeHtml(product.model)}</h3><span class="candidate-sku">${escapeHtml(product.name)}</span></div>
       <span class="price">${money(product.unit_price_cents)}</span>
@@ -411,10 +528,13 @@ function candidateCard(product, flags) {
       <div class="spec-cell"><span>USB-C host link</span><strong>${escapeHtml(pd)}</strong></div>
       <div class="spec-cell"><span>Max preset refresh</span><strong>${escapeHtml(refresh)}</strong></div>
     </div>
+    ${estimatedTotal ? `<div class="fit-summary ${overBudgetCents ? "over" : ""}"><span>${escapeHtml(fitLabel)}</span>${estimatedTotal}</div>` : ""}
     ${flags.incompatible ? '<p class="candidate-conflict">Does not meet the requested connection or charging requirements. Inspect the source before choosing an alternative.</p>' : ""}
     <div class="candidate-actions">
       <button class="evidence-button" data-sku="${escapeHtml(product.sku)}" type="button" aria-label="Inspect source evidence for ${escapeHtml(product.model)}">Inspect source evidence</button>
-      ${canSelect ? `<button class="select-button" data-sku="${escapeHtml(product.sku)}" type="button" aria-label="Quote one ${escapeHtml(product.model)} at zero discount">Quote 1 unit</button>` : ""}
+      ${canSelect
+        ? `<button class="select-button" data-sku="${escapeHtml(product.sku)}" type="button" aria-label="Start a one-unit quote for ${escapeHtml(product.model)} at zero discount">Start 1-unit draft</button>`
+        : flags.selectionBlocked ? '<button class="select-button" type="button" data-locked="true" disabled>Complete details first</button>' : ""}
     </div>
   </article>`;
 }
@@ -422,9 +542,13 @@ function candidateCard(product, flags) {
 function renderTrace() {
   const trace = latestResult()?.trace || [];
   const tools = trace.filter((step) => step.tool);
+  const result = latestResult();
+  const toolLabels = { search_products: "searched the catalogue", get_product: "verified product evidence", calculate_quote: "calculated the quote", "search_products/get": "resolved the requested model" };
+  const summary = [...new Set(tools.map((step) => toolLabels[step.tool] || step.tool))].join(" · ");
+  const duration = result?.duration_ms ? ` · ${(result.duration_ms / 1000).toFixed(1)}s` : "";
   $("#toolTrace").innerHTML = tools.length
     ? `<details class="trace-audit">
-        <summary><span>Tool activity & audit</span><small>${tools.length} verified action${tools.length === 1 ? "" : "s"}</small></summary>
+        <summary><span>Verified: ${escapeHtml(summary)}</span><small>${tools.length} action${tools.length === 1 ? "" : "s"}${duration}</small></summary>
         <div class="trace-steps">${tools.map((step, index) => `<div class="trace-step">
           <strong>${index + 1}. ${escapeHtml(step.tool)}</strong>
           <span>${escapeHtml(step.result || "completed")}</span>
@@ -446,6 +570,10 @@ function renderQuote() {
     actions.hidden = true;
     return;
   }
+  const quantityMismatch = isSingleUnitSelection(draft);
+  const budgetMessage = quantityMismatch
+    ? `This 1-unit draft is within budget; the original enquiry mentions ${originalRequestedQuantity()} units`
+    : draft.within_budget ? "Within stated budget" : `Over budget by ${money(draft.over_budget_cents)}`;
   body.innerHTML = `${draft.lines.map((line, index) => `
     <div class="quote-line">
       <div class="line-top"><div><strong>${escapeHtml(line.name)}</strong><br><span>${escapeHtml(line.sku)}</span></div><strong>${money(line.net_cents)}</strong></div>
@@ -455,7 +583,7 @@ function renderQuote() {
       </div>
     </div>`).join("")}
     <div class="total-block">
-      ${draft.within_budget === undefined ? "" : `<div class="budget-row ${draft.within_budget ? "" : "over"}"><span>${draft.within_budget ? "Within stated budget" : `Over budget by ${money(draft.over_budget_cents)}`}</span><span>Validity ${draft.validity_days} days</span></div>`}
+      ${draft.within_budget === undefined ? "" : `<div class="budget-row ${quantityMismatch ? "attention" : draft.within_budget ? "" : "over"}"><span>${escapeHtml(budgetMessage)}</span><span>Validity ${draft.validity_days} days</span></div>`}
     </div>`;
   $$('[data-quantity-index]').forEach((button) => button.addEventListener("click", () => {
     const input = $(`#qty-${button.dataset.quantityIndex}`);
@@ -514,10 +642,21 @@ async function saveQuote() {
   }
 }
 
-async function confirmVersion(quoteId, button) {
+function confirmVersion(quoteId, button) {
   const customer = $("#customerName").value.trim();
   const confirmedBy = $("#confirmedBy").value.trim();
-  if (!customer || !confirmedBy) return showToast("Customer and confirmer are required.");
+  if (!customer || !confirmedBy) return showToast("Enter the customer and your own name before confirming.");
+  pendingApproval = { quoteId, button, customer, confirmedBy };
+  $("#approvalSummary").innerHTML = `<strong>${escapeHtml(confirmedBy)}</strong> will confirm this quote for <strong>${escapeHtml(customer)}</strong>.`;
+  showDialog($("#approvalDialog"));
+}
+
+async function completeApproval() {
+  if (!pendingApproval) return;
+  const { quoteId, button, customer, confirmedBy } = pendingApproval;
+  const action = $("#completeApproval");
+  action.disabled = true;
+  action.textContent = "Confirming…";
   if (button) {
     button.disabled = true;
     button.textContent = "Confirming…";
@@ -533,12 +672,16 @@ async function confirmVersion(quoteId, button) {
       }),
     });
     state.conversation = await api(`/api/conversations/${state.conversation.id}`);
+    $("#approvalDialog").close();
     renderVersions();
     showToast(`Version ${quote.version} confirmed and ready to export.`);
   } catch (error) {
     await recoverConflict(error);
     showToast(error.message);
   } finally {
+    pendingApproval = null;
+    action.disabled = false;
+    action.textContent = "Confirm saved quote";
     if (button?.isConnected) {
       button.disabled = false;
       button.textContent = "Confirm";
@@ -574,13 +717,34 @@ async function openDiff(fromId, toId) {
 async function openEvidence(sku) {
   try {
     const product = await api(`/api/products/${encodeURIComponent(sku)}`);
+    const fieldLabels = {
+      model: "Model",
+      screen_inches: "Viewable diagonal",
+      resolution: "Native resolution",
+      max_refresh_hz: "Maximum refresh rate",
+      usb_c_video: "USB-C laptop video",
+      usb_c_pd_watts: "USB-C host charging",
+      usb_c_downstream_charge_watts: "USB-C downstream charging",
+      video_inputs: "Video inputs",
+    };
+    const valueLabels = {
+      screen_inches: (value) => `${value} in`,
+      max_refresh_hz: (value) => `${value} Hz`,
+      usb_c_video: (value) => value === true ? "Supported" : value === false ? "Not supported" : "Not stated",
+      usb_c_pd_watts: (value) => value == null ? "Not stated" : `${value} W`,
+      usb_c_downstream_charge_watts: (value) => value == null ? "Not stated" : `${value} W`,
+      video_inputs: (value) => Array.isArray(value) ? value.join(", ") : value,
+    };
+    const evidenceValue = (item) => valueLabels[item.field]
+      ? valueLabels[item.field](item.value)
+      : typeof item.value === "object" ? JSON.stringify(item.value) : item.value;
     $("#dialogSku").textContent = `${product.sku} · Official ${product.brand} specification`;
     $("#dialogTitle").textContent = `${product.model} specification evidence`;
     $("#evidenceContent").innerHTML = `
       <p class="availability-warning">Stock and delivery timing are not available in this dataset. Every value below links to its source page.</p>
       ${product.evidence.map((item) => `<div class="evidence-row">
-        <span class="field">${escapeHtml(item.field.replaceAll("_", " "))}</span>
-        <span class="value">${escapeHtml(typeof item.value === "object" ? JSON.stringify(item.value) : item.value)}</span>
+        <span class="field">${escapeHtml(fieldLabels[item.field] || item.field.replaceAll("_", " "))}</span>
+        <span class="value">${escapeHtml(evidenceValue(item))}</span>
         <a href="${escapeHtml(item.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(product.brand)} source · page ${escapeHtml(item.pdf_page)}</a>
       </div>`).join("")}`;
     showDialog($("#evidenceDialog"));
@@ -616,26 +780,58 @@ $("#resetDemo").addEventListener("click", async () => {
 $("#saveQuote").addEventListener("click", saveQuote);
 $("#closeEvidence").addEventListener("click", () => $("#evidenceDialog").close());
 $("#closeDiff").addEventListener("click", () => $("#diffDialog").close());
+$("#closeApproval").addEventListener("click", () => $("#approvalDialog").close());
+$("#cancelApproval").addEventListener("click", () => $("#approvalDialog").close());
+$("#completeApproval").addEventListener("click", completeApproval);
+$("#closeSelection").addEventListener("click", () => $("#selectionDialog").close());
+$("#cancelSelection").addEventListener("click", () => $("#selectionDialog").close());
+$("#completeSelection").addEventListener("click", () => {
+  if (!pendingSelection) return;
+  const sku = pendingSelection;
+  pendingSelection = null;
+  $("#selectionDialog").close();
+  sendMessage(`Quote 1 ${sku} at zero discount.`);
+});
 $("#evidenceDialog").addEventListener("click", (event) => {
   if (event.target === $("#evidenceDialog")) $("#evidenceDialog").close();
 });
 $("#diffDialog").addEventListener("click", (event) => {
   if (event.target === $("#diffDialog")) $("#diffDialog").close();
 });
-["#evidenceDialog", "#diffDialog"].forEach((selector) => {
+$("#approvalDialog").addEventListener("click", (event) => {
+  if (event.target === $("#approvalDialog")) $("#approvalDialog").close();
+});
+$("#selectionDialog").addEventListener("click", (event) => {
+  if (event.target === $("#selectionDialog")) $("#selectionDialog").close();
+});
+["#evidenceDialog", "#diffDialog", "#approvalDialog", "#selectionDialog"].forEach((selector) => {
   $(selector).addEventListener("close", () => {
+    if (selector === "#approvalDialog" && !state.busy) pendingApproval = null;
+    if (selector === "#selectionDialog") pendingSelection = null;
     if (dialogReturnFocus?.isConnected) dialogReturnFocus.focus();
     dialogReturnFocus = null;
   });
 });
 
 document.addEventListener("DOMContentLoaded", boot);
+
+function selectOneUnit(sku) {
+  const requested = originalRequestedQuantity();
+  if (requested > 1) {
+    pendingSelection = sku;
+    $("#selectionSummary").innerHTML = `The original enquiry mentions <strong>${requested} units</strong>. Selecting this product intentionally creates a separate 1-unit draft.`;
+    showDialog($("#selectionDialog"));
+    return;
+  }
+  sendMessage(`Quote 1 ${sku} at zero discount.`);
+}
+
 // Delegate product actions so catalogue entries stay interactive after rendering.
 $("#catalogueView").addEventListener("click", (event) => {
   const evidence = event.target.closest(".evidence-button");
   const select = event.target.closest(".select-button");
   if (evidence) openEvidence(evidence.dataset.sku);
-  if (select && !state.busy) sendMessage(`Quote 1 ${select.dataset.sku} at zero discount.`);
+  if (select && !state.busy) selectOneUnit(select.dataset.sku);
 });
 $$("[data-view]").forEach((tab) => {
   tab.addEventListener("click", () => switchWorkspace(tab.dataset.view));

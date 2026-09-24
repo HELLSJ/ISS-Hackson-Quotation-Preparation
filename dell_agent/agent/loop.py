@@ -722,7 +722,10 @@ class OfflineDriver:
 
         named_present = any(it.sku for it in items)
         if not named_present or self._turn_requests_search(text):
-            constraints, has_constraints = self._build_search_filters(text)
+            # Search against the accumulated requirement text so a follow-up
+            # such as "90W and 24-inch FHD is fine" does not discard the prior
+            # turn's one-cable USB-C video requirement.
+            constraints, has_constraints = self._build_search_filters(requirement_text)
             if has_constraints:
                 search_res = tools_mod.dispatch("search_products", constraints)
                 trace.append(
@@ -923,8 +926,14 @@ class OfflineDriver:
         rm = re.search(r"\b(\d{3,4}\s*[x\u00d7]\s*\d{3,4})\b", text, re.IGNORECASE)
         if rm:
             filters["resolution"] = re.sub(r"\s*", "", rm.group(1)).replace("\u00d7", "x")
-        elif re.search(r"\b4k\b", text, re.IGNORECASE):
+        elif re.search(r"\b(?:uhd|4k)\b", text, re.IGNORECASE):
             filters["resolution"] = "3840x2160"
+        elif re.search(r"\bqhd\b", text, re.IGNORECASE):
+            filters["resolution"] = "2560x1440"
+        elif re.search(r"\bfhd\b", text, re.IGNORECASE):
+            filters["resolution"] = "1920x1080"
+        elif re.search(r"\bwuxga\b", text, re.IGNORECASE):
+            filters["resolution"] = "1920x1200"
 
         # Exact size, e.g. "exactly 27-inch" -> min==max==27.0.
         sm = re.search(r"exactly\s*(\d{2}(?:\.\d+)?)\s*(?:-\s*)?(?:inch|inches|in\b|\")",
@@ -933,6 +942,21 @@ class OfflineDriver:
             size = float(sm.group(1))
             filters["min_screen_inches"] = size
             filters["max_screen_inches"] = size
+        else:
+            # A marketed size remains ambiguous until the customer explicitly
+            # accepts the class (for example "24-inch FHD is fine"). Once they
+            # do, use a narrow viewable-diagonal band without rounding stored
+            # catalogue facts or pretending 23.81 inches equals exactly 24.
+            marketed = re.search(
+                r"(\d{2}(?:\.\d+)?)\s*(?:-\s*)?(?:inch|inches|in\b|\").{0,40}"
+                r"\b(?:class|fine|acceptable|preferred|preference)\b",
+                text,
+                re.IGNORECASE,
+            )
+            if marketed:
+                size = float(marketed.group(1))
+                filters["min_screen_inches"] = size - 0.6
+                filters["max_screen_inches"] = size + 0.5
 
         refresh = re.search(
             r"(?:at\s+least|minimum(?:\s+of)?)?\s*(\d{2,3})\s*hz\b",

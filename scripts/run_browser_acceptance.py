@@ -185,7 +185,87 @@ def main() -> int:
             clean_load,
         )
 
+        broad_brief = (
+            "We’re refreshing a small office and need around 8 monitors. "
+            "Staff use USB-C laptops, so we’d prefer one cable for video and charging. "
+            "The total budget is about SGD 2,500."
+        )
+        before = cdp.evaluate("state.conversation.messages.length")
+        cdp.evaluate(
+            f"document.querySelector('#messageInput').value={json.dumps(broad_brief)}; document.querySelector('#messageForm').requestSubmit();"
+        )
+        cdp.wait(f"!state.busy && state.conversation.messages.length > {before} && state.conversation.latest_result?.candidates?.length > 3")
+        broad_state = cdp.evaluate(
+            "({message: state.conversation.messages.at(-1).content, displayRequirements: state.conversation.latest_result.display_requirements, visibleCards: document.querySelectorAll('#candidateList > .candidate-card').length, hiddenMatches: document.querySelectorAll('.match-browser .candidate-card').length, enabledSelections: document.querySelectorAll('#candidateList > .candidate-card .select-button:not(:disabled)').length, firstSelection: document.querySelector('#candidateList > .candidate-card .select-button')?.outerHTML})"
+        )
+        record(
+            "broad brief is clarified and reduced to a three-product shortlist",
+            "minimum laptop charging wattage" in broad_state["message"]
+            and broad_state["visibleCards"] == 3
+            and broad_state["hiddenMatches"] > 0
+            and broad_state["enabledSelections"] == 0,
+            broad_state,
+        )
+        shortlist_screenshot = cdp.call(
+            "Page.captureScreenshot", {"format": "png", "captureBeyondViewport": True}
+        )["data"]
+        (out / "broad-brief-shortlist.png").write_bytes(
+            base64.b64decode(shortlist_screenshot)
+        )
+        before = cdp.evaluate("state.conversation.messages.length")
+        refinement = "Exactly 8. We need at least 90W charging; a 24-inch FHD screen is fine."
+        cdp.evaluate(
+            f"document.querySelector('#messageInput').value={json.dumps(refinement)}; document.querySelector('#messageForm').requestSubmit();"
+        )
+        cdp.wait(
+            f"!state.busy && state.conversation.messages.length > {before} && "
+            "state.conversation.latest_result?.candidates?.length === 3"
+        )
+        refined_state = cdp.evaluate(
+            "({models: state.conversation.latest_result.candidates.map(row => row.model), visibleCards: document.querySelectorAll('#candidateList > .candidate-card').length, enabledSelections: document.querySelectorAll('#candidateList > .candidate-card .select-button:not(:disabled)').length, stillNeeded: document.querySelector('#requirementLedger').innerText})"
+        )
+        record(
+            "follow-up constraints narrow the shortlist without losing prior requirements",
+            refined_state["models"] == ["P2425HE", "T24D-4v", "T24D-40"]
+            and refined_state["visibleCards"] == 3
+            and refined_state["enabledSelections"] == 3
+            and "charging wattage" not in refined_state["stillNeeded"],
+            refined_state,
+        )
+        refined_screenshot = cdp.call(
+            "Page.captureScreenshot", {"format": "png", "captureBeyondViewport": True}
+        )["data"]
+        (out / "refined-shortlist.png").write_bytes(base64.b64decode(refined_screenshot))
+        cdp.evaluate("document.querySelector('#candidateList > .candidate-card .select-button[data-sku=\"MON-007\"]').click()")
+        cdp.wait("document.querySelector('#selectionDialog').open")
+        cdp.evaluate("document.querySelector('#completeSelection').click()")
+        cdp.wait(
+            "!state.busy && state.conversation.latest_result?.quote_draft?.lines?.[0]?.quantity === 1"
+        )
+        mismatch_state = cdp.evaluate(
+            "({warning: document.querySelector('#workspaceAlert').innerText, restore: document.querySelector('#restoreRequestedQuantity')?.innerText})"
+        )
+        record(
+            "one-unit selection makes the original quantity mismatch explicit",
+            "original enquiry mentions 8 units" in mismatch_state["warning"]
+            and mismatch_state["restore"] == "Use 8 units",
+            mismatch_state,
+        )
+        cdp.evaluate("document.querySelector('#restoreRequestedQuantity').click()")
+        cdp.wait(
+            "!state.busy && state.conversation.latest_result?.quote_draft?.lines?.[0]?.quantity === 8 && "
+            "state.conversation.latest_result.quote_draft.total_cents === 231200"
+        )
+        record(
+            "requested quantity is restored without reselecting the product",
+            cdp.evaluate("state.conversation.latest_result.quote_draft.lines[0].quantity") == 8,
+            cdp.evaluate("state.conversation.latest_result.quote_draft"),
+        )
+        cdp.evaluate("createConversation()", await_promise=True)
+        cdp.wait("state.conversation.messages.length === 0")
+
         send("Quote 8 P2425HE. Budget SGD 2500.", 231200)
+        cdp.evaluate("document.querySelector('#customerName').value='Example Customer'; document.querySelector('#confirmedBy').value='Browser Reviewer';")
         record("v1 draft displayed", cdp.evaluate("state.conversation.latest_result.quote_draft.total_cents") == 231200, 231200)
         cdp.evaluate("document.querySelector('#saveQuote').click()")
         cdp.wait("state.conversation.quote_versions.length === 1")
@@ -204,6 +284,8 @@ def main() -> int:
         record("v1/v2 diff rendered", "578.00" in diff_text and "8 → 10" in diff_text, diff_text)
 
         cdp.evaluate("[...document.querySelectorAll('.confirm-version')].at(-1).click()")
+        cdp.wait("document.querySelector('#approvalDialog').open")
+        cdp.evaluate("document.querySelector('#completeApproval').click()")
         cdp.wait("state.conversation.quote_versions[1].exportable === true")
         confirmed = cdp.evaluate("state.conversation.quote_versions[1]")
         record("v2 confirmed", confirmed["status"] == "confirmed" and confirmed["exportable"], confirmed)
@@ -233,7 +315,12 @@ def main() -> int:
             "dataset_version": "2026-09-22.v2",
             "steps": steps,
             "passed": all(step["passed"] for step in steps),
-            "artifacts": {"screenshot": "browser-final.png", "pdf": str(pdf_path.relative_to(out))},
+            "artifacts": {
+                "shortlist_screenshot": "broad-brief-shortlist.png",
+                "refined_shortlist_screenshot": "refined-shortlist.png",
+                "screenshot": "browser-final.png",
+                "pdf": str(pdf_path.relative_to(out)),
+            },
         }
         (out / "result.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         (out / "report.md").write_text(

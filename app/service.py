@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import re
 import threading
+import time
 from typing import Any
 
 from dell_agent.agent.loop import GatewayDriver, OfflineDriver
@@ -44,8 +45,10 @@ class QuotationService:
                 return None
             turns = self.repository.get_user_turns(conversation_id) or []
             turns.append(content)
+            started_at = time.perf_counter()
             agent_result = self.driver(conversation["driver"]).run(turns)
             result = agent_result.to_dict()
+            result["duration_ms"] = round((time.perf_counter() - started_at) * 1000)
             result["configured_driver"] = conversation["driver"]
             result["used_fallback"] = any(
                 isinstance(row, dict) and row.get("step") == "gateway_fallback"
@@ -54,9 +57,50 @@ class QuotationService:
             requirement_text = "\n".join(turns)
             result["conflicts"] = self._identify_conflicts(requirement_text, result)
             result["suggestions"] = self._suggest_alternatives(requirement_text, result)
+            result["display_requirements"] = self._clarification_requirements(requirement_text, result)
+            result["clarification_prompt"] = self._clarification_prompt(requirement_text, result)
             assistant = self._assistant_message(result)
             self.repository.append_exchange(conversation_id, content, assistant, result)
             return self.repository.get_conversation(conversation_id)
+
+    @staticmethod
+    def _clarification_requirements(content: str, result: dict[str, Any]) -> list[str]:
+        if result.get("status") != "needs_clarification":
+            return []
+        questions: list[str] = []
+        one_cable = re.search(r"\b(?:one|single)[\s-]+cable\b", content, re.IGNORECASE)
+        charging = re.search(r"\b(?:charg\w*|power\s*deliver\w*|\bpd\b)\b", content, re.IGNORECASE)
+        stated_watts = re.search(r"\b\d{2,3}\s*w(?:atts?)?\b", content, re.IGNORECASE)
+        if (one_cable or charging) and not stated_watts:
+            questions.append("the minimum laptop charging wattage")
+        stated_display = re.search(
+            r"\b(?:\d{2}(?:\.\d+)?[\s-]*(?:inch|inches|in\b)|fhd|qhd|uhd|4k|\d{3,4}x\d{3,4})\b",
+            content,
+            re.IGNORECASE,
+        )
+        if not stated_display:
+            questions.append("the preferred screen size or resolution")
+        approximate_quantity = re.search(
+            r"\b(?:around|about|roughly|approximately)\s+\d+\b", content, re.IGNORECASE
+        )
+        exact_quantity = re.search(r"\bexactly\s+\d+\b", content, re.IGNORECASE)
+        if approximate_quantity and not exact_quantity:
+            questions.append("whether the quantity is exact")
+        return questions
+
+    @classmethod
+    def _clarification_prompt(cls, content: str, result: dict[str, Any]) -> str | None:
+        """Turn a broad brief into decision questions before asking for a model."""
+        questions = cls._clarification_requirements(content, result)
+        if not questions:
+            return None
+        match_count = len(result.get("candidates") or [])
+        lead = f"I found {match_count} technically compatible models. " if match_count else ""
+        if len(questions) == 1:
+            detail = questions[0]
+        else:
+            detail = ", ".join(questions[:-1]) + f", and {questions[-1]}"
+        return f"{lead}Before choosing a product, please confirm {detail}."
 
     @staticmethod
     def _identify_conflicts(content: str, result: dict[str, Any]) -> list[dict[str, Any]]:
@@ -114,16 +158,19 @@ class QuotationService:
         status = result.get("status")
         candidates = result.get("candidates") or []
         suggestions = result.get("suggestions") or []
+        model_notes = [
+            note for note in result.get("notes", [])
+            if "synthetic/demo data" not in note.lower()
+            and "the named product cannot meet the stated" not in note.lower()
+            and "stock and delivery timing are unknown" not in note.lower()
+        ]
+        if status == "needs_clarification" and result.get("clarification_prompt"):
+            return result["clarification_prompt"]
         if (
             result.get("configured_driver") == "gateway"
             and not result.get("used_fallback")
-            and status in {"answer_with_evidence", "explain_limitation"}
+            and status in {"needs_clarification", "answer_with_evidence", "explain_limitation"}
         ):
-            model_notes = [
-                note for note in result.get("notes", [])
-                if "synthetic/demo data" not in note.lower()
-                and "the named product cannot meet the stated" not in note.lower()
-            ]
             if model_notes:
                 return model_notes[0]
         if status == "needs_clarification":

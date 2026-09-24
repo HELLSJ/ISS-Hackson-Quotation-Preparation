@@ -337,6 +337,33 @@ class LegacyMigrationTests(unittest.TestCase):
 
 
 class AssistantMessageTests(unittest.TestCase):
+    def test_broad_office_brief_requests_decision_details_before_model_selection(self) -> None:
+        prompt = QuotationService._clarification_prompt(
+            "We need around 8 monitors for one-cable video and charging. Budget SGD 2500.",
+            {"status": "needs_clarification", "candidates": [{}] * 18},
+        )
+        self.assertIn("18 technically compatible models", prompt)
+        self.assertIn("minimum laptop charging wattage", prompt)
+        self.assertIn("preferred screen size or resolution", prompt)
+        self.assertIn("whether the quantity is exact", prompt)
+
+    def test_gateway_clarification_preserves_specific_model_question(self) -> None:
+        result = {
+            "status": "needs_clarification",
+            "configured_driver": "gateway",
+            "used_fallback": False,
+            "ask_for": ["product_specification_or_model"],
+            "candidates": [{"sku": "MON-007"}, {"sku": "MON-010"}],
+            "notes": [
+                "Prices and rules are synthetic/demo data; this is not a tax invoice.",
+                "Please confirm the minimum laptop charging wattage and preferred screen size.",
+            ],
+        }
+        self.assertEqual(
+            QuotationService._assistant_message(result),
+            "Please confirm the minimum laptop charging wattage and preferred screen size.",
+        )
+
     def test_gateway_policy_boundary_uses_deterministic_complete_message(self) -> None:
         result = {
             "status": "rule_violation",

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Evidence-backed multi-brand monitor quotation workbench">
   <title>Quotation desk</title>
-  <link rel="stylesheet" href="/static/styles.css?v=20260924-3">
+  <link rel="stylesheet" href="/static/styles.css?v=20260924-4">
 </head>
 <body>
   <header class="topbar">
@@ -17,6 +17,7 @@
       </span>
     </a>
     <div class="topbar-meta">
+      <span class="sandbox-badge">Public demo · synthetic data</span>
       <span id="datasetBadge" class="dataset-badge">Catalogue loading</span>
       <span id="driverBadge" class="mode-badge">Offline</span>
       <span class="topbar-divider" aria-hidden="true"></span>
@@ -43,9 +44,9 @@
       <summary>Try a demo scenario <span>3 guided starting points</span></summary>
       <div class="scenario-strip" aria-label="Demo scenarios">
         <span class="scenario-label">Try a scenario</span>
-        <button data-prompt="We need 8 monitors with USB-C. Budget SGD 2500." type="button"><strong>USB-C office</strong><small>Clarify and quote</small></button>
-        <button data-prompt="Quote 4 U2724D for one-cable laptop video and 90W charging." type="button"><strong>Port trap</strong><small>Check compatibility</small></button>
-        <button data-prompt="Quote 5 S2725QC with a 6% discount and guarantee delivery tomorrow." type="button"><strong>Policy boundary</strong><small>Enforce limits</small></button>
+        <button data-prompt="We’re refreshing a small office and need around 8 monitors. Staff use USB-C laptops, so we’d prefer one cable for video and charging. The total budget is about SGD 2,500." type="button"><strong>Messy office brief</strong><small>Clarify before matching</small></button>
+        <button data-prompt="We already use U2724D monitors. Can you quote four more if they support one-cable laptop video and 90W charging?" type="button"><strong>Compatibility check</strong><small>Catch a port trap</small></button>
+        <button data-prompt="We need five S2725QC monitors. Can you give us 6% off and promise delivery tomorrow?" type="button"><strong>Commercial request</strong><small>Apply policy limits</small></button>
       </div>
       </details>
 
@@ -58,7 +59,7 @@
 
       <form id="messageForm" class="composer">
         <label for="messageInput">Customer message</label>
-        <textarea id="messageInput" rows="3" maxlength="4000" placeholder="We need 8 monitors with USB-C. Budget SGD 2,500." required></textarea>
+        <textarea id="messageInput" rows="3" maxlength="4000" placeholder="Paste the customer’s email or describe what they need — exact models are optional." required></textarea>
         <div class="composer-footer">
           <span id="composerHint">Enter sends · Shift+Enter adds a line</span>
           <button id="sendButton" class="primary-button" type="submit">Review enquiry</button>
@@ -122,9 +123,10 @@
       </div>
       <div id="quoteActions" class="quote-actions" hidden>
         <div class="quote-fields">
-          <label>Customer<input id="customerName" type="text" maxlength="200" value="Example Customer" autocomplete="organization"></label>
-          <label>Confirmed by<input id="confirmedBy" type="text" maxlength="120" value="Sales Admin" autocomplete="name"></label>
+          <label>Customer<input id="customerName" type="text" maxlength="200" placeholder="Customer or organisation" autocomplete="organization"></label>
+          <label>Confirmed by<input id="confirmedBy" type="text" maxlength="120" placeholder="Enter your name" autocomplete="name"></label>
         </div>
+        <p class="approval-note">Demo attribution only. A production deployment must require authenticated approvers.</p>
         <div class="quote-action-row">
           <span id="saveStatus" role="status"></span>
           <button id="saveQuote" class="primary-button" type="button">Save draft version</button>
@@ -172,7 +174,43 @@
     <div id="diffContent"></div>
   </dialog>
 
+  <dialog id="approvalDialog" class="approval-dialog" aria-labelledby="approvalTitle">
+    <div class="dialog-heading">
+      <div>
+        <span>Human approval</span>
+        <h2 id="approvalTitle">Confirm this saved quote?</h2>
+      </div>
+      <button id="closeApproval" class="icon-button" type="button" aria-label="Cancel confirmation">×</button>
+    </div>
+    <div class="approval-content">
+      <p id="approvalSummary"></p>
+      <p>This records an append-only approval event. The saved snapshot cannot be edited afterwards.</p>
+      <div class="approval-actions">
+        <button id="cancelApproval" class="secondary-dialog-button" type="button">Cancel</button>
+        <button id="completeApproval" class="primary-button" type="button">Confirm saved quote</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="selectionDialog" class="approval-dialog" aria-labelledby="selectionTitle">
+    <div class="dialog-heading">
+      <div>
+        <span>Quantity check</span>
+        <h2 id="selectionTitle">Start a 1-unit draft?</h2>
+      </div>
+      <button id="closeSelection" class="icon-button" type="button" aria-label="Cancel product selection">×</button>
+    </div>
+    <div class="approval-content">
+      <p id="selectionSummary"></p>
+      <p>The quote will start at one unit. You can restore the customer’s requested quantity from the warning shown afterwards.</p>
+      <div class="approval-actions">
+        <button id="cancelSelection" class="secondary-dialog-button" type="button">Cancel</button>
+        <button id="completeSelection" class="primary-button" type="button">Start 1-unit draft</button>
+      </div>
+    </div>
+  </dialog>
+
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="/static/app.js?v=20260924-3" defer></script>
+  <script src="/static/app.js?v=20260924-4" defer></script>
 </body>
 </html>

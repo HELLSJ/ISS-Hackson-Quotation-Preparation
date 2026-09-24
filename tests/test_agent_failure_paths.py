@@ -47,6 +47,20 @@ class _Response:
 
 
 class AgentFailurePathTests(unittest.TestCase):
+    def test_follow_up_refinement_keeps_prior_one_cable_constraints(self) -> None:
+        result = OfflineDriver().run([
+            "We need around 8 monitors for one-cable USB-C video and charging. Budget SGD 2500.",
+            "Exactly 8. We need at least 90W charging; a 24-inch FHD screen is fine.",
+        ])
+        self.assertEqual(result.status, "needs_clarification")
+        self.assertEqual([row["model"] for row in result.candidates], ["P2425HE", "T24D-4v", "T24D-40"])
+        self.assertTrue(all(row["usb_c_video"] for row in result.candidates))
+        self.assertTrue(all(row["usb_c_pd_watts"] >= 90 for row in result.candidates))
+        self.assertTrue(all(row["resolution"] == "1920x1080" for row in result.candidates))
+        search = [step for step in result.trace if step.get("tool") == "search_products"][-1]
+        self.assertEqual(search["args"]["min_screen_inches"], 23.4)
+        self.assertEqual(search["args"]["max_screen_inches"], 24.5)
+
     def test_model_generation_suffix_is_never_used_as_quantity(self) -> None:
         driver = OfflineDriver()
         for product in all_products():
