@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Evidence-backed multi-brand monitor quotation workbench">
   <title>Quotation desk</title>
-  <link rel="stylesheet" href="/static/styles.css?v=20260924-1">
+  <link rel="stylesheet" href="/static/styles.css?v=20260924-3">
 </head>
 <body>
   <header class="topbar">
@@ -39,12 +39,15 @@
         </div>
       </div>
 
+      <details id="scenarioDetails" class="scenario-details" open>
+      <summary>Try a demo scenario <span>3 guided starting points</span></summary>
       <div class="scenario-strip" aria-label="Demo scenarios">
         <span class="scenario-label">Try a scenario</span>
         <button data-prompt="We need 8 monitors with USB-C. Budget SGD 2500." type="button"><strong>USB-C office</strong><small>Clarify and quote</small></button>
         <button data-prompt="Quote 4 U2724D for one-cable laptop video and 90W charging." type="button"><strong>Port trap</strong><small>Check compatibility</small></button>
         <button data-prompt="Quote 5 S2725QC with a 6% discount and guarantee delivery tomorrow." type="button"><strong>Policy boundary</strong><small>Enforce limits</small></button>
       </div>
+      </details>
 
       <div id="messageList" class="message-list" aria-live="polite">
         <div class="empty-state">
@@ -63,37 +66,54 @@
       </form>
     </section>
 
-    <section class="panel evidence-panel" aria-labelledby="evidenceTitle">
+    <section class="panel workspace-panel" aria-label="Quotation workspace">
+      <header class="workspace-header">
+        <div><span class="eyebrow">Your workspace</span><h2 id="workspaceTitle">A clear path to a confident quote.</h2></div>
+        <span class="workspace-step" id="workspaceStep">Step 1 of 3 · Understand</span>
+      </header>
+      <div class="workspace-tabs" role="tablist" aria-label="Workspace view">
+        <button id="catalogueTab" type="button" role="tab" aria-selected="true" aria-controls="catalogueView" tabindex="0" data-view="catalogue"><span>01</span> Select product <small id="catalogueTabCount">Catalogue</small></button>
+        <button id="quoteTab" type="button" role="tab" aria-selected="false" aria-controls="quoteView" tabindex="-1" data-view="quote"><span>02</span> Review quote <small id="quoteTabStatus">Not started</small></button>
+      </div>
+      <div id="workspaceAlert" class="workspace-alert" role="status" hidden></div>
+      <div id="quoteDock" class="quote-dock" hidden></div>
+      <div id="requirementLedger" class="requirement-ledger" hidden></div>
+      <div class="workspace-content">
+    <section id="catalogueView" class="evidence-panel workspace-view" role="tabpanel" aria-labelledby="catalogueTab" tabindex="0">
       <div class="panel-heading">
         <span class="panel-index" aria-hidden="true">02</span>
         <div class="panel-heading-copy">
           <div>
             <span class="eyebrow">Verify</span>
-            <h2 id="evidenceTitle">Catalogue evidence</h2>
+            <h2 id="evidenceTitle">Find the right fit</h2>
             <p id="candidateSummary">Loading verified records</p>
           </div>
           <span class="evidence-key"><i></i> Source linked</span>
         </div>
       </div>
-      <div id="requirementLedger" class="requirement-ledger" hidden></div>
       <div id="candidateList" class="candidate-list" aria-live="polite" aria-busy="true">
         <div class="loading-state" role="status"><span class="spinner" aria-hidden="true"></span><strong>Loading catalogue evidence</strong><span>Checking the frozen product dataset.</span></div>
       </div>
-      <div id="toolTrace" class="tool-trace"></div>
+      <details id="catalogueBrowser" class="catalogue-browser">
+        <summary><span>Browse full catalogue</span><span id="catalogueCount">50 monitors</span></summary>
+        <p class="browse-note">All catalogue records. These are not filtered matches for your enquiry.</p>
+        <div id="browseList" class="browse-list"></div>
+      </details>
     </section>
 
-    <section class="panel quote-panel" aria-labelledby="quoteTitle">
+    <section id="quoteView" class="quote-panel workspace-view" role="tabpanel" aria-labelledby="quoteTab" tabindex="0" hidden>
       <div class="panel-heading">
         <span class="panel-index" aria-hidden="true">03</span>
         <div class="panel-heading-copy">
           <div>
             <span class="eyebrow">Approve</span>
-            <h2 id="quoteTitle">Quote draft</h2>
+            <h2 id="quoteTitle">Review your quote</h2>
             <p>Every cent comes from the pricing tool.</p>
           </div>
-          <span class="draft-badge">Unapproved</span>
+          <span class="draft-badge">Working draft</span>
         </div>
       </div>
+      <div id="selectedProduct" class="selected-product" hidden></div>
       <div id="quoteBody" class="quote-body">
         <div class="empty-quote">
           <span class="quote-glyph" aria-hidden="true">SGD</span>
@@ -118,8 +138,15 @@
         <div id="versionList" class="version-list">
           <p>No versions saved yet.</p>
         </div>
+        <details id="versionHistory" class="version-history" hidden>
+          <summary id="versionHistoryLabel">Earlier versions</summary>
+          <div id="historyList" class="version-list"></div>
+        </details>
       </div>
       <p class="legal-note">Synthetic demo pricing · Tax not modelled · Not a tax invoice</p>
+    </section>
+      </div>
+      <div id="toolTrace" class="tool-trace"></div>
     </section>
   </main>
 
@@ -146,6 +173,6 @@
   </dialog>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="/static/app.js?v=20260924-1" defer></script>
+  <script src="/static/app.js?v=20260924-3" defer></script>
 </body>
 </html>
