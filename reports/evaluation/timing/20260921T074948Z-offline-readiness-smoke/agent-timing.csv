@@ -1,6 +1,0 @@
-case_id,scenario,driver,model_id,region,started_at,duration_seconds,status,total_cents,used_fallback,result_check
-TIME-001,Exact quote: 8 P2425HE with SGD 2500 budget,offline,,,2026-09-21T07:49:48.717461+00:00,0.000899,ready_to_quote,231200,False,True
-TIME-002,Multi-line quote: 2 S2425H and 1 U2724DE,offline,,,2026-09-21T07:49:48.718367+00:00,9e-05,ready_to_quote,92700,False,True
-TIME-003,Discount quote: 2 P2725HE at 5 percent,offline,,,2026-09-21T07:49:48.718461+00:00,6.3e-05,ready_to_quote,66310,False,True
-TIME-004,Revision: 8 P2425HE changed to 10,offline,,,2026-09-21T07:49:48.718528+00:00,8.8e-05,ready_to_quote,289000,False,True
-TIME-005,Policy boundary: 5 S2725QC at 6 percent with delivery request,offline,,,2026-09-21T07:49:48.718618+00:00,6.5e-05,rule_violation,,False,True

@@ -58,6 +58,7 @@ def main() -> None:
         help="seal the manifest only when all 20 non-author review rows are signed PASS",
     )
     args = parser.parse_args()
+    REPORTS.mkdir(parents=True, exist_ok=True)
     inputs = load(INPUTS)
     expected = {row["case_id"]: row["expected"] for row in load(EXPECTED)}
     if {row["case_id"] for row in inputs} != set(expected):

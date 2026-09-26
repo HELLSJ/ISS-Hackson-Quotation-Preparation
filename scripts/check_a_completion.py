@@ -12,6 +12,8 @@ REPORT = ROOT / "reports/evaluation/a-completion-status.json"
 
 
 def read_json(path: Path) -> dict[str, Any]:
+    if not path.is_file():
+        return {}
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -88,6 +90,7 @@ def main() -> int:
         "complete": all(gate["passed"] for gate in gates.values()),
         "gates": gates,
     }
+    REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0 if report["complete"] else 1

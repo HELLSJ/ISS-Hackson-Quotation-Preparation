@@ -57,6 +57,7 @@ def main() -> int:
         "passed": all(checks.values()),
         "scope": "Machine extraction checks; independent human visual sign-off remains required.",
     }
+    REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0 if report["passed"] else 1

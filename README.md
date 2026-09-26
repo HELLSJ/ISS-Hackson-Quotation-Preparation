@@ -1,10 +1,8 @@
 # Quotation Desk — Evidence-Backed AI Quotation Agent
 
-**[Open the live AWS demo](http://47.131.151.253/)** · [中文说明](README.zh-CN.md) · [60-second walkthrough](#see-it-in-60-seconds) · [Architecture](#architecture) · [API contract](docs/api-contract.md) · [Project plan](docs/project-plan-zh.md)
+**[Open the live AWS demo](http://47.131.151.253/)** · [中文说明](README.zh-CN.md) · [60-second walkthrough](#see-it-in-60-seconds) · [Architecture](#architecture) · [API contract](docs/api-contract.md) · [Deployment guide](docs/frontend-development-deployment-zh.md)
 
 > Turn an ambiguous customer enquiry into a source-linked, reviewable and human-approved quotation. Language intelligence handles intent; deterministic tools own product facts and every cent.
-
-![Quotation Desk showing a saved-draft comparison before confirmation and PDF export](reports/evaluation/browser_acceptance/20260924T074557Z/browser-final.png)
 
 ## See it in 60 seconds
 
@@ -24,23 +22,16 @@ Try the deployed workbench at **[http://47.131.151.253/](http://47.131.151.253/)
 - **Export from the approved snapshot.** Diff and PDF read stored snapshots and never ask the model to recreate facts or totals.
 - **Visible failure modes.** Unknown stock and delivery stay unknown; policy violations and Gateway fallback remain visible.
 
-## Proof you can inspect
+## Verification
 
-| Evidence | Result |
+| Check | Current result |
 |---|---|
-| Real organizer Gateway, 12-SKU sealed run | **20/20**, every scored dimension 100%, **0 fallback** ([report](reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/report.md)) |
-| Untouched first pass | **10/20 preserved** before fixes, with separate repair reports |
-| Live Gateway tool execution | 20 cases started, 21 local tool calls, no hidden fallback |
-| Browser acceptance | A reload starts a clean enquiry; the final catalogue loads all 50 records and Lenovo evidence; save, revise, diff, confirm and PDF export passed ([report](reports/evaluation/browser_acceptance/20260923T151456Z/report.md)) |
-| Pricing and application validation | 77 catalogue/backend/Gateway/evaluation tests passed, including quantity-revision, model-suffix and metadata-conflict guards |
-| Agent regression suite | 64/64 cases passed with no OfflineDriver heuristic skips |
-| Final catalogue source base | 44 official Dell/Lenovo documents, 754 pages and 400 field-level evidence records |
-| Real Gateway timing | 5/5 correct; **12.705 s median** ([report](reports/evaluation/timing/20260922T073821Z-gateway-first-pass/report.md)) |
-| Quote PDF QA | 9/9 extraction checks and 8/8 disclosed visual technical checks passed |
+| Application and integration suite | 80 tests covering catalogue, backend, Gateway boundaries and evaluation gates |
+| Agent regression suite | 64 tests covering search, evidence retrieval, pricing and conversation state |
+| Data validation | 50 products, 50 synthetic prices and 400 field-level evidence records |
+| Reproducibility | Data, browser, PDF and Gateway checks are executable from the scripts in this repository |
 
-The valid first pass and repaired runs are deliberately separate. The final score is a real-model result only when the configured driver is `gateway`, fallback is false and the trace contains Gateway tool turns.
-
-The quoted Gateway score was produced against the original 12-SKU `2026-09-14` catalogue. The final 50-SKU `2026-09-22` catalogue has passed deterministic data, application and Chrome acceptance tests. A fresh 50-SKU Gateway/sealed run is still required before publishing a model score for the final catalogue.
+Generated reports, screenshots, exported quotations and submission materials stay local and are excluded by `.gitignore`.
 
 ## Product workflow
 
@@ -69,8 +60,6 @@ The model and browser cannot provide a unit price, calculate a total, silently s
 | Revision control | Stable line IDs, stale-save protection, idempotent save/confirm and structured diff |
 | Auditability | Gateway/fallback badge, tool trace, data/rule versions and source-page links |
 | Deployment | Public AWS Lightsail instance behind Nginx |
-
-The authoritative remaining-work sequence and acceptance criteria are in the [consolidated project plan](docs/project-plan-zh.md).
 
 ## Quick start
 
@@ -254,14 +243,6 @@ A live run is valid only when `configured_driver=gateway`, `used_fallback=false`
 2. **Catch the data-only port:** a request for four U2724D monitors with one-cable video and 90 W charging is blocked with source evidence; U2724DE is suggested but never selected automatically.
 3. **Enforce policy:** a 6% discount and next-day delivery request is blocked because the synthetic limit is 5% and delivery data is unavailable.
 
-## Remaining critical path
-
-1. Run and review the Gateway/sealed suite against the final 50-SKU catalogue; keep the 12-SKU reports as historical evidence.
-2. Spot-check and countersign the 38-SKU Lenovo expansion if the submission will call it independently reviewed.
-3. Complete five human timing observations, rehearse the fixed stories, record the 30-minute video, and submit.
-
-See [docs/project-plan-zh.md](docs/project-plan-zh.md) for owners, acceptance criteria, evaluation thresholds, exception coverage, and the video plan.
-
 ## Repository map
 
 ```text
@@ -269,10 +250,9 @@ app/                    FastAPI, SQLite lifecycle, snapshot validation, diff/PDF
 data/                   source, curated, generated, evaluation, and validation data
 dell_agent/             typed catalogue, pricing, state machine, tools, drivers
 docs/api-contract.md    frozen tool and HTTP contract
-docs/project-plan-zh.md single authoritative project plan
+docs/                   API, Gateway, frontend and deployment guides
 scripts/                download, extraction, build, validation, and CLI entry points
 tests/                  catalogue/CLI and quote-backend integration tests
-agent.md                concise engineering handoff
 ```
 
 ## Source and licensing note

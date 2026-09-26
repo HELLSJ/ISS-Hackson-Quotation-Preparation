@@ -35,23 +35,26 @@ credentials
 
 # --- Local hackathon briefing and submission working files ---
 hackathon_submission_materials/
+/agent.md
+/docs/project-plan-zh.md
+/scripts/build_business_proposal_docx.py
+
+# --- Local submission documents and media ---
+/output/
+/reports/
+/data/validation/
+*.mp4
+*.mov
+*.mkv
+*.webm
 
 # --- Local AI/editor workbench files ---
 .kiro/
 skills-lock.json
-output/frontend-review/
-output/business-proposal/assets/quote-version-comparison.png
-reports/evaluation/A_CURRENT_WORK.md
 
 # --- Sealed evaluation material ---
 # Keep prompts/answers private until the untouched first-pass model run is saved.
 data/evaluation/sealed_holdout_enquiries.jsonl
-reports/evaluation/sealed_holdout_expected.jsonl
-reports/evaluation/sealed-holdout-review.csv
-reports/evaluation/runs/*-readiness-smoke/
-reports/evaluation/runs/*-credential-check/
-reports/evaluation/timing/*-gate-credential-check/
-reports/evaluation/browser_acceptance/*/*.log
 
 # --- Regenerable build output ---
 # Manufacturer source PDFs are third-party reference material and are intentionally

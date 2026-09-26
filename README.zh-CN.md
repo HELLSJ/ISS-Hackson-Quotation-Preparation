@@ -1,10 +1,8 @@
 # Quotation Desk：可审计的 AI 报价工作台
 
-**[打开 AWS 在线演示](http://47.131.151.253/)** · [English README](README.md) · [60 秒体验](#60-秒看懂) · [系统架构](#架构) · [API 契约](docs/api-contract.md) · [前端指南](docs/frontend-development-deployment-zh.md) · [项目规划](docs/project-plan-zh.md)
+**[打开 AWS 在线演示](http://47.131.151.253/)** · [English README](README.md) · [60 秒体验](#60-秒看懂) · [系统架构](#架构) · [API 契约](docs/api-contract.md) · [前端与部署指南](docs/frontend-development-deployment-zh.md)
 
 > 把含糊的客户询价变成有原文证据、有草稿记录、经人工确认的正式报价快照。模型理解语言，确定性工具掌握产品事实和每一分钱。
-
-![Quotation Desk 展示两份已保存草稿的差异、确认和 PDF 导出流程](reports/evaluation/browser_acceptance/20260924T074557Z/browser-final.png)
 
 ## 60 秒看懂
 
@@ -24,23 +22,16 @@
 - **导出基于确认快照。**diff 和 PDF 只读存储快照，不让模型重新生成事实或金额。
 - **失败状态可见。**库存和交付未知会保留为未知；政策阻断和 Gateway fallback 都会显示。
 
-## 可核验的结果
+## 验证方式
 
-| 证据 | 结果 |
+| 检查 | 当前结果 |
 |---|---|
-| 组织者真实 Gateway（12 SKU）sealed 评测 | **20/20**，全部计分维度 100%，**0 fallback**（[报告](reports/evaluation/runs/20260922T073451Z-gateway-fixed-02/report.md)） |
-| 未修改的有效首轮 | 修复前 **10/20** 原样保留，修复报告单独保存 |
-| Gateway 工具执行 | 20 条案例启动，21 次本地工具调用，无隐藏 fallback |
-| 浏览器验收 | 刷新后创建空白询价；最终 50 条目录及 Lenovo 证据加载通过；保存、修订、diff、确认和 PDF 导出通过（[报告](reports/evaluation/browser_acceptance/20260923T151456Z/report.md)） |
-| 计价与应用校验 | 77 项目录/后端/Gateway/评测门禁测试通过，包含数量修订、型号后缀与元数据冲突防护 |
-| Agent 回归 | 64/64 项通过，无 OfflineDriver 启发式 skip |
-| 最终目录证据基础 | 44 份 Dell/Lenovo 官方资料、754 页、400 条字段级证据 |
-| 真实 Gateway 计时 | 5/5 正确，**中位数 12.705 秒**（[报告](reports/evaluation/timing/20260922T073821Z-gateway-first-pass/report.md)） |
-| 报价 PDF QA | 9/9 机器提取检查和 8/8 已披露视觉技术审核通过 |
+| 应用与集成测试 | 80 项，覆盖目录、后端、Gateway 边界和评测门禁 |
+| Agent 回归测试 | 64 项，覆盖搜索、证据读取、计价和对话状态 |
+| 数据校验 | 50 个产品、50 条模拟价格和 400 条字段级证据 |
+| 可复现性 | 数据、浏览器、PDF 和 Gateway 检查均可由仓库脚本重新执行 |
 
-有效首轮与修复后运行严格分开。只有 `configured_driver=gateway`、`used_fallback=false` 且 trace 包含 Gateway 工具调用时，结果才计入真实模型评测。
-
-上述 Gateway 成绩基于原 12-SKU 的 `2026-09-14` 目录。最终 50-SKU 的 `2026-09-22` 目录已通过确定性数据、应用测试和 Chrome 验收，但仍需重新执行 50-SKU Gateway/sealed 评测后才能公布最终目录的模型成绩。
+生成的报告、截图、报价 PDF 和比赛提交材料只保留在本地，并由 `.gitignore` 排除。
 
 ## 产品流程
 
@@ -69,8 +60,6 @@
 | 修订控制 | 稳定 line ID、stale 防护、保存/确认幂等和结构化 diff |
 | 审计能力 | Gateway/fallback 徽章、工具 trace、数据/规则版本和原文页码 |
 | 公网部署 | AWS Lightsail + Nginx |
-
-所有后续工作及验收标准见唯一的[项目总规划](docs/project-plan-zh.md)。
 
 ## 快速开始
 
@@ -249,14 +238,6 @@ export AGENT_DRIVER=gateway
 2. **识别 data-only：**要求 U2724D 一根线传视频和 90W 时必须阻断并展示证据；可以建议 U2724DE，但不能自动选择。
 3. **守住规则：**6% 折扣和明日交货要求必须被阻断，因为模拟上限为 5%，交期数据未知。
 
-## 后续关键路径
-
-1. 针对最终 50-SKU 目录重新运行并复核 Gateway/sealed 评测，12-SKU 报告保留为历史记录；
-2. 若要声称独立审核，请非作者队员抽查并复签 38 条 Lenovo 扩展记录；
-3. 完成 5 条真人计时、彩排固定故事、录制 30 分钟视频并提交。
-
-详细负责人、验收标准、指标、异常矩阵和视频结构见 [docs/project-plan-zh.md](docs/project-plan-zh.md)。
-
 ## 仓库结构
 
 ```text
@@ -265,10 +246,9 @@ data/                   原始、核对、生成、评估和校验数据
 dell_agent/             类型目录、计价、状态机、工具和 driver
 docs/api-contract.md    冻结的工具与 HTTP 契约
 docs/frontend-development-deployment-zh.md 前端优化、验收、协作与 Lightsail 发布
-docs/project-plan-zh.md 唯一项目总规划
+docs/                   API、Gateway、前端与部署指南
 scripts/                下载、提取、构建、校验和 CLI
 tests/                  目录/CLI 契约与报价后端集成测试
-agent.md                工程交接摘要
 ```
 
 ## 来源和许可
